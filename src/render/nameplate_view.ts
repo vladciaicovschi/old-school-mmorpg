@@ -37,9 +37,10 @@ export const NAMEPLATE_URGENT_RANGE = 14;
 const NAMEPLATE_URGENT_RANGE_SQ = NAMEPLATE_URGENT_RANGE * NAMEPLATE_URGENT_RANGE;
 
 // Vertical lift (world units) of the nameplate anchor above the rig top before
-// projection: the normal label sits a touch higher than the self overhead-emote
-// bubble, which hugs the head.
-export const NAMEPLATE_ANCHOR_LIFT = 0.8;
+// projection. The canvas grows upward from this anchor, so leave only a small
+// clearance: a larger gap makes the health bar and name look detached from the
+// character instead of sitting directly over their head.
+export const NAMEPLATE_ANCHOR_LIFT = 0.2;
 export const NAMEPLATE_SELF_EMOTE_ANCHOR_LIFT = 0.2;
 
 // The crypt's sealed royal door carries no floating label (it reads as back wall,

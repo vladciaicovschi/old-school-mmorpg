@@ -12716,9 +12716,9 @@ export class Renderer {
     // direct hit; the local player never competes for the click.
     //
     // Each candidate is a vertical screen COLUMN from the body midpoint up to an
-    // overhead anchor a touch above the head (the +1.0 the chat-bubble path uses;
-    // slightly higher than the nameplate's own NAMEPLATE_ANCHOR_LIFT of 0.8, which
-    // with the 26px radius just helps the column reach the floating name text).
+    // overhead anchor above the head (the +1.0 chat-bubble path uses; it is
+    // intentionally more generous than the tightly head-seated nameplate so the
+    // 26px radius can still reach floating text).
     // So a click on the floating name (what a healer does to target a party
     // member) registers on its owner instead of falling outside a body-only radius.
     const SLOPPY_PICK_PX = 26;

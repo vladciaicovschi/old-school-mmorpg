@@ -15,6 +15,7 @@
 import * as THREE from 'three';
 import { getActiveWorldContent, zoneAt } from '../sim/data';
 import { terrainHeight } from '../sim/world';
+import { lanternLampWorld } from './battleground_lantern_fx_core';
 import { buildTorchFlameGeometry, createTorchFlame } from './campfire_flame';
 import { buildDrapedGlowGeometry, type GlowPatchSite } from './ground_glow_patch';
 import { hasNightLightField, registerStaticNightLights } from './night_light_field';
@@ -36,9 +37,12 @@ export interface DecorTorchFxView {
 /** decorProps keys this pass treats as burning torch posts. */
 export const LIT_DECOR_KEYS: ReadonlySet<string> = new Set(['kcasTorch', 'kcasTorchMounted']);
 
-/** Where the torch head's flame sits above the seated base at decor scale 1
- *  (the castle's mounted torches put theirs at +2.4 for scale 1.5). */
-export const TORCH_FLAME_HEIGHT = 1.6;
+/** Basket floor in the seated GLB frame used by props.ts. Both torch models
+ *  are about 1.1 units tall; the old 1.6 anchor left the fire in mid-air.
+ *  Start inside the basket so the shader's transparent foot overlaps it. */
+export const TORCH_FLAME_HEIGHT = 0.7;
+const TORCH_BASKET_LOCAL = { x: 0, y: TORCH_FLAME_HEIGHT, z: 0 };
+const MOUNTED_TORCH_BASKET_LOCAL = { x: 0, y: TORCH_FLAME_HEIGHT, z: 0.03 };
 
 const POOL_COLOR = 0xff8830;
 const POOL_RADIUS = 6;
@@ -58,6 +62,7 @@ interface TorchSite {
   x: number;
   y: number;
   z: number;
+  scale: number;
 }
 
 /** Every authored torch decor entry, seated on the terrain like the
@@ -67,8 +72,18 @@ export function planDecorTorches(seed = 0): TorchSite[] {
   const sites: TorchSite[] = [];
   for (const d of content.props.decorProps ?? []) {
     if (!LIT_DECOR_KEYS.has(d.key)) continue;
-    const s = d.scale ?? 1;
-    sites.push({ x: d.x, y: terrainHeight(d.x, d.z, seed) + TORCH_FLAME_HEIGHT * s, z: d.z });
+    const scale = d.scale ?? 1;
+    const basket = lanternLampWorld(
+      {
+        x: d.x,
+        z: d.z,
+        seatY: terrainHeight(d.x, d.z, seed) - 0.05,
+        scale,
+        rotY: d.rot ?? 0,
+      },
+      d.key === 'kcasTorchMounted' ? MOUNTED_TORCH_BASKET_LOCAL : TORCH_BASKET_LOCAL,
+    );
+    sites.push({ ...basket, scale });
   }
   return sites;
 }
@@ -132,6 +147,7 @@ export function buildDecorTorchFx(seed = 0): DecorTorchFxView {
       patchSites.push({ x: site.x, z: site.z, radius: POOL_RADIUS });
       const flame = createTorchFlame({ geometry: flameGeo });
       flame.position.set(site.x, site.y, site.z);
+      flame.scale.setScalar(site.scale);
       flames.push(flame);
       zoneGroup.add(flame);
     }
