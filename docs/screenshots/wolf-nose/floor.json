@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Wolf_BiteLeft",
+    "samples": 41,
+    "lowestVertexY": -0.008028233431788337,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_BiteRight",
+    "samples": 41,
+    "lowestVertexY": -0.008068789714659762,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_Lunge",
+    "samples": 41,
+    "lowestVertexY": -0.0026115624461856006,
+    "phase": 0.575
+  },
+  {
+    "name": "Wolf_Howl",
+    "samples": 41,
+    "lowestVertexY": -0.0016451499990790689,
+    "phase": 0
+  },
+  {
+    "name": "Wolf_Death",
+    "samples": 41,
+    "lowestVertexY": 0.0018252808731547192,
+    "phase": 0.4
+  }
+]

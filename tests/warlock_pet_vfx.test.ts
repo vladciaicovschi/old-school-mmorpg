@@ -10,7 +10,7 @@ import {
   GLOOMSHADE_ABYSSAL_CHAIN_VFX_SPEC,
 } from '../src/render/warlock_pet_vfx_specs';
 
-function harness() {
+function harness(isMidOneShot = () => false) {
   const sequenceBolt = vi.fn();
   const sequenceInstant = vi.fn();
   const triggerAttack = vi.fn();
@@ -41,7 +41,7 @@ function harness() {
       triggerAttack,
       isMob: () => true,
       castingAbilityOf: () => null,
-      isMidOneShot: () => false,
+      isMidOneShot,
       localPlayerId: () => 99,
     },
     () => 0,
@@ -50,6 +50,25 @@ function harness() {
 }
 
 describe('Warlock pet signature VFX', () => {
+  it('starts the imp gesture at windup without restarting it when Felbolt launches', () => {
+    let active = false;
+    const h = harness(() => active);
+    h.triggerAttack.mockImplementation(() => {
+      active = true;
+    });
+    const spell = {
+      sourceId: 1,
+      targetId: 2,
+      school: 'fire' as const,
+      ability: 'emberkin_felbolt',
+    };
+    expect(h.painter.handleSpellfx({ ...spell, fx: 'windup' })).toBe(true);
+    expect(h.triggerAttack).toHaveBeenCalledExactlyOnceWith(1, 'emberkin_felbolt');
+    expect(h.sequenceBolt).not.toHaveBeenCalled();
+    expect(h.painter.handleSpellfx({ ...spell, fx: 'projectile' })).toBe(true);
+    expect(h.sequenceBolt).toHaveBeenCalledTimes(1);
+    expect(h.triggerAttack).toHaveBeenCalledTimes(1);
+  });
   it('routes Felbolt through its fel-lance projectile and the Emberkin cast clip hook', () => {
     expect(abilityVfxSpec('emberkin_felbolt')).toBe(EMBERKIN_FELBOLT_VFX_SPEC);
     expect(abilityVfxFullSpec('emberkin_felbolt')).toBe(EMBERKIN_FELBOLT_VFX_FULL_SPEC);

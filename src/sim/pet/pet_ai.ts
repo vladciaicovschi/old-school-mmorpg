@@ -287,6 +287,9 @@ function pullNearbyMobs(ctx: SimContext, pet: Entity): void {
     // wild, live, idle mobs only (skip pets/adds, corpses, already-engaged, visions)
     if (m.ownerId !== null || m.kind !== 'mob' || m.dead) return;
     if (m.aiState !== 'idle' || !m.hostile || m.templateId.startsWith('vision_')) return;
+    // Display encounters ignore body-pulls from pets as well as players.
+    // Direct pet attacks still enter combat through the normal damage path.
+    if (MOBS[m.templateId]?.aggroOnDamageOnly) return;
     if (isTrivialTo(m, pet)) return;
     const radius = Math.max(
       4,

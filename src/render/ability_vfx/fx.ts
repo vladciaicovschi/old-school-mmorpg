@@ -16,6 +16,7 @@ import { type DecalStyle, GroundDecals } from './decals';
 import { asFlipbookStyle, ImpactFlipbooks } from './flipbooks';
 import { abilityVfxTextures, OVERLAY_CELL } from './fx_textures';
 import { GroundAuras } from './ground_auras';
+import type { CastHandGlow } from './hand_glow';
 import { OverlaySprites } from './overlay_sprites';
 import { LightPillars } from './pillars';
 import { AbilityVfxRibbons, type BoltTrailStyle, type RibbonAnchor } from './ribbons';
@@ -440,6 +441,7 @@ export class AbilityVfxFx implements SequencerHost {
      *  screen space. Optional so a host that cannot supply it keeps the old
      *  camera-relative behaviour. */
     private facingOf?: (id: number) => number | null,
+    private handGlow?: CastHandGlow,
   ) {
     const tex = abilityVfxTextures();
     this.ribbons = new AbilityVfxRibbons(scene, anchor, tex);
@@ -710,6 +712,7 @@ export class AbilityVfxFx implements SequencerHost {
       return;
     }
     const style: BoltTrailStyle = b.style ?? PROJ_STYLE_BY_PALETTE[spec.palette] ?? 'comet';
+    if (style === 'arrow') width *= 0.25;
     const speed = b.speed ?? 26;
     const fullTier = tier === 0;
     // gallery head factors: arrows nearly vanish, shaped heads run leaner
@@ -834,6 +837,7 @@ export class AbilityVfxFx implements SequencerHost {
       : null;
     const b = spec.bolt;
     const style: BoltTrailStyle = b?.style ?? PROJ_STYLE_BY_PALETTE[spec.palette] ?? 'comet';
+    if (style === 'arrow') width *= 0.25;
     const speed = b?.speed ?? 26;
     const fullTier = tier === 0;
     const hs = headScale * (style === 'arrow' ? 0.35 : style !== 'comet' ? 0.7 : 1);
@@ -1658,7 +1662,10 @@ export class AbilityVfxFx implements SequencerHost {
         this.windups.delete(id);
         continue;
       }
-      this.drawWindup(id, w.style, w.colorHex, w.progress, w.streams, w.accentHex, reducedMotion);
+      if (
+        !this.handGlow?.(id, w.colorHex, w.accentHex, w.progress, this.qualityLevel, this.overlay)
+      )
+        this.drawWindup(id, w.style, w.colorHex, w.progress, w.streams, w.accentHex, reducedMotion);
     }
     for (const [id, bands] of this.orbits) {
       for (let i = bands.length - 1; i >= 0; i--) {
@@ -1730,6 +1737,7 @@ export class AbilityVfxFx implements SequencerHost {
     if (this.disposed) return;
     this.clear();
     this.disposed = true;
+    this.handGlow = undefined;
     this.ribbons.dispose();
     this.rings.dispose();
     this.flipbooks.dispose();

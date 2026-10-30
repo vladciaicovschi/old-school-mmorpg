@@ -1,0 +1,9 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_acolyte/dev_skeleton_acolyte.glb",
+      "out": "models/chars/npcs/dev_skeleton_acolyte.glb",
+      "type": "character"
+    }
+  ]
+}

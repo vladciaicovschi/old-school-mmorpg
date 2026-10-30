@@ -160,6 +160,10 @@ export const zh_CN: EnTranslations = {
         "label": "传送",
         "description": "移动到精确的世界坐标。"
       },
+      "modelLab": {
+        "label": "Model test island",
+        "description": "Enter the isolated NPC and character model test location."
+      },
       "dungeon": {
         "label": "进入地下城",
         "description": "绕过开发者模式的入场限制进入地下城。"
@@ -326,6 +330,13 @@ export const zh_CN: EnTranslations = {
     }
   },
   "hudChrome": {
+    "warriorSuit": {
+      "label": "护甲外观",
+      "hint": "更改此设备上的外观。装备属性保持不变。",
+      "recruit": "新兵",
+      "militia": "民兵",
+      "knight": "骑士"
+    },
     "materialStackSelectionUnavailable": "该素材选择已失效。",
     "warlock": {
       "doomLabel": "谴罪",
@@ -8318,6 +8329,33 @@ export const zh_CN: EnTranslations = {
     "realm": "服务器",
     "newCharacter": "新建角色",
     "appearance": "外观",
+    "equipmentCalibration": "装备调整",
+    "equipmentCalibrationHint": "拖动 3D 操纵器或使用控件来调整剑和盾牌。",
+    "equipmentCalibrationItem": "装备物品",
+    "equipmentCalibrationMode": "变换模式",
+    "equipmentCarryLocation": "Equipment location",
+    "equipmentInHands": "In hands",
+    "equipmentAtBelt": "At belt",
+    "equipmentOnBack": "On back",
+    "equipmentCalibrationValues": "已保存的数值",
+    "equipmentCalibrationAxis": "{field} {axis}",
+    "equipmentSword": "剑",
+    "equipmentShield": "盾牌",
+    "equipmentBracer": "Bracer",
+    "equipmentLeft": "Left",
+    "equipmentRight": "Right",
+    "equipmentPosition": "位置",
+    "equipmentRotation": "旋转",
+    "equipmentScale": "缩放",
+    "equipmentPauseAnimation": "暂停动画",
+    "equipmentResumeAnimation": "继续动画",
+    "equipmentResetItem": "重置物品",
+    "equipmentCopyValues": "复制数值",
+    "equipmentSaveProject": "Save fit to project",
+    "equipmentSavedProject": "Fit saved to the project.",
+    "equipmentSaveFailed": "Could not save. Run the local development server and try again.",
+    "equipmentValuesCopied": "数值已复制。",
+    "equipmentCopyManual": "无法自动复制，数值已选中。",
     "customize": "自定义",
     "body": "体型",
     "genderMale": "男性",
@@ -15530,6 +15568,12 @@ export const zh_CN: EnTranslations = {
       "stormhymn_chain_treads": {
         "name": "风暴颂歌链甲之靴"
       },
+      "dev_hunter_practice_bow": {
+        "name": "Practice Bow"
+      },
+      "dev_hunter_practice_crossbow": {
+        "name": "Practice Crossbow"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
@@ -16324,6 +16368,36 @@ export const zh_CN: EnTranslations = {
       }
     },
     "mobs": {
+      "dev_kobold": {
+        "name": "Kobold (Replaced)"
+      },
+      "dev_meshy_murlok": {
+        "name": "Meshy Native Murlok (Replaced)"
+      },
+      "dev_smart_bear": {
+        "name": "Smart Rig Bear"
+      },
+      "dev_smart_wolf": {
+        "name": "Smart Rig Wolf"
+      },
+      "dev_smart_wolf_v2": {
+        "name": "Smart Rig Wolf V2"
+      },
+      "dev_smart_goat": {
+        "name": "Smart Rig Goat"
+      },
+      "dev_smart_bufalo": {
+        "name": "Smart Rig Buffalo"
+      },
+      "dev_smart_deer": {
+        "name": "Smart Rig Deer"
+      },
+      "dev_smart_raptor": {
+        "name": "Smart Rig Raptor"
+      },
+      "dev_smart_imp": {
+        "name": "Smart Rig Imp"
+      },
       "yumi_cat": {
         "name": "由美"
       },
@@ -17595,6 +17669,1206 @@ export const zh_CN: EnTranslations = {
         "name": "操练官黑尔",
         "title": "码头陪练师",
         "greeting": "我身后那具假人从不还手，也永远打不倒，{className}。真正重要的是账目：你的伤害统计会记下你落在它身上的每一击。把它设为目标，打开伤害统计窗口，剩下的交给我来教你。"
+      },
+      "dev_compare_animal_old_wolf": {
+        "name": "[OLD/READY] Wolf",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_wolf": {
+        "name": "[NEW/READY] Wolf",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_bear": {
+        "name": "[OLD/READY] Bear",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_bear": {
+        "name": "[NEW/READY] Bear",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_deer": {
+        "name": "[OLD/READY] Deer",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_deer": {
+        "name": "[NEW/READY] Deer",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_ram": {
+        "name": "[OLD/READY] Ram",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_ram": {
+        "name": "[NEW/READY] Ram",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_bull": {
+        "name": "[OLD/READY] Bull",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_bull": {
+        "name": "[NEW/READY] Bull",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_raptor": {
+        "name": "[OLD/READY] Raptor",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_new_raptor": {
+        "name": "[NEW/READY] Raptor",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_animal_old_alpaca": {
+        "name": "[OLD/MISSING] Moonfleece Grazer",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_spearjaw": {
+        "name": "[OLD/MISSING] Deepfen Spearjaw",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_boar": {
+        "name": "[OLD/MISSING] Boar",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_fox": {
+        "name": "[OLD/MISSING] Fox",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_critter": {
+        "name": "[OLD/MISSING] Critter",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_horse": {
+        "name": "[OLD/MISSING] Horse",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_cat": {
+        "name": "[OLD/MISSING] Yumi",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_greyjaw": {
+        "name": "[OLD/MISSING] Old Greyjaw",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_veiled_stag": {
+        "name": "[OLD/MISSING] Veiled Stag",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_veiled_doe": {
+        "name": "[OLD/MISSING] Veiled Doe",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_gleamstag": {
+        "name": "[OLD/MISSING] Gleamstag",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_aurelhorn": {
+        "name": "[OLD/MISSING] Aurelhorn",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_spider": {
+        "name": "[OLD/MISSING] Spider",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_animal_old_crab": {
+        "name": "[OLD/DONE] Crab",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_animal_new_crab": {
+        "name": "[NEW/DONE] Crab",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_animal_old_tidepool_boss": {
+        "name": "[OLD/DONE] Mister Crabs",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_animal_new_tidepool_boss": {
+        "name": "[NEW/DONE] Mister Crabs",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_bandit": {
+        "name": "[OLD/READY] Bandit",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_bandit": {
+        "name": "[NEW/READY] Bandit",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_assassin": {
+        "name": "[OLD/READY] Assassin",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_assassin": {
+        "name": "[NEW/READY] Assassin",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_skeleton": {
+        "name": "[OLD/READY] Skeleton Minion",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_skeleton": {
+        "name": "[NEW/READY] Skeleton Minion",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_skeleton_warrior": {
+        "name": "[OLD/READY] Skeleton Warrior",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_skeleton_warrior": {
+        "name": "[NEW/READY] Skeleton Warrior",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_cultist": {
+        "name": "[OLD/READY] Cultist",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_cultist": {
+        "name": "[NEW/READY] Cultist",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_acolyte": {
+        "name": "[OLD/READY] Skeleton Acolyte",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_acolyte": {
+        "name": "[NEW/READY] Skeleton Acolyte",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_necromancer": {
+        "name": "[OLD/READY] Skeleton Necromancer",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_necromancer": {
+        "name": "[NEW/READY] Skeleton Necromancer",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_caster": {
+        "name": "[OLD/READY] Skeleton Caster",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_caster": {
+        "name": "[NEW/READY] Skeleton Caster",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_skeleton_rogue": {
+        "name": "[OLD/READY] Skeleton Rogue",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_skeleton_rogue": {
+        "name": "[NEW/READY] Skeleton Rogue",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_golem": {
+        "name": "[OLD/READY] Bone Golem",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_golem": {
+        "name": "[NEW/READY] Bone Golem",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_treant": {
+        "name": "[OLD/READY] Treant",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_treant": {
+        "name": "[NEW/READY] Treant",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_kobold": {
+        "name": "[OLD/DONE] Kobold",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_new_kobold": {
+        "name": "[NEW/DONE] Kobold",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_grix": {
+        "name": "[OLD/DONE] Grix the Tunnelking",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_new_grix": {
+        "name": "[NEW/DONE] Grix the Tunnelking",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_deeprock_kobold": {
+        "name": "[OLD/DONE] Deeprock Kobold",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_new_deeprock_kobold": {
+        "name": "[NEW/DONE] Deeprock Kobold",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_burrower": {
+        "name": "[OLD/MISSING] Burrower",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_murloc": {
+        "name": "[OLD/DONE] Murloc",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_new_murloc": {
+        "name": "[NEW/DONE] Murloc",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_frog": {
+        "name": "[OLD/MISSING] Bog Bloat",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_troll": {
+        "name": "[OLD/READY] Troll",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_troll": {
+        "name": "[NEW/READY] Troll",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_ogre": {
+        "name": "[OLD/DONE] Ogre",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_new_ogre": {
+        "name": "[NEW/DONE] Ogre",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_mob_old_imp": {
+        "name": "[OLD/READY] Imp",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_new_imp": {
+        "name": "[NEW/READY] Imp",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_mob_old_bruiser": {
+        "name": "[OLD/MISSING] Bruiser",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_skeleton_boss": {
+        "name": "[OLD/MISSING] Morthen",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_grubjaw": {
+        "name": "[OLD/MISSING] Grubjaw",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_drogmar": {
+        "name": "[OLD/MISSING] Warlord Drogmar",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_yeti": {
+        "name": "[OLD/MISSING] Yeti",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_elemental": {
+        "name": "[OLD/MISSING] Elemental",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_water_elemental": {
+        "name": "[OLD/MISSING] Water Elemental",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_dragonkin": {
+        "name": "[OLD/MISSING] Dragonkin",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_demon": {
+        "name": "[OLD/MISSING] Demon",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_demonalt": {
+        "name": "[OLD/MISSING] Voidwalker",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_ghost": {
+        "name": "[OLD/MISSING] Ghost",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_gravewing": {
+        "name": "[OLD/MISSING] Gravewing",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_glimmerwisp": {
+        "name": "[OLD/MISSING] Glimmerwisp",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_duskwisp": {
+        "name": "[OLD/MISSING] Duskwisp",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_sporeling": {
+        "name": "[OLD/MISSING] Sporeling",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_pixie": {
+        "name": "[OLD/MISSING] Mushroom Pixie",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_nightkin": {
+        "name": "[OLD/MISSING] Nightkin",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_emberkin": {
+        "name": "[OLD/MISSING] Emberkin",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_gloomshade": {
+        "name": "[OLD/MISSING] Gloomshade",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_pyre_colossus": {
+        "name": "[OLD/MISSING] Pyre Colossus",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mech": {
+        "name": "[OLD/MISSING] Derelict Mech",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_training_dummy": {
+        "name": "[OLD/MISSING] Training Dummy",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_wildheart_stalker": {
+        "name": "[OLD/MISSING] Wildheart Stalker",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_wildheart_ravager": {
+        "name": "[OLD/MISSING] Wildheart Ravager",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_wildheart_hexcaller": {
+        "name": "[OLD/MISSING] Wildheart Hexcaller",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_wildheart_beastmaster": {
+        "name": "[OLD/MISSING] Wildheart Beastmaster",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_wildheart_high_priest": {
+        "name": "[OLD/MISSING] Wildheart High Priest",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_ignivar": {
+        "name": "[OLD/MISSING] Ignivar",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_ignivar_heart_of_the_end": {
+        "name": "[OLD/MISSING] Heart of the End",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_ignivar_crucible_warden": {
+        "name": "[OLD/MISSING] Crucible Warden",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_ignivar_ember_sentinel": {
+        "name": "[OLD/MISSING] Ember Sentinel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_ignivar_cinder_artificer": {
+        "name": "[OLD/MISSING] Cinder Artificer",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_varkhul_forgefather": {
+        "name": "[OLD/MISSING] Varkhul",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodlord": {
+        "name": "[OLD/MISSING] Drakemaw Broodlord",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_dragonkin_matriarch": {
+        "name": "[OLD/MISSING] Cindraleth",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodguard": {
+        "name": "[OLD/MISSING] Broodguard",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_dragonkin_whelp": {
+        "name": "[OLD/MISSING] Whelp",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_dragon_egg": {
+        "name": "[OLD/MISSING] Dragon Egg",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_choir_thrall": {
+        "name": "[OLD/MISSING] Choir Thrall",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_tolling_bell": {
+        "name": "[OLD/MISSING] Tolling Bell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_delve_skel_wraith": {
+        "name": "[OLD/MISSING] Ledger Wraith",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_delve_skel_ringer": {
+        "name": "[OLD/MISSING] Funeral Ringer",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_delve_skel_effigy": {
+        "name": "[OLD/MISSING] Saintless Effigy",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_delve_skel_varric": {
+        "name": "[OLD/MISSING] Deacon Varric",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_skel_rickshaw_puller": {
+        "name": "[OLD/MISSING] Rickshaw Puller",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_rift_ritualist": {
+        "name": "[OLD/MISSING] Ritualist",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_reedbound_acolyte": {
+        "name": "[OLD/MISSING] Reedbound Acolyte",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_spider_egg_sac": {
+        "name": "[OLD/MISSING] Spider Egg Sac",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_mob_nythraxis_bone_spike": {
+        "name": "[OLD/MISSING] Bone Spike",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_npc_edda_reedhand": {
+        "name": "[OLD/MISSING] Edda Reedhand",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_npc_villager": {
+        "name": "[OLD/MISSING] Escort Villager",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_npc_knight": {
+        "name": "[OLD/MISSING] Hedge Knight",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_player_warrior": {
+        "name": "[OLD/MISSING] Spirit of Aldren",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_player_mage": {
+        "name": "[OLD/MISSING] Spirit of Malric",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_mob_old_player_rogue": {
+        "name": "[OLD/MISSING] Spirit of Voss",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_the_merchant": {
+        "name": "[OLD/MISSING] The Merchant",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_marshal_redbrook": {
+        "name": "[OLD/DONE] Marshal Redbrook",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_marshal_redbrook": {
+        "name": "[NEW/DONE] Marshal Redbrook",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_trader_wilkes": {
+        "name": "[OLD/DONE] Trader Wilkes",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_trader_wilkes": {
+        "name": "[NEW/DONE] Trader Wilkes",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_apothecary_lin": {
+        "name": "[OLD/DONE] Apothecary Lin",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_apothecary_lin": {
+        "name": "[NEW/DONE] Apothecary Lin",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_brother_aldric": {
+        "name": "[OLD/DONE] Brother Aldric",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_brother_aldric": {
+        "name": "[NEW/DONE] Brother Aldric",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_smith_haldren": {
+        "name": "[OLD/DONE] Smith Haldren",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_smith_haldren": {
+        "name": "[NEW/DONE] Smith Haldren",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_fisherman_brandt": {
+        "name": "[OLD/DONE] Fisherman Brandt",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_fisherman_brandt": {
+        "name": "[NEW/DONE] Fisherman Brandt",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_foreman_odell": {
+        "name": "[OLD/DONE] Foreman Odell",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_new_foreman_odell": {
+        "name": "[NEW/DONE] Foreman Odell",
+        "title": "REPLACED IN GAME",
+        "greeting": "REPLACED IN GAME"
+      },
+      "dev_compare_npc_old_bursar_fernando": {
+        "name": "[OLD/MISSING] Bursar Fernando",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_card_master": {
+        "name": "[OLD/MISSING] Card Master",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_chronicler_saul": {
+        "name": "[OLD/MISSING] Saul the Chronicler",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_forgemistress_darva": {
+        "name": "[OLD/MISSING] Forgemistress Darva",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_cook_marlow": {
+        "name": "[OLD/MISSING] Cook Marlow",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_weaver_ottilie": {
+        "name": "[OLD/MISSING] Weaver Ottilie",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_tinker_gizzel": {
+        "name": "[OLD/MISSING] Tinker Gizzel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_farmer_jessica": {
+        "name": "[OLD/MISSING] Farmer Jessica",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_warden_fenwick": {
+        "name": "[OLD/MISSING] Warden Fenwick",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_provisioner_hale": {
+        "name": "[OLD/MISSING] Provisioner Hale",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_herbalist_yara": {
+        "name": "[OLD/MISSING] Herbalist Yara",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_scout_maren": {
+        "name": "[OLD/MISSING] Scout Maren",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_bursar_petra_vell": {
+        "name": "[OLD/MISSING] Bursar Petra Vell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_chronicler_osric_fenn": {
+        "name": "[OLD/MISSING] Chronicler Osric Fenn",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_tanner_hesk": {
+        "name": "[OLD/MISSING] Tanner Hesk",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_farmer_teasel": {
+        "name": "[OLD/MISSING] Farmer Teasel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_captain_thessaly": {
+        "name": "[OLD/MISSING] Captain Thessaly",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_quartermaster_bree": {
+        "name": "[OLD/MISSING] Quartermaster Bree",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_armorer_hode": {
+        "name": "[OLD/MISSING] Armorer Hode",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_heroic_quartermaster": {
+        "name": "[OLD/MISSING] Quartermaster Vex",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_warmarshal_draven_kole": {
+        "name": "[OLD/MISSING] Warmarshal Draven Kole",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_loremaster_caddis": {
+        "name": "[OLD/MISSING] Loremaster Caddis",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_auctioneer_voss": {
+        "name": "[OLD/MISSING] Auctioneer Voss",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_bursar_aldous_crane": {
+        "name": "[OLD/MISSING] Bursar Aldous Crane",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_stablemaster_marla": {
+        "name": "[OLD/MISSING] Marla Hitchen",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_chronicler_edda_hartwell": {
+        "name": "[OLD/MISSING] Chronicler Zenzie",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_alchemist_verane": {
+        "name": "[OLD/MISSING] Alchemist Verane",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_farmer_hollis": {
+        "name": "[OLD/MISSING] Farmer Hollis",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_tidewatcher_ondrel": {
+        "name": "[OLD/MISSING] Ondrel Vane",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_fury": {
+        "name": "[OLD/MISSING] FURY",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_brother_halven": {
+        "name": "[OLD/MISSING] Brother Halven",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_keeper_saelwyn": {
+        "name": "[OLD/MISSING] Keeper Saelwyn",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_loremother_bryn": {
+        "name": "[OLD/MISSING] Loremother Bryn",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_provisioner_fenna": {
+        "name": "[OLD/MISSING] Provisioner Fenna",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_wardsmith_orun": {
+        "name": "[OLD/MISSING] Wardsmith Orun",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_archivist_tullo": {
+        "name": "[OLD/MISSING] Archivist Tullo",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_huntsman_deral": {
+        "name": "[OLD/MISSING] Huntsman Deral",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_gatecaptain_brannoc": {
+        "name": "[OLD/MISSING] Gatecaptain Brannoc",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_quartermaster_sela": {
+        "name": "[OLD/MISSING] Quartermaster Sela",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_scout_yerrin": {
+        "name": "[OLD/MISSING] Scout Yerrin",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_warden_kaldra": {
+        "name": "[OLD/MISSING] Warden Kaldra",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_hearthkeeper_maeve": {
+        "name": "[OLD/MISSING] Hearthkeeper Maeve",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_scout_einna": {
+        "name": "[OLD/MISSING] Scout Einna",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_aurorist_veyla": {
+        "name": "[OLD/MISSING] Aurorist Veyla",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_trapper_brosk": {
+        "name": "[OLD/MISSING] Trapper Brosk",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_reeve_ottoline": {
+        "name": "[OLD/MISSING] Reeve Ottoline",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_waywatcher_sorrel": {
+        "name": "[OLD/MISSING] Waywatcher Sorrel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_ferrymaster_caddow": {
+        "name": "[OLD/MISSING] Ferrymaster Caddow",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_orchardist_pomeline": {
+        "name": "[OLD/MISSING] Orchardist Pomeline",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_waykeeper_pell": {
+        "name": "[OLD/MISSING] Waykeeper Pell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_bridgewright_alden": {
+        "name": "[OLD/MISSING] Bridgewright Alden",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_netter_maris": {
+        "name": "[OLD/MISSING] Netter Maris",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_mother_sedge": {
+        "name": "[OLD/MISSING] Mother Sedge",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_lamplighter_sorrel": {
+        "name": "[OLD/MISSING] Lamplighter Sorrel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_lira_dewsong": {
+        "name": "[OLD/MISSING] Lira Dewsong",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_weaver_amelle": {
+        "name": "[OLD/MISSING] Weaver Amelle",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_astronomer_cassian": {
+        "name": "[OLD/MISSING] Astronomer Cassian",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_lampman_cobb": {
+        "name": "[OLD/MISSING] Lampman Cobb",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_sexton_marrow": {
+        "name": "[OLD/MISSING] Sexton Marrow",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_widow_tansy": {
+        "name": "[OLD/MISSING] Widow Tansy",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_vicar_creel": {
+        "name": "[OLD/MISSING] Vicar Creel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_strandwatcher_pell": {
+        "name": "[OLD/MISSING] Strandwatcher Pell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_salvage_boss_ryna": {
+        "name": "[OLD/MISSING] Salvage-Boss Ryna",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_pearlmother_isha": {
+        "name": "[OLD/MISSING] Pearl-Mother Isha",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_hermit_okku": {
+        "name": "[OLD/MISSING] Okrim",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_gatewarden_pell": {
+        "name": "[OLD/MISSING] Gatewarden Pell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_head_gardener_amaranth": {
+        "name": "[OLD/MISSING] Head Gardener Amaranth",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_wickmother_sorrel": {
+        "name": "[OLD/MISSING] Wickmother Sorrel",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_gardener_yew": {
+        "name": "[OLD/MISSING] Gardener Yew",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_farmer_verbena": {
+        "name": "[OLD/MISSING] Farmer Verbena",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_watcher_maren": {
+        "name": "[OLD/MISSING] Watcher Maren",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_harbormaster_odile": {
+        "name": "[OLD/MISSING] Harbormaster Odile",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_keeper_bram": {
+        "name": "[OLD/MISSING] Keeper Bram",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_salvager_edda": {
+        "name": "[OLD/MISSING] Salvager Edda",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_warden_coalfast": {
+        "name": "[OLD/MISSING] Warden Coalfast",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_riftwatch_ollun": {
+        "name": "[OLD/MISSING] Riftwatch Ollun",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_quartermaster_edda": {
+        "name": "[OLD/MISSING] Quartermaster Edda",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_mender_saul": {
+        "name": "[OLD/MISSING] Mender Saul",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_bellkeeper_tam": {
+        "name": "[OLD/MISSING] Bellkeeper Tam",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_fisher_nell": {
+        "name": "[OLD/MISSING] Frightened Nell",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_riftwright_maelis": {
+        "name": "[OLD/MISSING] Riftwright Maelis",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_wayfarer_bryn": {
+        "name": "[OLD/MISSING] Wayfarer Bryn",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_instructor_maren": {
+        "name": "[OLD/READY] Instructor Maren",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_instructor_maren": {
+        "name": "[NEW/READY] Instructor Maren",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_quartermaster_finch": {
+        "name": "[OLD/READY] Quartermaster Finch",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_quartermaster_finch": {
+        "name": "[NEW/READY] Quartermaster Finch",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_bursar_wick": {
+        "name": "[OLD/READY] Bursar Wick",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_bursar_wick": {
+        "name": "[NEW/READY] Bursar Wick",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_ferryman_odo": {
+        "name": "[OLD/READY] Ferryman Odo",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_ferryman_odo": {
+        "name": "[NEW/READY] Ferryman Odo",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_warden_tam": {
+        "name": "[OLD/READY] Warden Tam",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_warden_tam": {
+        "name": "[NEW/READY] Warden Tam",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_overseer_pell": {
+        "name": "[OLD/READY] Overseer Pell",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_overseer_pell": {
+        "name": "[NEW/READY] Overseer Pell",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_drillmaster_rook": {
+        "name": "[OLD/READY] Drillmaster Rook",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_drillmaster_rook": {
+        "name": "[NEW/READY] Drillmaster Rook",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_tidewarden_nel": {
+        "name": "[OLD/READY] Tidewarden Nel",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_new_tidewarden_nel": {
+        "name": "[NEW/READY] Tidewarden Nel",
+        "title": "REPLACEMENT READY",
+        "greeting": "REPLACEMENT READY"
+      },
+      "dev_compare_npc_old_archivist_maelin_emberward": {
+        "name": "[OLD/MISSING] Archivist Maelin Emberward",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_archivist_maelin_ember_projection": {
+        "name": "[OLD/MISSING] Maelin's Ember Projection",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_crucible_quartermaster": {
+        "name": "[OLD/MISSING] Quartermaster Bronn Emberward",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_spirit_healer": {
+        "name": "[OLD/MISSING] The Pale Keeper",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
+      },
+      "dev_compare_npc_old_drillmaster_hale": {
+        "name": "[OLD/MISSING] Drillmaster Hale",
+        "title": "NO REPLACEMENT",
+        "greeting": "NO REPLACEMENT"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
@@ -20352,6 +21626,30 @@ export const zh_CN: EnTranslations = {
           },
           "4": {
             "label": "试炼跑道"
+          }
+        }
+      },
+      "dev_model_lab": {
+        "name": "Model Test Island",
+        "welcome": "Developer model test island. Use dev commands to rebuild or clear test subjects.",
+        "pois": {
+          "0": {
+            "label": "Character Lineup"
+          },
+          "1": {
+            "label": "NPC Gallery"
+          },
+          "2": {
+            "label": "Creature Ring"
+          },
+          "3": {
+            "label": "Animal Replacements"
+          },
+          "4": {
+            "label": "Mob Replacements"
+          },
+          "5": {
+            "label": "NPC Replacements"
           }
         }
       }

@@ -13,6 +13,11 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.warriorSuit.label': '防具の外見',
+  'hudChrome.warriorSuit.hint': 'この端末での外見を変更します。装備の性能は変わりません。',
+  'hudChrome.warriorSuit.recruit': '新兵',
+  'hudChrome.warriorSuit.militia': '民兵',
+  'hudChrome.warriorSuit.knight': '騎士',
   'guide.professions.endgameBodyRaidCollections':
     '名匠鍛造は「装備数制限：名匠鍛造」の印を持つ共通の装備群です。従来の最高位製作ルートでは、発見する型紙、1日ごとに制限される中間素材の製作、共通の終盤素材を引き続き使います。坩堝のセットはレイド素材を使う別ルートであり、従来のルートに追加費用を積み重ねるものではありません。どちらも同じ2部位までの装備上限を共有するため、ビルド内の同じ二つの枠を競います。完成品は完全化や依頼製作によってその個体が帰属するまでは自由に取引できます。',
   'guide.professions.endgamePatternsBodyCollections':
@@ -6033,6 +6038,24 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'auth.realm': 'ワールド',
   'auth.newCharacter': '新規キャラクター',
   'auth.appearance': '外見',
+  'auth.equipmentCalibration': '装備調整',
+  'auth.equipmentCalibrationHint':
+    '3Dギズモをドラッグするか、コントロールを使って剣と盾を調整できます。',
+  'auth.equipmentCalibrationItem': '装備アイテム',
+  'auth.equipmentCalibrationMode': '変形モード',
+  'auth.equipmentCalibrationValues': '保存した値',
+  'auth.equipmentCalibrationAxis': '{field} {axis}',
+  'auth.equipmentSword': '剣',
+  'auth.equipmentShield': '盾',
+  'auth.equipmentPosition': '位置',
+  'auth.equipmentRotation': '回転',
+  'auth.equipmentScale': '拡大縮小',
+  'auth.equipmentPauseAnimation': 'アニメーションを一時停止',
+  'auth.equipmentResumeAnimation': 'アニメーションを再開',
+  'auth.equipmentResetItem': 'アイテムをリセット',
+  'auth.equipmentCopyValues': '値をコピー',
+  'auth.equipmentValuesCopied': '値をコピーしました。',
+  'auth.equipmentCopyManual': '自動コピーできません。値を選択しました。',
   'auth.class': 'クラス',
   'auth.name': '名前',
   'auth.chromaOption': 'カラー {n}',

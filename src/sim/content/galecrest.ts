@@ -1,3 +1,6 @@
+import { applySettlementProps } from '../settlements_layout';
+import { WICKHARBOR_ROADS } from '../wickharbor_layout';
+import { rebuildWickharborProps } from '../wickharbor_props';
 // The Galecrest (level 20). The world's first EAST map: a wind-scoured
 // headland realm in its own grid column beside the Willowfen, entered on
 // foot through the Windway, a pass in the mountain border that runs along
@@ -90,6 +93,7 @@ export const GALECREST_ROADS: { x: number; z: number }[][] = [
     { x: 376, z: 666 },
     { x: 396, z: 698 },
   ], // the Wreckfields -> up to the Garden Gate (onto the lawns)
+  ...WICKHARBOR_ROADS.slice(4).map((road) => road.points.map(([x, z]) => ({ x, z }))),
 ] as { x: number; z: number }[][];
 
 // Authored always-bloom flower circles (render/foliage.ts reads these the
@@ -310,10 +314,7 @@ export const GALECREST_NPCS: Record<string, NpcDef> = {
     id: 'keeper_bram',
     name: 'Keeper Bram',
     title: 'Keeper of the Old Beacon',
-    // on the Beacon's upper balcony (BEACON_SPIRAL deck2, +19), a couple of
-    // paces along the deck from where the second flight tops out, looking back
-    // at the stair head. Keep him clear of the tower column: inside coreR the
-    // ground snap hands out the plug height and he ends up on the roof cap.
+    // Beside the open lighthouse entrance, reachable before climbing.
     pos: { x: 503, z: 309 },
     facing: -0.46,
     color: 0xc8b06a,
@@ -644,7 +645,7 @@ export const GALECREST_QUEST_CAMPS: CampDef[] = [
   { mobId: 'gale_wisp', center: { x: 355, z: 585 }, radius: 8, count: 4, offStream: true },
 ];
 
-export const GALECREST_PROPS: ZonePropsDef = {
+const GALECREST_LEGACY_PROPS: ZonePropsDef = {
   ...emptyZoneProps(),
   // Wickharbor: the coast's medieval harbor city, laid out along its four
   // street spokes (the roads above): every house fronts a street with open
@@ -843,3 +844,8 @@ export const GALECREST_PROPS: ZonePropsDef = {
   ruinRings: [{ x: 288, z: 328, ringR: 7, columns: 5 }],
   graveyards: [{ x: 400, z: 342 }],
 };
+
+export const GALECREST_PROPS: ZonePropsDef = applySettlementProps(
+  rebuildWickharborProps(GALECREST_LEGACY_PROPS),
+  'wickharbor',
+);

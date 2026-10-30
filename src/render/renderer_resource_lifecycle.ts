@@ -12,6 +12,8 @@ export interface RendererPrewarmAndGroundFxOwner<T extends RendererDisposable> {
   warlockMeteorFx?: RendererDisposable;
   vfx?: RendererDisposable;
   abilityVfxFx?: RendererDisposable;
+  /** Renderer-owned settlement material clones and terrain adaptation geometry. */
+  eastbrookTownView?: RendererDisposable;
   // The farm patch visuals (src/render/farm_patches.ts) own per-plot material
   // clones; their dispose() walks plots AND feasts. Added at the Phase 17
   // render review: the class carried a correct idempotent terminal owner that
@@ -45,6 +47,7 @@ export function disposeRendererPrewarmAndGroundFx(
   bestEffort(() => resources.mageGroundFx?.dispose());
   bestEffort(() => resources.warlockMeteorFx?.dispose());
   bestEffort(() => resources.abilityVfxFx?.dispose());
+  bestEffort(() => resources.eastbrookTownView?.dispose());
   bestEffort(() => resources.vfx?.dispose());
   bestEffort(() => resources.farmPatchVisuals?.dispose());
   bestEffort(() => resources.frozenOrbFx?.dispose());

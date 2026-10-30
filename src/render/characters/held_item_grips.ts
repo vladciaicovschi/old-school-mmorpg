@@ -9,6 +9,12 @@ export const KAYKIT_SHIELD_ACCESSORIES = {
   shield_square: 'Rectangle_Shield',
   shield_badge: 'Badge_Shield',
   varkhul_emberward: 'Varkhul_Bulwark',
+  battleworn_oak_shield: 'Meshy_Shield',
+  fallen_king_shield_1: 'Meshy_Shield',
+  fallen_king_shield_2: 'Meshy_Shield',
+  fallen_king_shield_3: 'Meshy_Shield',
+  fallen_king_shield_4: 'Meshy_Shield',
+  fallen_king_shield_5: 'Meshy_Shield',
 } as const;
 
 // Extracted from the authored accessory nodes in the original KayKit knight
@@ -26,6 +32,10 @@ export const KAYKIT_SHIELD_GRIPS: Readonly<Record<string, { r: HandGrip; l: Hand
   Badge_Shield: {
     r: { position: [0, -0.0123, 0.1341], quaternion: [0, 1, 0, 0], scale: 0.5108 },
     l: { position: [0, -0.0123, 0.1341], quaternion: [0, 0, 0, 1], scale: 0.5108 },
+  },
+  Meshy_Shield: {
+    r: { position: [0, 0.017, 0.15], quaternion: [0, 1, 0, 0], scale: 0.65 },
+    l: { position: [0, 0.017, 0.15], quaternion: [0, 0, 0, 1], scale: 0.65 },
   },
   // Ignivar raid legendary (Varkhul drop). Not a KayKit accessory: the model is
   // origined at its back grip bar (tmp/varkhul_drops_build.mjs), so the hand

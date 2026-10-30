@@ -1,0 +1,149 @@
+{
+  "sourcePacks": [
+    "Medieval Village MegaKit Pro",
+    "Fantasy Props MegaKit Pro"
+  ],
+  "license": "CC0 1.0; existing game fixture licenses retained",
+  "models": [
+    {
+      "id": "home",
+      "source": "home.glb",
+      "sha256": "6d993dee16648bf2665b71e7a30c79689d716660be27e3169a757404f1b6e17f"
+    },
+    {
+      "id": "home-salter",
+      "source": "home-salter.glb",
+      "sha256": "2b943e048a13cd23398c347d4082593c73318be988bf5798a6d3266760f8d1e2"
+    },
+    {
+      "id": "home-compact",
+      "source": "home-compact.glb",
+      "sha256": "2265f0e6d7d70d5f8134d345cefb490c98b05d778bcae8ab2f7286f1554fcdb1"
+    },
+    {
+      "id": "home-shuttered",
+      "source": "home-shuttered.glb",
+      "sha256": "8d1389e18f6bb2c68d2e9879984fbe3221ac1072f7e0f54b6d7843e74f7d1051"
+    },
+    {
+      "id": "inn",
+      "source": "inn.glb",
+      "sha256": "dccd56b1dd2f9677fd4e0e28c07938ca18644e5f419b466672416a0f66f3bd70"
+    },
+    {
+      "id": "lighthouse-round",
+      "source": "lighthouse-round.glb",
+      "sha256": "843775d4a371ccfb9c2664f1d584d245a58847b8d6f779ed4bd8ed470928f90c"
+    },
+    {
+      "id": "entrance-step",
+      "source": "wickharbor/entrance-step.glb",
+      "sha256": "61e5c41dec66e05d499ae4da48c6d82af1ee1c0f2d7688c23c7d265e0de93d4c"
+    },
+    {
+      "id": "entrance-platform",
+      "source": "wickharbor/entrance-platform.glb",
+      "sha256": "26d9da8bf4bd89645fa17a2138fb263d971f63f2e2aee953ccd9099c372a50d1"
+    },
+    {
+      "id": "civic-hall",
+      "source": "wickharbor/civic-hall.glb",
+      "sha256": "b10be504e7f23dba84797c8bce9350baf6ca67b478e97e0e9cdf50758bdcf6e8"
+    },
+    {
+      "id": "civic-chapel",
+      "source": "wickharbor/civic-chapel.glb",
+      "sha256": "7acba1bfeff3f6f611605b84ce684a8ed595e2f0bf3e6a00ab04423d95e40cd1"
+    },
+    {
+      "id": "civic-market",
+      "source": "wickharbor/civic-market.glb",
+      "sha256": "5471e12af8bb926bb077578da562ce7404430f5c1c54bf27259878f1b431cecc"
+    },
+    {
+      "id": "civic-office",
+      "source": "wickharbor/civic-office.glb",
+      "sha256": "a271a38337ce9c4acac3cefb18438f89a75358d4451d15c4c817ef2523803368"
+    },
+    {
+      "id": "civic-warehouse",
+      "source": "wickharbor/civic-warehouse.glb",
+      "sha256": "bb5b584abb5c8b3f02404991ed73e2fd8a78d9762fe4466675693d4724dd3769"
+    },
+    {
+      "id": "civic-shipyard",
+      "source": "wickharbor/civic-shipyard.glb",
+      "sha256": "044971e7536ca9c6601f102402fc2fe9636e77cc86c3698c894160bcda95ed5c"
+    },
+    {
+      "id": "civic-smokehouse",
+      "source": "wickharbor/civic-smokehouse.glb",
+      "sha256": "055b61f7fc0415cb8183cb1791bd0f4730753a0bf1e3d581be938ac259a713c1"
+    },
+    {
+      "id": "civic-workshop",
+      "source": "wickharbor/civic-workshop.glb",
+      "sha256": "8bbc6357f9b8b12272da3c7f87d2f8072286893851b51afb6806f348387e03f9"
+    },
+    {
+      "id": "civic-beacon-store",
+      "source": "wickharbor/civic-beacon-store.glb",
+      "sha256": "f8fce1f3de554eda72e95d4a164beedc00cd3767dcd8100dad7e87500a0809e7"
+    },
+    {
+      "id": "yard-fence",
+      "source": "wickharbor/yard-fence.glb",
+      "sha256": "0c151ca10d63a16b357da536249f44dafd5a24df1ebe09b39f9d8efd63766a6e"
+    },
+    {
+      "id": "yard-leek",
+      "source": "wickharbor/yard-leek.glb",
+      "sha256": "91bc7596e3a1067d3cd14aba3e94a54aa570a9056f8ae584418612df91cd31c5"
+    },
+    {
+      "id": "yard-carrot",
+      "source": "wickharbor/yard-carrot.glb",
+      "sha256": "0190915ea7a067e11e60fa9c0f0e6f83069544aa10c435b45778270fa9e991c3"
+    },
+    {
+      "id": "yard-log",
+      "source": "wickharbor/yard-log.glb",
+      "sha256": "6183105f55d2d30fdb1787f4349797b8ca83d852d1cfd26a3d7f63b0078d3e96"
+    },
+    {
+      "id": "yard-bench",
+      "source": "wickharbor/yard-bench.glb",
+      "sha256": "6d5fbd6a982a982fcc1fac9262d871d56150bfd4bdef67159cad5f7e6d925f29"
+    },
+    {
+      "id": "yard-deck",
+      "source": "wickharbor/yard-deck.glb",
+      "sha256": "dae9e5093230e4175bd46beb5064abcbcd8ffed21760eb0bd9e8bef522af9e27"
+    },
+    {
+      "id": "yard-post",
+      "source": "wickharbor/yard-post.glb",
+      "sha256": "980965d0cc61646964f9df59fc404525da2ecdfa16c3eb3350420a796aaf0090"
+    },
+    {
+      "id": "fixture-well",
+      "source": "wickharbor/fixture-well.glb",
+      "sha256": "f56aadb735126741256f4ce6cb1a7e6d9ab545e95c5e6690e7d5210ec5f799b5"
+    },
+    {
+      "id": "fixture-mailbox",
+      "source": "wickharbor/fixture-mailbox.glb",
+      "sha256": "9bd6f1a88e66e3652ed856616f6c58de9b092da3df3584fdd41498657a29754b"
+    },
+    {
+      "id": "fixture-noticeboard",
+      "source": "wickharbor/fixture-noticeboard.glb",
+      "sha256": "96c3a8ff87f3d7a10106d622294a32fb56901559a1bc90373023c046f128724f"
+    },
+    {
+      "id": "fixture-monument",
+      "source": "wickharbor/fixture-monument.glb",
+      "sha256": "59a31b47133083f136617553902753e3e2fc188a4aef0c259e45a14662367ebe"
+    }
+  ]
+}

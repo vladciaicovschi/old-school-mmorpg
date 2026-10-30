@@ -1,0 +1,38 @@
+{
+  "Buffalo_Walk": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.202980464072474
+  },
+  "Buffalo_Trot": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.16777066808378888
+  },
+  "Buffalo_Run": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.090411259940196
+  },
+  "Buffalo_HornLeft": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.29262893273814866
+  },
+  "Buffalo_HornRight": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.29211787746671336
+  },
+  "Buffalo_Charge": {
+    "reach_clamp": 0.0,
+    "reach_leg": null,
+    "reach_phase": null,
+    "fold_margin": 0.2932702771636491
+  }
+}

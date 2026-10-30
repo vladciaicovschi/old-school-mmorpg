@@ -1,0 +1,49 @@
+{
+  "runtime": [
+    {
+      "animal": "wolf",
+      "walk": {
+        "clip": "Wolf_Walk",
+        "time": 0.9972482801356225
+      },
+      "run": {
+        "clip": "Wolf_Run",
+        "time": 0.15683255212300912
+      },
+      "attacks": [
+        "Wolf_BiteLeft",
+        "Wolf_BiteRight",
+        "Wolf_BiteLeft",
+        "Wolf_BiteRight",
+        "Wolf_Lunge"
+      ],
+      "recovery": {
+        "clip": "Wolf_Idle",
+        "time": 0.8000000000000008
+      }
+    },
+    {
+      "animal": "goat",
+      "walk": {
+        "clip": "Goat_Walk",
+        "time": 0.6804642074452921
+      },
+      "run": {
+        "clip": "Goat_Run",
+        "time": 0.050000047683715854
+      },
+      "attacks": [
+        "Goat_HeadbuttLeft",
+        "Goat_HeadbuttRight",
+        "Goat_HeadbuttLeft",
+        "Goat_HeadbuttRight",
+        "Goat_Ram"
+      ],
+      "recovery": {
+        "clip": "Goat_Idle",
+        "time": 0.8000000000000008
+      }
+    }
+  ],
+  "errors": []
+}

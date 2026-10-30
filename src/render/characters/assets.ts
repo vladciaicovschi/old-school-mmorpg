@@ -15,8 +15,9 @@ import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
-import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
+import { offhandMirrorsWeaponSkin, weaponTypeForItem } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
+import { ITEMS } from '../../sim/data';
 import { retryDelayMs as gltfRetryDelayMs } from '../assets/load_retry';
 import { loadGltf, loadKtx2Texture, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
@@ -24,11 +25,14 @@ import { recordBuildSpan, timeBuildSpan } from '../build_spans';
 import { addRimGlow, EMISSIVE_GLOW, GFX, type GfxSettings } from '../gfx';
 import { applySurfaceDetail, riggedWornFamilyFor } from '../worn_stone';
 import { type ArmorDyeSpec, attachArmorDye } from './armor_dye';
-import { backGripFor } from './back_grips';
+import { backGripFor, hipGripFor } from './back_grips';
+import { carriedAttachmentFitFor } from './carried_attachment_fit';
 import { dequantizeAttribute } from './dequantize_attribute';
 import { coalesceFarBakeGroups, farBakeGroupRanges } from './far_bake_groups_core';
 import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
+import { heldAttachmentFitFor } from './held_attachment_fit';
 import { pruneHeldPropIdles, registerHeldPropIdle } from './held_prop_idle';
+import { itemAttachmentFitFor } from './item_attachment_fit';
 import { composedLookReady } from './look_pieces';
 import { buildMakeupDecal } from './makeup';
 import {
@@ -51,6 +55,21 @@ import {
   weaponSkinModelUrls,
 } from './manifest';
 import { meshProgramShapeKey } from './material_program_shape_core';
+import {
+  allEquipmentPartNodeNames,
+  type EquipmentPartItems,
+  type EquipmentPartMap,
+  equipmentPartNodeNames,
+} from './meshy_titan_armor_core';
+import { MESHY_TITAN_EQUIPMENT_FIT } from './meshy_titan_equipment_fit.generated';
+import {
+  MESHY_TITAN_ATTACHMENT_UNIT_SCALE,
+  MESHY_TITAN_HANDSLOT_POSITION,
+  MESHY_TITAN_WEAPON_MODEL_URLS,
+  meshyTitanHeldFinalTransformFor,
+  meshyTitanHeldModelCorrectionFor,
+  meshyTitanWeaponModelUrlFor,
+} from './meshy_titan_weapon_models_core';
 import {
   armorMaterialSet,
   bandMaterialSpec,
@@ -88,6 +107,10 @@ import {
   createPaladinTemplarsVerdictClip,
   PALADIN_TEMPLARS_VERDICT_CLIP,
 } from './paladin_templars_verdict_clip';
+import {
+  QUATERNIUS_WEAPON_MODEL_URLS,
+  quaterniusWeaponModelUrlFor,
+} from './quaternius_weapon_models_core';
 import { animatedNodeNames, mergeSkinnedParts } from './rig_merge';
 import { shareRigSkeleton } from './rig_shared_skeleton';
 import { attachSharedDepthMaterials, clearSharedDepthMaterials } from './shadow_depth_materials';
@@ -97,6 +120,8 @@ import { optimizeSkinGpuLayout } from './skin_gpu_layout';
 import { primeSkinnedSortSpheres } from './skinned_sort_spheres';
 import { buildStubbleDecal, headNodeName } from './stubble';
 import { TINTED_MATERIAL_IDLE_CACHE_MAX, TintedMaterialCache } from './tinted_material_cache_core';
+import { addWarriorTravelClips } from './warrior_travel_clips';
+import { weaponUsesHipCarry } from './weapon_carry_core';
 import { variantGripTransform, WEAPON_GRIP_OVERRIDES } from './weapon_grip';
 import { markOwnedWeaponSkinMaterials } from './weapon_skin_materials';
 
@@ -114,6 +139,8 @@ export const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   crossbow_1handed: '1H_Crossbow',
   crossbow_2handed: '2H_Crossbow',
   sword_1handed: '1H_Sword',
+  knights_valor_sword: 'VAR_SWORD',
+  knights_valor_shield: 'Rectangle_Shield',
   sword_2handed: '2H_Sword',
   staff: '2H_Staff',
   dagger: 'Knife',
@@ -135,6 +162,37 @@ export const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   dagger_a: 'VAR_DAGGER',
   dagger_b: 'VAR_DAGGER',
   dagger_c: 'VAR_DAGGER',
+  ascendance_sword_1: 'VAR_SWORD',
+  ascendance_sword_2: 'VAR_SWORD',
+  ascendance_sword_3: 'VAR_SWORD',
+  ascendance_sword_4: 'VAR_SWORD',
+  ascendance_sword_5: 'VAR_SWORD',
+  claymore_sword_1: 'VAR_SWORD',
+  claymore_sword_2: 'VAR_SWORD',
+  claymore_sword_3: 'VAR_SWORD',
+  claymore_sword_4: 'VAR_SWORD',
+  claymore_sword_5: 'VAR_SWORD',
+  lion_warhammer_1h_1: 'VAR_MACE',
+  lion_warhammer_1h_2: 'VAR_MACE',
+  lion_warhammer_1h_3: 'VAR_MACE',
+  lion_warhammer_1h_4: 'VAR_MACE',
+  lion_warhammer_1h_5: 'VAR_MACE',
+  dwarven_warhammer_2h_1: 'VAR_HAMMER',
+  dwarven_warhammer_2h_2: 'VAR_HAMMER',
+  dwarven_warhammer_2h_3: 'VAR_HAMMER',
+  dwarven_warhammer_2h_4: 'VAR_HAMMER',
+  dwarven_warhammer_2h_5: 'VAR_HAMMER',
+  test_crossbow_1: 'VAR_CROSSBOW',
+  arcane_dagger_1: 'VAR_DAGGER',
+  arcane_dagger_2: 'VAR_DAGGER',
+  arcane_dagger_3: 'VAR_DAGGER',
+  arcane_dagger_4: 'VAR_DAGGER',
+  arcane_dagger_5: 'VAR_DAGGER',
+  arcane_longbow_1: 'VAR_BOW',
+  arcane_longbow_2: 'VAR_BOW',
+  arcane_longbow_3: 'VAR_BOW',
+  arcane_longbow_4: 'VAR_BOW',
+  arcane_longbow_5: 'VAR_BOW',
   staff_a: 'VAR_STAFF',
   staff_b: 'VAR_STAFF',
   staff_c: 'VAR_STAFF',
@@ -348,6 +406,93 @@ function applyHandGrip(
   payload.scale.setScalar(grip.scale);
 }
 
+// The Quaternius humanoid rig exposes anatomical hand bones but no prop sockets.
+// Its hand-local axes match the KayKit hand bones closely enough that the old
+// authored handslot marker is a stable adapter. Compose it before the existing
+// per-weapon grip, preserving all item, offhand and cosmetic weapon behavior.
+const QUATERNIUS_HANDSLOT_POSITION: [number, number, number] = [0, 0.096125, -0.0575];
+const QUATERNIUS_HANDSLOT_ROTATION: Record<'r' | 'l', THREE.Quaternion> = {
+  r: new THREE.Quaternion(0, 0, Math.SQRT1_2, Math.SQRT1_2),
+  l: new THREE.Quaternion(0, 0, -Math.SQRT1_2, Math.SQRT1_2),
+};
+const QUATERNIUS_WEAPON_AXIS_ROTATION: Record<'r' | 'l', THREE.Quaternion> = {
+  r: new THREE.Quaternion(0, 0, -Math.SQRT1_2, Math.SQRT1_2),
+  l: new THREE.Quaternion(0, 0, Math.SQRT1_2, Math.SQRT1_2),
+};
+const quaterniusHandslotMatrix = new THREE.Matrix4();
+const quaterniusHandslotPosition = new THREE.Vector3(...QUATERNIUS_HANDSLOT_POSITION);
+const quaterniusHandslotScale = new THREE.Vector3(1, 1, 1);
+const mixamoHandslotMatrix = new THREE.Matrix4();
+const mixamoHandslotPosition = new THREE.Vector3(...MESHY_TITAN_HANDSLOT_POSITION).multiplyScalar(
+  MESHY_TITAN_ATTACHMENT_UNIT_SCALE,
+);
+const mixamoHandslotScale = new THREE.Vector3(1, 1, 1).multiplyScalar(
+  MESHY_TITAN_ATTACHMENT_UNIT_SCALE,
+);
+
+function applyQuaterniusHandslotAdapter(payload: THREE.Object3D, bone: string): void {
+  quaterniusHandslotMatrix.compose(
+    quaterniusHandslotPosition,
+    QUATERNIUS_HANDSLOT_ROTATION[handSide(bone)],
+    quaterniusHandslotScale,
+  );
+  payload.updateMatrix();
+  payload.matrix.premultiply(quaterniusHandslotMatrix);
+  payload.matrix.decompose(payload.position, payload.quaternion, payload.scale);
+}
+
+function applyMixamoHandslotAdapter(payload: THREE.Object3D, bone: string): void {
+  mixamoHandslotMatrix.compose(
+    mixamoHandslotPosition,
+    QUATERNIUS_HANDSLOT_ROTATION[handSide(bone)],
+    mixamoHandslotScale,
+  );
+  payload.updateMatrix();
+  payload.matrix.premultiply(mixamoHandslotMatrix);
+  payload.matrix.decompose(payload.position, payload.quaternion, payload.scale);
+}
+
+function applyMixamoPropUnitScale(payload: THREE.Object3D): void {
+  payload.position.multiplyScalar(MESHY_TITAN_ATTACHMENT_UNIT_SCALE);
+  payload.scale.multiplyScalar(MESHY_TITAN_ATTACHMENT_UNIT_SCALE);
+}
+
+function applyMeshyTitanHeldModelCorrection(
+  payload: THREE.Object3D,
+  url: string,
+  scaleGripOffset: boolean,
+): void {
+  const correction = meshyTitanHeldModelCorrectionFor(url);
+  if (!correction) return;
+  if (scaleGripOffset) payload.position.multiplyScalar(correction.scale);
+  payload.scale.multiplyScalar(correction.scale);
+  payload.quaternion.multiply(new THREE.Quaternion(...correction.quaternion));
+  if (scaleGripOffset && correction.modelOffset) {
+    payload.position.add(
+      new THREE.Vector3(...correction.modelOffset)
+        .multiplyScalar(correction.scale)
+        .applyQuaternion(payload.quaternion),
+    );
+  }
+}
+
+function applyMeshyTitanHeldFinalTransform(payload: THREE.Object3D, url: string): void {
+  const transform = meshyTitanHeldFinalTransformFor(url);
+  if (!transform) return;
+  payload.position.set(...transform.position);
+  payload.rotation.set(
+    THREE.MathUtils.degToRad(transform.rotationDeg[0]),
+    THREE.MathUtils.degToRad(transform.rotationDeg[1]),
+    THREE.MathUtils.degToRad(transform.rotationDeg[2]),
+    'XYZ',
+  );
+  payload.scale.setScalar(transform.scale);
+}
+
+function applyQuaterniusWeaponAxis(payload: THREE.Object3D, bone: string): void {
+  payload.quaternion.premultiply(QUATERNIUS_WEAPON_AXIS_ROTATION[handSide(bone)]);
+}
+
 function flattenWeaponScene(src: THREE.Object3D): THREE.Object3D {
   if (src.children.length !== 1) return src;
   const holder = new THREE.Group();
@@ -413,15 +558,28 @@ function attachProp(
   bone: THREE.Object3D,
   att: AttachDef,
   swapKind: 'mainhand' | 'offhand' | null = null,
+  calibrationSlot: 'mainhand' | 'offhand' | null = swapKind,
   stowed = false,
+  attachmentRig: VisualDef['attachmentRig'] = undefined,
+  heldAttachmentFit: VisualDef['heldAttachmentFit'] = undefined,
+  hipCarry = false,
+  carriedAttachmentFit: VisualDef['carriedAttachmentFit'] = undefined,
+  equipmentFitKey: string | undefined = undefined,
 ): THREE.Object3D {
-  const gltf = resolvedGltf(att.url);
+  const modelUrl =
+    attachmentRig === 'quaternius_humanoid'
+      ? quaterniusWeaponModelUrlFor(att.url)
+      : attachmentRig === 'mixamo_humanoid'
+        ? meshyTitanWeaponModelUrlFor(att.url)
+        : att.url;
+  const quaterniusPackWeapon = modelUrl.startsWith('models/weapons/quaternius/');
+  const gltf = resolvedGltf(modelUrl);
   const payload = flattenWeaponScene(cloneSkinned(gltf.scene));
   if (gltf.animations.length) registerHeldPropIdle(root, payload, gltf.animations);
   primeSkinnedSortSpheres(payload);
   // An authored held model (manifest AUTHORED_HELD_MODELS) keeps its shipped
   // surface response through applyMaterials instead of the kit polish.
-  const authoredSurface = isAuthoredHeldModelUrl(att.url);
+  const authoredSurface = isAuthoredHeldModelUrl(modelUrl);
   payload.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) {
       o.userData.weaponMesh = true;
@@ -430,15 +588,16 @@ function attachProp(
   });
   if (swapKind === 'mainhand') {
     payload.userData[SWAP_WEAPON_TAG] = true;
-    payload.userData.heldSlot = 0;
   } else if (swapKind === 'offhand') {
     payload.userData[SWAP_OFFHAND_TAG] = true;
-    payload.userData.heldSlot = 1;
   }
+  if (calibrationSlot) payload.userData.heldSlot = calibrationSlot === 'mainhand' ? 0 : 1;
   payload.userData[HELD_PROP_TAG] = true;
-  const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
+  payload.userData.heldAccessory = kaykitAccessoryFor(att.url);
+  payload.userData.heldModelUrl = att.url;
+  const variantGrip = isHandslotBone(att.bone) ? variantGripFor(modelUrl) : null;
   if (variantGrip) {
-    applyVariantGrip(payload, att.bone, variantGrip, att.url);
+    applyVariantGrip(payload, att.bone, variantGrip, modelUrl);
   } else if (att.position || att.rotationY !== undefined) {
     if (att.position) payload.position.set(...att.position);
     if (att.rotationY !== undefined) payload.rotation.y = att.rotationY;
@@ -446,15 +605,67 @@ function attachProp(
     const ref = findAccessoryNode(root, att.gripRef);
     if (ref) copyAccessoryTransform(payload, ref);
   } else if (isHandslotBone(att.bone)) {
-    applyHandGrip(payload, root, att.bone, att.url);
+    applyHandGrip(payload, root, att.bone, modelUrl);
   }
   // Sheathed: override where the prop SITS (on-back position/lean, chest-bone
   // space; the caller resolved the chest bone) but keep the SCALE the normal
   // grip pass just computed, so variant-pack size clamps carry over.
   if (stowed && isHandslotBone(att.bone)) {
-    const grip = backGripFor(kaykitAccessoryFor(att.url), handSide(att.bone));
+    const grip = hipCarry
+      ? hipGripFor(handSide(att.bone))
+      : backGripFor(kaykitAccessoryFor(att.url), handSide(att.bone));
     payload.position.set(...grip.position);
     payload.quaternion.set(...grip.quaternion);
+  }
+  if (isHandslotBone(att.bone) && attachmentRig === 'quaternius_humanoid' && !stowed) {
+    if (quaterniusPackWeapon) applyQuaterniusWeaponAxis(payload, att.bone);
+    applyQuaterniusHandslotAdapter(payload, att.bone);
+  } else if (isHandslotBone(att.bone) && attachmentRig === 'mixamo_sentinel') {
+    if (!stowed) applyMixamoHandslotAdapter(payload, att.bone);
+    payload.scale.multiplyScalar(0.4);
+  } else if (isHandslotBone(att.bone) && attachmentRig === 'mixamo_humanoid') {
+    applyMeshyTitanHeldModelCorrection(payload, modelUrl, !stowed);
+    if (stowed) applyMixamoPropUnitScale(payload);
+    else {
+      applyMixamoHandslotAdapter(payload, att.bone);
+      applyMeshyTitanHeldFinalTransform(payload, modelUrl);
+    }
+  } else if (isHandslotBone(att.bone) && attachmentRig === 'mixamo_standard') {
+    if (!stowed) applyMixamoHandslotAdapter(payload, att.bone);
+    else applyMixamoPropUnitScale(payload);
+  }
+  if (att.scaleMultiplier !== undefined) payload.scale.multiplyScalar(att.scaleMultiplier);
+  const itemFit = itemAttachmentFitFor(equipmentFitKey, att.url);
+  const bodyFit = heldAttachmentFitFor(equipmentFitKey) ?? heldAttachmentFit;
+  const fitted = calibrationSlot
+    ? (itemFit?.[calibrationSlot] ?? bodyFit?.[calibrationSlot])
+    : undefined;
+  // Carry changes the anchor, not the size of a calibrated equipped item.
+  if (fitted) payload.scale.setScalar(fitted.scale);
+  if (fitted && !stowed) {
+    payload.position.set(...fitted.position);
+    payload.rotation.set(
+      THREE.MathUtils.degToRad(fitted.rotationDeg[0]),
+      THREE.MathUtils.degToRad(fitted.rotationDeg[1]),
+      THREE.MathUtils.degToRad(fitted.rotationDeg[2]),
+      'XYZ',
+    );
+  }
+  const carryKey = calibrationSlot
+    ? (`${calibrationSlot}_${hipCarry ? 'hip' : 'back'}` as const)
+    : null;
+  const carried =
+    stowed && carryKey
+      ? (itemFit?.[carryKey] ??
+        (equipmentFitKey ? carriedAttachmentFitFor(equipmentFitKey)[carryKey] : undefined) ??
+        carriedAttachmentFit?.[carryKey])
+      : undefined;
+  if (carried) {
+    payload.position.set(...carried.position);
+    payload.rotation.set(
+      ...(carried.rotationDeg.map(THREE.MathUtils.degToRad) as [number, number, number]),
+    );
+    payload.scale.setScalar(carried.scale);
   }
   bone.add(payload);
   return payload;
@@ -481,10 +692,22 @@ function swapAttachDef(
   if (skinUrl) {
     const skin = weaponSkinId ? WEAPON_SKINS[weaponSkinId] : null;
     const bone = skin ? weaponSkinAttachBone(weaponSkinHandling(skin), base.bone) : base.bone;
-    return { url: skinUrl, bone };
+    return {
+      url: skinUrl,
+      bone,
+      calibrationSlot: base.calibrationSlot,
+      scaleMultiplier: base.scaleMultiplier,
+    };
   }
   const url = itemWeaponModelUrl(weaponItemId);
-  return url ? { url, bone: base.bone } : base;
+  return url
+    ? {
+        url,
+        bone: base.bone,
+        calibrationSlot: base.calibrationSlot,
+        scaleMultiplier: base.scaleMultiplier,
+      }
+    : base;
 }
 
 // The AttachDef for the actual equipped offhand. Its model is the offhand item's
@@ -501,13 +724,20 @@ function offhandAttachDef(
   // The mirrored-skin arm of offhandModelUrl can name a streamed skin GLB; the
   // item's own offhand model is always resident, so degrade to it.
   const resident = residentOrEnsure(url) ?? itemOffhandModelUrl(offhandItemId);
-  return resident ? { url: resident, bone: base.bone } : null;
+  return resident
+    ? {
+        url: resident,
+        bone: base.bone,
+        calibrationSlot: base.calibrationSlot,
+        scaleMultiplier: base.scaleMultiplier,
+      }
+    : null;
 }
 
 // Classes without weaponSlots keep a FIXED weapon visual (the hunter's ranged
 // crossbow). A bow/crossbow skin replaces that fixed attach instead of a
 // swappable slot, so those attaches join the swap/stale cycle too.
-const RANGED_SWAP_BASENAMES = new Set(['crossbow_1handed', 'crossbow_2handed']);
+const RANGED_SWAP_BASENAMES = new Set(['crossbow_1handed', 'crossbow_2handed', 'test_crossbow_1']);
 
 function attachBasename(att: AttachDef): string {
   return modelBasename(att.url);
@@ -517,19 +747,34 @@ function isRangedSwapAttach(att: AttachDef): boolean {
   return RANGED_SWAP_BASENAMES.has(attachBasename(att));
 }
 
+export function hasRangedWeaponAttachment(def: VisualDef): boolean {
+  return def.attach?.some(isRangedSwapAttach) ?? false;
+}
+
 // The fixed ranged attach with a bow/crossbow skin substituted, or null to keep
 // the base def (no skin, or a skin of a non-ranged type). The bone follows the
 // skin's HANDLING: drawn bows move to the left handslot (the draw animation's
 // front arm); crossbow handling (real crossbows, and bow-slot guns that aim
 // like them) keeps the base bone.
-function rangedSkinAttachDef(base: AttachDef, weaponSkinId: string | null): AttachDef | null {
-  if (!weaponSkinId) return null;
+function rangedSkinAttachDef(base: AttachDef, weaponSkinId: string | null, weaponItemId: string | null): AttachDef | null {
+  if (!isRangedSwapAttach(base)) return null;
+  const itemType = weaponTypeForItem(weaponItemId);
+  const itemUrl = itemType === 'bow' || itemType === 'crossbow' ? itemWeaponModelUrl(weaponItemId) : null;
+  const itemAttach = itemUrl ? { ...base, url: itemUrl, bone: weaponSkinAttachBone(itemType!, base.bone) } : null;
+  if (!weaponSkinId) return itemAttach;
   const def = WEAPON_SKINS[weaponSkinId];
-  if (!def || (def.weaponType !== 'bow' && def.weaponType !== 'crossbow')) return null;
+  if (!def || (def.weaponType !== 'bow' && def.weaponType !== 'crossbow')) return itemAttach;
   const url = residentOrEnsure(weaponSkinModelUrl(weaponSkinId));
   // Not resident yet: no override, the fixed class weapon renders until the
   // skin GLB streams in and the next rebuild applies it.
-  return url ? { url, bone: weaponSkinAttachBone(weaponSkinHandling(def), base.bone) } : null;
+  return url
+    ? {
+        url,
+        bone: weaponSkinAttachBone(weaponSkinHandling(def), base.bone),
+        calibrationSlot: base.calibrationSlot,
+        scaleMultiplier: base.scaleMultiplier,
+      }
+    : itemAttach;
 }
 
 function resolveBone(root: THREE.Object3D, name: string): THREE.Object3D | null {
@@ -657,6 +902,38 @@ function characterAssetResident(url: string): boolean {
 export function ensureCharacterUrl(url: string | null | undefined): void {
   if (!url || characterAssetResident(url)) return;
   void prepareCharacterUrl(url).catch(() => undefined);
+}
+
+/** Preload one complete fixed-body visual (body, animation donors, and props).
+ *
+ * This is the targeted counterpart to the eager manifest sweep: replacement
+ * bodies can stay `lazyPreload` while their boot coordinator loads the exact
+ * set it needs before the first synchronous CharacterVisual construction.
+ */
+export function preloadCharacterVisualAssets(
+  visualKey: string,
+  equipmentUrls: readonly string[] = [],
+): Promise<void> {
+  const def = VISUALS[visualKey];
+  if (!def) return Promise.reject(new Error(`unknown character visual '${visualKey}'`));
+  return Promise.all(
+    [
+      def.url,
+      ...(def.animUrls ?? []),
+      ...(def.attach ?? []).map((attach) => attach.url),
+      ...equipmentUrls,
+    ].map((url) => prepareCharacterUrl(url)),
+  ).then(() => undefined);
+}
+
+/** Load the Quaternius weapon slice before its island-only body overrides are installed. */
+export function preloadQuaterniusWeaponAssets(): Promise<void> {
+  return Promise.all(QUATERNIUS_WEAPON_MODEL_URLS.map(prepareCharacterUrl)).then(() => undefined);
+}
+
+/** Load the Meshy Titan's rig-scoped sword and shield replacements. */
+export function preloadMeshyTitanWeaponAssets(): Promise<void> {
+  return Promise.all(MESHY_TITAN_WEAPON_MODEL_URLS.map(prepareCharacterUrl)).then(() => undefined);
 }
 
 /** A streamed url that has not arrived yet must degrade, never throw: return
@@ -982,7 +1259,10 @@ function optimizedScene(url: string): THREE.Object3D {
     }
   }
   const root = cloneSkinned(source.scene);
-  mergeSkinnedParts(root, animatedNodeNames(clips));
+  const preserveSkinnedParts = Object.values(VISUALS).some(
+    (def) => def.url === url && def.preserveSkinnedParts,
+  );
+  if (!preserveSkinnedParts) mergeSkinnedParts(root, animatedNodeNames(clips));
   // After the merge, so only what the merge could not fold is rebaked, and
   // before the palette pass, which reads the (now single) skeleton.
   shareRigSkeleton(root);
@@ -1441,7 +1721,7 @@ function attachMakeupDecal(head: THREE.SkinnedMesh, look: ModularLook): THREE.Sk
   return decal;
 }
 
-/** Options of a composed build. */
+/** Options of a character build. */
 export interface AssembleOptions {
   /** Leave the face decals off when the look's pieces (its decal maps and
    *  cuts, look_pieces.ts) are not resident, flagging the root
@@ -1455,6 +1735,112 @@ export interface AssembleOptions {
    *  the maps it would otherwise mint are the two procedural textures a
    *  peer's first sight of an unseen style already pays in pieces. */
   skipDecals?: boolean;
+  /** Occupied gameplay slots for a fixed body with named equipment parts. */
+  equipmentItems?: EquipmentPartItems;
+  /** Paperdoll visibility bit; suppresses an equipped helmet part. */
+  helmHidden?: boolean;
+}
+
+/** Apply the fixed body's equipment-node mask in place. Newly shown top-level
+ * nodes are returned so the world renderer can compile-gate only those parts. */
+export function setEquipmentPartVisibility(
+  root: THREE.Object3D,
+  parts: EquipmentPartMap,
+  items: EquipmentPartItems,
+  helmHidden: boolean,
+): THREE.Object3D[] {
+  const all = new Set(allEquipmentPartNodeNames(parts));
+  const shown = new Set(equipmentPartNodeNames(parts, items, helmHidden));
+  const newlyShown: THREE.Object3D[] = [];
+  root.traverse((node) => {
+    if (!all.has(node.name)) return;
+    const visible = shown.has(node.name);
+    if (visible && !node.visible) newlyShown.push(node);
+    node.visible = visible;
+    node.userData.equipmentPart = true;
+    node.userData.equipmentPartDesiredVisible = visible;
+    node.traverse((child) => {
+      child.userData.equipmentPart = true;
+    });
+  });
+  return newlyShown;
+}
+
+const meshyTitanArmorPivotCache = new Map<string, readonly [number, number, number]>();
+const meshyTitanArmorFitBindings = new WeakMap<
+  THREE.Object3D,
+  { mesh: THREE.SkinnedMesh; baseBindMatrix: THREE.Matrix4; pivot: THREE.Vector3 }
+>();
+const meshyTitanFitTranslateBack = new THREE.Matrix4();
+const meshyTitanFitDelta = new THREE.Matrix4();
+
+/** Push a calibration proxy's local delta into its rigid-skinned armor mesh.
+ * Attached SkinnedMesh model transforms cancel against bindMatrixInverse, so
+ * the persistent fit belongs in bindMatrix instead of the render node tree. */
+export function applyEquipmentCalibrationPivotTransform(pivot: THREE.Object3D): boolean {
+  const binding = meshyTitanArmorFitBindings.get(pivot);
+  if (!binding) return false;
+  pivot.updateMatrix();
+  meshyTitanFitTranslateBack.makeTranslation(-binding.pivot.x, -binding.pivot.y, -binding.pivot.z);
+  meshyTitanFitDelta.copy(pivot.matrix).multiply(meshyTitanFitTranslateBack);
+  binding.mesh.bindMatrix.copy(meshyTitanFitDelta).multiply(binding.baseBindMatrix);
+  return true;
+}
+
+/** Give each skinned armor mesh a centre-pivoted calibration proxy.
+ *
+ * The GLB's rigid-skinned nodes all have their origin at the armature origin.
+ * TransformControls attached there therefore draw under the character, and a
+ * rotation swings armor around the feet. The non-rendering proxy writes its
+ * delta into the mesh's bind matrix, which is the one transform Three's
+ * attached-skin update does not cancel. */
+function installMeshyTitanArmorFitPivots(root: THREE.Object3D, parts: EquipmentPartMap): void {
+  root.updateMatrixWorld(true);
+  for (const name of allEquipmentPartNodeNames(parts)) {
+    const node = root.getObjectByName(name);
+    const parent = node?.parent;
+    const transform = MESHY_TITAN_EQUIPMENT_FIT[name as keyof typeof MESHY_TITAN_EQUIPMENT_FIT];
+    const skinned = node as THREE.SkinnedMesh | undefined;
+    if (!node || !parent || !transform || !skinned?.isSkinnedMesh) continue;
+
+    let pivotPosition = meshyTitanArmorPivotCache.get(name);
+    if (!pivotPosition) {
+      const bounds = new THREE.Box3().setFromObject(node, true);
+      const worldCenter = bounds.isEmpty()
+        ? node.getWorldPosition(new THREE.Vector3())
+        : bounds.getCenter(new THREE.Vector3());
+      const localCenter = parent.worldToLocal(worldCenter);
+      pivotPosition = [localCenter.x, localCenter.y, localCenter.z];
+      meshyTitanArmorPivotCache.set(name, pivotPosition);
+    }
+
+    const pivot = new THREE.Group();
+    pivot.name = `EquipmentFit_${name}`;
+    pivot.userData.equipmentCalibrationTarget = name;
+    pivot.userData.equipmentCalibrationBasePosition = [...pivotPosition];
+    pivot.position.set(pivotPosition[0], pivotPosition[1], pivotPosition[2]);
+    parent.add(pivot);
+    meshyTitanArmorFitBindings.set(pivot, {
+      mesh: skinned,
+      baseBindMatrix: skinned.bindMatrix.clone(),
+      pivot: new THREE.Vector3(pivotPosition[0], pivotPosition[1], pivotPosition[2]),
+    });
+
+    // Generated armor values are a delta around the authored part centre,
+    // unlike held props whose saved transforms remain hand-bone absolute.
+    pivot.position.x += transform.position[0];
+    pivot.position.y += transform.position[1];
+    pivot.position.z += transform.position[2];
+    pivot.rotation.set(
+      THREE.MathUtils.degToRad(transform.rotationDeg[0]),
+      THREE.MathUtils.degToRad(transform.rotationDeg[1]),
+      THREE.MathUtils.degToRad(transform.rotationDeg[2]),
+      'XYZ',
+    );
+    pivot.scale.setScalar(transform.scale);
+    applyEquipmentCalibrationPivotTransform(pivot);
+  }
+  root.updateMatrixWorld(true);
 }
 
 /** The compose's decal step: both decals attached, or deferred (see
@@ -1682,10 +2068,19 @@ export function assembleModel(
   }
   const root = cloneSkinned(optimizedScene(def.url));
   shareRigSkeleton(root);
+  if (def.equipmentParts) {
+    installMeshyTitanArmorFitPivots(root, def.equipmentParts);
+    setEquipmentPartVisibility(
+      root,
+      def.equipmentParts,
+      opts?.equipmentItems ?? {},
+      opts?.helmHidden ?? false,
+    );
+  }
   // tag the character's own meshes (body + accessories share one texture atlas)
   // so a skin override hits them but not the separate weapons attached below
   root.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) o.userData.bodyMesh = true;
+    if ((o as THREE.Mesh).isMesh && !o.userData.equipmentPart) o.userData.bodyMesh = true;
   });
   // KayKit characters ship every accessory mesh visible; keep only the kit
   if (def.show) {
@@ -1730,10 +2125,35 @@ export function assembleModel(
 // resolveBone tries both.
 function attachTargetBone(
   root: THREE.Object3D,
+  def: VisualDef,
   att: AttachDef,
   stowed: boolean,
+  hipCarry = false,
 ): THREE.Object3D | null {
-  return resolveBone(root, stowed && isHandslotBone(att.bone) ? STOW_BONE : att.bone);
+  const logical = stowed && isHandslotBone(att.bone) ? (hipCarry ? 'hips' : STOW_BONE) : att.bone;
+  const adapted =
+    def.attachmentRig === 'quaternius_humanoid'
+      ? logical === 'handslot.r'
+        ? 'hand_r'
+        : logical === 'handslot.l'
+          ? 'hand_l'
+          : logical === STOW_BONE
+            ? 'spine_03'
+            : logical
+      : def.attachmentRig === 'mixamo_humanoid' ||
+          def.attachmentRig === 'mixamo_standard' ||
+          def.attachmentRig === 'mixamo_sentinel'
+        ? logical === 'handslot.r'
+          ? 'mixamorigRightHand'
+          : logical === 'handslot.l'
+            ? 'mixamorigLeftHand'
+            : logical === STOW_BONE
+              ? 'mixamorigSpine2'
+              : logical === 'hips'
+                ? 'mixamorigHips'
+                : logical
+        : logical;
+  return resolveBone(root, adapted);
 }
 
 // Attach every authored prop: swappable slots take the equipped item's model (or an
@@ -1770,12 +2190,30 @@ function attachAllProps(
       ? swapAttachDef(base, weaponItemId, weaponSkinId)
       : isOffhandSwap
         ? offhandAttachDef(base, offhandItemId, weaponSkinId)
-        : (rangedSkinAttachDef(base, weaponSkinId) ?? base);
+        : (rangedSkinAttachDef(base, weaponSkinId, weaponItemId) ?? base);
     if (!att) continue;
-    const bone = attachTargetBone(root, att, stowed);
+    const attachmentStowed = stowed || base.stowByDefault === true;
+    const carryItemId = isOffhandSwap ? offhandItemId : isSwap ? weaponItemId : null;
+    const hipCarry =
+      def.weaponCarryByHand === true &&
+      weaponUsesHipCarry(carryItemId ? ITEMS[carryItemId] : undefined);
+    const bone = attachTargetBone(root, def, att, attachmentStowed, hipCarry);
     if (!bone) continue;
     const swapKind = isOffhandSwap ? 'offhand' : isWeapon ? 'mainhand' : null;
-    const payload = attachProp(root, bone, att, swapKind, stowed);
+    const calibrationSlot = base.calibrationSlot ?? swapKind;
+    const payload = attachProp(
+      root,
+      bone,
+      att,
+      swapKind,
+      calibrationSlot,
+      attachmentStowed,
+      def.attachmentRig,
+      def.heldAttachmentFit,
+      hipCarry,
+      def.carriedAttachmentFit,
+      def.equipmentFitKey,
+    );
     if (isWeapon || (isOffhandSwap && offhandSkinned)) payloads.push(payload);
   }
   return payloads;
@@ -1814,10 +2252,28 @@ export function setHeldWeapon(
     const base = attachments[i];
     const att = def.weaponSlots?.includes(i)
       ? swapAttachDef(base, weaponItemId, weaponSkinId)
-      : (rangedSkinAttachDef(base, weaponSkinId) ?? base);
-    const bone = attachTargetBone(root, att, stowed);
+      : (rangedSkinAttachDef(base, weaponSkinId, weaponItemId) ?? base);
+    const attachmentStowed = stowed || base.stowByDefault === true;
+    const hipCarry =
+      def.weaponCarryByHand === true &&
+      weaponUsesHipCarry(weaponItemId ? ITEMS[weaponItemId] : undefined);
+    const bone = attachTargetBone(root, def, att, attachmentStowed, hipCarry);
     if (!bone) continue;
-    payloads.push(attachProp(root, bone, att, 'mainhand', stowed));
+    payloads.push(
+      attachProp(
+        root,
+        bone,
+        att,
+        'mainhand',
+        base.calibrationSlot ?? 'mainhand',
+        attachmentStowed,
+        def.attachmentRig,
+        def.heldAttachmentFit,
+        hipCarry,
+        def.carriedAttachmentFit,
+        def.equipmentFitKey,
+      ),
+    );
   }
   return payloads;
 }
@@ -1846,8 +2302,28 @@ export function setHeldOffhand(
   if (!base) return [];
   const att = offhandAttachDef(base, offhandItemId, weaponSkinId);
   if (!att) return [];
-  const bone = attachTargetBone(root, att, stowed);
-  return bone ? [attachProp(root, bone, att, 'offhand', stowed)] : [];
+  const attachmentStowed = stowed || base.stowByDefault === true;
+  const hipCarry =
+    def.weaponCarryByHand === true &&
+    weaponUsesHipCarry(offhandItemId ? ITEMS[offhandItemId] : undefined);
+  const bone = attachTargetBone(root, def, att, attachmentStowed, hipCarry);
+  return bone
+    ? [
+        attachProp(
+          root,
+          bone,
+          att,
+          'offhand',
+          base.calibrationSlot ?? 'offhand',
+          attachmentStowed,
+          def.attachmentRig,
+          def.heldAttachmentFit,
+          hipCarry,
+          def.carriedAttachmentFit,
+          def.equipmentFitKey,
+        ),
+      ]
+    : [];
 }
 
 /** A standalone display clone of a weapon-skin model for the armory inspect
@@ -2403,6 +2879,13 @@ export const tintedMaterialInternalsForTest = {
   cacheIdleSize: (): number => matCache.idleSize,
 };
 
+/** Test-only access to the per-url optimization boundary. Character asset
+ * regressions need to exercise the exact preserve/merge decision without
+ * constructing the much larger CharacterVisual presentation wrapper. */
+export const characterAssetOptimizationInternalsForTest = {
+  optimizedScene,
+};
+
 export function prepareVisual(key: string): PreparedVisual {
   const hit = prepared.get(key);
   if (hit) return hit;
@@ -2415,18 +2898,37 @@ export function prepareVisual(key: string): PreparedVisual {
   for (const url of def.animUrls ?? []) {
     for (const clip of resolvedGltf(url).animations) clips.set(clip.name, clip);
   }
-  // The modular paladin mirrors the classic clip map (attackByAbility includes
-  // the synthesized Verdict and Sweep names), so it needs the same synthesis:
-  // its animUrls lead with the class GLB, which supplies both source clips.
+  if (def.clips.travel) {
+    addWarriorTravelClips(clips, gltf.scene, {
+      idle: def.clips.idle,
+      walk: def.clips.walk,
+      run: def.clips.run,
+      attack: def.clips.attack[0],
+    });
+  }
+  // The modular paladin mirrors the fixed clip map (attackByAbility includes
+  // the synthesized Verdict and Sweep names). Legacy packs supply their source
+  // clips; the imported T1 pack supplies one generic attack, which safely
+  // covers those abilities until bespoke T1 variants are authored.
   if (key === 'player_paladin' || key === modularVisualKey('paladin')) {
     const verdictBase = clips.get(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_TEMPLARS_VERDICT_CLIP]);
-    if (!verdictBase) throw new Error('Paladin Templar Verdict requires 2H_Melee_Attack_Chop');
-    clips.set(PALADIN_TEMPLARS_VERDICT_CLIP, createPaladinTemplarsVerdictClip(verdictBase));
-    const sweepBase = clips.get(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_BASTION_SWEEP_CLIP]);
-    if (!sweepBase) {
-      throw new Error('Paladin Bastion Sweep requires 1H_Melee_Attack_Slice_Diagonal');
+    const defaultAttack = def.clips.attack;
+    const fallbackAttack = clips.get(
+      Array.isArray(defaultAttack) ? defaultAttack[0] : defaultAttack,
+    );
+    if (verdictBase) {
+      clips.set(PALADIN_TEMPLARS_VERDICT_CLIP, createPaladinTemplarsVerdictClip(verdictBase));
+    } else if (fallbackAttack) {
+      clips.set(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_TEMPLARS_VERDICT_CLIP], fallbackAttack);
+      clips.set(PALADIN_TEMPLARS_VERDICT_CLIP, fallbackAttack);
     }
-    clips.set(PALADIN_BASTION_SWEEP_CLIP, createPaladinBastionSweepClip(sweepBase));
+    const sweepBase = clips.get(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_BASTION_SWEEP_CLIP]);
+    if (sweepBase) {
+      clips.set(PALADIN_BASTION_SWEEP_CLIP, createPaladinBastionSweepClip(sweepBase));
+    } else if (fallbackAttack) {
+      clips.set(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_BASTION_SWEEP_CLIP], fallbackAttack);
+      clips.set(PALADIN_BASTION_SWEEP_CLIP, fallbackAttack);
+    }
   }
 
   // Pose a throwaway clone mid-idle, measure it, and bake the static mesh. No
@@ -2504,7 +3006,11 @@ export function prepareVisual(key: string): PreparedVisual {
     .multiply(new THREE.Matrix4().makeRotationY(def.yaw ?? 0))
     .multiply(new THREE.Matrix4().makeScale(normScale, normScale, normScale));
 
-  const farMeshes = farBakeMeshes(temp);
+  // An equipment-part body can change its visible nodes at runtime. Its one
+  // default-loadout bake would otherwise shed equipped armor at the far LOD,
+  // so the experiment keeps the articulated rig at distance until loadout-keyed
+  // bakes are introduced.
+  const farMeshes = def.equipmentParts ? [] : farBakeMeshes(temp);
   const { geo, mats, isBody } = bakeStaticPose(norm, farMeshes);
   const shadowMeshes = farMeshes.filter(characterMeshCastsShadow);
   const shadowGeo =

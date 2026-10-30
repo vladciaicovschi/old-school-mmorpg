@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Buffalo_Idle",
+    "samples": 41,
+    "lowestVertexY": -0.0025205027838941145,
+    "phase": 0.75
+  },
+  {
+    "name": "Buffalo_CombatIdle",
+    "samples": 41,
+    "lowestVertexY": -0.0012018387417690086,
+    "phase": 0.85
+  },
+  {
+    "name": "Buffalo_Walk",
+    "samples": 41,
+    "lowestVertexY": -0.0011991468249575494,
+    "phase": 0.6
+  },
+  {
+    "name": "Buffalo_Trot",
+    "samples": 41,
+    "lowestVertexY": -0.0007889972766977522,
+    "phase": 0.575
+  },
+  {
+    "name": "Buffalo_Run",
+    "samples": 41,
+    "lowestVertexY": -0.0009305427969025595,
+    "phase": 0.875
+  },
+  {
+    "name": "Buffalo_HornLeft",
+    "samples": 41,
+    "lowestVertexY": -0.0007492041192750376,
+    "phase": 0.375
+  },
+  {
+    "name": "Buffalo_HornRight",
+    "samples": 41,
+    "lowestVertexY": -0.000640741507573724,
+    "phase": 0.95
+  },
+  {
+    "name": "Buffalo_Charge",
+    "samples": 41,
+    "lowestVertexY": -0.0006575827502758314,
+    "phase": 0.1
+  },
+  {
+    "name": "Buffalo_Hit",
+    "samples": 41,
+    "lowestVertexY": -0.00063896483863816,
+    "phase": 0.15
+  },
+  {
+    "name": "Buffalo_Death",
+    "samples": 41,
+    "lowestVertexY": -0.0005131428726006988,
+    "phase": 0
+  },
+  {
+    "name": "Buffalo_Bellow",
+    "samples": 41,
+    "lowestVertexY": -0.002034013405462276,
+    "phase": 0.275
+  },
+  {
+    "name": "Buffalo_AlertLook",
+    "samples": 41,
+    "lowestVertexY": -0.00043620033483600845,
+    "phase": 0.025
+  },
+  {
+    "name": "Buffalo_Graze",
+    "samples": 41,
+    "lowestVertexY": -0.0006754565983147682,
+    "phase": 0.9
+  }
+]

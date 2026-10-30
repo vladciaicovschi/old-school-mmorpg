@@ -23,7 +23,9 @@ export const FLEE_HELP_RADIUS = 5;
 // mob onto its attacker. Called each tick of the flee; the caller turns the fleer back
 // the moment this returns a non-zero count. Returns the number of allies newly pulled.
 export function rallyFleeingAllies(ctx: SimContext, mob: Entity, target: Entity): number {
-  const family = MOBS[mob.templateId]?.family;
+  const template = MOBS[mob.templateId];
+  if (template?.aggroOnDamageOnly) return 0;
+  const family = template?.family;
   if (!family) return 0;
   let pulled = 0;
   ctx.grid.forEachInRadius(mob.pos.x, mob.pos.z, FLEE_HELP_RADIUS, (m, d2) => {
@@ -35,6 +37,7 @@ export function rallyFleeingAllies(ctx: SimContext, mob: Entity, target: Entity)
       m.aiState === 'idle' &&
       m.ownerId === null &&
       MOBS[m.templateId]?.family === family &&
+      !MOBS[m.templateId]?.aggroOnDamageOnly &&
       d2 < FLEE_HELP_RADIUS * FLEE_HELP_RADIUS &&
       // A quest-gated same-family idle mob (e.g. a Broodmother egg beside a fleeing
       // Mirefen Widow) never joins a rally against a player it cannot legally fight.
@@ -66,7 +69,9 @@ const SOCIAL_PULL_RADIUS: Partial<Record<MobFamily, number>> = {
  * mob/dungeon_pack_aggro.ts regardless). Like the rally above it draws NO rng,
  * so the shared draw order and the parity goldens are unaffected. */
 export function socialPullSameTemplate(ctx: SimContext, mob: Entity, target: Entity): void {
-  const family = MOBS[mob.templateId]?.family;
+  const template = MOBS[mob.templateId];
+  if (template?.aggroOnDamageOnly) return;
+  const family = template?.family;
   const pullRadius = (family && SOCIAL_PULL_RADIUS[family]) ?? DEFAULT_SOCIAL_PULL_RADIUS;
   ctx.grid.forEachInRadius(mob.pos.x, mob.pos.z, pullRadius, (m, d2) => {
     if (
@@ -77,6 +82,7 @@ export function socialPullSameTemplate(ctx: SimContext, mob: Entity, target: Ent
       m.aiState === 'idle' &&
       m.ownerId === null &&
       m.templateId === mob.templateId &&
+      !MOBS[m.templateId]?.aggroOnDamageOnly &&
       d2 < pullRadius * pullRadius
     ) {
       m.aiState = 'chase';

@@ -225,7 +225,7 @@ describe('renderer integration (source pins)', () => {
     const keyEnd = renderer.indexOf('\n  private ', keyStart + 1);
     expect(keyStart).toBeGreaterThan(-1);
     const keyFor = renderer.slice(keyStart, keyEnd);
-    expect(keyFor).toContain('return characterVisualPoolKey(e);');
+    expect(keyFor).toContain('return characterVisualPoolKeyFor(e);');
     // Mutant proof at the renderer layer: re-inlining the per-instance
     // color/scale key re-creates the dead-entry leak and turns this red.
     // biome-ignore lint/suspicious/noTemplateCurlyInString: a deliberate plain-string scan for template-literal SOURCE TEXT in renderer.ts

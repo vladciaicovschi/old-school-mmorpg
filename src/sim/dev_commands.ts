@@ -1,12 +1,17 @@
 import { applyCourserDaze } from './combat/hunter_shared';
 import { DEV_KIT_ROLES, devKitRole } from './content/dev_kit_roles';
+import {
+  DEV_MODEL_LAB_ARRIVAL,
+  DEV_MODEL_LAB_MOB_LINEUP,
+  DEV_MODEL_LAB_NPC_LINEUP,
+} from './content/dev_model_lab';
 import { MOUNT_SKIN_IDS } from './content/mount_skins';
 import { MOUNT_KEYS } from './content/mounts';
 import { GATHERING_PROFESSIONS } from './content/professions';
-import { DUNGEONS, ITEMS, MOBS, NPCS } from './data';
+import { DEV_MODEL_COMPARISON_GALLERY, DUNGEONS, ITEMS, MOBS, NPCS } from './data';
 import { equipBestInSlotForDev } from './dev/bis_gear';
 import { applyDevKit } from './dev_kit';
-import { createGroundObject, createMob } from './entity';
+import { createGroundObject, createMob, createNpc } from './entity';
 import {
   ignivarDevRaidTravelRoster,
   setupIgnivarDevRaid,
@@ -141,11 +146,58 @@ function emitDevLog(ctx: SimContext, pid: number, text: string): void {
   ctx.emit({ type: 'log', text, pid });
 }
 
+/** Enter the isolated model laboratory and rebuild this developer's subjects. */
+export function enterModelLabForDev(ctx: SimContext, pid: number): number[] {
+  const player = ctx.entities.get(pid);
+  if (!player) return [];
+
+  despawnMobsForDev(ctx, pid, 'spawned');
+  cancelProfessionSessionOnDisplacement(ctx, player);
+  const arrival = ctx.groundPos(DEV_MODEL_LAB_ARRIVAL.x, DEV_MODEL_LAB_ARRIVAL.z);
+  player.pos = arrival;
+  player.prevPos = { ...arrival };
+  player.facing = DEV_MODEL_LAB_ARRIVAL.facing;
+  player.prevFacing = DEV_MODEL_LAB_ARRIVAL.facing;
+  ctx.rebucket(player);
+
+  const ids: number[] = [];
+  for (const subject of [...DEV_MODEL_LAB_NPC_LINEUP, ...DEV_MODEL_COMPARISON_GALLERY.subjects]) {
+    const template = NPCS[subject.templateId];
+    if (!template) continue;
+    const npc = createNpc(ctx.nextId++, template, ctx.groundPos(subject.x, subject.z));
+    npc.facing = subject.facing;
+    npc.prevFacing = subject.facing;
+    npc.devSpawnOwnerId = pid;
+    ctx.addEntity(npc);
+    ids.push(npc.id);
+  }
+  for (const subject of DEV_MODEL_LAB_MOB_LINEUP) {
+    const template = MOBS[subject.templateId];
+    if (!template) continue;
+    const level = clampInteger(player.level, template.minLevel, template.maxLevel);
+    const mob = createMob(ctx.nextId++, template, level, ctx.groundPos(subject.x, subject.z));
+    mob.facing = subject.facing;
+    mob.prevFacing = subject.facing;
+    mob.devSpawnOwnerId = pid;
+    ctx.addEntity(mob);
+    ids.push(mob.id);
+  }
+  return ids;
+}
+
 export function handleDevChat(
   ctx: SimContext,
   raw: string,
   pid: number,
 ): SentChat | null | undefined {
+  if (/^\/(?:dev\s+lab|devlab)\s*$/i.test(raw)) {
+    const ids = enterModelLabForDev(ctx, pid);
+    if (ids.length === 0) ctx.error(pid, '[dev] Model lab is unavailable.');
+    else
+      emitDevLog(ctx, pid, `[dev] Entered Model Test Island. ${ids.length} test models are ready.`);
+    return null;
+  }
+
   const levelMatch = /^\/(?:dev\s+level|devlevel)\s+(\d+)\s*$/i.exec(raw);
   if (levelMatch) {
     const level = Number(levelMatch[1]);

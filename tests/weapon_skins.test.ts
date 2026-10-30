@@ -113,25 +113,26 @@ describe('weapon type classification', () => {
 
   it('stays in lockstep with the render variant family for mapped items', () => {
     const familyOf = (variant: string): string | null => {
+      variant = variant.split('/').pop() ?? variant;
       // The violet-gem KayKit sword and axe (the Nythraxis gap-fill one-handers)
       // carry the same VAR_SWORD / VAR_AXE grips as the adv set in assets.ts.
       if (variant === 'purple_sword') return 'sword';
       if (variant === 'purple_axe') return 'axe';
-      if (/^(adv_)?sword/.test(variant)) return 'sword';
+      if (/^(adv_)?sword|^(ascendance|claymore)_sword/.test(variant)) return 'sword';
       // The bespoke dagger skins carry thematic names; assets.ts tags each of
       // these variants VAR_DAGGER, which is the render-side family authority.
       if (/^(ice_fang|redskull_dagger|purple_dagger|whittler_s_knife)$/.test(variant))
         return 'dagger';
-      if (/^(adv_)?dagger/.test(variant)) return 'dagger';
-      if (/^(adv_)?(druid_)?staff|^adv_druid_staff/.test(variant)) return 'staff';
-      if (/^hammer/.test(variant)) return 'mace';
-      if (/^(adv_)?axe/.test(variant)) return 'axe';
+      if (/^(adv_)?dagger|^arcane_dagger/.test(variant)) return 'dagger';
+      if (/^(adv_)?(druid_)?staff|^adv_druid_staff|^arcane_staff/.test(variant)) return 'staff';
+      if (/^hammer|^(lion_warhammer_1h|dwarven_warhammer_2h)_/.test(variant)) return 'mace';
+      if (/^(adv_)?axe|^evolution_axe/.test(variant)) return 'axe';
       if (/^(adv_)?wand/.test(variant)) return 'wand';
       if (/^spear|^scythe/.test(variant)) return 'polearm';
       // The Armory bow GLBs double as held-model variants for real bow items
       // (the Crucible longbow is the first); crossbow names must match first.
       if (/crossbow/.test(variant)) return 'crossbow';
-      if (/bow$/.test(variant)) return 'bow';
+      if (/bow($|_)/.test(variant)) return 'bow';
       return null;
     };
     for (const id of weaponIds) {
@@ -517,7 +518,7 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
       manifestSrc.indexOf('player_hunter: swims({'),
       manifestSrc.indexOf('player_rogue: swims({'),
     );
-    expect(hunterBlock).toContain('bow_hold_anim.glb');
+    expect(hunterBlock).toContain('hunter_t1_motion_anims.glb');
   });
 
   it('the hunter ships the bow clip via animUrls and the GLB carries it', async () => {
@@ -534,15 +535,15 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
       manifestSrc.indexOf('player_hunter:', visualsAt),
       manifestSrc.indexOf('player_rogue:', visualsAt),
     );
-    expect(hunterBlock, 'anchored on the hunter VISUAL, not its skin row').toContain('ranger.glb');
-    expect(hunterBlock).toContain('bow_anims.glb');
+    expect(hunterBlock, 'anchored on the hunter VISUAL, not its skin row').toContain('t1_hunter.glb');
+    expect(hunterBlock).toContain('hunter_t1_motion_anims.glb');
     // Parse the shipped GLB's JSON chunk and assert the clips are inside
     // (scripts/build_bow_anims.mjs output; regenerate from the CC0 pack).
-    const glb = readFileSync(join(ROOT, 'public/models/chars/players/bow_anims.glb'));
+    const glb = readFileSync(join(ROOT, 'public/models/chars/players/hunter_t1_motion_anims.glb'));
     const jsonLen = glb.readUInt32LE(12);
     const doc = JSON.parse(glb.subarray(20, 20 + jsonLen).toString('utf8'));
     const clips = (doc.animations ?? []).map((a: { name?: string }) => a.name);
-    expect(clips).toContain('Bow_Draw_Shot');
+    expect(clips).toContain('HunterT1_Bow_Shot');
     // Mesh-free clip donor: nothing to render, just bones + tracks.
     expect(doc.meshes ?? []).toEqual([]);
     // The authored animation can carry a release pose without changing the
@@ -698,6 +699,9 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
           animations: [
             '2H_Ranged_Shoot',
             'Hunter_Shot_LongDraw',
+            'HunterT1_Bow_Release',
+            'HunterT1_Bow_Shot',
+            'HunterT1_Crossbow_Release',
             'Hunter_Melee_Gut',
             'Spellcast_Raise',
             'Bow_Draw_Shot',
@@ -732,15 +736,15 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
     if (!visual) return;
     expect(visual).toBeInstanceOf(CharacterVisual);
 
-    // No skin displayed: the authored ability override plays.
+    // No skin displayed: the default crossbow profile's release plays.
     visual.playAttack('aimed_shot');
-    expect((visual as unknown as ActionPeek).current?.getClip().name).toBe('Hunter_Shot_LongDraw');
+    expect((visual as unknown as ActionPeek).current?.getClip().name).toBe('HunterT1_Crossbow_Release');
 
     // A bow skin displayed: the same ability call must fall back to the
     // draw clip instead, not the crossbow-shoulder ability pose.
     visual.setWeaponSkin('winterbite');
     visual.playAttack('aimed_shot');
-    expect((visual as unknown as ActionPeek).current?.getClip().name).toBe('Bow_Draw_Shot');
+    expect((visual as unknown as ActionPeek).current?.getClip().name).toBe('HunterT1_Bow_Release');
 
     // A melee ability (range 0) keeps its bespoke Hunter_Melee_* swing even
     // with the same bow skin displayed: the bow substitution is a RANGED-only

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/meshy_knights_valor/knights_valor_sword.glb",
+      "out": "models/weapons/meshy/knights_valor_sword.glb",
+      "type": "static",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/meshy_knights_valor/knights_valor_shield.glb",
+      "out": "models/weapons/meshy/knights_valor_shield.glb",
+      "type": "static",
+      "maxTex": 1024
+    }
+  ]
+}

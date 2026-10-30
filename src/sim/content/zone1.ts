@@ -1,3 +1,4 @@
+import { applySettlementProps, settlementRoads } from '../settlements_layout';
 // Zone 1 — Eastbrook Vale (levels 1-7). The starter zone: town of Eastbrook,
 // wolves and boars, the bandit camp, and Brother Aldric's Gravecaller chain
 // leading to the Hollow Crypt.
@@ -1956,7 +1957,7 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
 
 // Roads from town toward each hub — used for terrain painting and the map.
 // Roads from town toward each hub — used for terrain painting and the map.
-export const ZONE1_ROADS: { x: number; z: number }[][] = [
+const ZONE1_LEGACY_ROADS: { x: number; z: number }[][] = [
   [
     ...EASTBROOK_LAYOUT.roads[0].points,
     { x: -2, z: -34 },
@@ -1996,7 +1997,7 @@ export const ZONE1_ROADS: { x: number; z: number }[][] = [
 // Static props (rendering + collision share this placement data)
 // ---------------------------------------------------------------------------
 
-export const ZONE1_PROPS: ZonePropsDef = {
+const ZONE1_LEGACY_PROPS: ZonePropsDef = {
   buildings: [
     // Round 4: the preserved Grand Armoury row left this table; the KayKit
     // barracks and its watch tower stand on the lot as decorProps below.
@@ -2264,3 +2265,7 @@ export const ZONE1_PROPS: ZonePropsDef = {
   // nearest stable ground, 18 yd off the water.
   delveMarkers: [{ x: -136, z: 112, delveId: 'collapsed_reliquary' }],
 };
+
+export const ZONE1_PROPS: ZonePropsDef = applySettlementProps(ZONE1_LEGACY_PROPS, 'eastbrook');
+
+export const ZONE1_ROADS = settlementRoads('eastbrook', ZONE1_LEGACY_ROADS);

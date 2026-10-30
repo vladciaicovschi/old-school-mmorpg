@@ -60,6 +60,8 @@ export const TERRAIN_APPLIER = {
   provingCoast: 34,
   provingMoat: 35,
   gardenwalkWestPass: 36,
+  devModelLabCoast: 37,
+  devModelLabMoat: 38,
 } as const;
 
 function bounds(minX: number, maxX: number, minZ: number, maxZ: number): TerrainRegionBounds {
@@ -120,6 +122,12 @@ export const TERRAIN_APPLIER_BOUNDS: readonly (readonly TerrainRegionBounds[] | 
   // x-falloff (centered ON the border, STRIP_MAX_X 180) are both fully zero
   // outside this box.
   [bounds(122, 238, 748, 852)],
+  // translated Proving Shore used as the developer model laboratory
+  [bounds(534, 934, -188, 188)],
+  // Only the authored laboratory row is reachable. Bound the translated
+  // moat to that row so this dev feature adds no always-run terrain work to
+  // the production world.
+  [bounds(534, 934, -220, 200)],
 ];
 
 interface MutableCell {

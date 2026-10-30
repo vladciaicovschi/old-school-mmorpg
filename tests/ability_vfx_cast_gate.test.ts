@@ -81,6 +81,79 @@ const frostbolt = {
 };
 
 describe('the cast gate', () => {
+  it.each([
+    ['dev_skeleton_cultist', 'shadow_bolt'],
+    ['dev_skeleton_acolyte', 'wrath'],
+    ['dev_skeleton_necromancer_v2', 'shadow_bolt'],
+    ['dev_skeleton_caster_v3', 'fireball'],
+  ])(
+    '%s prepares its spell at the hands without tinting the whole model',
+    (templateId, ability) => {
+      const { painter, calls } = painterWith(() => true);
+      painter.syncEntity({
+        id: 7,
+        kind: 'mob',
+        templateId,
+        castingAbility: ability,
+        castRemaining: 1,
+        castTotal: 1.7,
+        auras: [],
+      });
+      expect(calls.some((call) => call.name === 'windup')).toBe(true);
+      expect(calls.some((call) => call.name === 'bodyGlow')).toBe(false);
+    },
+  );
+  it('keeps Warlock cast preparation at the hands without a whole-body tint', () => {
+    const { painter, calls } = painterWith(() => true);
+    painter.syncEntity({
+      id: 7,
+      kind: 'player',
+      templateId: 'warlock',
+      castingAbility: 'shadow_bolt',
+      castRemaining: 1,
+      castTotal: 2,
+      auras: [],
+    });
+    expect(calls.some((call) => call.name === 'windup')).toBe(true);
+    expect(calls.some((call) => call.name === 'bodyGlow')).toBe(false);
+  });
+
+  it.each(['mage', 'priest', 'druid', 'shaman', 'paladin', 'hunter', 'warrior', 'rogue'])(
+    'keeps %s cast preparation off the body material',
+    (templateId) => {
+      const { painter, calls } = painterWith(() => true);
+      painter.syncEntity({
+        id: 7,
+        kind: 'player',
+        templateId,
+        castingAbility: 'frostbolt',
+        castRemaining: 1,
+        castTotal: 2,
+        auras: [],
+      });
+      expect(calls.some((call) => call.name === 'windup')).toBe(true);
+      expect(calls.some((call) => call.name === 'bodyGlow')).toBe(false);
+    },
+  );
+
+  it.each([
+    { dead: true, hp: 1 },
+    { dead: false, hp: 0 },
+  ])('does not refresh cast preparation on a dead caster (%j)', (death) => {
+    const { painter, calls } = painterWith(() => true);
+    painter.syncEntity({
+      id: 7,
+      kind: 'player',
+      templateId: 'warlock',
+      castingAbility: 'shadow_bolt',
+      castRemaining: 1,
+      castTotal: 2,
+      auras: [],
+      ...death,
+    });
+    expect(calls.some((call) => call.name === 'windup')).toBe(false);
+  });
+
   it('claims a spec-driven cast and draws nothing while a program is unlinked', () => {
     const { painter, touched, vfx } = painterWith(() => false);
     expect(painter.handleSpellfx(frostbolt)).toBe(true);

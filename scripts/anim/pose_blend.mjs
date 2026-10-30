@@ -81,11 +81,23 @@ export function indexClip(root, name) {
     if (sampler.getInterpolation() === 'CUBICSPLINE') {
       throw new Error(`cubic spline sampler on ${node.getName()}.${path}: unsupported`);
     }
+    const output = sampler.getOutput();
+    // Compressed GLBs store unit rotations as normalized int16 values.
+    // getArray() returns their encoded integers, not their floating values.
+    // Blending those directly exports invalid quaternions and exploding poses.
+    let values = output.getArray();
+    if (output.getNormalized()) {
+      values = new Float32Array(output.getCount() * output.getElementSize());
+      const element = [];
+      for (let i = 0; i < output.getCount(); i++) {
+        values.set(output.getElement(i, element), i * output.getElementSize());
+      }
+    }
     map.set(`${node.getName()}|${path}`, {
       node,
       path,
       times: sampler.getInput().getArray(),
-      values: sampler.getOutput().getArray(),
+      values,
       size: path === 'rotation' ? 4 : 3,
     });
   }

@@ -244,6 +244,8 @@ const UI_PURE_CORES = [
   'src/ui/char_bags_pairing_core.ts',
   'src/ui/empower_hold_core.ts',
   'src/ui/equip_drop_core.ts',
+  'src/ui/equipment_calibration_core.ts',
+  'src/ui/weapon_fit_loadouts_core.ts',
   'src/ui/error_text_i18n_core.ts',
   'src/ui/system_text_i18n.ts',
   'src/ui/general_chat_quota_view.ts',
@@ -644,6 +646,10 @@ const DOM_GLOBAL_VALUE_ALLOWLIST = new Set([join(repoRoot, 'src/ui/safe_local_st
 // post_bloom_shader_core is the host-agnostic GLSL source patch for the
 // identity tint terms in UnrealBloom's composite shader.
 const RENDER_PURE_CORES = [
+  'src/render/characters/model_gait_core.ts',
+  'src/render/hunter_vfx_specs.ts',
+  'src/render/characters/cast_gesture_capabilities_core.ts',
+  'src/render/characters/armor_tier_core.ts',
   'src/render/arena_wall_occlusion_core.ts',
   'src/render/outdoor_light_rig_core.ts',
   'src/render/wall_backface_cull_core.ts',
@@ -704,6 +710,7 @@ const RENDER_PURE_CORES = [
   'src/render/frame_ms_stats_core.ts',
   'src/render/ability_vfx_core.ts',
   'src/render/characters/player_look_core.ts',
+  'src/render/characters/meshy_titan_armor_core.ts',
   'src/render/characters/far_lod_reveal_core.ts',
   'src/render/ability_vfx_longbuff_core.ts',
   'src/render/arena_water_band_core.ts',
@@ -884,6 +891,14 @@ const RENDER_PURE_CORES = [
   'src/render/characters/morph_union_core.ts',
   'src/render/characters/tinted_material_cache_core.ts',
   'src/render/characters/weapon_attack_style_core.ts',
+  'src/render/characters/weapon_carry_core.ts',
+  'src/render/characters/cast_duration_core.ts',
+  'src/render/characters/clip_names_core.ts',
+  'src/render/characters/weapon_motion_core.ts',
+  'src/render/characters/ranged_weapon_core.ts',
+  'src/render/cast_hand_glow_core.ts',
+  'src/render/characters/meshy_titan_weapon_models_core.ts',
+  'src/render/characters/quaternius_weapon_models_core.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // Bare-named pure cores: registered cores (from UI_PURE_CORES + RENDER_PURE_CORES)
@@ -920,6 +935,7 @@ const BARE_NAMED = [
   'src/ui/woc_market_reason_text.ts',
   'src/render/foliage_lod.ts',
   'src/render/frame_present.ts',
+  'src/render/hunter_vfx_specs.ts',
   'src/render/self_motion_rift_lift.ts',
   'src/game/presentation_gate.ts',
   'src/game/stale_chrome_focus.ts',
@@ -1990,6 +2006,7 @@ const EXPECTED_BARE_NAMED = [
   'src/render/compile_gate.ts',
   'src/render/foliage_lod.ts',
   'src/render/frame_present.ts',
+  'src/render/hunter_vfx_specs.ts',
   'src/render/interior_encounter_prewarm.ts',
   'src/render/link_rate_budget.ts',
   'src/render/preview_prewarm_lane.ts',
@@ -2446,6 +2463,8 @@ const UI_DOM_MODULES = [
   'src/ui/discord_widget.ts',
   'src/ui/entry_guard_banner.ts',
   'src/ui/epic_link.ts',
+  'src/ui/equipment_calibration_controller.ts',
+  'src/ui/weapon_fit_studio.ts',
   'src/ui/focus_manager.ts',
   'src/ui/focus_restore.ts',
   'src/ui/form_draft.ts',

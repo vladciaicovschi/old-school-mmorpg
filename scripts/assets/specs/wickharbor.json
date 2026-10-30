@@ -1,0 +1,201 @@
+{
+  "source": "Approved Wickharbor study; Medieval Village MegaKit Pro and Fantasy Props MegaKit Pro (CC0), existing game fixtures retained",
+  "items": [
+    {
+      "src": "tmp/asset_src/wickharbor/home.glb",
+      "out": "models/wickharbor/home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/home-salter.glb",
+      "out": "models/wickharbor/home_salter.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/home-compact.glb",
+      "out": "models/wickharbor/home_compact.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/home-shuttered.glb",
+      "out": "models/wickharbor/home_shuttered.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/inn.glb",
+      "out": "models/wickharbor/inn.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/lighthouse-round.glb",
+      "out": "models/wickharbor/lighthouse_round.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/entrance-step.glb",
+      "out": "models/wickharbor/entrance_step.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/entrance-platform.glb",
+      "out": "models/wickharbor/entrance_platform.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-hall.glb",
+      "out": "models/wickharbor/civic_hall.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-chapel.glb",
+      "out": "models/wickharbor/civic_chapel.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-market.glb",
+      "out": "models/wickharbor/civic_market.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-office.glb",
+      "out": "models/wickharbor/civic_office.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-warehouse.glb",
+      "out": "models/wickharbor/civic_warehouse.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-shipyard.glb",
+      "out": "models/wickharbor/civic_shipyard.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-smokehouse.glb",
+      "out": "models/wickharbor/civic_smokehouse.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-workshop.glb",
+      "out": "models/wickharbor/civic_workshop.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/civic-beacon-store.glb",
+      "out": "models/wickharbor/civic_beacon_store.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-fence.glb",
+      "out": "models/wickharbor/yard_fence.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-leek.glb",
+      "out": "models/wickharbor/yard_leek.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-carrot.glb",
+      "out": "models/wickharbor/yard_carrot.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-log.glb",
+      "out": "models/wickharbor/yard_log.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-bench.glb",
+      "out": "models/wickharbor/yard_bench.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-deck.glb",
+      "out": "models/wickharbor/yard_deck.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/yard-post.glb",
+      "out": "models/wickharbor/yard_post.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/fixture-well.glb",
+      "out": "models/wickharbor/fixture_well.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/fixture-mailbox.glb",
+      "out": "models/wickharbor/fixture_mailbox.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/fixture-noticeboard.glb",
+      "out": "models/wickharbor/fixture_noticeboard.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/wickharbor/fixture-monument.glb",
+      "out": "models/wickharbor/fixture_monument.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "errors": [],
+  "runtime": [
+    {
+      "animal": "wolf_v2",
+      "attacks": [
+        "Wolf_BiteLeft",
+        "Wolf_BiteLeft",
+        "Wolf_BiteRight",
+        "Wolf_Lunge",
+        "Wolf_BiteLeft",
+        "Wolf_Lunge"
+      ],
+      "recovery": {
+        "clip": "Wolf_Idle",
+        "time": 1.2500000000000004
+      },
+      "death": {
+        "clip": "Wolf_Death",
+        "time": 1.350000023841858
+      }
+    },
+    {
+      "animal": "goat",
+      "attacks": [
+        "Goat_HeadbuttLeft",
+        "Goat_HeadbuttRight",
+        "Goat_HeadbuttLeft",
+        "Goat_HeadbuttRight",
+        "Goat_Ram",
+        "Goat_HeadbuttLeft"
+      ],
+      "recovery": {
+        "clip": "Goat_Idle",
+        "time": 1.4
+      },
+      "death": {
+        "clip": "Goat_Death",
+        "time": 1.399999976158142
+      }
+    },
+    {
+      "animal": "bufalo",
+      "attacks": [
+        "Buffalo_HornLeft",
+        "Buffalo_HornRight",
+        "Buffalo_HornLeft",
+        "Buffalo_HornRight",
+        "Buffalo_Charge",
+        "Buffalo_HornLeft"
+      ],
+      "recovery": {
+        "clip": "Buffalo_Idle",
+        "time": 1.2500000000000004
+      },
+      "death": {
+        "clip": "Buffalo_Death",
+        "time": 1.600000023841858
+      }
+    },
+    {
+      "animal": "deer",
+      "attacks": [
+        "Deer_AntlerLeft",
+        "Deer_AntlerLeft",
+        "Deer_AntlerRight",
+        "Deer_Charge",
+        "Deer_AntlerLeft",
+        "Deer_Charge"
+      ],
+      "recovery": {
+        "clip": "Deer_Idle",
+        "time": 1.2500000000000004
+      },
+      "death": {
+        "clip": "Deer_Death",
+        "time": 1.399999976158142
+      }
+    },
+    {
+      "animal": "raptor",
+      "attacks": [
+        "Raptor_SlashLeft",
+        "Raptor_SlashRight",
+        "Raptor_Pounce",
+        "Raptor_TailWhip",
+        "Raptor_SlashLeft",
+        "Raptor_TailWhip"
+      ],
+      "recovery": {
+        "clip": "Raptor_Idle",
+        "time": 1.183333333333334
+      },
+      "death": {
+        "clip": "Raptor_Death",
+        "time": 1.4500000476837158
+      }
+    }
+  ]
+}

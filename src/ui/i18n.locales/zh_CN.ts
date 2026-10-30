@@ -13,6 +13,11 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.warriorSuit.label': '护甲外观',
+  'hudChrome.warriorSuit.hint': '更改此设备上的外观。装备属性保持不变。',
+  'hudChrome.warriorSuit.recruit': '新兵',
+  'hudChrome.warriorSuit.militia': '民兵',
+  'hudChrome.warriorSuit.knight': '骑士',
   'guide.professions.endgameBodyRaidCollections':
     '大师锻造是带有“唯一装备：大师锻造”标记的共同装备家族。旧有的巅峰制作路线仍需寻找图样、制作每日限次的中间材料，并消耗共同的终局材料。熔炉套装则是由团队副本材料支持的独立路线，并非在旧路线之上再加一套费用。两条路线共用最多穿戴两件的限制，因此会竞争配装中的同两个位置。成品在臻至完美或委托绑定该件物品之前都可自由交易。',
   'guide.professions.endgamePatternsBodyCollections':
@@ -5819,6 +5824,23 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'auth.realm': '服务器',
   'auth.newCharacter': '新建角色',
   'auth.appearance': '外观',
+  'auth.equipmentCalibration': '装备调整',
+  'auth.equipmentCalibrationHint': '拖动 3D 操纵器或使用控件来调整剑和盾牌。',
+  'auth.equipmentCalibrationItem': '装备物品',
+  'auth.equipmentCalibrationMode': '变换模式',
+  'auth.equipmentCalibrationValues': '已保存的数值',
+  'auth.equipmentCalibrationAxis': '{field} {axis}',
+  'auth.equipmentSword': '剑',
+  'auth.equipmentShield': '盾牌',
+  'auth.equipmentPosition': '位置',
+  'auth.equipmentRotation': '旋转',
+  'auth.equipmentScale': '缩放',
+  'auth.equipmentPauseAnimation': '暂停动画',
+  'auth.equipmentResumeAnimation': '继续动画',
+  'auth.equipmentResetItem': '重置物品',
+  'auth.equipmentCopyValues': '复制数值',
+  'auth.equipmentValuesCopied': '数值已复制。',
+  'auth.equipmentCopyManual': '无法自动复制，数值已选中。',
   'auth.class': '职业',
   'auth.name': '名称',
   'auth.chromaOption': '配色 {n}',

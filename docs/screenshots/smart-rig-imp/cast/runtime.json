@@ -1,0 +1,24 @@
+{
+  "enter": {
+    "clip": "Imp_Cast",
+    "time": 0.21666657129923617,
+    "oneShot": false
+  },
+  "wingTravel": 0.5822422447230275,
+  "release": {
+    "clip": "Imp_CastRelease",
+    "time": 0.016666666666666666,
+    "oneShot": true
+  },
+  "recover": {
+    "clip": "Imp_Hover",
+    "time": 0.41666666666666663,
+    "oneShot": false
+  },
+  "cancel": {
+    "clip": "Imp_Hover",
+    "time": 0.5166666666666666,
+    "oneShot": false
+  },
+  "errors": []
+}

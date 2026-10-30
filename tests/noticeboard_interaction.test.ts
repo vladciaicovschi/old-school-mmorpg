@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { objectDisplayName } from '../src/render/entity_labels';
 import { colliderInternalsForTest } from '../src/sim/colliders';
-import { noticeboardDefByEntityId } from '../src/sim/content/noticeboards';
+import { MAILBOXES } from '../src/sim/content/mailboxes';
+import { NOTICEBOARDS, noticeboardDefByEntityId } from '../src/sim/content/noticeboards';
 import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
 import { Sim } from '../src/sim/sim';
@@ -25,6 +26,16 @@ import { Hud } from '../src/ui/hud';
 import { ensureLocaleLoaded, setLanguage, t } from '../src/ui/i18n';
 
 const SEED = 20_061;
+const boardDef = NOTICEBOARDS.find(
+  (board) => board.entityId === EASTBROOK_LAYOUT.services.noticeboard.entityId,
+);
+if (!boardDef) throw new Error('missing approved Eastbrook board');
+const boardLayout = {
+  ...EASTBROOK_LAYOUT.services.noticeboard,
+  position: { x: boardDef.x, z: boardDef.z },
+  rotation: boardDef.rotation,
+  frontStandingPoint: boardDef.frontStandingPoint,
+};
 const EMPTY_NOTICEBOARD_EVENT = {
   type: 'noticeboard',
   noticeboardId: 'noticeboard_eastbrook',
@@ -99,8 +110,15 @@ describe('active-world noticeboard service', () => {
       noPlayer: true,
       world: worldWithoutBoard,
     });
-    setActiveWorldContent(null);
-    const withBoard = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    // Both copies use the same custom-world collision authority; only the board differs.
+    const worldWithBoard = { ...BUILTIN_WORLD };
+    setActiveWorldContent(worldWithBoard);
+    const withBoard = new Sim({
+      seed: SEED,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: worldWithBoard,
+    });
     const board = noticeboard(withBoard);
 
     // Re-pinned 2026-08 for the harbor move (d19aa33f76,
@@ -113,10 +131,10 @@ describe('active-world noticeboard service', () => {
       name: 'Notice Board',
       objectItemId: null,
       lootable: true,
-      facing: -2.17084654019665,
-      prevFacing: -2.17084654019665,
+      facing: boardLayout.rotation,
+      prevFacing: boardLayout.rotation,
     });
-    expect({ x: board.pos.x, z: board.pos.z }).toEqual({ x: 5, z: -89 });
+    expect({ x: board.pos.x, z: board.pos.z }).toEqual(boardLayout.position);
     expect(withBoard.nextId).toBe(withoutBoard.nextId);
 
     const stableProjection = (sim: Sim) =>
@@ -137,7 +155,7 @@ describe('active-world noticeboard service', () => {
     const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
     const first = sim.addPlayer('warrior', 'First');
     const board = noticeboard(sim);
-    const player = standAt(sim, first, EASTBROOK_LAYOUT.services.noticeboard.frontStandingPoint);
+    const player = standAt(sim, first, boardLayout.frontStandingPoint);
 
     sim.drainEvents();
     expect(sim.pickUpObject(board.id, first)).toBe(true);
@@ -154,7 +172,6 @@ describe('active-world noticeboard service', () => {
   });
 
   it('keeps proximity F on nearby service NPCs instead of the permanently lootable board', () => {
-    const boardLayout = EASTBROOK_LAYOUT.services.noticeboard;
     const protectedAnchors = [
       ...EASTBROOK_LAYOUT.services.npcs.map((npc) => ({ id: npc.id, position: npc.position })),
       ...EASTBROOK_LAYOUT.services.stations.map((station) => ({
@@ -163,7 +180,7 @@ describe('active-world noticeboard service', () => {
       })),
       {
         id: EASTBROOK_LAYOUT.services.mailbox.id,
-        position: EASTBROOK_LAYOUT.services.mailbox.position,
+        position: MAILBOXES[0],
       },
     ];
     for (const anchor of protectedAnchors) {
@@ -174,18 +191,18 @@ describe('active-world noticeboard service', () => {
         ),
         `${anchor.id} is in range of the noticeboard body`,
       ).toBeGreaterThan(INTERACT_RANGE);
-      expect(
-        Math.hypot(
-          boardLayout.frontStandingPoint.x - anchor.position.x,
-          boardLayout.frontStandingPoint.z - anchor.position.z,
-        ),
-        `${anchor.id} is in range of the noticeboard standing point`,
-      ).toBeGreaterThan(INTERACT_RANGE);
     }
 
     const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
     const pid = sim.addPlayer('warrior', 'Service Visitor');
     const board = noticeboard(sim);
+    // The public entrance intentionally groups services. At the reading point,
+    // the board must win even if a service NPC is also within talking range.
+    const reader = standAt(sim, pid, boardLayout.frontStandingPoint);
+    reader.targetId = null;
+    sim.drainEvents();
+    sim.interact(pid);
+    expect(sim.drainEvents()).toContainEqual({ ...EMPTY_NOTICEBOARD_EVENT, pid });
     const serviceNpcIds = new Set(EASTBROOK_LAYOUT.services.npcs.map((npc) => npc.id));
     const nearestService = [...sim.entities.values()]
       .filter((entity) => entity.kind === 'npc' && serviceNpcIds.has(entity.templateId))
@@ -195,18 +212,18 @@ describe('active-world noticeboard service', () => {
           Math.hypot(right.pos.x - board.pos.x, right.pos.z - board.pos.z),
       )[0];
     if (!nearestService) throw new Error('missing service NPC near noticeboard');
-    expect(nearestService.templateId).toBe('chronicler_saul');
-    expect(Math.hypot(nearestService.pos.x - board.pos.x, nearestService.pos.z - board.pos.z)).toBe(
-      5.412023651093922,
-    );
+    expect(nearestService.templateId).toBe('bursar_fernando');
+    expect(
+      Math.hypot(nearestService.pos.x - board.pos.x, nearestService.pos.z - board.pos.z),
+    ).toBeGreaterThan(INTERACT_RANGE);
 
-    const talkToNpc = vi.spyOn(sim, 'talkToNpc');
     const player = standAt(sim, pid, nearestService.pos);
     player.targetId = null;
     sim.drainEvents();
     sim.interact(pid);
-    expect(talkToNpc).toHaveBeenCalledWith(nearestService.id, pid);
-    expect(sim.drainEvents()).not.toContainEqual(expect.objectContaining({ type: 'noticeboard' }));
+    const events = sim.drainEvents();
+    expect(events).toContainEqual(expect.objectContaining({ type: 'bank', pid }));
+    expect(events).not.toContainEqual(expect.objectContaining({ type: 'noticeboard' }));
   });
 
   it('localizes the object label and the empty-board feedback from structured keys', () => {
@@ -528,7 +545,11 @@ describe('active-world noticeboard service', () => {
         [EASTBROOK_NOTICEBOARD_INTERACTION_RADIUS, true],
         [EASTBROOK_NOTICEBOARD_INTERACTION_RADIUS + epsilon, false],
       ] as const) {
-        const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+        // Integer coordinates isolate the exact range boundary from rotated-site rounding.
+        const definition = canonicalCustomNoticeboard();
+        const world = { ...customWorld(), services: { noticeboards: [definition] } };
+        setActiveWorldContent(world);
+        const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true, world });
         const pid = sim.addPlayer('warrior', `${path} ${distance}`);
         const board = noticeboard(sim);
         const player = standAt(sim, pid, { x: board.pos.x + distance, z: board.pos.z });

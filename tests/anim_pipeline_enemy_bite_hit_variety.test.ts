@@ -57,36 +57,29 @@ describe('ENEMY_BITE hit-reaction stagger (issue #2889 round 2)', () => {
     expect(block).toContain("death: 'Death'");
   });
 
-  it('wires a matching animUrls entry onto both ENEMY_BITE consumers', () => {
-    const consumers: [string, string][] = [
-      ['mob_crab', 'crabenemy_hit_variety_anims.glb'],
-      ['mob_treant', 'yeti_hit_variety_anims.glb'],
-    ];
+  it('keeps the matching donor on the remaining treant consumer', () => {
+    const consumers: [string, string][] = [['mob_treant', 'yeti_hit_variety_anims.glb']];
     for (const [key, file] of consumers) {
       const idx = MANIFEST_SRC.indexOf(`  ${key}: {`);
       expect(idx, key).toBeGreaterThanOrEqual(0);
       const end = MANIFEST_SRC.indexOf('\n  },', idx);
       const block = MANIFEST_SRC.slice(idx, end);
-      // mob_crab wires its own CRAB_ENEMY_BITE and mob_treant its own
-      // TREANT_ENEMY_BITE (both `{ ...ENEMY_BITE, attack: [...] }`, issue
-      // #2889): each inherits ENEMY_BITE's hit array unchanged, so both still
-      // qualify as ENEMY_BITE consumers for HitRecieve_Dazed.
+      // The treant still inherits the original hit vocabulary.
       const ENEMY_BITE_VARIANTS: Record<string, string> = {
-        mob_crab: 'CRAB_ENEMY_BITE',
         mob_treant: 'TREANT_ENEMY_BITE',
       };
       const clipsOk = block.includes(`clips: ${ENEMY_BITE_VARIANTS[key] ?? 'ENEMY_BITE'}`);
       expect(clipsOk, key).toBe(true);
       expect(block, `${key} animUrls`).toContain(file);
     }
-    // Exactly 2 ENEMY_BITE consumers wire a hit-variety donor GLB: a stray
-    // extra or missing wiring on either family changes this count. (Other
+    // Exactly 1 ENEMY_BITE consumer wires a hit-variety donor GLB: a stray
+    // extra or missing wiring changes this count. Emberclaw has its own rig. (Other
     // BIPED14 families independently wire their own `_hit_variety_anims.glb`
     // donors in the same batch, issue #2889, so this only counts ENEMY_BITE
     // consumers, not every `_hit_variety_anims.glb` occurrence repo-wide.)
     const occurrences = [
       ...MANIFEST_SRC.matchAll(/clips: (ENEMY_BITE|CRAB_ENEMY_BITE|TREANT_ENEMY_BITE),/g),
     ].length;
-    expect(occurrences).toBe(2);
+    expect(occurrences).toBe(1);
   });
 });

@@ -1,0 +1,107 @@
+{
+  "source_sha256": "dc23d1fa29efdeb602b0d6aa5f60f1e3a7737bfed6b7b89fe79e83ecf8bf6353",
+  "bones": 44,
+  "height": 1.85,
+  "gaits": {
+    "walk": {
+      "duration": 1.05,
+      "stride": 0.46,
+      "stance": 0.66,
+      "lift": 0.11
+    },
+    "trot": {
+      "duration": 0.65,
+      "stride": 0.56,
+      "stance": 0.54,
+      "lift": 0.14
+    },
+    "run": {
+      "duration": 0.52,
+      "stride": 0.62,
+      "stance": 0.46,
+      "lift": 0.16
+    }
+  },
+  "clips": {
+    "Goat_Idle": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.4654638478613572
+    },
+    "Goat_CombatIdle": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.42554463537839704
+    },
+    "Goat_Walk": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2245263635745069
+    },
+    "Goat_Trot": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.1550597429582577
+    },
+    "Goat_Run": {
+      "reach_clamp": 0.010679610180482468,
+      "reach_leg": "hind_right",
+      "reach_phase": 0.45161290322580644,
+      "fold_margin": 0.11272660341806842
+    },
+    "Goat_HeadbuttLeft": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.39983538302601657
+    },
+    "Goat_HeadbuttRight": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.3178138793348713
+    },
+    "Goat_Ram": {
+      "reach_clamp": 0.008285415066203505,
+      "reach_leg": "hind_right",
+      "reach_phase": 0.5256410256410257,
+      "fold_margin": 0.37229719379944315
+    },
+    "Goat_Hit": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.4212842458741588
+    },
+    "Goat_Death": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": null
+    },
+    "Goat_Bleat": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.47084139407450587
+    },
+    "Goat_AlertLook": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.47084139407450587
+    },
+    "Goat_Graze": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.39021534355666754
+    }
+  },
+  "walkRef": 0.7223495458789578,
+  "runRef": 2.8206767656895537
+}

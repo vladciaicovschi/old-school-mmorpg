@@ -51,6 +51,13 @@ import {
   DROWNED_LITANY_MODULES,
 } from './content/delves';
 import {
+  DEV_MODEL_LAB_MOBS,
+  DEV_MODEL_LAB_NPCS,
+  DEV_MODEL_LAB_PROPS,
+  DEV_MODEL_LAB_ROADS,
+  DEV_MODEL_LAB_ZONE,
+} from './content/dev_model_lab';
+import {
   DRAKELANDS_BROOD_CAMPS,
   DRAKELANDS_CAMPS,
   DRAKELANDS_ITEMS,
@@ -298,6 +305,7 @@ import {
   ZONE3_ROADS,
   ZONE3_ZONE,
 } from './content/zone3';
+import { buildDevModelComparisonGallery } from './dev_model_comparisons';
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
 import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
@@ -423,6 +431,7 @@ export const MOBS: Record<string, MobTemplate> = {
   ...GALECREST_MOBS,
   ...FARSHORE_MOBS,
   ...PROVING_SHORE_MOBS,
+  ...DEV_MODEL_LAB_MOBS,
 };
 
 // Heroic upgraded drop variants: generated from the base item + mob loot tables and
@@ -466,7 +475,34 @@ export const NPCS: Record<string, NpcDef> = {
   // dynamic, spawned after the player by sim/hub_practice.ts, so his
   // presence in this record moves no id.
   ...HUB_PRACTICE_NPCS,
+  // Imported bodies awaiting content placement. Dynamic templates are spawned
+  // only by `/dev lab`, after the player, so production entity ids stay stable.
+  ...DEV_MODEL_LAB_NPCS,
 };
+
+export const DEV_MODEL_COMPARISON_GALLERY = buildDevModelComparisonGallery(NPCS);
+Object.assign(NPCS, DEV_MODEL_COMPARISON_GALLERY.templates);
+DEV_MODEL_LAB_PROPS.decorProps?.push(
+  ...DEV_MODEL_COMPARISON_GALLERY.subjects
+    .filter((subject) => subject.side === 'old' && subject.status === 'missing')
+    .map((subject) => ({ key: 'hexFlagRed', x: subject.x - 8, z: subject.z, scale: 6 })),
+);
+for (const [category, label] of [
+  ['animal', 'Animal Replacements'],
+  ['mob', 'Mob Replacements'],
+  ['npc', 'NPC Replacements'],
+] as const) {
+  const first = DEV_MODEL_COMPARISON_GALLERY.subjects.find(
+    (subject) => subject.category === category,
+  );
+  if (first)
+    DEV_MODEL_LAB_ZONE.pois.push({
+      x: first.x,
+      z: first.z,
+      label,
+      id: `dev_comparison_${category}`,
+    });
+}
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the
 // whole death-loop data surface from this one merge module.
@@ -631,6 +667,7 @@ export const ROADS: { x: number; z: number }[][] = [
   ...GALECREST_ROADS,
   ...FARSHORE_ROADS,
   ...PROVING_SHORE_ROADS,
+  ...DEV_MODEL_LAB_ROADS,
 ];
 
 // Paired overworld portals (src/sim/portals.ts checks these each tick).
@@ -665,6 +702,7 @@ export const PROPS: ZonePropsDef = mergeProps([
   GALECREST_PROPS,
   FARSHORE_PROPS,
   PROVING_SHORE_PROPS,
+  DEV_MODEL_LAB_PROPS,
 ]);
 
 function mergeProps(sets: ZonePropsDef[]): ZonePropsDef {
@@ -747,6 +785,7 @@ export const ZONES: ZoneDef[] = [
   GALECREST_ZONE,
   FARSHORE_ZONE,
   PROVING_SHORE_ZONE,
+  DEV_MODEL_LAB_ZONE,
 ];
 
 export const WORLD_SIZE = 360; // the original strip's width (one grid column)

@@ -14,6 +14,16 @@ export interface BackGripTransform {
   quaternion: [number, number, number, number];
 }
 
+/** Meter-scale pelvis-local belt carry. Mainhand is on the opposite hip so
+ * the right hand draws across the body; a second blade mirrors to the other hip. */
+export function hipGripFor(side: 'r' | 'l'): BackGripTransform {
+  const mirror = side === 'r' ? 1 : -1;
+  return {
+    position: [0.26 * mirror, -0.26, 0.03],
+    quaternion: quatFromEulerXYZ(0.13, 0.08 * mirror, Math.PI * 1.08 * mirror),
+  };
+}
+
 interface BackGripSpec {
   position: [number, number, number];
   /** Intrinsic XYZ Euler, radians (converted once at module load). */
@@ -102,6 +112,7 @@ const BACK_GRIPS: Record<string, BackGripSpec> = {
   Round_Shield: { position: [0, 0.24, -0.32], euler: [0, Math.PI, 0] },
   Rectangle_Shield: { position: [0, 0.2, -0.32], euler: [0, Math.PI, 0] },
   Badge_Shield: { position: [0, 0.24, -0.32], euler: [0, Math.PI, 0] },
+  Meshy_Shield: { position: [0, 0.16, -0.34], euler: [0, Math.PI, 0] },
   // The Ignivar legendary shield: same flat-to-spine carry as the KayKit
   // shields. Its origin is the back grip bar (mid-plate), and the plate is a
   // full unit tall at the legendary 1.1 grip scale, so it sits LOWER than the

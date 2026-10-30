@@ -29,6 +29,19 @@ describe('character preview memory policy', () => {
     expect(characterPreviewFrameVisible(true, 260, 0)).toBe(false);
   });
 
+  it('adopts the shared canvas when async construction finishes after a panel switch', () => {
+    const preview = readFileSync(
+      new URL('../src/render/characters/preview.ts', import.meta.url),
+      'utf8',
+    );
+    const constructorStart = preview.indexOf('constructor(\n');
+    const constructorEnd = preview.indexOf('\n  /** Set the active character model', constructorStart);
+    const constructor = preview.slice(constructorStart, constructorEnd);
+    expect(constructor).toContain(
+      'if (this.canvas.parentElement !== this.container) this.container.appendChild(this.canvas);',
+    );
+  });
+
   it('is wired through the HUD device profile and preview render loop', () => {
     const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
     const preview = readFileSync(

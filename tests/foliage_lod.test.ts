@@ -14,7 +14,7 @@ import {
   treeDetailDistance,
 } from '../src/render/foliage_lod';
 import type { GfxTier } from '../src/render/gfx';
-import { WORLD_MIN_Z } from '../src/sim/data';
+import { WORLD_MIN_X, WORLD_MIN_Z } from '../src/sim/data';
 import { generateDecorations } from '../src/sim/world';
 import { WORLD_SEED } from '../src/sim/world_seed';
 
@@ -446,26 +446,28 @@ describe('foliage LOD: the lean rock/dressing caps measure from the near edge', 
     expect(bucketVisible({ ...w, centerDist: 300 + radius })).toBe(false); // whole slab past swap
   });
 
-  it('the shipped world really has lean rock slabs wider than the rock cap', () => {
-    // Re-bucket the live decorations the way buildTrees() does (two columns
-    // split on x < 0, one band per BUCKET_DEPTH from WORLD_MIN_Z, radius from
+  it('keeps the shipped spatial slabs local after adding the eastern test island', () => {
+    // Re-bucket the live decorations the way buildTrees() does (spatial columns
+    // and bands, radius from
     // the bucket's bounds plus the canopy margin) and show the gap is real:
     // a boulder on a slab's near edge can be under the player while the
     // slab's center is past the cap. Parsed from the renderer so a re-bucketing
     // that closes the gap by itself retires this pin honestly.
     const foliageSrc = readFileSync(new URL('../src/render/foliage.ts', import.meta.url), 'utf8');
     const depth = Number(/const BUCKET_DEPTH = (\d+)/.exec(foliageSrc)?.[1]);
+    const width = Number(/const BUCKET_WIDTH = (\d+)/.exec(foliageSrc)?.[1]);
     const margin = Number(
       /Math\.hypot\(maxX - minX, maxZ - minZ\) \/ 2 \+ (\d+); \/\/ canopy/.exec(foliageSrc)?.[1],
     );
     expect(depth).toBeGreaterThan(0);
+    expect(width).toBeGreaterThan(0);
     expect(margin).toBeGreaterThan(0);
     const bounds = new Map<
       string,
       { minX: number; maxX: number; minZ: number; maxZ: number; rocks: number }
     >();
     for (const d of generateDecorations(WORLD_SEED)) {
-      const key = `${Math.floor((d.z - WORLD_MIN_Z) / depth)}:${d.x < 0 ? 0 : 1}`;
+      const key = `${Math.floor((d.z - WORLD_MIN_Z) / depth)}:${Math.floor((d.x - WORLD_MIN_X) / width)}`;
       let b = bounds.get(key);
       if (!b) {
         b = { minX: d.x, maxX: d.x, minZ: d.z, maxZ: d.z, rocks: 0 };
@@ -482,15 +484,12 @@ describe('foliage LOD: the lean rock/dressing caps measure from the near edge', 
       .map((b) => Math.hypot(b.maxX - b.minX, b.maxZ - b.minZ) / 2 + margin);
     expect(radii.length).toBeGreaterThan(0);
     const widest = Math.max(...radii);
-    // Most rock slabs out-radius the rested lean cap; the center rule
-    // therefore hides a near-edge boulder from a camera anywhere in the
-    // (cap, radius) annulus of slab-center distances.
+    // Model Test Island used to share one entire x-half with the mainland.
+    // That made the slab centre hundreds of yards away and culled nearby bark
+    // while its canopy row survived. Spatial columns keep those rows local.
     const wider = radii.filter((r) => r > cap * leanScale).length;
-    expect(wider / radii.length).toBeGreaterThan(0.5);
-    expect(widest).toBeGreaterThan(cap * leanScale);
-    const camToCenter = cap * leanScale + 1;
-    expect(bucketVisible(leanRocks(camToCenter, { radius: widest }))).toBe(false);
-    expect(bucketVisible(leanRocks(camToCenter, { radius: widest, maxNearEdge: true }))).toBe(true);
+    expect(wider).toBe(0);
+    expect(widest).toBeLessThanOrEqual(cap * leanScale);
   });
 });
 
@@ -618,7 +617,7 @@ describe('foliage LOD: tiers and purity', () => {
     const src = readFileSync(new URL('../src/render/foliage_lod.ts', import.meta.url), 'utf8');
     // The GfxTier import is `import type`, erased at build, so this module
     // still pulls nothing in at runtime. Any VALUE import would.
-    const imports = [...src.matchAll(/^import\b[^\n]*/gm)].map((m) => m[0]);
+    const imports = [...src.matchAll(/^import\b[^\n]*/gm)].map((m) => m[0].trimEnd());
     expect(imports).toEqual(["import type { GfxTier } from './gfx';"]);
   });
 });

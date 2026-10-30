@@ -1,0 +1,44 @@
+{
+  "note": "Tutorial-island weapon slice from Quaternius Medieval Weapons Pack. The Blender exporter keeps the source materials and grip-relative origins, then this spec applies the standard meshopt shipping pipeline.",
+  "defaults": {
+    "type": "static"
+  },
+  "items": [
+    {
+      "sourceBlend": "Sword.blend",
+      "scale": 0.22,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/sword.glb",
+      "out": "models/weapons/quaternius/sword.glb"
+    },
+    {
+      "sourceBlend": "Dagger.blend",
+      "scale": 0.25,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/dagger.glb",
+      "out": "models/weapons/quaternius/dagger.glb"
+    },
+    {
+      "sourceBlend": "Hammer_Small.blend",
+      "scale": 0.25,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/hammer_small.glb",
+      "out": "models/weapons/quaternius/hammer_small.glb"
+    },
+    {
+      "sourceBlend": "Axe_Small.blend",
+      "scale": 0.32,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/axe_small.glb",
+      "out": "models/weapons/quaternius/axe_small.glb"
+    },
+    {
+      "sourceBlend": "Shield_Round.blend",
+      "scale": 0.38,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/shield_round.glb",
+      "out": "models/weapons/quaternius/shield_round.glb"
+    },
+    {
+      "sourceBlend": "Spear.blend",
+      "scale": 0.195,
+      "src": "tmp/asset_src/quaternius_modular_weapons/raw/spear.glb",
+      "out": "models/weapons/quaternius/spear.glb"
+    }
+  ]
+}

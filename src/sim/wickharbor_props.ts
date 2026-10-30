@@ -1,0 +1,19 @@
+import type { ZonePropsDef } from './types';
+import { WICKHARBOR_BUILDINGS } from './wickharbor_layout';
+
+/** Replace the harbor settlement only; ships and the distant camps keep their identities. */
+export function rebuildWickharborProps(legacy: ZonePropsDef): ZonePropsDef {
+  const outside = (x: number, z: number) => x < 350 || x > 536 || z < 294 || z > 430;
+  return {
+    ...legacy,
+    buildings: [...legacy.buildings.filter((b) => outside(b.x, b.z)), ...WICKHARBOR_BUILDINGS],
+    wells: legacy.wells.filter((w) => outside(w.x, w.z)),
+    stalls: legacy.stalls.filter((s) => outside(s.x, s.z)),
+    crates: legacy.crates.filter(([x, z]) => outside(x, z)),
+    campfires: legacy.campfires.filter(([x, z]) => outside(x, z)),
+    fences: legacy.fences.filter((f) => outside((f.x1 + f.x2) / 2, (f.z1 + f.z2) / 2)),
+    decorProps: legacy.decorProps?.filter(
+      (p) => outside(p.x, p.z) || /^(hexShipBlue|hexBoat|hexBoatrack|hexAnchor)$/.test(p.key),
+    ),
+  };
+}

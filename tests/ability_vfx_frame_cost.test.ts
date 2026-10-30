@@ -6,6 +6,7 @@ import { GroundAuras } from '../src/render/ability_vfx/ground_auras';
 import { OverlaySprites } from '../src/render/ability_vfx/overlay_sprites';
 import { AbilityVfxRibbons } from '../src/render/ability_vfx/ribbons';
 import { ABILITY_VFX_FULL_SPECS } from '../src/render/ability_vfx_full_specs';
+import { abilityVfxFullSpec } from '../src/render/ability_vfx_registry';
 import { createVfxAnchor } from '../src/render/vfx_anchor';
 
 // The steady-state combat cost of the ability-VFX subsystem: anchors resolved
@@ -79,6 +80,60 @@ afterEach(() => {
 });
 
 describe('ability VFX steady-state frame cost', () => {
+  it('keeps Hunter arrow ribbons thin for entity and ground targets without shrinking comets', () => {
+    installCanvasStub();
+    const { anchor } = countingAnchor(() => 2);
+    const fx = new AbilityVfxFx(new THREE.Scene(), new THREE.PerspectiveCamera(), anchor, () => 0);
+    const entity = vi.spyOn(AbilityVfxRibbons.prototype, 'spawnTrailStyled');
+    const ground = vi.spyOn(AbilityVfxRibbons.prototype, 'spawnTrailStyledTo');
+    const arrow = abilityVfxFullSpec('arcane_shot');
+    if (!arrow) throw new Error('Hunter projectile spec missing');
+    const comet = { ...arrow, bolt: { ...arrow.bolt, style: 'comet' as const } };
+    try {
+      fx.sequenceBolt('arcane_shot', arrow, 1, 2, 0xffffff, 0.16, 0);
+      expect(entity.mock.calls[0][3]).toBeCloseTo(0.08, 6);
+      fx.sequenceBolt('arcane_shot', comet, 1, 2, 0xffffff, 0.16, 0);
+      expect(entity.mock.calls[1][3]).toBeCloseTo(0.32, 6);
+      fx.sequenceBoltAt('arcane_shot', arrow, 1, 10, 20, 0xffffff, 0.16, 0);
+      expect(ground.mock.calls[0][5]).toBeCloseTo(0.08, 6);
+      fx.sequenceBoltAt('arcane_shot', comet, 1, 10, 20, 0xffffff, 0.16, 0);
+      expect(ground.mock.calls[1][5]).toBeCloseTo(0.32, 6);
+    } finally {
+      entity.mockRestore();
+      ground.mockRestore();
+      fx.dispose();
+    }
+  });
+  it('draws hand preparation only for a refreshed live cast, never at release or after disposal', () => {
+    installCanvasStub();
+    const handGlow = vi.fn().mockReturnValue(true);
+    const fx = new AbilityVfxFx(
+      new THREE.Scene(),
+      new THREE.PerspectiveCamera(),
+      createVfxAnchor((_id, pose) => {
+        pose.height = 2;
+        return true;
+      }),
+      () => 0,
+      undefined,
+      handGlow,
+    );
+    fx.windup(7, 0x6622cc, 0.5, 'orb', false, 1, 0xddbbff);
+    fx.update(1 / 60, true);
+    expect(handGlow).toHaveBeenCalledTimes(1);
+    expect(handGlow.mock.calls[0].slice(0, 4)).toEqual([7, 0x6622cc, 0xddbbff, 0.5]);
+    // Completion, interruption and death stop refreshing the windup stamp.
+    fx.update(1 / 60);
+    expect(handGlow).toHaveBeenCalledTimes(1);
+    fx.windup(7, 0xff6600, 0.1);
+    fx.update(1 / 60);
+    expect(handGlow).toHaveBeenCalledTimes(2);
+    fx.dispose();
+    fx.windup(7, 1, 1);
+    fx.update(1 / 60);
+    expect(handGlow).toHaveBeenCalledTimes(2);
+  });
+
   it('resolves every per-frame anchor into a scratch vector, allocating none', () => {
     installCanvasStub();
     const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);

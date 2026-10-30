@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_goat/smart_goat.glb",
+      "out": "models/creatures/smart_goat.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Goat_Idle",
+        "Goat_CombatIdle",
+        "Goat_Walk",
+        "Goat_Trot",
+        "Goat_Run",
+        "Goat_HeadbuttLeft",
+        "Goat_HeadbuttRight",
+        "Goat_Ram",
+        "Goat_Hit",
+        "Goat_Death",
+        "Goat_Bleat",
+        "Goat_AlertLook",
+        "Goat_Graze"
+      ]
+    }
+  ]
+}

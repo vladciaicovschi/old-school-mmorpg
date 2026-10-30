@@ -23,6 +23,7 @@ import {
   GRID_CELL,
   MAX_BODY_RADIUS,
 } from './collider_cells';
+import { standsOnNpcSpot, townNpcPositions } from './collider_npc_clearance';
 import { MOUNT_RACE_JUMP_FIXTURES, raceGateSegment } from './content/mounts';
 import {
   arenaOriginAt,
@@ -52,6 +53,10 @@ import {
   STRIP_MIN_X,
   yumiMazeOriginAt,
 } from './data';
+import {
+  buildAuthoredSettlementColliders,
+  hasAuthoredSettlementCollision,
+} from './settlement_collision_integration';
 
 // Re-exported from the extracted cell-index module so existing importers keep
 // their './colliders' path.
@@ -62,7 +67,6 @@ import {
   DAWNHOLD_WALL_LEDGES,
   dawnholdParapetSegments,
 } from './dawnhold_layout';
-import { buildDecorPropColliders } from './decor_prop_colliders';
 import {
   decorationHasCollider,
   ROCK_RADIUS_PER_SCALE,
@@ -184,6 +188,8 @@ export interface CircleCollider {
 
 export interface ObbCollider {
   type: 'obb';
+  /** Stair risers contact the feet; surrounding walls still use the full body. */
+  stairTread?: boolean;
   x: number;
   z: number;
   hw: number; // half width (local x)
@@ -326,7 +332,7 @@ export function moverHeight(e: { pos: { y: number }; onGround: boolean }): Mover
 /** Head clearance a mover with height needs to walk beneath an elevated slab
  *  (`passUnderY`): a touch above the tallest body so a deck one yard overhead
  *  still walls, while a real balcony admits the walk below. */
-const PASS_UNDER_HEADROOM = 2.1;
+export const PASS_UNDER_HEADROOM = 2.1;
 
 // Does the mover pass clean over this collider at (x, z)? Full-height
 // colliders (moveTopY undefined) never pass; standable tops grant the mantle
@@ -373,34 +379,6 @@ export function mineMoundFootprint(m: {
 // Collider sets
 // ---------------------------------------------------------------------------
 
-// Positions no prop may stand on: authored NPCs, plus every overworld
-// graveyard anchor, where a Spirit Healer is spawned at runtime rather than
-// being an authored NPC record. Reads the ACTIVE content (byte-identical on
-// shipped hosts) so a custom map's furniture is vetoed against ITS npcs and
-// graveyards, never the builtin layout's.
-function townNpcPositions(): { x: number; z: number }[] {
-  const content = getActiveWorldContent();
-  const out: { x: number; z: number }[] = [];
-  for (const npc of Object.values(content.npcs)) {
-    const pos = (npc as { pos?: { x: number; z: number } }).pos;
-    if (pos) out.push({ x: pos.x, z: pos.z });
-  }
-  for (const g of content.services?.graveyards ?? []) out.push({ x: g.x, z: g.z });
-  return out;
-}
-
-function standsOnNpcSpot(
-  x: number,
-  z: number,
-  r: number,
-  spots: readonly { x: number; z: number }[],
-): boolean {
-  for (const s of spots) {
-    if (Math.hypot(s.x - x, s.z - z) < r + 0.4) return true;
-  }
-  return false;
-}
-
 function staticWorldColliders(seed: number): Collider[] {
   const out: Collider[] = [];
   const content = getActiveWorldContent();
@@ -409,6 +387,7 @@ function staticWorldColliders(seed: number): Collider[] {
   // Render hideables still block movement while their render subsystem fades
   // whichever one crosses the eye-to-camera segment to 20% opacity.
   for (const b of PROPS.buildings) {
+    if (hasAuthoredSettlementCollision(b, content === BUILTIN_WORLD)) continue;
     if (b.kind === 'chapel' && b.assetId === undefined) {
       // The legacy procedural chapel is COMPOSED (render/props.ts): full-height
       // bell tower at the rear, squat entry hall in front. Collide the two
@@ -774,10 +753,7 @@ function staticWorldColliders(seed: number): Collider[] {
     }
   }
 
-  // Hand-placed GLB decor (src/sim/decor_prop_colliders.ts): a circle or box
-  // per PROPS.decorProps entry, walk-through when r/hw+hd are absent, standable
-  // on top when standableTop is set (see that module's header).
-  out.push(...buildDecorPropColliders(seed, PROPS.decorProps ?? []));
+  out.push(...buildAuthoredSettlementColliders(content, seed));
 
   // THE GREAT MAZE's hedges. One box per drawn piece, straight off the same
   // grid the renderer lays the hedge GLBs from, so the blocked ground IS the
@@ -2427,6 +2403,7 @@ function sightBlockedAt(
   const overlapsAny = (list: Collider[], lx: number, lz: number, skipLow: boolean): boolean => {
     for (const c of list) {
       if (skipLow && c.cameraTopY !== undefined && c.cameraTopY <= sightY) continue;
+      if (c.passUnderY !== undefined && sightY < c.passUnderY) continue;
       if (pushOut(c, lx, lz, r) !== null) return true;
     }
     return false;

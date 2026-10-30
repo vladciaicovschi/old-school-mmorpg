@@ -109,8 +109,8 @@ describe('the continent derives the right border set', () => {
 
   it('row bounds widen exactly where columns live', () => {
     for (const z of [-100, 100]) {
-      // the Farshore and the Proving Shore widen the starter row both ways
-      expect(worldXBoundsAt(z)).toEqual({ min: -540, max: 540 });
+      // The dev-only model laboratory sits beyond the Farshore in this row.
+      expect(worldXBoundsAt(z)).toEqual({ min: -540, max: 920 });
     }
     for (const z of [300, 800, 1100, 1700, 1900]) {
       expect(worldXBoundsAt(z)).toEqual({ min: -540, max: 540 });

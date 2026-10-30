@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_bear/smart_bear.glb",
+      "out": "models/creatures/smart_bear.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Bear_Idle",
+        "Bear_CombatIdle",
+        "Bear_Walk",
+        "Bear_Run",
+        "Bear_SwipeLeft",
+        "Bear_SwipeRight",
+        "Bear_DoubleSlam",
+        "Bear_Hit",
+        "Bear_Death",
+        "Bear_Roar"
+      ]
+    }
+  ]
+}

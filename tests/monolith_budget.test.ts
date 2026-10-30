@@ -1859,7 +1859,9 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned at the 2026-09-07 release/v0.42.0 sync of the Drakelands
     // map-improvements epic (PR #3746): the keep wall-ledge and parapet loops retired and the Wildheart static set moved beside its field data. Measured with wc -l on the
     // merged tree. Exact merged count, zero headroom.
-    ceiling: 2548,
+    // Wickharbor: NPC reservation queries moved to collider_npc_clearance.ts.
+    // Approved settlements: town and decor assembly moved to settlement_collision_integration.ts.
+    ceiling: 2525,
     seam: 'per-zone collider data beside the zone content; shared logic stays here',
   },
   {

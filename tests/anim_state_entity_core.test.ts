@@ -34,7 +34,26 @@ const facts = (over: Partial<AnimOverrideFacts> = {}): AnimOverrideFacts => ({
   ...over,
 });
 
+describe('applyEntityAnimOverrides: presentation cast clock', () => {
+  it('copies the authoritative clock and clears stale timing when facts are absent', () => {
+    const st = state();
+    applyEntityAnimOverrides(st, facts({ castTotal: 3, castRemaining: 1.5 }), false);
+    expect(st.castTotal).toBe(3);
+    expect(st.castRemaining).toBe(1.5);
+    applyEntityAnimOverrides(st, facts(), false);
+    expect(st.castTotal).toBe(0);
+    expect(st.castRemaining).toBe(0);
+  });
+});
+
 describe('applyEntityAnimOverrides: battle-stance engagement', () => {
+  it('braces a warrior from presentation engagement but never a corpse', () => {
+    const st = state();
+    applyEntityAnimOverrides(st, facts(), false, 0, true);
+    expect(st.combat).toBe(true);
+    applyEntityAnimOverrides(st, facts(), true, 0, true);
+    expect(st.combat).toBe(false);
+  });
   it('flags a mob that holds a live aggro target as engaged', () => {
     const st = state();
     applyEntityAnimOverrides(st, facts({ aggroTargetId: 7 }), false);

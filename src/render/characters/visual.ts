@@ -8,6 +8,7 @@
 import * as THREE from 'three';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
+import { ITEMS } from '../../sim/data';
 import type { OverheadEmoteId } from '../../world_api';
 import { recordBuildSpan, timeBuildSpan } from '../build_spans';
 import { GFX } from '../gfx';
@@ -29,9 +30,9 @@ import {
   advanceTreadBlend,
   type BaseState,
   castHoldStep,
-  desiredBaseState,
   drivesPose,
   locomotionTimeScale,
+  POSE_DRIVE_MIN_WEIGHT,
   pickProxyHeight,
   scanAnimRepair,
   shouldPlayLanding,
@@ -45,11 +46,13 @@ import {
   attachDeferredFaceDecals,
   ensureSkinTexture,
   farSourceMaterials,
+  hasRangedWeaponAttachment,
   modularFarBake,
   peekModularFarBake,
   prepareVisual,
   releaseModularVariant,
   releaseTintedMaterials,
+  setEquipmentPartVisibility,
   setHeldOffhand,
   setHeldWeapon,
   setWeaponsStowed,
@@ -59,6 +62,10 @@ import {
   takeFarBakeBudget,
   tintedFarMaterials,
 } from './assets';
+import { CastDurationMixer } from './cast_duration';
+import { castPalmWorldPosition } from './cast_palms';
+import { type CastTargetMode, friendlyCastClip } from './cast_target_mode';
+import { clipNamesOf } from './clip_names_core';
 import { deathGroundingOffset } from './death_grounding_core';
 import {
   createGhostEffectMaterial,
@@ -73,7 +80,9 @@ import { buildHalo } from './halo';
 import { disposeHeldPropIdles, updateHeldPropIdles } from './held_prop_idle';
 import { noteLookAttached } from './look_pieces';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
+import { type EquipmentPartItems, equipmentPartSignature } from './meshy_titan_armor_core';
 import { createMetamorphWingPose, metamorphWingPoseInto } from './metamorph_wing_motion_core';
+import { desiredModelBaseState } from './model_gait_core';
 import type { ModularAppearance, ModularLook } from './modular';
 import {
   PALADIN_BASTION_SWEEP_CLIP,
@@ -87,6 +96,7 @@ import {
 import { PaladinTemplarsVerdictFx } from './paladin_templars_verdict_fx';
 import { attachSharedDepthMaterials } from './shadow_depth_materials';
 import { characterMeshCastsShadow } from './shadow_policy';
+import { ShotLocomotionLayer } from './shot_locomotion';
 import { SkeletonUpdateCache, type SkeletonUpdateStats } from './skeleton_update_cache';
 import {
   type OneShotKind,
@@ -102,6 +112,13 @@ import { applySoulRendOverlay } from './soul_rend_overlay';
 import { soulRendPrewarmTargets } from './soul_rend_prewarm_core';
 import { createStowTransition, forceStow, requestStow, tickStow } from './stow_transition';
 import { SPIN_ATTACK_VISUAL_DURATION, weaponAttackStyle } from './weapon_attack_style_core';
+import { weaponUsesHipCarry } from './weapon_carry_core';
+import {
+  drawnIdleClip,
+  weaponMotionAttackIndex,
+  weaponMotionBaseClip,
+  weaponMotionFor,
+} from './weapon_motion_core';
 import {
   disposeOwnedWeaponSkinMaterials,
   markOwnedWeaponSkinMaterials,
@@ -465,6 +482,7 @@ export class CharacterVisual {
   private skinIndex: number;
   private weaponItemId: string | null;
   private offhandItemId: string | null;
+  private equipmentPartSignature: string | null = null;
   /** Composition inputs for a `modular` def (null for a fixed class rig).
    *  Changing a look means changing GEOMETRY, so callers rebuild the visual
    *  rather than mutating it; this is kept so they can tell whether they must. */
@@ -565,6 +583,7 @@ export class CharacterVisual {
   }[] = [];
   private weaponVfxSpriteScale = WORLD_FOV_SPRITE_SCALE;
   private stow = createStowTransition();
+  private carryGesture: THREE.AnimationAction | null = null;
   // Set whenever the held-prop graph is rebuilt OUTSIDE a renderer-driven call
   // (the deferred stow swap); the renderer consumes it to re-rank view lights.
   private weaponGraphDirty = false;
@@ -576,6 +595,7 @@ export class CharacterVisual {
   private ghosted = false;
   private ghostStyle: GhostStyle = 'spirit';
   private mixer: THREE.AnimationMixer;
+  private shotLocomotion: ShotLocomotionLayer | null = null;
   private skeletonUpdates: SkeletonUpdateCache;
   private actions = new Map<string, THREE.AnimationAction>();
   private model: THREE.Object3D;
@@ -682,6 +702,8 @@ export class CharacterVisual {
 
   private baseState: BaseState = 'idle';
   private current: THREE.AnimationAction | null = null;
+  /** A dev-studio clip deliberately owns the preview until stopped. */
+  private studioPreviewClip = false;
   private currentIsOneShot = false;
   /** Seconds until the next idle-breaker; -1 means "rearm on the next idle". */
   private idleVariantIn = -1;
@@ -698,14 +720,21 @@ export class CharacterVisual {
    *  over a body the sim is already MOVING glides the model across the floor
    *  with no run animation (the post-Slam "teleport" to the tank) */
   private currentOneShotIsCastExit = false;
+  private currentOneShotIsMagicAuto = false;
   // Whether the live one-shot is the ATTACK, as opposed to a hit react, a
   // landing, the sheathe gesture or any other one-shot. Only the aim pin needs
   // the distinction (skin_attack.ts rangedSkinAiming); a stale true is harmless
   // because every read gates on currentIsOneShot first.
   private currentOneShotIsAttack = false;
+  /** True while an authored magic release gesture needs free hands. */
+  private currentOneShotStowsHeldProps = false;
+  /** Temporary cast-driven back-stow; distinct from the player Z-key state. */
+  private castPropsStowed = false;
   /** The ability driving the cast base state, mirrored from AnimState so the
    *  aim pin can tell a drawn shot from a pet utility cast. */
   private castingAbility: string | null = null;
+  private readonly castDurationMixer = new CastDurationMixer();
+  private castTargetMode: 'self' | 'ally' | 'hostile' | null = null;
   /** which ability's cast clip the current cast-state base action was chosen
    *  for; lets chained casts refresh their per-ability override */
   private castClipAbility: string | null = null;
@@ -797,6 +826,8 @@ export class CharacterVisual {
     offhandItemId: string | null = null,
     look: ModularLook | null = null,
     opts?: AssembleOptions,
+    equipmentItems: EquipmentPartItems = {},
+    helmHidden = false,
   ) {
     const prep = prepareVisual(key);
     // A cosmetic body (the Combat Mech) keeps its model/clips but can adopt the
@@ -816,6 +847,11 @@ export class CharacterVisual {
     this.skinIndex = skinIndex;
     this.weaponItemId = weaponItemId;
     this.offhandItemId = offhandItemId;
+    this.equipmentPartSignature = equipmentPartSignature(
+      this.def.equipmentParts,
+      equipmentItems,
+      helmHidden,
+    );
     this.height = prep.def.height;
 
     // model: yaw/scale/feet normalization wrapper around the skinned clone. The
@@ -828,8 +864,9 @@ export class CharacterVisual {
     // for a non-modular def, this makes the visual agree, so nothing
     // downstream can read a look the geometry never used.
     this.look = prep.def.modular ? look : null;
+    const assembleOpts = this.def.equipmentParts ? { ...opts, equipmentItems, helmHidden } : opts;
     this.model = timeBuildSpan('view-part:assemble', () =>
-      assembleModel(this.def, weaponItemId, offhandItemId, look, opts),
+      assembleModel(this.def, weaponItemId, offhandItemId, look, assembleOpts),
     );
     // Release-on-throw for everything below: the retry gate re-runs this whole
     // constructor when a streamed asset lands late (a designed path, not an
@@ -952,6 +989,11 @@ export class CharacterVisual {
 
       const mixerStarted = performance.now();
       this.mixer = new THREE.AnimationMixer(this.model);
+      if (this.def.clips.locomotionShotClips?.length)
+        this.shotLocomotion = new ShotLocomotionLayer(
+          this.mixer,
+          this.def.clips.locomotionShotClips,
+        );
       this.skeletonUpdates = new SkeletonUpdateCache(this.model);
       for (const name of [...clipNamesOf(prep.def), ...SKIN_ATTACK_CLIP_NAMES]) {
         const clip = prep.clips.get(name);
@@ -1021,6 +1063,7 @@ export class CharacterVisual {
     // Deferred sheathe swap: lands at the gesture's windup peak (see
     // setWeaponStowed), where the clip is also cut so the chop's downswing never
     // plays. Ticks even when `animate` is false so a throttled rig still settles.
+    if (s.dead) forceStow(this.stow, this.stow.attached);
     const stowTick = tickStow(this.stow, dt);
     if (stowTick !== 'none') {
       if (stowTick === 'swap') this.applyStowSwap();
@@ -1028,8 +1071,10 @@ export class CharacterVisual {
     }
 
     // death is a level sim-side, edge-trigger the clip locally
-    if (s.dead && !this.wasDead) this.enterDeath();
-    else if (!s.dead && this.wasDead) this.revive();
+    if (s.dead && !this.wasDead) {
+      this.shotLocomotion?.stop();
+      this.enterDeath();
+    } else if (!s.dead && this.wasDead) this.revive();
     this.wasDead = s.dead;
     this.initialized = true;
 
@@ -1047,11 +1092,25 @@ export class CharacterVisual {
     this.wasAirborne = s.airborne;
 
     this.castingAbility = s.casting ? (s.castingAbility ?? null) : null;
-    if (!this.deadLock) {
+    this.castTargetMode = s.casting ? (s.castTargetMode ?? null) : null;
+    this.syncHeldPropCastStow(s.casting || this.currentOneShotStowsHeldProps);
+    if (!this.deadLock && !this.studioPreviewClip) {
       const desired = this.desiredBase(s);
       const baseChanged = desired !== this.baseState;
       const previousBase = this.baseState;
       if (baseChanged) this.baseState = desired;
+      // Cosmetic full-body carry clips yield the instant the body travels,
+      // jumps or casts. Keep gait/airborne motion instead of skating in place.
+      if (
+        this.def.clips.travel &&
+        this.currentIsOneShot &&
+        this.current === this.carryGesture &&
+        (MOVING_STATES.has(desired) || s.airborne || s.casting || s.sitting || s.swimming)
+      ) {
+        this.currentIsOneShot = false;
+        this.setWeaponStowed(this.stow.target, true);
+        this.fadeTo(this.baseAction(), 0.18, false);
+      }
       if (this.currentOneShotIsEmote && this.shouldInterruptEmote(s)) {
         this.currentIsOneShot = false;
         this.currentOneShotIsEmote = false;
@@ -1079,13 +1138,22 @@ export class CharacterVisual {
         this.currentIsOneShot = false;
         this.currentOneShotIsLanding = false;
         this.fadeTo(this.baseAction(), this.baseTransitionFade(desired), false);
-      } else if (this.currentOneShotIsCastExit && this.shouldInterruptEmote(s)) {
+      } else if (
+        (this.currentOneShotIsMagicAuto && s.casting) ||
+        (this.currentOneShotIsCastExit &&
+          (this.def.clips.castDurationFit
+            ? this.castDurationMixer.releaseInterrupted(s)
+            : this.shouldInterruptEmote(s)))
+      ) {
         // The recovery tail outlived the sim's stand-still window (the clip
         // lagged the cast, so more of it was left than the window covers) and
         // the body is really moving/casting again: hand the rig back to the
         // base state NOW instead of gliding the model under the one-shot.
         this.currentIsOneShot = false;
+        this.currentOneShotIsAttack = false;
         this.currentOneShotIsCastExit = false;
+        this.currentOneShotStowsHeldProps = false;
+        this.syncHeldPropCastStow(s.casting);
         this.fadeTo(this.baseAction(), this.baseTransitionFade(desired), false);
       } else if (baseChanged && !this.currentIsOneShot) {
         // a cast clip frozen at its hold point must never stay paused through
@@ -1095,6 +1163,13 @@ export class CharacterVisual {
           this.fadeTo(this.baseAction(), this.baseTransitionFade(desired), false);
           this.fadeTo(this.baseAction(), waterFade(previousBase, desired), false);
         }
+      } else if (
+        (this.def.clips.weaponMotions || this.def.clips.drawnIdle) &&
+        !this.currentIsOneShot &&
+        this.current !== this.baseAction()
+      ) {
+        // Same state, different equipment/carry profile: refresh the stance.
+        this.fadeTo(this.baseAction(), 0.15, false);
       } else if (
         desired === 'cast' &&
         !this.currentIsOneShot &&
@@ -1116,6 +1191,15 @@ export class CharacterVisual {
           this.current.timeScale = timeScale;
         }
         if (this.baseState === 'spin') this.current.timeScale = SPIN_ATTACK_TIMESCALE;
+        // `fall` resolves to the same authored jump clip for rigs without a
+        // separate falling action. Keep the rate across the physics apex:
+        // otherwise it snaps from the compressed takeoff to full-speed
+        // playback precisely when vertical velocity changes sign.
+        if (
+          (this.baseState === 'jump' || this.baseState === 'fall') &&
+          this.def.clips.jumpTimeScale !== undefined
+        )
+          this.current.timeScale = this.def.clips.jumpTimeScale;
         if (this.baseState === 'cast') {
           // per-frame on purpose: actions are cached per clip, so a clip that
           // doubles as an attackByAbility one-shot would otherwise leak that
@@ -1125,13 +1209,18 @@ export class CharacterVisual {
               ? this.def.clips.castTimeScaleByAbility?.[this.castingAbility]
               : undefined) ?? 1;
           this.current.timeScale = castScale;
-          const holdPoint = this.def.clips.castHoldPointSeconds;
+          const genericHoldPoint = this.def.clips.castHoldPointSeconds;
+          const abilityHoldPoint = this.castingAbility
+            ? this.def.clips.castHoldPointByAbility?.[this.castingAbility]
+            : undefined;
           const genericCast = this.action(this.def.clips.cast);
-          // The freeze covers ONLY the generic cast clip: a per-ability
-          // override (the identity check, since actions are cached per clip)
-          // keeps its authored behavior. The recovery past the hold point
-          // plays on cast end via beginCastExitPlayOut.
-          if (holdPoint !== undefined && genericCast && this.current === genericCast) {
+          // An ability-specific cast may name its own release frame. This lets
+          // the body arrive at the throw/point, wait there for the authoritative
+          // cast, then continue into recovery exactly when its projectile leaves.
+          const holdPoint =
+            abilityHoldPoint ??
+            (genericCast && this.current === genericCast ? genericHoldPoint : undefined);
+          if (holdPoint !== undefined) {
             const step = castHoldStep(
               this.current.time,
               holdPoint,
@@ -1164,7 +1253,10 @@ export class CharacterVisual {
     // (the T-pose) for as long as the state is held, and strafe/cast/walk are
     // all held states. Re-drive the base pose instead of waiting for the next
     // edge. Debounced, so a legitimate crossfade can never trip it.
-    if (this.current && drivesPose(readActionWeight(this.current, this.currentWeight))) {
+    if (
+      (this.current && drivesPose(readActionWeight(this.current, this.currentWeight))) ||
+      this.shotLocomotion?.drivesPose(POSE_DRIVE_MIN_WEIGHT)
+    ) {
       this.starvedFrames = 0;
     } else {
       const scan = scanAnimRepair(this.starvedFrames, this.readActionWeights(), this.deadLock);
@@ -1270,7 +1362,7 @@ export class CharacterVisual {
       // BEFORE the mixer integrates: scrub the climb's baked clips (weights
       // and frozen times are mixer INPUTS, unlike the additive lifts below).
       this.driveClimbClips();
-      this.updateMixer(animationDt);
+      this.updateMixer(animationDt, s);
       // Held props with their own looping clip (the Ignivar legendaries'
       // engine idles) advance on the same hitstop-aware dt as the rig.
       // Gated on the far mesh ACTUALLY standing in, like updateWeaponVfx:
@@ -1695,17 +1787,108 @@ export class CharacterVisual {
    *  entry with a live action). The ability-VFX painter gates its ceremonial
    *  cast gestures on this, so a heal/blessing cue can never fall back to a
    *  weapon swing on a rig without the authored clip. */
+  get supportsJoinedCastRelease(): boolean {
+    return (
+      this.def.clips.castDurationFit !== undefined &&
+      Object.values(this.def.clips.castReleaseByTarget ?? {}).some(
+        (clip) => this.action(clip) !== null,
+      )
+    );
+  }
+
+  get isPreparingFittedCast(): boolean {
+    return this.supportsJoinedCastRelease && this.baseState === 'cast' && !this.currentIsOneShot;
+  }
+
   hasAttackClipOverride(abilityId: string): boolean {
-    const override = this.def.clips.attackByAbility?.[abilityId];
-    return override !== undefined && this.action(override) !== null;
+    const override =
+      weaponMotionFor(
+        this.def.clips.weaponMotions,
+        this.weaponItemId,
+        this.offhandItemId,
+        this.weaponSkinId,
+      )?.attackByAbility?.[abilityId] ?? this.def.clips.attackByAbility?.[abilityId];
+    return (
+      (override !== undefined && this.action(override) !== null) ||
+      Object.values(this.def.clips.castReleaseByTarget ?? {}).some(
+        (clip) => this.action(clip) !== null,
+      )
+    );
+  }
+
+  /** Complete a cast that has reached its authored release pose. The normal
+   * attack route starts a fresh gesture; this route resumes the current cast
+   * instead, keeping the projectile on the hand's actual throw/point frame. */
+  playCastRelease(
+    abilityId: string,
+    targetMode: CastTargetMode | null = this.castTargetMode,
+  ): void {
+    if (this.deadLock) return;
+    const c = this.def.clips;
+    const clipName =
+      friendlyCastClip(c.castReleaseByTarget, targetMode) ??
+      c.attackByAbility?.[abilityId] ??
+      (targetMode ? c.castReleaseByTarget?.[targetMode] : c.castReleaseByTarget?.hostile);
+    const action = this.action(clipName);
+    if (action && action === this.current && this.baseState === 'cast' && !this.currentIsOneShot) {
+      action.paused = false;
+      action.setLoop(THREE.LoopOnce, 1);
+      action.clampWhenFinished = true;
+      this.currentIsOneShot = true;
+      this.currentOneShotIsAttack = true;
+      this.currentOneShotStowsHeldProps = this.def.stowHeldPropsWhileCasting === true;
+      this.syncHeldPropCastStow(this.currentOneShotStowsHeldProps);
+      return;
+    }
+    if (clipName && c.castReleaseByTarget && action) {
+      this.playOneShot(clipName, c.attackTimeScaleByAbility?.[abilityId] ?? 1);
+      this.currentOneShotIsAttack = true;
+      this.currentOneShotIsCastExit = c.castDurationFit !== undefined;
+      this.currentOneShotStowsHeldProps = this.def.stowHeldPropsWhileCasting === true;
+      this.syncHeldPropCastStow(this.currentOneShotStowsHeldProps);
+    } else this.playAttack(abilityId);
+  }
+
+  /** Magic autos have no ability ID. Do not route them through staff melee or
+   * restart a spell release that legitimately shares the same server tick. */
+  playMagicAutoAttack(): boolean {
+    if (
+      this.deadLock ||
+      this.baseState === 'cast' ||
+      (this.currentIsOneShot && this.currentOneShotIsAttack)
+    )
+      return false;
+    const c = this.def.clips;
+    const release = c.castReleaseByTarget?.hostile;
+    if (!release || !this.action(release)) return false;
+    this.playOneShot(release, 1);
+    this.currentOneShotIsAttack = true;
+    this.currentOneShotIsMagicAuto = true;
+    this.currentOneShotStowsHeldProps = this.def.stowHeldPropsWhileCasting === true;
+    this.syncHeldPropCastStow(this.currentOneShotStowsHeldProps);
+    return true;
+  }
+
+  castPalmWorldPosition(out: THREE.Vector3): boolean {
+    return castPalmWorldPosition(this.root, 'Right', out);
   }
 
   playAttack(abilityId?: string): void {
     if (this.deadLock) return;
+    // A resolved hit must never wait for a cosmetic draw gesture.
+    if (this.def.clips.travel) this.setWeaponStowed(false, true);
     // Resolved against THIS rig's bound clips: a rig without the substitute
     // (every body but the hunter) keeps its own authored attack instead of
     // swinging with no animation at all.
-    const skinAttack = pickSkinAttackClips(this.weaponSkinId, (c) => this.action(c) !== null);
+    const motion = weaponMotionFor(
+      this.def.clips.weaponMotions,
+      this.weaponItemId,
+      this.offhandItemId,
+      this.weaponSkinId,
+    );
+    const skinAttack = motion
+      ? null
+      : pickSkinAttackClips(this.weaponSkinId, (c) => this.action(c) !== null);
     // A displayed bow skin substitutes Bow_Draw_Shot for the hunter's RANGED
     // attacks, including the ranged per-ability overrides: the crossbow-
     // shoulder ability poses (Hunter_Shot_Snap etc.) are authored for the
@@ -1721,7 +1904,9 @@ export class CharacterVisual {
     // convention rather than a hardcoded ability list, so any future
     // non-ranged override keeps its authored clip automatically
     // (tests/weapon_skins.test.ts).
-    const rawOverride = abilityId ? this.def.clips.attackByAbility?.[abilityId] : undefined;
+    const rawOverride = abilityId
+      ? (motion?.attackByAbility?.[abilityId] ?? this.def.clips.attackByAbility?.[abilityId])
+      : undefined;
     const overrideIsNonRanged =
       rawOverride?.startsWith('Hunter_Melee_') || rawOverride === 'Spellcast_Raise';
     const override = !skinAttack || overrideIsNonRanged ? rawOverride : undefined;
@@ -1731,6 +1916,11 @@ export class CharacterVisual {
         : undefined;
       this.playOneShot(override, authoredTimeScale ?? this.def.attackTimeScale ?? 1.3);
       this.currentOneShotIsAttack = true;
+      // The dedicated magic gestures were authored with free hands. A normal
+      // weapon swing (including any fallback with no named ability) stays drawn.
+      this.currentOneShotStowsHeldProps =
+        this.def.stowHeldPropsWhileCasting === true && abilityId !== undefined;
+      this.syncHeldPropCastStow(this.currentOneShotStowsHeldProps);
       if (override === PALADIN_TEMPLARS_VERDICT_CLIP) {
         this.templarsVerdictAction = this.action(override);
       } else if (override === PALADIN_BASTION_SWEEP_CLIP) {
@@ -1743,29 +1933,58 @@ export class CharacterVisual {
     if (!skinAttack && handClip && this.action(handClip)) {
       this.playOneShot(handClip, this.def.attackTimeScale ?? 1.3);
       this.currentOneShotIsAttack = true;
+      this.syncHeldPropCastStow(false);
       return;
     }
-    const clips = skinAttack?.clips ?? this.def.clips.attack;
+    const clips = skinAttack?.clips ?? motion?.attack ?? this.def.clips.attack;
     if (clips.length === 0) return;
-    const name = clips[this.attackIdx++ % clips.length];
+    const weights = skinAttack
+      ? undefined
+      : motion
+        ? motion.attackWeights
+        : this.def.clips.attackWeights;
+    const name =
+      clips[
+        weaponMotionAttackIndex(
+          clips.length,
+          weights,
+          weights ? Math.random() : 0,
+          this.attackIdx++,
+        )
+      ];
     this.playOneShot(name, skinAttack?.timeScale ?? this.def.attackTimeScale ?? 1.3);
     this.currentOneShotIsAttack = true;
+    this.syncHeldPropCastStow(false);
   }
 
   /** Bladed Gyre is instant, so it uses one short body spin instead of the
    *  held Bladestorm channel pose. Repeated AoE hits only refresh the timer. */
   playWhirl(): void {
     if (this.deadLock) return;
+    if (this.def.clips.travel) this.setWeaponStowed(false, true);
     this.spinOnceTimer = SPIN_ATTACK_VISUAL_DURATION;
-    const clips = this.def.clips.attack;
+    const clips =
+      weaponMotionFor(
+        this.def.clips.weaponMotions,
+        this.weaponItemId,
+        this.offhandItemId,
+        this.weaponSkinId,
+      )?.attack ?? this.def.clips.attack;
     if (clips.length > 0) {
       this.playOneShot(clips[this.attackIdx++ % clips.length], SPIN_ATTACK_TIMESCALE);
+      this.currentOneShotIsAttack = true;
     }
   }
 
   playHit(): void {
     if (this.deadLock || this.currentIsOneShot || this.hitCooldown > 0) return;
-    const clips = this.def.clips.hit;
+    const clips =
+      weaponMotionFor(
+        this.def.clips.weaponMotions,
+        this.weaponItemId,
+        this.offhandItemId,
+        this.weaponSkinId,
+      )?.hit ?? this.def.clips.hit;
     if (!clips || clips.length === 0) return;
     this.hitCooldown = HIT_REACT_COOLDOWN;
     this.playOneShot(clips[Math.floor(Math.random() * clips.length)], 1.2);
@@ -1844,6 +2063,7 @@ export class CharacterVisual {
       }
     }
     if (!chosen) return null;
+    this.shotLocomotion?.stop();
     for (const a of this.actions.values()) if (a !== chosen) a.stop();
     chosen.stop();
     chosen.reset();
@@ -1862,8 +2082,47 @@ export class CharacterVisual {
     return name;
   }
 
+  /** Names of clips that were actually wired into this visual's mixer. */
+  availableAnimationClips(): readonly string[] {
+    return [...this.actions.keys()].sort((a, b) => a.localeCompare(b));
+  }
+
+  /** Loop an authored clip for the fitting studio without letting the normal
+   * gameplay state machine immediately replace it with Idle. */
+  playStudioPreviewClip(name: string): boolean {
+    const chosen = this.action(name);
+    if (!chosen) return false;
+    this.shotLocomotion?.stop();
+    for (const action of this.actions.values()) if (action !== chosen) action.stop();
+    chosen.stop();
+    chosen.reset();
+    chosen.setLoop(THREE.LoopRepeat, Infinity);
+    chosen.clampWhenFinished = false;
+    chosen.timeScale = 1;
+    chosen.paused = false;
+    chosen.setEffectiveWeight(1);
+    chosen.play();
+    this.current = chosen;
+    this.currentIsOneShot = true;
+    this.currentOneShotIsEmote = false;
+    this.currentOneShotIsIdleVariant = false;
+    this.currentOneShotIsLanding = false;
+    this.currentOneShotIsCastExit = false;
+    this.studioPreviewClip = true;
+    this.updateMixer(0);
+    return true;
+  }
+
+  stopStudioPreviewClip(): void {
+    if (!this.studioPreviewClip) return;
+    this.studioPreviewClip = false;
+    this.clearPose();
+  }
+
   /** Resume the looping idle after poseFreeze() so the live preview isn't stuck. */
   clearPose(): void {
+    this.shotLocomotion?.stop();
+    this.studioPreviewClip = false;
     this.currentIsOneShot = false;
     this.currentOneShotIsEmote = false;
     this.baseState = 'idle';
@@ -2568,9 +2827,25 @@ export class CharacterVisual {
    *  payload(s) (for the caller's compile gate), or null on a no-op. */
   setWeapon(weaponItemId: string | null): THREE.Object3D[] | null {
     if (weaponItemId === this.weaponItemId) return null;
+    this.finishCarryForEquipmentChange();
     this.weaponItemId = weaponItemId;
-    if (!this.def.weaponSlots?.length) return null;
+    if (!this.def.weaponSlots?.length && !hasRangedWeaponAttachment(this.def)) return null;
     return this.reattachHeldWeapon();
+  }
+
+  /** Toggle the segmented fixed-body armor in place. The current prototype
+   * treats slot occupancy as Knight's Valor selection; item-to-set resolution
+   * can replace that rule without rebuilding the rig or mixer. */
+  setArmorEquipment(
+    equipmentItems: EquipmentPartItems,
+    helmHidden: boolean,
+  ): THREE.Object3D[] | null {
+    const parts = this.def.equipmentParts;
+    if (!parts) return null;
+    const signature = equipmentPartSignature(parts, equipmentItems, helmHidden);
+    if (signature === this.equipmentPartSignature) return null;
+    this.equipmentPartSignature = signature;
+    return setEquipmentPartVisibility(this.model, parts, equipmentItems, helmHidden);
   }
 
   /** Swap the actual offhand. When neither the old nor the new offhand mirrors the
@@ -2582,6 +2857,7 @@ export class CharacterVisual {
    *  payload(s) (for the caller's compile gate), or null on a no-op. */
   setOffhand(offhandItemId: string | null): THREE.Object3D[] | null {
     if (offhandItemId === this.offhandItemId) return null;
+    this.finishCarryForEquipmentChange();
     if (this.def.offhandSlot === undefined) {
       this.offhandItemId = offhandItemId;
       return null;
@@ -3107,34 +3383,70 @@ export class CharacterVisual {
     this.auraGlowMaterials.clear();
   }
 
-  /** Move every held prop between the hands and the sheathed on-back pose (the
-   *  Z-key stow toggle). On a live rig this plays the ClipMap `stow` arm gesture
-   *  and defers the actual re-parent to the gesture's midpoint (stow_transition),
-   *  so the swap lands while the hand passes the shoulder; spawn-in sync, dead
-   *  rigs, and clip-less defs snap immediately instead. */
-  setWeaponStowed(stowed: boolean): void {
+  /** Do not retain a belt-reach gesture after equipping a back-carried weapon. */
+  private finishCarryForEquipmentChange(): void {
+    if (!this.def.weaponCarryByHand || !this.currentIsOneShot || this.current !== this.carryGesture)
+      return;
+    this.currentIsOneShot = false;
+    this.setWeaponStowed(this.stow.target, true);
+    this.fadeTo(this.baseAction(), 0.18, false);
+  }
+
+  /** Move held props between hands and their carry anchors. Live stationary
+   * rigs defer the reparent until the gesture midpoint; spawn, death, movement
+   * and first resolved attacks can snap without delaying actionable motion. */
+  setWeaponStowed(stowed: boolean, immediate = false): void {
     if (!this.def.attach?.length) {
       forceStow(this.stow, stowed);
       return;
     }
-    const clip = this.def.clips.stow;
+    const c = this.def.clips;
+    const mainHip =
+      this.def.weaponCarryByHand &&
+      weaponUsesHipCarry(this.weaponItemId ? ITEMS[this.weaponItemId] : undefined);
+    const offHip =
+      this.def.weaponCarryByHand &&
+      weaponUsesHipCarry(this.offhandItemId ? ITEMS[this.offhandItemId] : undefined);
+    const clip =
+      mainHip && c.hipCarry
+        ? offHip
+          ? stowed
+            ? c.hipCarry.dualStow
+            : c.hipCarry.dualDraw
+          : stowed
+            ? c.hipCarry.stow
+            : c.hipCarry.draw
+        : stowed
+          ? c.stow
+          : (c.draw ?? c.stow);
     const gesture = clip ? this.action(clip) : null;
-    if (!this.initialized || this.deadLock || !gesture) {
+    if (
+      immediate ||
+      (this.def.clips.travel && MOVING_STATES.has(this.baseState)) ||
+      !this.initialized ||
+      this.deadLock ||
+      !gesture ||
+      (!stowed && this.currentOneShotIsAttack)
+    ) {
       if (forceStow(this.stow, stowed)) this.applyStowSwap();
       return;
     }
-    const swapDelay = (gesture.getClip().duration / STOW_GESTURE_TIMESCALE) * STOW_SWAP_FRACTION;
+    const authored = this.def.clips.carrySwapFraction;
+    const timeScale = authored === undefined ? STOW_GESTURE_TIMESCALE : 1;
+    const swapDelay = (gesture.getClip().duration / timeScale) * (authored ?? STOW_SWAP_FRACTION);
     if (requestStow(this.stow, stowed, swapDelay)) {
-      this.playOneShot(clip as string, STOW_GESTURE_TIMESCALE);
+      this.carryGesture = gesture;
+      this.playOneShot(clip as string, timeScale);
       // Arm-raise window: peaks exactly at the swap, eases back out after it.
       this.stowLift.t = 0;
-      this.stowLift.dur = swapDelay * 2;
+      this.stowLift.dur = authored === undefined ? swapDelay * 2 : 0;
     }
   }
 
   /** Cut the stow gesture at its windup peak: hand back to base so the chop
    *  clip's downswing never plays (mirrors onFinished's one-shot hand-off). */
   private endStowGesture(): void {
+    if (this.def.clips.carrySwapFraction !== undefined) return;
     const clip = this.def.clips.stow;
     const gesture = clip ? this.action(clip) : null;
     if (!gesture || this.current !== gesture || this.deadLock) return;
@@ -3148,10 +3460,16 @@ export class CharacterVisual {
    *  shared re-attach tail (materials, caster snapshot, skin VFX rebuilt on the
    *  new payloads). Mixer state is untouched. */
   private applyStowSwap(): void {
-    // The swap lands mid-gesture, long after the renderer's stow diff returned,
-    // so the rig it rebuilds (and the skin VFX point light hanging off it) can
-    // only be reconciled into the light budget on a later frame: raise an edge
-    // the renderer consumes (consumeWeaponGraphDirty).
+    this.rebuildHeldPropsForStow();
+    if (this.initialized && !this.currentIsOneShot && !this.deadLock) {
+      this.fadeTo(this.baseAction(), 0.18, false);
+    }
+  }
+
+  /** Rebuild attachments in their combined manual- and cast-stow state. */
+  private rebuildHeldPropsForStow(): void {
+    // The swap can happen after the renderer's stow diff returned, so the rig
+    // and weapon-VFX light need a later budget reconciliation.
     this.weaponGraphDirty = true;
     this.disposeWeaponVfx();
     this.disposeWeaponSkinMaterials();
@@ -3160,7 +3478,7 @@ export class CharacterVisual {
       this.def,
       this.weaponItemId,
       this.weaponSkinId,
-      this.stow.attached,
+      this.stow.attached || this.castPropsStowed,
       this.offhandItemId,
     );
     this.finishWeaponAttach(payloads);
@@ -3203,6 +3521,7 @@ export class CharacterVisual {
   }
 
   dispose(): void {
+    this.shotLocomotion?.stop();
     this.disposed = true;
     disposeHeldPropIdles(this.model);
     this.bastionSweepFx?.dispose();
@@ -3268,11 +3587,13 @@ export class CharacterVisual {
     //
     // The battle stance is gated the same way and for the walkBack reason: only
     // a rig that ships the loop may enter the state.
-    return desiredBaseState(
+    return desiredModelBaseState(
       s,
       !!this.action(this.def.clips.walkBack),
       !!this.action(this.def.clips.wade),
       !!this.action(this.def.clips.combatIdle),
+      this.def.gait,
+      this.baseState,
     );
   }
 
@@ -3294,8 +3615,25 @@ export class CharacterVisual {
     return this.skeletonUpdates.stats();
   }
 
-  private updateMixer(dt: number): void {
-    this.mixer.update(dt);
+  private updateMixer(dt: number, snapshot?: AnimState): void {
+    if (snapshot && this.shotLocomotion)
+      this.current = this.shotLocomotion.sync(
+        this.current,
+        this.currentIsOneShot &&
+          this.currentOneShotIsAttack &&
+          !this.deadLock &&
+          !this.studioPreviewClip,
+        this.baseAction(),
+        this.baseState,
+        locomotionTimeScale(this.baseState, snapshot, this.def.walkRef, this.def.runRef),
+        this.def.clips.jumpClampAtEnd === true,
+      );
+    const fit =
+      this.baseState === 'cast' && !this.currentIsOneShot
+        ? this.def.clips.castDurationFit
+        : undefined;
+    this.castDurationMixer.update(this.mixer, this.current, dt, snapshot, fit);
+    this.shotLocomotion?.afterUpdate();
     this.skeletonUpdates.markPoseChanged();
   }
 
@@ -3304,6 +3642,7 @@ export class CharacterVisual {
    *  `finished` may have left set, and re-drive the base state. beginAction
    *  snaps rather than fades, since there is no live pose to blend from. */
   private repairPose(): void {
+    this.shotLocomotion?.stop();
     this.currentIsOneShot = false;
     this.currentOneShotIsEmote = false;
     this.current = null;
@@ -3464,6 +3803,28 @@ export class CharacterVisual {
 
   private baseAction(): THREE.AnimationAction | null {
     const c = this.def.clips;
+    const drawn = drawnIdleClip(
+      c.drawnIdle,
+      this.baseState,
+      this.stow.attached || this.castPropsStowed,
+    );
+    if (drawn && this.action(drawn)) return this.action(drawn);
+    const travel = this.stow.attached ? c.travel : undefined;
+    if (travel) {
+      if (this.baseState === 'idle' || this.baseState === 'combatIdle')
+        return this.action(travel.idle) ?? this.action(c.idle);
+      if (this.baseState === 'walk' || this.baseState === 'walkBack')
+        return this.action(travel.walk) ?? this.action(c.walk);
+      if (this.baseState === 'run') return this.action(travel.run) ?? this.action(c.run);
+      if ((this.baseState === 'jump' || this.baseState === 'fall') && travel.jump)
+        return this.action(travel.jump) ?? this.action(c.jump);
+    }
+    const equipped = weaponMotionBaseClip(
+      weaponMotionFor(c.weaponMotions, this.weaponItemId, this.offhandItemId, this.weaponSkinId),
+      this.baseState,
+      this.castingAbility,
+    );
+    if (equipped && this.action(equipped)) return this.action(equipped);
     switch (this.baseState) {
       case 'combatIdle':
         // desiredBaseState only picks this for a rig that HAS the loop, so the
@@ -3482,7 +3843,9 @@ export class CharacterVisual {
         // every other weapon keeps the rig's authored cast.
         return (
           this.action(weaponSkinCastClip(this.weaponSkinId, this.castingAbility) ?? undefined) ??
+          this.action(friendlyCastClip(c.castByTarget, this.castTargetMode)) ??
           this.action(this.castingAbility ? c.castByAbility?.[this.castingAbility] : undefined) ??
+          this.action(this.castTargetMode ? c.castByTarget?.[this.castTargetMode] : undefined) ??
           this.action(c.cast) ??
           this.action(c.idle)
         );
@@ -3554,10 +3917,12 @@ export class CharacterVisual {
     next.clampWhenFinished = true;
     next.timeScale = 1;
     this.beginAction(next, prev, fade);
+    this.shotLocomotion?.handoff(next, prev);
     this.current = next;
     this.currentIsOneShot = oneShot;
     this.currentOneShotIsEmote = false;
     this.currentOneShotIsCastExit = false;
+    this.currentOneShotIsMagicAuto = false;
   }
 
   /**
@@ -3573,6 +3938,7 @@ export class CharacterVisual {
     prev: THREE.AnimationAction | null,
     fade: number,
   ): void {
+    this.shotLocomotion?.sweep(next, prev);
     // A transition can interrupt a crossfade still in flight (the stow gesture
     // racing the waterline's base-state edge is the common case: auto-sheathe
     // fires the moment the swim latch flips). The action that was FADING IN at
@@ -3627,8 +3993,12 @@ export class CharacterVisual {
     // meant a long fall silently LOOPED the pose a short hop clamps. The check
     // is on the resolved ACTION, so a rig that does ship a flail is unaffected:
     // its fall action is not the jump action, and the flail loops as intended.
-    if ((this.baseState === 'jump' || this.baseState === 'fall') && this.def.clips.land)
-      return a === this.action(this.def.clips.jump);
+    if (this.baseState === 'jump' || this.baseState === 'fall') {
+      if (this.def.clips.jumpClampAtEnd || this.def.clips.land)
+        return this.def.clips.weaponMotions
+          ? a === this.baseAction()
+          : a === this.action(this.def.clips.jump);
+    }
     return false;
   }
 
@@ -3712,6 +4082,7 @@ export class CharacterVisual {
     emoteId: OverheadEmoteId | null = null,
   ): void {
     this.currentOneShotIsAttack = false;
+    this.currentOneShotStowsHeldProps = false;
     const a = this.action(name);
     if (!a) return;
     if (name !== PALADIN_TEMPLARS_VERDICT_CLIP) this.stopTemplarsVerdictFx();
@@ -3738,6 +4109,7 @@ export class CharacterVisual {
     this.currentOneShotIsIdleVariant = false;
     this.currentOneShotIsLanding = false;
     this.currentOneShotIsCastExit = false;
+    this.currentOneShotIsMagicAuto = false;
   }
 
   private onFinished(a: THREE.AnimationAction): void {
@@ -3750,6 +4122,8 @@ export class CharacterVisual {
     }
     if (a === this.current) {
       this.currentIsOneShot = false;
+      this.currentOneShotStowsHeldProps = false;
+      this.syncHeldPropCastStow(false);
       this.currentOneShotIsEmote = false;
       this.currentOneShotIsIdleVariant = false;
       this.currentOneShotIsLanding = false;
@@ -3761,6 +4135,15 @@ export class CharacterVisual {
   /** Two-state prop mobs (VisualDef.corpseMeshSwap): alive shows `hide`,
    *  dead shows `show` (the dragonkin egg's cracked shell IS its corpse).
    *  assembleModel seeds the alive state; the death/revive edges flip it. */
+  /** Move a staff/tome to the ordinary on-back pose while an opted-in magic
+   * cast uses its free-hand animation. The regular player stow flag remains
+   * independent, so ending a cast cannot unsheathe a weapon the player stowed. */
+  private syncHeldPropCastStow(stowForCast: boolean): void {
+    if (!this.def.stowHeldPropsWhileCasting || stowForCast === this.castPropsStowed) return;
+    this.castPropsStowed = stowForCast;
+    this.rebuildHeldPropsForStow();
+  }
+
   private applyCorpseMeshSwap(dead: boolean): void {
     const swap = this.def.corpseMeshSwap;
     if (!swap) return;
@@ -3859,44 +4242,6 @@ export class CharacterVisual {
     }
     this.fadeTo(this.action(this.def.clips.idle), 0.2, false);
   }
-}
-
-function clipNamesOf(def: VisualDef): string[] {
-  const c = def.clips;
-  return [
-    c.idle,
-    c.combatIdle,
-    c.walk,
-    c.run,
-    c.death,
-    ...(c.attack ?? []),
-    ...Object.values(c.attackByAbility ?? {}),
-    ...Object.values(c.castByAbility ?? {}),
-    ...Object.values(c.attackByHand ?? {}),
-    ...(c.hit ?? []),
-    c.cast,
-    c.sitDown,
-    c.sitIdle,
-    c.swim,
-    c.swimSurface,
-    c.swimIdle,
-    c.wade,
-    c.jump,
-    c.fall,
-    c.land,
-    c.walkBack,
-    c.flourish,
-    c.stow,
-    // The idle-breakers and the idle beat were MISSING here, which is the only
-    // place actions get built (visual.ts constructor). A clip absent from this
-    // list loads fine and passes the clipmap gate, that gate checks the GLB,
-    // not the action map, but `this.action(name)` returns null forever, so
-    // tickIdleVariant/tickIdleBeat bail on every fire and the rig simply never
-    // fidgets. Silent: no throw, no warning, just a clip that is never seen.
-    ...(c.idleVariants ?? []),
-    c.idleBeat?.clip,
-    ...Object.values(c.emote ?? {}).flatMap((spec) => spec.clips),
-  ].filter((n): n is string => !!n);
 }
 
 function firstLoadedEmoteClip(

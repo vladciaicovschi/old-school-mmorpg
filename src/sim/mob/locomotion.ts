@@ -106,6 +106,7 @@ import {
   updateMobChargeDash,
 } from './charge';
 import { holdPinnedMob, updateMobCombatProfile } from './combat_profile';
+import { cancelTimedMobSpell } from './caster_spell';
 import { applyBroodBurn } from './dragonkin_brood';
 import { resetDungeonMinibossStomp, updateDungeonMinibossStomp } from './dungeon_miniboss_stomp';
 import { idleRng, wanderPause } from './idle_rng';
@@ -493,6 +494,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   }
 
   if (ctx.isStunned(mob)) {
+    cancelTimedMobSpell(ctx, mob);
     // A total lockout (stun/stasis/incapacitate/polymorph) breaks an in-flight
     // charge dash. This branch is the only mob code that runs while locked, so
     // the dash cancel must live here: the dash step itself is never reached.
@@ -542,19 +544,20 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         // class, but its 5 yd slack meant only displacements past ~6 yd could
         // fall outside it; this query defers any inward displacement past the
         // pad. Ruled acceptable: one 50 ms deferral, uniform across hosts.
-        ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
-          counters.aggroScanPlayerVisits++;
-          if (e.dead) return;
-          const radius = Math.max(
-            4,
-            Math.min(MAX_AGGRO_RADIUS, template.aggroRadius + (mob.level - e.level) * 1.5),
-          );
-          const d = Math.sqrt(d2);
-          if (d < radius && d < detectedD) {
-            detected = e;
-            detectedD = d;
-          }
-        });
+        if (!template?.aggroOnDamageOnly)
+          ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
+            counters.aggroScanPlayerVisits++;
+            if (e.dead) return;
+            const radius = Math.max(
+              4,
+              Math.min(MAX_AGGRO_RADIUS, template.aggroRadius + (mob.level - e.level) * 1.5),
+            );
+            const d = Math.sqrt(d2);
+            if (d < radius && d < detectedD) {
+              detected = e;
+              detectedD = d;
+            }
+          });
         if (detected) ctx.aggroMob(mob, detected, true);
         return;
       }
@@ -563,25 +566,28 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       let detectedD = Infinity;
       // Resolved once per scan, not per candidate (same reason as the boss branch).
       const counters = ctx.mobScanCounters;
-      ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
-        counters.aggroScanPlayerVisits++;
-        if (e.dead) return;
-        if (isTrivialTo(mob, e)) return;
-        let radius = Math.max(
-          4,
-          Math.min(MAX_AGGRO_RADIUS, template.aggroRadius + (mob.level - e.level) * 1.5),
-        );
-        radius *= ctx.delveDetectMult(e);
-        if (hasEscapeStealth(e)) return;
-        // stealthed rogues are harder to detect, relative to observer level
-        if (e.auras.some((a) => a.kind === 'stealth'))
-          radius = stealthDetectionRadius(mob, e, radius);
-        const d = Math.sqrt(d2);
-        if (d < radius && d < detectedD) {
-          detected = e;
-          detectedD = d;
-        }
-      });
+      // Zero radius still has the ordinary four-yard detection floor. An
+      // explicitly damage-only template skips the passive scan, not combat AI.
+      if (!template?.aggroOnDamageOnly)
+        ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
+          counters.aggroScanPlayerVisits++;
+          if (e.dead) return;
+          if (isTrivialTo(mob, e)) return;
+          let radius = Math.max(
+            4,
+            Math.min(MAX_AGGRO_RADIUS, template.aggroRadius + (mob.level - e.level) * 1.5),
+          );
+          radius *= ctx.delveDetectMult(e);
+          if (hasEscapeStealth(e)) return;
+          // stealthed rogues are harder to detect, relative to observer level
+          if (e.auras.some((a) => a.kind === 'stealth'))
+            radius = stealthDetectionRadius(mob, e, radius);
+          const d = Math.sqrt(d2);
+          if (d < radius && d < detectedD) {
+            detected = e;
+            detectedD = d;
+          }
+        });
       if (detected) {
         ctx.aggroMob(mob, detected, true);
         break;
@@ -1492,6 +1498,7 @@ function pulseLoudYell(ctx: SimContext, mob: Entity): void {
 // An evading mob has reached its spawn (walking or phasing): drop the pull
 // entirely and return to idle at full health, ready to be pulled again.
 export function resetEvadingMob(ctx: SimContext, mob: Entity): void {
+  cancelTimedMobSpell(ctx, mob);
   mob.aiState = 'idle';
   mob.hp = mob.maxHp;
   mob.auras = [];

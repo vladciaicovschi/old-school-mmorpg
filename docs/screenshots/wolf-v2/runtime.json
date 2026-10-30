@@ -1,0 +1,28 @@
+{
+  "runtime": {
+    "walk": {
+      "clip": "Wolf_Walk",
+      "time": 1.0546939514418123
+    },
+    "run": {
+      "clip": "Wolf_Run",
+      "time": 0.43869502479816985
+    },
+    "attacks": [
+      "Wolf_BiteLeft",
+      "Wolf_BiteRight",
+      "Wolf_BiteLeft",
+      "Wolf_BiteRight",
+      "Wolf_Lunge"
+    ],
+    "recovery": {
+      "clip": "Wolf_Idle",
+      "time": 0.850000000000001
+    },
+    "death": {
+      "clip": "Wolf_Death",
+      "time": 1.350000023841858
+    }
+  },
+  "errors": []
+}

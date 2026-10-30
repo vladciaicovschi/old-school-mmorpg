@@ -1,0 +1,473 @@
+{
+  "models": [
+    {
+      "id": "eastbrook:inn",
+      "source": "/study/eastbrook/inn.glb",
+      "sha256": "b2f77c9ad81bbefaef1d8c832013267006760794e73652ec417da891d40bf327",
+      "url": "/models/settlements/eastbrook_inn.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:smithy",
+      "source": "/study/eastbrook/smithy.glb",
+      "sha256": "1913463f654c5e503a40c006b993a298ed3d566fd826edf10f2dd61eeb36e92f",
+      "url": "/models/settlements/eastbrook_smithy.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:hall",
+      "source": "/study/eastbrook/hall.glb",
+      "sha256": "44abbec6b8244a7c28284d76741f48e3bbb63feea7c8cf3f7e9005d7aef59a96",
+      "url": "/models/settlements/eastbrook_hall.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:office",
+      "source": "/study/eastbrook/office.glb",
+      "sha256": "f825626e2627a01a394c6299b5cfbae237bcd0a16b8231ffb93371d7bd5a94ce",
+      "url": "/models/settlements/eastbrook_office.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:chapel",
+      "source": "/study/eastbrook/chapel.glb",
+      "sha256": "51744debfaef134eb20e9902c8b5edc582aa17a91c3cfe9f4897626949ae519e",
+      "url": "/models/settlements/eastbrook_chapel.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:warehouse",
+      "source": "/study/eastbrook/warehouse.glb",
+      "sha256": "881b165fec98b278dd562307a550cc4dadd2144e463a554855401d9d388a315b",
+      "url": "/models/settlements/eastbrook_warehouse.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:workshop",
+      "source": "/study/eastbrook/workshop.glb",
+      "sha256": "5f9f2c6bb43ff80be151559c9ad4bd2956d1c6a4af81e2b10f5a6cabeab5565f",
+      "url": "/models/settlements/eastbrook_workshop.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:home",
+      "source": "/study/eastbrook/home.glb",
+      "sha256": "1bd6c223feab7e296ed738d9ee8e18a498b2b9b3f902effc0bcba3d2e50f4793",
+      "url": "/models/settlements/eastbrook_home.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:compact",
+      "source": "/study/eastbrook/compact.glb",
+      "sha256": "42d54af6def299a592ed310233a9ff41510e09140f3c6a911bd86748475f0cb7",
+      "url": "/models/settlements/eastbrook_compact.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:shuttered",
+      "source": "/study/eastbrook/shuttered.glb",
+      "sha256": "129206f2e2b18738ed797e20a7bd21c4d11bf05b3b2e52bf232f797c75bce496",
+      "url": "/models/settlements/eastbrook_shuttered.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:salter",
+      "source": "/study/eastbrook/salter.glb",
+      "sha256": "fc62f81c982be3688933e35040e71cadd1dab123e6715ffa832200c980fc0f77",
+      "url": "/models/settlements/eastbrook_salter.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:smokehouse",
+      "source": "/study/eastbrook/smokehouse.glb",
+      "sha256": "b225049d0d99ce0d66a9220717bd732e918c371d5ace16da8db1caea21bcb42c",
+      "url": "/models/settlements/eastbrook_smokehouse.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:entrance-step",
+      "source": "/study/wickharbor/entrance-step.glb",
+      "sha256": "61e5c41dec66e05d499ae4da48c6d82af1ee1c0f2d7688c23c7d265e0de93d4c",
+      "url": "/models/wickharbor/entrance_step.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:entrance-platform",
+      "source": "/study/wickharbor/entrance-platform.glb",
+      "sha256": "26d9da8bf4bd89645fa17a2138fb263d971f63f2e2aee953ccd9099c372a50d1",
+      "url": "/models/wickharbor/entrance_platform.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:well",
+      "source": "/study/gibbetmere/well.glb",
+      "sha256": "f13fe424b334f639ca320c4143f7383e3239a4576abcb67868b5bc65737e5c51",
+      "url": "/models/settlements/eastbrook_well.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:mailbox",
+      "source": "/study/wickharbor/fixture-mailbox.glb",
+      "sha256": "9bd6f1a88e66e3652ed856616f6c58de9b092da3df3584fdd41498657a29754b",
+      "url": "/models/wickharbor/fixture_mailbox.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:noticeboard",
+      "source": "/study/wickharbor/fixture-noticeboard.glb",
+      "sha256": "96c3a8ff87f3d7a10106d622294a32fb56901559a1bc90373023c046f128724f",
+      "url": "/models/wickharbor/fixture_noticeboard.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:barrel",
+      "source": "/study/icemantle/barrel.glb",
+      "sha256": "9bb80e048ea9dcda1f30b2bde2176fcc540c58f29a35f9a6711b466afb63b777",
+      "url": "/models/settlements/eastbrook_barrel.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:crate",
+      "source": "/study/icemantle/crate.glb",
+      "sha256": "b3ec0246b7da1e2aa9c1c58b537aafff567855721ae2a4ba517bd199c772b6f0",
+      "url": "/models/settlements/eastbrook_crate.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:bench",
+      "source": "/study/icemantle/bench.glb",
+      "sha256": "993d367f0fd10062804d39b713f3d94f5807626370b9dea4d494be2b40c5d338",
+      "url": "/models/settlements/eastbrook_bench.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:stall",
+      "source": "/study/icemantle/stall.glb",
+      "sha256": "dac8901ee15b722766d8d139601ee94901cfeccea34a7a604636b93a17c623e6",
+      "url": "/models/settlements/eastbrook_stall.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:firepit",
+      "source": "/study/icemantle/firepit.glb",
+      "sha256": "01a37efdffa94ceea145e5b2063aca09eb2423984f5719b85afd474cb8754db0",
+      "url": "/models/settlements/eastbrook_firepit.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:deck",
+      "source": "/study/wickharbor/yard-deck.glb",
+      "sha256": "dae9e5093230e4175bd46beb5064abcbcd8ffed21760eb0bd9e8bef522af9e27",
+      "url": "/models/wickharbor/yard_deck.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:post",
+      "source": "/study/wickharbor/yard-post.glb",
+      "sha256": "980965d0cc61646964f9df59fc404525da2ecdfa16c3eb3350420a796aaf0090",
+      "url": "/models/wickharbor/yard_post.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:fence",
+      "source": "/study/wickharbor/yard-fence.glb",
+      "sha256": "0c151ca10d63a16b357da536249f44dafd5a24df1ebe09b39f9d8efd63766a6e",
+      "url": "/models/wickharbor/yard_fence.glb",
+      "reused": true
+    },
+    {
+      "id": "eastbrook:monument",
+      "source": "/study/constructions/paladin-hammer.glb",
+      "sha256": "7fc953acc2f15c79fff447e6743e83a7431a330eb573b11f29140ac76684b30f",
+      "url": "/models/settlements/eastbrook_monument.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:gravestone-4",
+      "source": "/study/constructions/gravestone-4.glb",
+      "sha256": "75dd585fd10865d29768791def5a78b74e9977765ef54f896d35d601eba20f51",
+      "url": "/models/settlements/eastbrook_gravestone_4.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:gravestone-2",
+      "source": "/study/constructions/gravestone-2.glb",
+      "sha256": "6dc578ee85f7c269fd7f45869447cff5393b4ef89b72835cffd2dac5f2217241",
+      "url": "/models/settlements/eastbrook_gravestone_2.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:gravestone-8",
+      "source": "/study/constructions/gravestone-8.glb",
+      "sha256": "35a271267d7fa9dd4fe5a3a1c4a341980f8bf3a03f4fdb9459205fe850f37a43",
+      "url": "/models/settlements/eastbrook_gravestone_8.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:woodpile",
+      "source": "/study/icemantle/woodpile.glb",
+      "sha256": "3b43174eeb269f0ee0588cffe8d5ff14d28e114f099412c3f5f46fa5b5500530",
+      "url": "/models/settlements/eastbrook_woodpile.glb",
+      "reused": false
+    },
+    {
+      "id": "eastbrook:woodpile-small",
+      "source": "/study/icemantle/woodpile-small.glb",
+      "sha256": "b0334e9e026c89c5e03820cbb5677a59d11b68665eb3d6b386860cdff4e81b20",
+      "url": "/models/settlements/eastbrook_woodpile_small.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:hearth-lodge",
+      "source": "/study/icemantle/hearth-lodge.glb",
+      "sha256": "a5142ff7cd74b2070a90d76097a25ff323b7e0e600ee7d0b3eac212dbe21ca1a",
+      "url": "/models/settlements/icemantle_hearth_lodge.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:trade-hall",
+      "source": "/study/icemantle/trade-hall.glb",
+      "sha256": "6e24ae12ef15ebc60c07c332d6e9322b55395f521b4d42c6816faaea10831ea0",
+      "url": "/models/settlements/icemantle_trade_hall.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:stone-sanctuary",
+      "source": "/study/icemantle/stone-sanctuary.glb",
+      "sha256": "c37f90bc7683845bcaa6f04e4716af9f015358d23a2a3a607888ad40f07fc0c1",
+      "url": "/models/settlements/icemantle_stone_sanctuary.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:family-home",
+      "source": "/study/icemantle/family-home.glb",
+      "sha256": "9e6de530f010ada63268c1f355d949d1b54ed12dfccbddd0130a814749cb672b",
+      "url": "/models/settlements/icemantle_family_home.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:trapper-home",
+      "source": "/study/icemantle/trapper-home.glb",
+      "sha256": "2581e6ddd0331749a87b911f270e09ebdca9301a1ee3c17038302029e2a25559",
+      "url": "/models/settlements/icemantle_trapper_home.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:fisher-home",
+      "source": "/study/icemantle/fisher-home.glb",
+      "sha256": "987d2b321cc7ae0659a74443c993213fd58d467246be4dbd36bd521f867f892a",
+      "url": "/models/settlements/icemantle_fisher_home.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:artisan-home",
+      "source": "/study/icemantle/artisan-home.glb",
+      "sha256": "d9209d5e60e3207147d55bf72e81e3758270ac2cff1a9c9e01c08a26fc1a997b",
+      "url": "/models/settlements/icemantle_artisan_home.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:log",
+      "source": "/study/wickharbor/yard-log.glb",
+      "sha256": "6183105f55d2d30fdb1787f4349797b8ca83d852d1cfd26a3d7f63b0078d3e96",
+      "url": "/models/wickharbor/yard_log.glb",
+      "reused": true
+    },
+    {
+      "id": "icemantle:wood-shelter",
+      "source": "/study/icemantle/wood-shelter.glb",
+      "sha256": "573f6fc284417697bff71a1d9a8906dde3fac27d5dd9e7a92edbe272410f3748",
+      "url": "/models/settlements/icemantle_wood_shelter.glb",
+      "reused": false
+    },
+    {
+      "id": "icemantle:kindling",
+      "source": "/study/icemantle/kindling.glb",
+      "sha256": "bb16feff788b7342d4a9cf9ae78d90b8195885c17f78be822c7d8b856b731b32",
+      "url": "/models/settlements/icemantle_kindling.glb",
+      "reused": false
+    },
+    {
+      "id": "gullhaven:hall",
+      "source": "/study/wickharbor/civic-hall.glb",
+      "sha256": "b10be504e7f23dba84797c8bce9350baf6ca67b478e97e0e9cdf50758bdcf6e8",
+      "url": "/models/wickharbor/civic_hall.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:menders",
+      "source": "/study/wickharbor/civic-office.glb",
+      "sha256": "a271a38337ce9c4acac3cefb18438f89a75358d4451d15c4c817ef2523803368",
+      "url": "/models/wickharbor/civic_office.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:home",
+      "source": "/study/home.glb",
+      "sha256": "6d993dee16648bf2665b71e7a30c79689d716660be27e3169a757404f1b6e17f",
+      "url": "/models/wickharbor/home.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:home-shuttered",
+      "source": "/study/home-shuttered.glb",
+      "sha256": "8d1389e18f6bb2c68d2e9879984fbe3221ac1072f7e0f54b6d7843e74f7d1051",
+      "url": "/models/wickharbor/home_shuttered.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:warehouse",
+      "source": "/study/wickharbor/civic-warehouse.glb",
+      "sha256": "bb5b584abb5c8b3f02404991ed73e2fd8a78d9762fe4466675693d4724dd3769",
+      "url": "/models/wickharbor/civic_warehouse.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:smokehouse",
+      "source": "/study/gullhaven/shore-smokehouse.glb",
+      "sha256": "d161d84aa3ad765c72446fe82b5596b921579222aaba9d7961ab65913ad869c7",
+      "url": "/models/settlements/gullhaven_smokehouse.glb",
+      "reused": false
+    },
+    {
+      "id": "gullhaven:tower",
+      "source": "/study/gullhaven/timber-watchtower.glb",
+      "sha256": "8cc6fa413ef2a3f7ba71ff52f3fa39deabcdff294566d9fc56b21c42214183c4",
+      "url": "/models/settlements/gullhaven_tower.glb",
+      "reused": false
+    },
+    {
+      "id": "gullhaven:gate",
+      "source": "/study/gullhaven/timber-gate.glb",
+      "sha256": "2607ec458f9df6c92ce8e202926e98188982d1a9fce5d53eca58b3c7e5d57174",
+      "url": "/models/settlements/gullhaven_gate.glb",
+      "reused": false
+    },
+    {
+      "id": "gullhaven:well",
+      "source": "/study/wickharbor/fixture-well.glb",
+      "sha256": "f56aadb735126741256f4ce6cb1a7e6d9ab545e95c5e6690e7d5210ec5f799b5",
+      "url": "/models/wickharbor/fixture_well.glb",
+      "reused": true
+    },
+    {
+      "id": "gullhaven:fence",
+      "source": "/study/gullhaven/palisade-panel.glb",
+      "sha256": "eedbe668aa5af41082fc6a81a404258eae5ddb2488fb8ce77e7c3874fa01d2ce",
+      "url": "/models/settlements/gullhaven_fence.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:forest-inn",
+      "source": "/study/gibbetmere/forest-inn.glb",
+      "sha256": "d7e6976637cec63492a3a25763986f658f0a99bac8d1858696ebb89e8b817d48",
+      "url": "/models/settlements/gibbetmere_forest_inn.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:candle-home",
+      "source": "/study/gibbetmere/candle-home.glb",
+      "sha256": "2889aa47244f67cdeacd00946efc6c0cf487c26178449dff5b106bc607500fad",
+      "url": "/models/settlements/gibbetmere_candle_home.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:shuttered-home",
+      "source": "/study/gibbetmere/shuttered-home.glb",
+      "sha256": "8c3c0532e9f78b94a38c6c133c9ffeeccaa8f7ddc724ce5a16fdb4de02d7dfd1",
+      "url": "/models/settlements/gibbetmere_shuttered_home.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:vigil-house",
+      "source": "/study/gibbetmere/vigil-house.glb",
+      "sha256": "3e4767b260698a77bcfdfa09ac8a7c30c3df5abd4ff154fb5b992fca4147430e",
+      "url": "/models/settlements/gibbetmere_vigil_house.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:barrel",
+      "source": "/study/gibbetmere/barrel.glb",
+      "sha256": "9bb80e048ea9dcda1f30b2bde2176fcc540c58f29a35f9a6711b466afb63b777",
+      "url": "/models/settlements/gibbetmere_barrel.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:crate",
+      "source": "/study/gibbetmere/crate.glb",
+      "sha256": "b3ec0246b7da1e2aa9c1c58b537aafff567855721ae2a4ba517bd199c772b6f0",
+      "url": "/models/settlements/gibbetmere_crate.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:bench",
+      "source": "/study/gibbetmere/bench.glb",
+      "sha256": "993d367f0fd10062804d39b713f3d94f5807626370b9dea4d494be2b40c5d338",
+      "url": "/models/settlements/gibbetmere_bench.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:stall",
+      "source": "/study/gibbetmere/stall.glb",
+      "sha256": "dac8901ee15b722766d8d139601ee94901cfeccea34a7a604636b93a17c623e6",
+      "url": "/models/settlements/gibbetmere_stall.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:firepit",
+      "source": "/study/gibbetmere/firepit.glb",
+      "sha256": "01a37efdffa94ceea145e5b2063aca09eb2423984f5719b85afd474cb8754db0",
+      "url": "/models/settlements/gibbetmere_firepit.glb",
+      "reused": false
+    },
+    {
+      "id": "gibbetmere:oak",
+      "source": "/game/models/foliage/oak_3.glb",
+      "sha256": "f5c66922b92e5fc5902af717159bd616bd4ff984ea1b0a51d7d5b780e5c6cef7",
+      "url": "/models/foliage/oak_3.glb",
+      "reused": true
+    },
+    {
+      "id": "gibbetmere:dead",
+      "source": "/game/models/dungeon/tree_dead_large.glb",
+      "sha256": "5666d419154d5a57239675b74b69b202d418cead1cb23428c1f279bddc915085",
+      "url": "/models/dungeon/tree_dead_large.glb",
+      "reused": true
+    },
+    {
+      "id": "gibbetmere:marsh",
+      "source": "/game/models/props/marsh_dead_tree.glb",
+      "sha256": "582187ee9f0bb65f3be04300cbcc6e595d1ced78168acde5b943f64f62ff2671",
+      "url": "/models/props/marsh_dead_tree.glb",
+      "reused": true
+    },
+    {
+      "id": "gibbetmere:ghost-lamp",
+      "source": "/game/models/props/streetlamp_wraithwood_ghost.glb",
+      "sha256": "d6cf06f1a113d167a5a6fe6a37ccd089732be1c051ac49b67191ac1afb1b4c30",
+      "url": "/models/props/streetlamp_wraithwood_ghost.glb",
+      "reused": true
+    },
+    {
+      "id": "wickharbor:gravestone-3",
+      "source": "/study/constructions/gravestone-3.glb",
+      "sha256": "c21ae9797bf364b69d15845dbc52018bdd5bd5c398ea5dabb08d9a28ef2eafff",
+      "url": "/models/settlements/wickharbor_gravestone_3.glb",
+      "reused": false
+    },
+    {
+      "id": "wickharbor:gravestone-6",
+      "source": "/study/constructions/gravestone-6.glb",
+      "sha256": "9670fa9ba53da67ef6441a706f35894cb2ac38e9572686d0bea33994ceff3f64",
+      "url": "/models/settlements/wickharbor_gravestone_6.glb",
+      "reused": false
+    },
+    {
+      "id": "wickharbor:gravestone-7",
+      "source": "/study/constructions/gravestone-7.glb",
+      "sha256": "e69e8e13231e3b3ec2933a51991a7011aee18c3ffa1db6a666444b6a8842c137",
+      "url": "/models/settlements/wickharbor_gravestone_7.glb",
+      "reused": false
+    }
+  ]
+}

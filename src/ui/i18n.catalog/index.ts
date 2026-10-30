@@ -197,6 +197,10 @@ export const en = {
           'Bring your planted crop beds to their ready time, or one bed by id. Nothing else changes: the outcome was rolled when you planted.',
       },
       teleport: { label: 'Teleport', description: 'Move to exact world coordinates.' },
+      modelLab: {
+        label: 'Model test island',
+        description: 'Enter the isolated NPC and character model test location.',
+      },
       dungeon: {
         label: 'Enter dungeon',
         description: 'Enter a dungeon with dev gate bypass.',
@@ -380,6 +384,36 @@ export const en = {
     realm: 'World',
     newCharacter: 'New Character',
     appearance: 'Appearance',
+    // Temporary technical fitting pass for the Meshy Titan test body. Values
+    // cover held props and every segmented armor node, and the dev-only Save
+    // action writes them into the generated render configuration.
+    equipmentCalibration: 'Equipment Fit',
+    equipmentCalibrationHint: 'Select a part, then drag the 3D gizmo or use the numeric controls.',
+    equipmentCalibrationItem: 'Equipment item',
+    equipmentCalibrationMode: 'Transform mode',
+    equipmentCarryLocation: 'Equipment location',
+    equipmentInHands: 'In hands',
+    equipmentAtBelt: 'At belt',
+    equipmentOnBack: 'On back',
+    equipmentCalibrationValues: 'Saved values',
+    equipmentCalibrationAxis: '{field} {axis}',
+    equipmentSword: 'Sword',
+    equipmentShield: 'Shield',
+    equipmentBracer: 'Bracer',
+    equipmentLeft: 'Left',
+    equipmentRight: 'Right',
+    equipmentPosition: 'Position',
+    equipmentRotation: 'Rotation',
+    equipmentScale: 'Scale',
+    equipmentPauseAnimation: 'Pause animation',
+    equipmentResumeAnimation: 'Resume animation',
+    equipmentResetItem: 'Reset item',
+    equipmentCopyValues: 'Copy values',
+    equipmentSaveProject: 'Save fit to project',
+    equipmentSavedProject: 'Fit saved to the project.',
+    equipmentSaveFailed: 'Could not save. Run the local development server and try again.',
+    equipmentValuesCopied: 'Values copied.',
+    equipmentCopyManual: 'Automatic copy is blocked. The values are selected.',
     // Modular character customization (every class): the body is composed
     // from parts, so these pick the parts and recolour skin/hair.
     customize: 'Customize',
@@ -1753,7 +1787,7 @@ export const en = {
       necromancy_bone_mage: { name: 'Bone Mage' },
       necromancy_gravewing: { name: 'Gravewing' },
     },
-    npcs: { ...worldNames.en.entities.npcs, ...mergeExtra.en.npcs },
+    npcs: Object.assign({}, worldNames.en.entities.npcs, mergeExtra.en.npcs),
     quests: {
       ...worldNames.en.entities.quests,
       ...mergeEntities.en.quests,

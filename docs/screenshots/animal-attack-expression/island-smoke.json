@@ -1,0 +1,31 @@
+{
+  "smokeOnly": true,
+  "renderer": "headless SwiftShader",
+  "errors": [],
+  "shots": [
+    {
+      "templateId": "dev_smart_wolf_v2",
+      "visual": "npc_dev_smart_wolf_v2",
+      "clip": "Wolf_Death",
+      "actualClip": "Wolf_Death",
+      "bodyGlow": 0,
+      "overlayCount": 0
+    },
+    {
+      "templateId": "dev_smart_raptor",
+      "visual": "npc_dev_smart_raptor",
+      "clip": "Raptor_Pounce",
+      "actualClip": "Raptor_Pounce",
+      "bodyGlow": 0,
+      "overlayCount": 0
+    },
+    {
+      "templateId": "dev_skeleton_cultist",
+      "visual": "npc_dev_skeleton_cultist",
+      "clip": "CultistMagic_PrepareHostile",
+      "actualClip": "CultistMagic_PrepareHostile",
+      "bodyGlow": 0,
+      "overlayCount": 4
+    }
+  ]
+}

@@ -1409,6 +1409,8 @@ export interface PlayerMeta {
   // PBE so live saves round-trip byte-equal; the world-join top-up re-kits
   // any character whose stamp is below the current BOOST_KIT_VERSION.
   pbeBoostKit?: number;
+  /** Inert legacy whole-body trial stamp, retained for save compatibility. */
+  wholeBodyArmorRevision?: number;
   moveInput: MoveInput;
   // Monotonic counter bumped when a bulky, rarely-changing wire field (the
   // inventory, and the collection-quest progress derived from it) mutates, so a
@@ -2900,6 +2902,7 @@ export class Sim {
       pendingSkinRank: savedState?.pendingSkinRank ?? null,
       pendingSkinCatalog: savedState?.pendingSkinCatalog ?? null,
       pendingSkinItemId: savedState?.pendingSkinItemId ?? null,
+      wholeBodyArmorRevision: savedState?.wholeBodyArmorRevision,
       moveInput: emptyMoveInput(),
       wireRev: 0,
       inventory: [],
@@ -4122,6 +4125,9 @@ export class Sim {
       ),
       pos: { x: e.pos.x, z: e.pos.z },
       facing: e.facing,
+      ...(meta.wholeBodyArmorRevision === undefined
+        ? {}
+        : { wholeBodyArmorRevision: meta.wholeBodyArmorRevision }),
       // Death state: a released spirit resumes its corpse run on relog, and a
       // dead-but-unreleased corpse auto-releases on load (see addPlayer).
       dead: e.dead,
@@ -7971,15 +7977,7 @@ export class Sim {
   private updateRangedPetAttack(
     pet: Entity,
     target: Entity,
-    spell: {
-      name: string;
-      school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
-      min: number;
-      max: number;
-      range: number;
-      every: number;
-      windup?: number;
-    },
+    spell: NonNullable<(typeof MOBS)[string]['petSpell']>,
   ): void {
     const d = dist2d(pet.pos, target.pos);
     if (d > spell.range) {
@@ -8001,6 +7999,7 @@ export class Sim {
         targetId: target.id,
         school: spell.school,
         fx: 'projectile',
+        ...(spell.ability ? { ability: spell.ability } : {}),
       });
       if (isMobSpellResisted(this.rng, pet, target, pet.hitBonus)) {
         this.emit({
@@ -8048,6 +8047,7 @@ export class Sim {
         targetId: target.id,
         school: spell.school,
         fx: 'windup',
+        ...(spell.ability ? { ability: spell.ability } : {}),
       });
       pet.rangedWindupReleaseTick = this.tickCount + windupTicks;
       pet.swingTimer = spell.every;

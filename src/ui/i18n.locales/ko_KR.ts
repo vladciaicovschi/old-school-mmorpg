@@ -13,6 +13,11 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.warriorSuit.label': '방어구 외형',
+  'hudChrome.warriorSuit.hint': '이 기기에서 외형을 변경합니다. 장비 능력치는 유지됩니다.',
+  'hudChrome.warriorSuit.recruit': '신병',
+  'hudChrome.warriorSuit.militia': '민병',
+  'hudChrome.warriorSuit.knight': '기사',
   'guide.professions.endgameBodyRaidCollections':
     '명장 제작은 고유 장착: 명장 제작 표식을 공유하는 장비 계열이다. 기존 최상위 제작 경로는 발견하는 도안, 하루 단위로 제한되는 중간 재료 제작, 공통 최종 단계 재료를 그대로 사용한다. 도가니 세트는 공격대 재료를 쓰는 별도 경로이지, 기존 경로에 비용을 또 얹는 것이 아니다. 두 경로는 동일한 최대 2개 착용 제한을 공유하므로 구성에서 같은 두 자리를 두고 경쟁한다. 완성품은 완전하게 만들기나 의뢰 제작으로 해당 개체가 귀속되기 전까지 자유롭게 거래할 수 있다.',
   'guide.professions.endgamePatternsBodyCollections':
@@ -6003,6 +6008,24 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'auth.realm': '월드',
   'auth.newCharacter': '새 캐릭터',
   'auth.appearance': '외형',
+  'auth.equipmentCalibration': '장비 조정',
+  'auth.equipmentCalibrationHint':
+    '3D 기즈모를 드래그하거나 컨트롤을 사용해 검과 방패를 조정하세요.',
+  'auth.equipmentCalibrationItem': '장비 아이템',
+  'auth.equipmentCalibrationMode': '변환 모드',
+  'auth.equipmentCalibrationValues': '저장된 값',
+  'auth.equipmentCalibrationAxis': '{field} {axis}',
+  'auth.equipmentSword': '검',
+  'auth.equipmentShield': '방패',
+  'auth.equipmentPosition': '위치',
+  'auth.equipmentRotation': '회전',
+  'auth.equipmentScale': '크기',
+  'auth.equipmentPauseAnimation': '애니메이션 일시 중지',
+  'auth.equipmentResumeAnimation': '애니메이션 계속',
+  'auth.equipmentResetItem': '아이템 초기화',
+  'auth.equipmentCopyValues': '값 복사',
+  'auth.equipmentValuesCopied': '값을 복사했습니다.',
+  'auth.equipmentCopyManual': '자동 복사가 차단되었습니다. 값이 선택되었습니다.',
   'auth.class': '직업',
   'auth.name': '이름',
   'auth.chromaOption': '색상 {n}',

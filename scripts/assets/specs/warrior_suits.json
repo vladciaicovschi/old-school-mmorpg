@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/warrior_suits/warrior_recruit.glb",
+      "out": "models/chars/players/warrior_recruit.glb",
+      "type": "character",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/warrior_suits/warrior_militia.glb",
+      "out": "models/chars/players/warrior_militia.glb",
+      "type": "character",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/warrior_suits/warrior_knight.glb",
+      "out": "models/chars/players/warrior_knight.glb",
+      "type": "character",
+      "maxTex": 1024
+    }
+  ]
+}

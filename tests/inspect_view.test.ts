@@ -49,6 +49,25 @@ const base: InspectInput = {
   now: 1_000 * 86_400_000, // a fixed "now" in whole days
 };
 
+it('keeps all independent warrior slots in inspect with a tiered chest equipped', () => {
+  const view = buildInspectView(
+    {
+      ...base,
+      cls: 'warrior',
+      equippedItems: {
+        chest: 'warrior_knight_suit',
+        helmet: 'cryptbone_helm',
+        feet: 'oiled_boots',
+      },
+    },
+    ITEMS,
+  );
+  expect(view.gear.left.map((cell) => cell.slot)).toEqual(PAPERDOLL_LEFT_SLOTS);
+  expect(view.gear.right.map((cell) => cell.slot)).toEqual(PAPERDOLL_RIGHT_SLOTS);
+  expect(view.gear.left[0].item).toBe(ITEMS.cryptbone_helm);
+  expect(view.gear.right[3].item).toBe(ITEMS.oiled_boots);
+});
+
 describe('classColorCss', () => {
   it('mirrors hud.ts classCss: the mage class color as a #rrggbb string', () => {
     // Pinned literals (CLASSES[mage].color === 0x33c1f1, warrior === 0xd67a54), the

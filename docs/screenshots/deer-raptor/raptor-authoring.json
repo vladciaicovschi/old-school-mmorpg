@@ -1,0 +1,94 @@
+{
+  "source_sha256": "e114cefdd26f97c15af516c5acca1e9154efeed9258e69c7ede91e4ba08ba3cf",
+  "bones": 64,
+  "height": 2.1,
+  "idle_height": 1.5887591457988106,
+  "normalization": {
+    "reach_clamp": 0
+  },
+  "gaits": {
+    "walk": {
+      "duration": 1.5,
+      "stride": 0.62,
+      "stance": 0.66,
+      "lift": 0.13
+    },
+    "run": {
+      "duration": 0.55,
+      "stride": 0.68,
+      "stance": 0.46,
+      "lift": 0.16
+    }
+  },
+  "clips": {
+    "Raptor_Idle": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.31016622126721205
+    },
+    "Raptor_CombatIdle": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.31945286864380806
+    },
+    "Raptor_Walk": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.1477593123769922
+    },
+    "Raptor_Run": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.0642273606853973
+    },
+    "Raptor_SlashLeft": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.18827722181211204
+    },
+    "Raptor_SlashRight": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.1416623288118118
+    },
+    "Raptor_Pounce": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.13570167471766076
+    },
+    "Raptor_Hit": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.23787462603474752
+    },
+    "Raptor_Death": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": null
+    },
+    "Raptor_AlertLook": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.3155172957404003
+    },
+    "Raptor_Threat": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.3155172957404003
+    }
+  },
+  "walkRef": 0.8277836672691808,
+  "runRef": 3.549007060514628,
+  "normalization_sample_seconds": 0.5
+}

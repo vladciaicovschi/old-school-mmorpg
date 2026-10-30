@@ -1,0 +1,48 @@
+{
+  "forced": [
+    "Wolf_Lunge",
+    "Wolf_BiteLeft",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteLeft"
+  ],
+  "live": [
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_Lunge",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteLeft",
+    "Wolf_Lunge",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_BiteLeft",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteRight",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft"
+  ],
+  "recovery": {
+    "clip": "Wolf_Idle",
+    "time": 1.0333333333333345
+  },
+  "errors": []
+}

@@ -1,0 +1,13 @@
+{
+  "defaults": { "type": "character", "maxTex": 1024 },
+  "items": [
+    { "src": "tmp/asset_src/players/t1_warrior/t1_warrior.glb", "out": "models/chars/players/t1_warrior.glb", "keepClips": ["T1Warrior_Idle","T1Warrior_Walk","T1Warrior_Run","T1Warrior_Attack","T1Warrior_Death"] },
+    { "src": "tmp/asset_src/players/t1_paladin/t1_paladin.glb", "out": "models/chars/players/t1_paladin.glb", "keepClips": ["T1Paladin_Idle","T1Paladin_Walk","T1Paladin_Run","T1Paladin_Attack","T1Paladin_Death"] },
+    { "src": "tmp/asset_src/players/t1_hunter/t1_hunter.glb", "out": "models/chars/players/t1_hunter.glb", "keepClips": ["T1Hunter_Idle","T1Hunter_Walk","T1Hunter_Run","T1Hunter_Attack","T1Hunter_Death"] },
+    { "src": "tmp/asset_src/players/t1_rogue/t1_rogue.glb", "out": "models/chars/players/t1_rogue.glb", "keepClips": ["T1Rogue_Idle","T1Rogue_Walk","T1Rogue_Run","T1Rogue_Attack","T1Rogue_Death"] },
+    { "src": "tmp/asset_src/players/t1_priest/t1_priest.glb", "out": "models/chars/players/t1_priest.glb", "keepClips": ["T1Priest_Idle","T1Priest_Walk","T1Priest_Run","T1Priest_Attack","T1Priest_Death"] },
+    { "src": "tmp/asset_src/players/t1_mage/t1_mage.glb", "out": "models/chars/players/t1_mage.glb", "keepClips": ["T1Mage_Idle","T1Mage_Walk","T1Mage_Run","T1Mage_Attack","T1Mage_Death"] },
+    { "src": "tmp/asset_src/players/t1_shaman/t1_shaman.glb", "out": "models/chars/players/t1_shaman.glb", "keepClips": ["T1Shaman_Idle","T1Shaman_Walk","T1Shaman_Run","T1Shaman_Attack","T1Shaman_Death"] },
+    { "src": "tmp/asset_src/players/t1_druid/t1_druid.glb", "out": "models/chars/players/t1_druid.glb", "keepClips": ["T1Druid_Idle","T1Druid_Walk","T1Druid_Run","T1Druid_Attack","T1Druid_Death"] }
+  ]
+}

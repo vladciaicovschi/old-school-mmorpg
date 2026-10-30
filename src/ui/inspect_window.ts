@@ -126,6 +126,7 @@ export interface InspectWindowDeps extends PainterHostPresentation {
       cls: PlayerClass;
       skin: number;
       skinCatalog: SkinCatalog;
+      equipment: Partial<Record<EquipSlot, string>>;
       mainhand: string | null;
       weaponSkinId: string | null;
       offhand: string | null;
@@ -258,6 +259,7 @@ export class InspectWindow {
         cls,
         skin: model.skin,
         skinCatalog: model.skinCatalog,
+        equipment: e.equippedItems,
         mainhand: e.equippedItems.mainhand ?? null,
         offhand: e.equippedItems.offhand ?? null,
         weaponSkinId: e.weaponSkinId ?? null,
@@ -319,7 +321,8 @@ export class InspectWindow {
     const icon = item
       ? this.deps.itemIcon(item, parts?.quality)
       : `<img class="item-icon" src="${iconDataUrl('item', 'slot_empty')}" alt="" draggable="false">`;
-    row.innerHTML = `${icon}<div><div class="slot-name">${esc(this.deps.slotName(slot))}</div><div class="slot-item"${item ? ` style="color:${qColor}"` : ''}>${wornName !== null ? esc(wornName) : esc(t('itemUi.equipment.empty'))}</div></div>`;
+    const slotName = this.deps.slotName(slot);
+    row.innerHTML = `${icon}<div><div class="slot-name">${esc(slotName)}</div><div class="slot-item"${item ? ` style="color:${qColor}"` : ''}>${wornName !== null ? esc(wornName) : esc(t('itemUi.equipment.empty'))}</div></div>`;
     if (item) {
       const iconEl = row.querySelector<HTMLImageElement>('.item-icon');
       if (iconEl) iconEl.style.boxShadow = qualityGlowShadow(qColor);

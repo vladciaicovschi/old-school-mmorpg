@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Buffalo_Walk",
+    "samples": 41,
+    "lowestVertexY": -0.0005195423671486831,
+    "phase": 0.5
+  },
+  {
+    "name": "Buffalo_Trot",
+    "samples": 41,
+    "lowestVertexY": -0.0007595053816208158,
+    "phase": 0.05
+  },
+  {
+    "name": "Buffalo_Run",
+    "samples": 41,
+    "lowestVertexY": -0.0010347862988108632,
+    "phase": 0.45
+  },
+  {
+    "name": "Buffalo_HornLeft",
+    "samples": 41,
+    "lowestVertexY": -0.000013958750610165715,
+    "phase": 0.4
+  },
+  {
+    "name": "Buffalo_HornRight",
+    "samples": 41,
+    "lowestVertexY": -9.99909061031682e-7,
+    "phase": 0.125
+  },
+  {
+    "name": "Buffalo_Charge",
+    "samples": 41,
+    "lowestVertexY": 0.000009155664708493383,
+    "phase": 0.125
+  }
+]

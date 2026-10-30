@@ -51,6 +51,7 @@ import {
 } from './ability_material_prewarm';
 import { AbilityVfx, AbilityVfxFx, abilityVfxTexturePrewarmSteps } from './ability_vfx';
 import type { AbilityVfxTextures } from './ability_vfx/fx_textures';
+import { createCastHandGlow } from './ability_vfx/hand_glow';
 import { ABILITY_VFX_FULL_SPECS } from './ability_vfx_full_specs';
 import { shouldDrawLegacyCastSparkle, syncAbilityVfxCast } from './ability_vfx_registry';
 import { ABILITY_VFX_SPECS } from './ability_vfx_specs';
@@ -112,6 +113,7 @@ import { canopyDetailPrewarmTextures } from './canopy_detail';
 import { canvasDataUrlAsync } from './canvas_data_url';
 import { castVfxProgramUnits, createSceneCastVfxReadiness } from './cast_vfx_prewarm';
 import type { CastVfxReadiness } from './cast_vfx_readiness_core';
+import { playCasterAutoAttack } from './caster_auto_attack';
 import { buildCelestialSprites, type CelestialSprites } from './celestial_sprites';
 import {
   CHARACTER_CULL_ALL,
@@ -153,6 +155,8 @@ import {
   type AssembleOptions,
   applyEntityAnimOverrides,
   type CharacterVisual,
+  characterBaseVisualKeyFor,
+  characterVisualPoolKeyFor,
   composedLookPiecesOf,
   createCharacterVisual,
   type FarBakeGate,
@@ -182,6 +186,11 @@ import {
   preloadTrainingDummyAssets,
   trainingDummyAssetsReady,
 } from './characters/assets';
+import {
+  castGestureCapabilities,
+  fallbackSpellGesture,
+} from './characters/cast_gesture_capabilities_core';
+import { castTargetMode } from './characters/cast_target_mode';
 import { damageEventStartsAttackAnimation } from './characters/damage_attack_animation';
 import {
   activeCharacterFormVisual,
@@ -192,13 +201,14 @@ import {
   requestedCharacterForm,
   resolvedCharacterForm,
 } from './characters/form_visual_selection_core';
-import { visualKeyFor, weaponSkinModelUrl } from './characters/manifest';
+import { weaponSkinModelUrl } from './characters/manifest';
 import { modularLookChanged } from './characters/player_look_core';
 import { PooledVisualLifecycle } from './characters/pooled_visual_lifecycle';
 import { playerRangedAttackStartsAtLaunch } from './characters/skin_attack';
-import { CharacterVisualPool, characterVisualPoolKey } from './characters/visual_pool';
+import { CharacterVisualPool } from './characters/visual_pool';
 import { shouldRetainPooledCharacterVisual } from './characters/visual_pool_policy';
 import { attackAbilityId, isSpinAttackAbility } from './characters/weapon_attack_style_core';
+import { WeaponCarryPresentation } from './characters/weapon_carry_core';
 import { fogFarForBuiltGround, groundViewConeHalfAngle } from './chunk_residency_core';
 import { CLICK_MARKER_LIFETIME, clickMarkerAnim, clickMarkerColor } from './click_marker';
 import { buildCliffScree, type CliffScreeView } from './cliff_scree';
@@ -266,7 +276,6 @@ import {
   initialEffectiveRenderScale,
   MIN_DYNAMIC_RENDER_SCALE,
 } from './dynamic_resolution_core';
-import { buildEastbrookTownView, type EastbrookTownView } from './eastbrook_town';
 import { buildEmberFeatures, type EmberFeaturesView } from './ember_features';
 import { buildEmberPools, type EmberPoolsView } from './ember_pools';
 import { applyCharacterFormVisibility } from './entity_gate_stand_in_core';
@@ -688,6 +697,7 @@ import { warmSelfSpiritPrograms } from './self_spirit_warm';
 import { SentenceVfx } from './sentence_vfx';
 import { sentenceImpactPlan } from './sentence_vfx_core';
 import { SET_PROC_FX_BY_NAME } from './set_proc_fx';
+import { buildSettlementsTownView, type SettlementsTownView } from './settlements_town';
 import { runPiecesWarmed } from './shader_warm_gate';
 import { warmRootBeforeLink } from './shader_warm_lane';
 import {
@@ -1489,6 +1499,7 @@ export class Renderer {
   // .update() and the pose-selection helpers only read it within the call (the
   // preview drives a shared constant too), so one buffer avoids allocating a
   // fresh state object per entity per frame, reducing GC churn that scales with crowd.
+  private readonly weaponCarry = new WeaponCarryPresentation();
   private readonly animScratch: AnimState = {
     speed: 0,
     moving: false,
@@ -1698,7 +1709,7 @@ export class Renderer {
   private propsRevealGate: RevealGateCore | null = null;
   /** The foliage bucket reveal gate (armed at world entry, like the bands). */
   private foliageRevealGate: RevealGateCore | null = null;
-  private eastbrookTownView!: EastbrookTownView;
+  private eastbrookTownView!: SettlementsTownView;
 
   /** Re-bake the monument's projected name (src/game/realm_builder_boot.ts). */
   setRealmBuilderHonouree(name: string): void {
@@ -2529,10 +2540,9 @@ export class Renderer {
     }
     this.propsView = props;
 
-    // Eastbrook's replacement town is a distinct, stable scene subtree. Its
-    // six opaque building volumes stay individual for camera roof ghosting;
-    // civic, market, fence, and wall geometry is initialization-batched.
-    this.eastbrookTownView = buildEastbrookTownView(this.sim.cfg.seed);
+    // Approved settlements share the existing per-root reveal and camera-fade
+    // lanes. Their native stairs and grounded dressing follow the sim plans.
+    this.eastbrookTownView = buildSettlementsTownView(this.sim.cfg.seed);
     setRenderCategory(this.eastbrookTownView.group, 'props');
     this.scene.add(this.eastbrookTownView.group);
     freezeStaticSubtreeMatrices(this.eastbrookTownView.group);
@@ -2575,7 +2585,7 @@ export class Renderer {
       this.propsRevealGate = createRevealGate(revealHost, (key) => this.propsView.revealRoots(key));
       this.propsView.setRevealGate(this.propsRevealGate);
       this.eastbrookTownView.setRevealGate(
-        createRevealGate(revealHost, () => this.eastbrookTownView.staticRevealRoots()),
+        createRevealGate(revealHost, (key) => this.eastbrookTownView.staticRevealRoots(key)),
       );
       this.fenbridgeTownView.setRevealGate(
         createRevealGate(revealHost, () => this.fenbridgeTownView.staticRevealRoots()),
@@ -2997,10 +3007,9 @@ export class Renderer {
       this.camera,
       vfxAnchor,
       (x, z) => groundHeight(x, z, this.sim.cfg.seed),
-      // the DISPLAYED facing, not e.facing: the view group carries the smoothed
-      // yaw actually on screen, so a stationary spirit lines up with the body it
-      // is rising out of instead of with a pose one frame ahead of the draw
+      // Spirits follow displayed facing; hand glows follow the live rig.
       (id) => this.views.get(id)?.group.rotation.y ?? this.sim.entities.get(id)?.facing ?? null,
+      createCastHandGlow(this.views),
     );
     this.abilityVfxFx.setViewportScale(
       this.webgl.domElement.clientHeight * this.webgl.getPixelRatio(),
@@ -3023,6 +3032,7 @@ export class Renderer {
       spawnAoeRing: (x, z, radius, school, colorHex) =>
         this.spawnAoeRing(x, z, radius, school, colorHex),
       triggerAttack: (id, abilityId) => this.triggerAttack(id, abilityId),
+      triggerCastRelease: (id, abilityId, targetId) => this.triggerCastRelease(id, abilityId, targetId),
       lightPulse: (id, school, intensity, duration, range) =>
         this.pulseAt(id, school, intensity, duration, range),
       setAuraGlow: (id, colorHex, intensity) => {
@@ -3041,11 +3051,10 @@ export class Renderer {
         return v ? !!this.activeVisual(v)?.isMidOneShot : false;
       },
       localPlayerId: () => this.sim.player.id,
-      hasGestureClip: (id, abilityId) => {
+      ...castGestureCapabilities((id) => {
         const v = this.views.get(id);
-        const vis = v ? this.activeVisual(v) : null;
-        return vis ? vis.hasAttackClipOverride(abilityId) : false;
-      },
+        return v ? this.activeVisual(v) : null;
+      }, (id) => this.sim.entities.get(id)?.channeling ?? false),
       isInstantAbility: (abilityId) => {
         const def = ABILITIES[abilityId];
         return !def || (def.castTime <= 0 && !def.channel && !def.empowerStages);
@@ -5119,9 +5128,7 @@ export class Renderer {
     // view - that dispose + re-upload cycle is the open-world "asset-upload"
     // travel hitch (Skeleton.dispose via CharacterVisual.dispose in
     // removeView, pinned by GPU-upload profiling). Players never pool (A6).
-    // The extracted zone_prewarm_groups builders call characterVisualPoolKey
-    // directly: mirror any logic added here, or re-point them at this wrapper.
-    return characterVisualPoolKey(e);
+    return characterVisualPoolKeyFor(e);
   }
 
   private storePooledObject(key: string, object: PooledObjectView): void {
@@ -7267,9 +7274,31 @@ export class Renderer {
         if (ev.fx === 'selfCast' && ev.ability === 'taunt') {
           this.showChatBubble(ev.sourceId, '$@#%&*!', false, 1.8);
         }
+        if (ev.wand) {
+          const view = this.views.get(ev.sourceId);
+          if (
+            playCasterAutoAttack(
+              ev,
+              this.sim.entities.get(ev.sourceId)?.kind,
+              view ? this.activeVisual(view) : null,
+              this.vfx,
+            )
+          )
+            break;
+        }
         // Spec-driven per-ability visuals claim the event first; unknown
         // ability/fx falls through to the generic school-colored arms below.
         if (this.abilityVfx.handleSpellfx(ev)) break;
+        // Rigs still owe their release when the FX registry declines the cue.
+        {
+          const src = this.sim.entities.get(ev.sourceId);
+          const view = this.views.get(ev.sourceId);
+          const vis = view ? this.activeVisual(view) : null;
+          const gesture = fallbackSpellGesture(ev, src, vis);
+          if (gesture === 'release')
+            this.triggerCastRelease(ev.sourceId, ev.ability ?? '', ev.targetId);
+          else if (gesture === 'attack') this.triggerAttack(ev.sourceId, ev.ability);
+        }
         // 'selfCast' is a renderer-only cue this layer introduced (see
         // casting_lifecycle: the silent completions that emit no damage,
         // projectile or castFx). It has no legacy meaning, so an ability the
@@ -7326,9 +7355,8 @@ export class Renderer {
           // A petSpell windup telegraph: start the throw animation now; the
           // projectile for this throw follows petSpell.windup later, timed to
           // the clip's release pose. `ability` rides along so a mob one-shot
-          // can pick its authored clip via attackByAbility (the dragonkin
-          // brood's Cleave/Stun); every petSpell emitter sends none, so their
-          // rotation is unchanged.
+          // can pick its authored clip via attackByAbility (the island imp
+          // and dragonkin brood). Templates without an ID keep their rotation.
           this.triggerAttack(ev.sourceId, ev.ability);
           break;
         }
@@ -7371,7 +7399,7 @@ export class Renderer {
           break;
         }
         if (ev.fx === 'projectile') {
-          this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
+          this.vfx.projectileForEvent(ev);
         } else if (ev.fx === 'heavyBolt')
           // Pyroblast's boulder: the same homing comet, doubled up.
           this.vfx.projectile(ev.sourceId, ev.targetId, ev.school, 2);
@@ -7472,22 +7500,6 @@ export class Renderer {
         } else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
-        // A mob that hurls an instant bolt with NO windup (the warlock
-        // demon's bolt) has no cast state for the looping cast channel, and
-        // the damage event that animates melee fires on ARRIVAL and only for
-        // the physical school: play the shooter's attack one-shot at launch
-        // so the throw reads. A windup-telegraphed throw already started its
-        // one-shot above (still mid-flight at the release: skip the
-        // retrigger). Real casts (castingAbility set) animate via the cast
-        // channel; players animate through their own cast/swing paths.
-        if (ev.fx === 'projectile' || ev.fx === 'beam') {
-          const src = this.sim.entities.get(ev.sourceId);
-          if (src && src.kind === 'mob' && !src.castingAbility) {
-            const view = this.views.get(ev.sourceId);
-            const vis = view ? this.activeVisual(view) : null;
-            if (!vis?.isMidOneShot) this.triggerAttack(ev.sourceId, ev.ability);
-          }
-        }
         break;
       }
       case 'spellfxAt': {
@@ -8076,7 +8088,7 @@ export class Renderer {
       sparkle.position.y = 1.35;
       group.add(sparkle);
     } else {
-      const visualKey = visualKeyFor(e);
+      const visualKey = characterBaseVisualKeyFor(e);
       // The in-flight cooldown stops the deferring entity from burning a
       // budget slot every frame, and clearing it when the fetch RESOLVES
       // keeps pop-in at the next frame after readiness (only a rejected
@@ -8187,7 +8199,7 @@ export class Renderer {
     this.views.set(e.id, {
       group,
       visual,
-      visualKey: visual ? visualKeyFor(e) : null,
+      visualKey: visual ? characterBaseVisualKeyFor(e) : null,
       visualPoolKey,
       sheepVisual: null,
       bearVisual: null,
@@ -8452,19 +8464,22 @@ export class Renderer {
   // a node nothing else drives the visibility of per frame (a weapon/offhand
   // payload, once attached, is left alone); for one the per-frame loop
   // recomputes every tick, use gateSwapFlagOnCompile instead.
-  private gateSwapOnCompile(target: THREE.Object3D): void {
+  private gateSwapOnCompile(
+    target: THREE.Object3D,
+    shouldReveal: () => boolean = () => true,
+  ): void {
     if (!this.asyncCompileSupported || !target.visible) return;
     const generation = this.lifecycleGeneration;
     target.visible = false;
     void this.compileGate(target).then(
       () => {
         if (!this.shutdownStarted && generation === this.lifecycleGeneration) {
-          target.visible = true;
+          if (shouldReveal()) target.visible = true;
         }
       },
       (error) => {
         this.recoverRejectedCompileGate(error, generation, () => {
-          target.visible = true;
+          if (shouldReveal()) target.visible = true;
         });
       },
     );
@@ -8506,7 +8521,7 @@ export class Renderer {
 
   private updateBaseVisual(e: Entity, v: EntityView): void {
     if (!v.visual) return;
-    const nextKey = visualKeyFor(e);
+    const nextKey = characterBaseVisualKeyFor(e);
     if (nextKey === v.visualKey) return;
     // One base-rig swap in flight at a time: the outgoing rig stands in until
     // the replacement links, and this per-frame key diff retries the next one.
@@ -8674,6 +8689,24 @@ export class Renderer {
     this.attackTriggerCount++;
     if (isSpinAttackAbility(abilityId)) visual.playWhirl();
     else visual.playAttack(abilityId);
+  }
+
+  /** A spell projectile is leaving a player who is already in a cast pose.
+   * Preserve that pose's timeline so the VFX releases from the authored hand
+   * frame, rather than restarting a full cast after the projectile is gone. */
+  private triggerCastRelease(entityId: number, abilityId: string, targetId?: number): void {
+    const v = this.views.get(entityId);
+    const visual = v ? this.activeVisual(v) : null;
+    if (!visual) return;
+    this.attackTriggerCount++;
+    // Relationship comes from the spell event; the cast snapshot may already
+    // have cleared by the time its release cue reaches this client.
+    visual.playCastRelease(
+      abilityId,
+      targetId === undefined
+        ? null
+        : castTargetMode(entityId, targetId, ABILITIES[abilityId]?.targetType),
+    );
   }
 
   private playShoutFx(
@@ -9836,6 +9869,7 @@ export class Renderer {
     present = true,
   ): void {
     if (this.shutdownStarted) return;
+    this.weaponCarry.sync(this.sim.entities.values());
     const totalStart = performance.now();
     this.resizeGate.flush(); // before anything draws: see resize_coalesce_core.ts
     // The hitch sample's start reading, before any view creation, then a new
@@ -10485,6 +10519,12 @@ export class Renderer {
       }
       this.updateBaseVisual(e, v);
       if (!v.visual) continue;
+      const changedArmor = v.visual.setArmorEquipment(e.equippedItems, e.helmHidden);
+      if (changedArmor) {
+        for (const node of changedArmor) {
+          this.gateSwapOnCompile(node, () => node.userData.equipmentPartDesiredVisible === true);
+        }
+      }
       // Warm the local player's own spirit variants once per distinct look, so
       // a death spirit-release never links them inline on the ungated self view.
       if (e.id === this.sim.player.id) {
@@ -10565,16 +10605,6 @@ export class Renderer {
       const petFrenzy = hunterPetFrenzyActive(e, petOwner);
       v.visual.setFerocityStage(petFrenzy ? 3 : ferocityStage);
       v.visual.setPresentationScale(hunterPetVisualScale(ferocityStage, petFrenzy));
-
-      // The live sheathe toggle (Z key) is diffed further down, folded into the
-      // swim/mount stow overlay: ONE writer for `v.weaponStowed`. Two diffs
-      // against the same field fight, because they compute different targets:
-      // this one the bare sim bit, the other the union with swimming/riding. A
-      // swimmer with a weapon drawn had them ping-pong the field every frame,
-      // replaying the sheathe one-shot forever (for a player rig that clip is
-      // 1H_Melee_Attack_Chop), which pins `currentIsOneShot` true and so
-      // suppresses every base-state fade: the authored strokes never played and
-      // the body froze in the chop's windup.
 
       // lazy form visuals, swapped by visibility like the old sheep/bear rigs
       // (build, compile gate and encounter prewarm all live in buildFormVisual)
@@ -10743,17 +10773,13 @@ export class Renderer {
       const wading = isWadingAtDepth(v.wasWading, swimming, e.dead, feetDepth);
       v.wasWading = wading;
 
-      // Sheathe, from the Z key OR from being in the water: nobody swims with a
-      // sword in their hand. Swimming is an OVERLAY on the sim's cosmetic
-      // weaponStowed bit rather than a write to it — the player's own sheathe
-      // choice is untouched, so wading back out restores exactly what they had
-      // drawn, and a peer's weapon rides their back the moment they start
-      // swimming without any wire traffic. (This diff sits here, after the swim
-      // latch, precisely so both halves are known in the same frame.)
-      // Mounting folds into the SAME overlay for the same reason (nobody rides
-      // with a sword in hand); it must stay the single writer of
-      // `v.weaponStowed` (see weaponStowedOverlay's header).
-      const stowed = weaponStowedOverlay(e.weaponStowed, swimming, e.mountKey !== '');
+      // One carry writer: manual choice, warrior combat policy, water and riding.
+      const stowed = weaponStowedOverlay(
+        e.weaponStowed,
+        swimming,
+        e.mountKey !== '',
+        this.weaponCarry.stowed(e, dt),
+      );
       if (stowed !== v.weaponStowed) {
         v.weaponStowed = stowed;
         v.visual.setWeaponStowed(stowed);
@@ -10947,6 +10973,10 @@ export class Renderer {
       // Which ability, so the pose layer can tell a drawn shot from a pet
       // utility cast (tame_beast is a 6s cast; a bow must not sit aimed for it).
       st.castingAbility = characterCasting ? (e.castingAbility ?? null) : null;
+      const castDef = st.castingAbility ? ABILITIES[st.castingAbility] : undefined;
+      st.castTargetMode = characterCasting
+        ? castTargetMode(e.id, e.castTargetId, castDef?.targetType)
+        : null;
       st.spinning =
         st.casting &&
         e.castingAbility !== null &&
@@ -10964,7 +10994,7 @@ export class Renderer {
         (e.sitting || e.eating !== null || e.drinking !== null || riderMounted);
       // Facts about the ENTITY that override what its displayed motion implies
       // (battle-stance engagement, ice-slide suppression): anim_state_entity_core.
-      applyEntityAnimOverrides(st, e, visuallyDead, characterEffects);
+      applyEntityAnimOverrides(st, e, visuallyDead, characterEffects, this.weaponCarry.combat(e));
       // Reset and prewarm mount audio BEFORE this frame can dispatch movement
       // cues. A completed summon or live swap must not start the new idle/run
       // voice only to have the transition edge immediately tear it down below.
@@ -11874,7 +11904,7 @@ export class Renderer {
     this.hauntFeatures?.update(this.time);
     this.jungleFeatures?.update(this.time);
     this.gardenFeatures?.update(this.time);
-    this.galeFeatures?.update(this.time);
+    this.galeFeatures?.update(this.time, this.camera, this.cameraLookAt, dt, this.reducedMotion());
     this.birds.update(p.pos.x, p.pos.z, dt);
     this.impactSite.update(p.pos.x, p.pos.z, dt);
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'zoneFeatures', worldStart);

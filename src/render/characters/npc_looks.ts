@@ -24,7 +24,15 @@
 // normalizeAppearance unchanged (a typo'd style id would silently clamp to the
 // default), and no two NPCs share an appearance.
 
+import {
+  comparisonNpcSource,
+  DEV_COMPARISON_PREFIX,
+} from '../../sim/content/dev_model_comparisons';
 import type { EntityKind } from '../../sim/types';
+import {
+  devModelLegacyNpcLookFor,
+  devModelLegacyNpcPropSetFor,
+} from './dev_model_legacy_npc_looks';
 import {
   type ArmorLoadout,
   type ArmorSetId,
@@ -127,118 +135,8 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
     worn: kit('rogue'),
     props: 'none',
   },
-  // Marshal Redbrook: the name is the colorway; a greying soldier holding a town.
-  marshal_redbrook: {
-    app: {
-      gender: 'male',
-      hair: 'crewcut',
-      ...hair(20, 0.15, 0.35),
-      beard: 'shortbox',
-      brows: 'angled',
-      eyeShape: 'sharp',
-      ...eyes(200, 0.35, 0.3),
-      ...skin(25, 0.45, 0.55),
-      face: face({ jaw: 0.4, brow: 0.2 }),
-      body: body({ shoulders: 0.2 }),
-      outfit: 'crimson',
-    },
-    worn: kit('knight'),
-    props: 'sword_shield',
-  },
-  // Trader Wilkes: round-faced, easy smile, sleeves rolled off the leathers.
-  trader_wilkes: {
-    app: {
-      gender: 'male',
-      hair: 'sidepart',
-      ...hair(28, 0.5, 0.4),
-      beard: 'scruff',
-      brows: 'soft',
-      eyeShape: 'round',
-      ...eyes(140, 0.35, 0.3),
-      ...skin(26, 0.5, 0.62),
-      mouth: 'smile',
-      face: face({ cheeks: 0.35 }),
-      body: body({ chest: 0.15, hips: 0.1 }),
-    },
-    worn: kit('rogue', { arms: null }),
-    props: 'none',
-  },
-  // Apothecary Lin: neat, small, dark-haired; watches where everyone steps.
-  apothecary_lin: {
-    app: {
-      gender: 'female',
-      hair: 'lowbun',
-      ...hair(20, 0.4, 0.06),
-      brows: 'thin',
-      eyeShape: 'doe',
-      ...eyes(30, 0.4, 0.2),
-      ...skin(30, 0.35, 0.62),
-      mouth: 'lips',
-      body: body({ shoulders: -0.15, hands: -0.1 }),
-      outfit: 'forest',
-    },
-    worn: kit('druid'),
-    props: 'none',
-  },
-  // Brother Aldric is DELIBERATELY ABSENT, in every hub (see ALDRIC_KEEPS_HIS_RIG
-  // below). He keeps the pre-v0.7 `npc_aldric` model with the staff built into
-  // the mesh: the community adopted that exact silhouette, so recomposing him
-  // would be a regression, not an upgrade, however good the composed body looks.
-  // Smith Haldren: the Vale armorer, all shoulders, horseshoe moustache.
-  smith_haldren: {
-    app: {
-      gender: 'male',
-      hair: 'crew',
-      ...hair(22, 0.45, 0.15),
-      beard: 'horseshoe',
-      brows: 'bushy',
-      eyeShape: 'almond',
-      ...eyes(28, 0.45, 0.25),
-      ...skin(24, 0.5, 0.5),
-      face: face({ jaw: 0.3 }),
-      body: body({ shoulders: 0.35, chest: 0.3, hands: 0.2 }),
-      outfit: 'ember',
-    },
-    worn: kit('barbarian'),
-    props: 'hammer',
-  },
-  // Fisherman Brandt, Old Salt: grey, weathered, grinning about the fish-men.
-  fisherman_brandt: {
-    app: {
-      gender: 'male',
-      hair: 'crew',
-      ...hair(30, 0.05, 0.6),
-      beard: 'full',
-      brows: 'bushy',
-      eyeShape: 'droopy',
-      ...eyes(190, 0.4, 0.4),
-      ...skin(24, 0.5, 0.48),
-      mouth: 'grin',
-      face: face({ cheeks: -0.2, nose: 0.3 }),
-      outfit: 'teal',
-    },
-    worn: kit('rogue', { arms: null }),
-    props: 'spear',
-  },
-  // Foreman Odell: dust-choked and exasperated, balding, heavy-browed.
-  foreman_odell: {
-    app: {
-      gender: 'male',
-      hair: 'buzz',
-      ...hair(24, 0.3, 0.25),
-      beard: 'mutton',
-      brows: 'thick',
-      eyeShape: 'sharp',
-      ...eyes(30, 0.4, 0.35),
-      ...skin(26, 0.45, 0.45),
-      mouth: 'frown',
-      face: face({ jaw: 0.5, brow: 0.3, nose: 0.2 }),
-      body: body({ shoulders: 0.25, chest: 0.2 }),
-      outfit: 'onyx',
-    },
-    worn: kit('barbarian'),
-    props: 'hammer',
-  },
+  // Brother Aldric (all hub ids) and Foreman Odell use their named Meshy rigs.
+  // Keep them out of the modular roster so it cannot replace their bodies.
   // Bursar Fernando: the Gilded Strongbox uniform is gold over dark leathers;
   // his likeness keeps the black shoulder-length hair and light brown skin the
   // old bespoke atlas painted.
@@ -1000,7 +898,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'obsidian',
     },
     worn: kit('paladin', { chest: 'knight' }),
-    props: 'sword',
+    props: 'none',
   },
   // Warmarshal Draven Kole: honor is the only coin; blood-forged plate, grey
   // horseshoe, a face like a shut gate.
@@ -1037,7 +935,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'royal',
     },
     worn: kit('mage', { head: 'mage' }),
-    props: 'tome',
+    props: 'none',
   },
   // Auctioneer Voss: pompadour, moustache, gold chain; the market as theatre.
   auctioneer_voss: {
@@ -1199,7 +1097,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'ivory',
     },
     worn: kit('druid'),
-    props: 'walking_staff',
+    props: 'none',
   },
   // Okku, The Man Who Went In: wiry, bald, grey-bearded, listening for drums.
   hermit_okku: {
@@ -1966,7 +1864,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'royal',
     },
     worn: kit('knight'),
-    props: 'sword',
+    props: 'none',
   },
   // Quartermaster Finch: the camp stall; buys salvage all day, so she is the
   // one islander with rolled sleeves and an apron-drab colourway.
@@ -2007,7 +1905,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'gilded',
     },
     worn: kit('mage'),
-    props: 'tome',
+    props: 'none',
   },
   // Ferryman Odo: the oldest hand on the shore and the first voice a new player
   // hears; weathered, white-bearded, punt pole still in his fist.
@@ -2026,7 +1924,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'azure',
     },
     worn: kit('druid', { arms: null, back: null }),
-    props: 'walking_staff',
+    props: 'none',
   },
   // Warden Tam: keeps the Gauntlet on the strand; lean, sun-cured, a spear he
   // uses as a lane marker more than a weapon.
@@ -2045,7 +1943,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'classic',
     },
     worn: kit('ranger'),
-    props: 'spear',
+    props: 'none',
   },
   // Overseer Pell: clocks every Gauntlet run from the far end; a foreman's
   // build, arms crossed, nothing in his hands but the count.
@@ -2085,7 +1983,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'crimson',
     },
     worn: kit('knight'),
-    props: 'sword_shield',
+    props: 'none',
   },
   // Tidewarden Nel: keeps the strand tally out where the wrecks are; salt-white
   // hair, teal oilskins, a stave she walks the tide line with.
@@ -2105,7 +2003,7 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
       outfit: 'teal',
     },
     worn: kit('druid'),
-    props: 'oak_stave',
+    props: 'none',
   },
   // Drillmaster Hale: the Eastbrook quay's sparring master, keeper of the hub
   // training dummy (content/practice_dummies.ts). Grey-shaved veteran in the
@@ -2134,16 +2032,28 @@ export const NPC_LOOKS: Record<string, NpcLookDef> = {
  * The one NPC this module deliberately does NOT compose, under any of the hub
  * ids he recurs at (`brother_aldric`, `_fen`, `_highwatch`, `_raid`).
  *
- * Brother Aldric renders the pre-v0.7 `npc_aldric` model, restored on purpose
- * once already (PR #499) after a model change moved him off it. The community
- * knows him by that exact silhouette, staff baked into the mesh and all, so a
- * composed replacement would be a regression no matter how good the new body
- * is. `npcLookFor` returns null for him, which is the same "keep the fixed
- * rig" answer a pre-creator player character gets, so nothing special-cases
- * him downstream. Pinned by tests/npc_looks.test.ts.
+ * Brother Aldric now renders his named Meshy body through the stable
+ * `npc_aldric` key. `npcLookFor` returns null at every placement so the
+ * modular composer cannot replace it. Pinned by tests/npc_looks.test.ts.
  */
 export function aldricKeepsHisRig(templateId: string): boolean {
   return templateId.startsWith('brother_aldric');
+}
+
+/** Named NPCs with authored Meshy bodies on fixed Mixamo rigs. Keep them out
+ * of the modular composer so their manifest mappings can select those bodies. */
+export function meshyNpcKeepsItsRig(templateId: string): boolean {
+  return (
+    templateId.startsWith(DEV_COMPARISON_PREFIX) ||
+    templateId === 'apothecary_lin' ||
+    templateId === 'fisherman_brandt' ||
+    templateId === 'trader_wilkes' ||
+    templateId === 'smith_haldren' ||
+    templateId === 'marshal_redbrook' ||
+    templateId === 'foreman_odell' ||
+    templateId === 'dev_rogue_minion' ||
+    templateId === 'dev_skeleton_minion'
+  );
 }
 
 /** Suffixed hub ids that share one person's look (the same character recurs
@@ -2163,7 +2073,12 @@ const resolved = new Map<string, ModularLook | null>();
  *  (which keeps its fixed rig, the same null the player path uses). */
 export function npcLookFor(templateId: string, kind: EntityKind = 'npc'): ModularLook | null {
   if (kind !== 'npc') return null;
-  if (aldricKeepsHisRig(templateId)) return null;
+  if (templateId.startsWith(DEV_COMPARISON_PREFIX)) {
+    const source = comparisonNpcSource(templateId);
+    if (!source || !templateId.startsWith('dev_compare_npc_old_')) return null;
+    return devModelLegacyNpcLookFor(source) ?? npcLookFor(source);
+  }
+  if (aldricKeepsHisRig(templateId) || meshyNpcKeepsItsRig(templateId)) return null;
   const id = baseId(templateId);
   let look = resolved.get(id);
   if (look === undefined) {
@@ -2177,6 +2092,12 @@ export function npcLookFor(templateId: string, kind: EntityKind = 'npc'): Modula
 /** The modular VisualDef key for a composed NPC: the prop-set def authored for
  *  them (every prop set has one, derived in manifest.ts). */
 export function npcModularKeyFor(templateId: string): string {
+  const source = comparisonNpcSource(templateId);
+  if (source) {
+    const props = devModelLegacyNpcPropSetFor(source);
+    if (props) return `npc_modular_${props}`;
+    return npcModularKeyFor(source);
+  }
   const def = NPC_LOOKS[baseId(templateId)];
   return `npc_modular_${def?.props ?? 'none'}`;
 }

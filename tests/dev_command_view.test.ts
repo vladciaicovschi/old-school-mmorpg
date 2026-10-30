@@ -5,6 +5,7 @@ import {
   DEV_COMMAND_ACTIONS,
   devCategoryVisible,
   filteredDevActions,
+  isDevEditorCommand,
   isDevGuiCommand,
 } from '../src/ui/dev_command_view';
 
@@ -46,7 +47,15 @@ describe('developer command view', () => {
     expect(isDevGuiCommand('/dev god')).toBe(false);
   });
 
+  it('recognizes only the exact attachment editor command', () => {
+    expect(isDevEditorCommand('/dev editor')).toBe(true);
+    expect(isDevEditorCommand('  /DEV EDITOR  ')).toBe(true);
+    expect(isDevEditorCommand('/dev editor rogue')).toBe(false);
+    expect(isDevEditorCommand('/dev lab')).toBe(false);
+  });
+
   it('builds bounded commands without accepting arbitrary tokens', () => {
+    expect(buildDevCommand('modelLab', {})).toBe('/dev lab');
     expect(buildDevCommand('spawn', { mob: 'forest_wolf', count: 999, mobLevel: 999 })).toBe(
       `/dev spawn forest_wolf 20 ${MAX_LEVEL}`,
     );

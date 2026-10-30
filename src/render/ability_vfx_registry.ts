@@ -19,6 +19,7 @@ import {
   RUINOUS_BRAND_VFX_FULL_SPEC,
   RUINOUS_BRAND_VFX_SPEC,
 } from './destruction_vfx_specs';
+import { HUNTER_ARROW_VFX_FULL_SPECS, MEASURED_SHOT_VFX_SPEC } from './hunter_vfx_specs';
 import {
   ARMY_OF_THE_DEAD_VFX_FULL_SPEC,
   ARMY_OF_THE_DEAD_VFX_SPEC,
@@ -50,6 +51,7 @@ import { ABYSSAL_RIFT_VFX_FULL_SPEC, ABYSSAL_RIFT_VFX_SPEC } from './warlock_vfx
 // Generated gallery projections remain untouched. Class-owned bespoke
 // identities resolve through this narrow runtime seam instead.
 export function abilityVfxSpec(abilityId: string): AbilityVfxSpec | undefined {
+  if (abilityId === 'measured_shot') return MEASURED_SHOT_VFX_SPEC;
   if (abilityId === 'emberkin_felbolt') return EMBERKIN_FELBOLT_VFX_SPEC;
   if (abilityId === 'gloomshade_abyssal_chain') return GLOOMSHADE_ABYSSAL_CHAIN_VFX_SPEC;
   if (abilityId === 'bone_mage_shadow_bolt') return BONE_MAGE_SHADOW_BOLT_VFX_SPEC;
@@ -74,6 +76,7 @@ export function abilityVfxSpec(abilityId: string): AbilityVfxSpec | undefined {
 }
 
 export function abilityVfxFullSpec(abilityId: string): AbilityVfxFullSpec | undefined {
+  if (HUNTER_ARROW_VFX_FULL_SPECS[abilityId]) return HUNTER_ARROW_VFX_FULL_SPECS[abilityId];
   if (abilityId === 'emberkin_felbolt') return EMBERKIN_FELBOLT_VFX_FULL_SPEC;
   if (abilityId === 'gloomshade_abyssal_chain') return GLOOMSHADE_ABYSSAL_CHAIN_VFX_FULL_SPEC;
   if (abilityId === 'bone_mage_shadow_bolt') return BONE_MAGE_SHADOW_BOLT_VFX_FULL_SPEC;

@@ -1,0 +1,45 @@
+{
+  "idle": {
+    "clip": "Idle",
+    "time": 2.0166666666666644,
+    "base": "idle",
+    "oneShot": false
+  },
+  "run": {
+    "clip": "Locomotion",
+    "time": 0.2100000000000007,
+    "base": "run",
+    "oneShot": false
+  },
+  "attack": {
+    "clip": "Attack",
+    "time": 0.5416666666666667,
+    "base": "idle",
+    "oneShot": true
+  },
+  "recovered": {
+    "clip": "Idle",
+    "time": 1.1500000000000008,
+    "base": "idle",
+    "oneShot": false
+  },
+  "hit": {
+    "clip": "Hit",
+    "time": 0.25999999999999995,
+    "base": "idle",
+    "oneShot": true
+  },
+  "death": {
+    "clip": "Death",
+    "time": 1.25,
+    "base": "idle",
+    "oneShot": false
+  },
+  "clips": [
+    "Attack",
+    "Death",
+    "Hit",
+    "Idle",
+    "Locomotion"
+  ]
+}

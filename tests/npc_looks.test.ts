@@ -10,6 +10,7 @@ import { VISUALS, visualKeyFor } from '../src/render/characters/manifest';
 import { ARMOR_SETS, ARMOR_SLOTS, normalizeAppearance } from '../src/render/characters/modular';
 import {
   aldricKeepsHisRig,
+  meshyNpcKeepsItsRig,
   NPC_LOOKS,
   NPC_PROP_SET_IDS,
   npcLookFor,
@@ -18,25 +19,87 @@ import {
 import { NPCS } from '../src/sim/data';
 
 describe('npc looks roster', () => {
-  it('covers every NpcDef id except Brother Aldric (every other world NPC composes)', () => {
+  it('covers every NpcDef id except fixed bespoke rigs', () => {
     const missing = Object.keys(NPCS).filter(
-      (id) => !aldricKeepsHisRig(id) && npcLookFor(id) === null,
+      (id) => !aldricKeepsHisRig(id) && !meshyNpcKeepsItsRig(id) && npcLookFor(id) === null,
     );
     expect(missing).toEqual([]);
   });
 
-  // Brother Aldric renders the pre-v0.7 npc_aldric model on purpose (the
-  // community knows him by that silhouette; PR #499 already restored it once).
-  // Composing him would be a regression, so his hub ids must resolve to null
-  // AND carry no roster entry a later edit could quietly re-activate.
+  it('keeps named Meshy NPCs on their bespoke fixed bodies', () => {
+    expect(meshyNpcKeepsItsRig('apothecary_lin')).toBe(true);
+    expect(npcLookFor('apothecary_lin')).toBeNull();
+    expect(NPC_LOOKS.apothecary_lin).toBeUndefined();
+    expect(visualKeyFor({ kind: 'npc', templateId: 'apothecary_lin' } as never)).toBe(
+      'npc_apothecary_lin',
+    );
+    expect(VISUALS.npc_apothecary_lin).toMatchObject({
+      url: 'models/chars/npcs/apothecary_lin.glb',
+      clips: {
+        idle: 'Apothecary_Idle_A',
+      },
+    });
+    for (const [id, visualKey, url, idle] of [
+      [
+        'fisherman_brandt',
+        'npc_fisherman_brandt',
+        'models/chars/npcs/fisherman_brandt.glb',
+        'Fisherman_Idle',
+      ],
+      ['trader_wilkes', 'npc_trader_wilkes', 'models/chars/npcs/trader_wilkes.glb', 'Trader_Idle'],
+      ['smith_haldren', 'npc_smith_haldren', 'models/chars/npcs/smith_haldren.glb', 'Smith_Idle'],
+      [
+        'marshal_redbrook',
+        'npc_marshal_redbrook',
+        'models/chars/npcs/marshal_redbrook.glb',
+        'Marshal_Idle',
+      ],
+      ['foreman_odell', 'npc_foreman_odell', 'models/chars/npcs/foreman_odell.glb', 'Foreman_Idle'],
+    ] as const) {
+      expect(meshyNpcKeepsItsRig(id), id).toBe(true);
+      expect(npcLookFor(id), id).toBeNull();
+      expect(NPC_LOOKS[id], id).toBeUndefined();
+      expect(visualKeyFor({ kind: 'npc', templateId: id } as never)).toBe(visualKey);
+      expect(VISUALS[visualKey]).toMatchObject({
+        url,
+        preserveSkinnedParts: true,
+        clips: { idle },
+      });
+    }
+  });
+
+  // Every placement of Brother Aldric shares his named imported body.
   it('never composes Brother Aldric, at any of his hub ids', () => {
     const aldricIds = Object.keys(NPCS).filter((id) => id.startsWith('brother_aldric'));
     expect(aldricIds.length).toBeGreaterThan(1);
     for (const id of aldricIds) {
       expect(aldricKeepsHisRig(id), id).toBe(true);
       expect(npcLookFor(id), id).toBeNull();
+      expect(visualKeyFor({ kind: 'npc', templateId: id } as never)).toBe('npc_aldric');
     }
+    expect(VISUALS.npc_aldric).toMatchObject({
+      url: 'models/chars/npcs/brother_aldric.glb',
+      preserveSkinnedParts: true,
+      clips: { idle: 'Aldric_Idle' },
+    });
     expect(Object.keys(NPC_LOOKS).filter((id) => id.startsWith('brother_aldric'))).toEqual([]);
+  });
+
+  it('leaves NPCs without their own imported model on their authored looks', () => {
+    for (const id of [
+      'the_merchant',
+      'bursar_fernando',
+      'card_master',
+      'chronicler_saul',
+      'forgemistress_darva',
+      'cook_marlow',
+      'weaver_ottilie',
+      'tinker_gizzel',
+      'farmer_jessica',
+    ]) {
+      expect(meshyNpcKeepsItsRig(id), id).toBe(false);
+      expect(npcLookFor(id), id).not.toBeNull();
+    }
   });
 
   it('covers the NPC-bodied quest actors and the dev vendor', () => {
@@ -48,6 +111,21 @@ describe('npc looks roster', () => {
       'gravedigger_mosley',
     ]) {
       expect(npcLookFor(id), id).not.toBeNull();
+    }
+  });
+
+  it('keeps every Proving Shore civilian unarmed', () => {
+    for (const id of [
+      'instructor_maren',
+      'quartermaster_finch',
+      'bursar_wick',
+      'ferryman_odo',
+      'warden_tam',
+      'overseer_pell',
+      'drillmaster_rook',
+      'tidewarden_nel',
+    ]) {
+      expect(NPC_LOOKS[id]?.props, id).toBe('none');
     }
   });
 

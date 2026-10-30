@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BACK_GRIP_FAMILIES,
   backGripFor,
+  hipGripFor,
   quatFromEulerXYZ,
 } from '../src/render/characters/back_grips';
 import { KAYKIT_SHIELD_ACCESSORIES } from '../src/render/characters/held_item_grips';
@@ -12,6 +13,18 @@ import { KAYKIT_SHIELD_ACCESSORIES } from '../src/render/characters/held_item_gr
 function quatLength(q: [number, number, number, number]): number {
   return Math.hypot(q[0], q[1], q[2], q[3]);
 }
+
+describe('T1 pelvis-local hip grips', () => {
+  it('mirrors blades to separate hips and keeps normalized orientations', () => {
+    const right = hipGripFor('r');
+    const left = hipGripFor('l');
+    expect(right.position).toEqual([0.26, -0.26, 0.03]);
+    expect(left.position).toEqual([-0.26, -0.26, 0.03]);
+    expect(quatLength(right.quaternion)).toBeCloseTo(1, 12);
+    expect(quatLength(left.quaternion)).toBeCloseTo(1, 12);
+    expect(right.quaternion).not.toEqual(left.quaternion);
+  });
+});
 
 describe('quatFromEulerXYZ', () => {
   it('matches known rotations', () => {

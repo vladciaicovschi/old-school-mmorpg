@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/sentinel_v1/sentinel_v1.glb",
+      "out": "models/chars/players/meshy_sentinel_v1.glb",
+      "type": "character",
+      "maxTex": 1024
+    }
+  ]
+}

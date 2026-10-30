@@ -1,0 +1,35 @@
+{
+  "items": [
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_dagger_1.glb", "out": "models/weapons/meshy/arcane_dagger_1.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_dagger_2.glb", "out": "models/weapons/meshy/arcane_dagger_2.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_dagger_3.glb", "out": "models/weapons/meshy/arcane_dagger_3.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_dagger_4.glb", "out": "models/weapons/meshy/arcane_dagger_4.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_dagger_5.glb", "out": "models/weapons/meshy/arcane_dagger_5.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/fallen_king_shield_1.glb", "out": "models/weapons/meshy/fallen_king_shield_1.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/fallen_king_shield_2.glb", "out": "models/weapons/meshy/fallen_king_shield_2.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/fallen_king_shield_3.glb", "out": "models/weapons/meshy/fallen_king_shield_3.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/fallen_king_shield_4.glb", "out": "models/weapons/meshy/fallen_king_shield_4.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/fallen_king_shield_5.glb", "out": "models/weapons/meshy/fallen_king_shield_5.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/ascendance_sword_1.glb", "out": "models/weapons/meshy/ascendance_sword_1.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/ascendance_sword_2.glb", "out": "models/weapons/meshy/ascendance_sword_2.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/ascendance_sword_3.glb", "out": "models/weapons/meshy/ascendance_sword_3.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/ascendance_sword_4.glb", "out": "models/weapons/meshy/ascendance_sword_4.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/meshy_weapon_sets/raw/ascendance_sword_5.glb", "out": "models/weapons/meshy/ascendance_sword_5.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/evolution_axe_1.glb", "out": "models/weapons/meshy/evolution_axe_1.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/evolution_axe_2.glb", "out": "models/weapons/meshy/evolution_axe_2.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/evolution_axe_3.glb", "out": "models/weapons/meshy/evolution_axe_3.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/evolution_axe_4.glb", "out": "models/weapons/meshy/evolution_axe_4.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/evolution_axe_5.glb", "out": "models/weapons/meshy/evolution_axe_5.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_staff_1.glb", "out": "models/weapons/meshy/arcane_staff_1.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_staff_2.glb", "out": "models/weapons/meshy/arcane_staff_2.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_staff_3.glb", "out": "models/weapons/meshy/arcane_staff_3.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_staff_4.glb", "out": "models/weapons/meshy/arcane_staff_4.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_staff_5.glb", "out": "models/weapons/meshy/arcane_staff_5.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_longbow_1.glb", "out": "models/weapons/meshy/arcane_longbow_1.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_longbow_2.glb", "out": "models/weapons/meshy/arcane_longbow_2.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_longbow_3.glb", "out": "models/weapons/meshy/arcane_longbow_3.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_longbow_4.glb", "out": "models/weapons/meshy/arcane_longbow_4.glb", "type": "static", "maxTex": 512 }
+    ,{ "src": "tmp/asset_src/meshy_weapon_sets/raw/arcane_longbow_5.glb", "out": "models/weapons/meshy/arcane_longbow_5.glb", "type": "static", "maxTex": 512 }
+  ]
+}
+

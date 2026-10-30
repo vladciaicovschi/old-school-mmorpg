@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/apothecary_lin/apothecary_lin_ktx2.glb",
+      "out": "models/chars/npcs/apothecary_lin.glb",
+      "type": "character",
+      "keepClips": ["Apothecary_Idle_A"]
+    }
+  ]
+}

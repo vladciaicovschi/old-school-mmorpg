@@ -13,7 +13,13 @@ import { AbilityVfx } from '../src/render/ability_vfx/painter';
 const SOURCE_ID = 3;
 const TARGET_ID = 9;
 
-function makePainter(hasGestureClip: (id: number, ability: string) => boolean, isMob = false) {
+function makePainter(
+  hasGestureClip: (id: number, ability: string) => boolean,
+  isMob = false,
+  preserveCastTimeline = false,
+  joinedMob = false,
+  overrides: Partial<AbilityVfxDeps> = {},
+) {
   const fx = {
     setDelegates: vi.fn(),
     warmSpiritsForClass: vi.fn(),
@@ -29,6 +35,8 @@ function makePainter(hasGestureClip: (id: number, ability: string) => boolean, i
     sequenceInstantAt: vi.fn(),
     sequenceBolt: vi.fn(),
     sequenceBoltAt: vi.fn(),
+    beamRibbon: vi.fn(),
+    burstAt: vi.fn(),
     groundYAt: vi.fn().mockReturnValue(0),
   };
   const vfx = {
@@ -42,21 +50,69 @@ function makePainter(hasGestureClip: (id: number, ability: string) => boolean, i
     beam: vi.fn(),
   };
   const triggerAttack = vi.fn();
+  const triggerCastRelease = vi.fn();
   const deps = {
     vfx,
     fx,
     anchor: () => ({ x: 0, y: 0, z: 0 }),
     spawnAoeRing: vi.fn(),
     triggerAttack,
+    ...(preserveCastTimeline ? { triggerCastRelease } : {}),
     isMob: () => isMob,
     hasGestureClip,
+    hasJoinedCastRelease: () => joinedMob,
     localPlayerId: () => -1,
+    ...overrides,
   } as unknown as AbilityVfxDeps;
   const painter = new AbilityVfx(deps, () => 0);
-  return { painter, triggerAttack };
+  return { painter, triggerAttack, triggerCastRelease };
 }
 
 describe('player gesture release on cast fx (review #2961)', () => {
+  it.each(['projectile', 'lightning', 'nova'] as const)(
+    'joins an opted-in caster mob on %s without a second generic attack',
+    (fx) => {
+      const f = makePainter(() => true, true, true, true);
+      f.painter.handleSpellfx({
+        sourceId: SOURCE_ID,
+        targetId: TARGET_ID,
+        school: 'shadow',
+        fx,
+        ability: 'shadow_bolt',
+      });
+      expect(f.triggerCastRelease).toHaveBeenCalledOnce();
+      expect(f.triggerCastRelease).toHaveBeenCalledWith(SOURCE_ID, 'shadow_bolt', TARGET_ID);
+      expect(f.triggerAttack).not.toHaveBeenCalled();
+    },
+  );
+  it('joins friendly mob releases even when particle readiness rejects the event', () => {
+    for (const rejected of [false, true]) {
+      const f = makePainter(() => true, true, true, true, { castVfxAdmit: () => !rejected });
+      f.painter.handleSpellfx({
+        sourceId: SOURCE_ID,
+        targetId: TARGET_ID,
+        school: 'holy',
+        fx: 'selfCast',
+        ability: 'flash_heal',
+      });
+      expect(f.triggerCastRelease).toHaveBeenCalledOnce();
+      expect(f.triggerCastRelease).toHaveBeenCalledWith(SOURCE_ID, 'flash_heal', TARGET_ID);
+      expect(f.triggerAttack).not.toHaveBeenCalled();
+    }
+  });
+  it('starts a channel gesture once, never once per beam tick', () => {
+    const f = makePainter(() => true, true, true, true);
+    for (let tick = 0; tick < 3; tick++)
+      f.painter.handleSpellfx({
+        sourceId: SOURCE_ID,
+        targetId: TARGET_ID,
+        school: 'shadow',
+        fx: 'beam',
+        ability: 'drain_life',
+      });
+    expect(f.triggerCastRelease).toHaveBeenCalledOnce();
+    expect(f.triggerAttack).not.toHaveBeenCalled();
+  });
   it('plays the authored clip for a player projectile cast whose ability has a gesture (earth_shock)', () => {
     const { painter, triggerAttack } = makePainter((_id, ability) => ability === 'earth_shock');
     painter.handleSpellfx({
@@ -67,6 +123,23 @@ describe('player gesture release on cast fx (review #2961)', () => {
       ability: 'earth_shock',
     });
     expect(triggerAttack).toHaveBeenCalledWith(SOURCE_ID, 'earth_shock');
+  });
+
+  it('resumes a held player cast at its release frame when the renderer supports it', () => {
+    const { painter, triggerAttack, triggerCastRelease } = makePainter(
+      (_id, ability) => ability === 'shadow_bolt',
+      false,
+      true,
+    );
+    painter.handleSpellfx({
+      sourceId: SOURCE_ID,
+      targetId: TARGET_ID,
+      school: 'shadow',
+      fx: 'projectile',
+      ability: 'shadow_bolt',
+    });
+    expect(triggerCastRelease).toHaveBeenCalledWith(SOURCE_ID, 'shadow_bolt', TARGET_ID);
+    expect(triggerAttack).not.toHaveBeenCalled();
   });
 
   it('plays the authored clip for a player lightning cast with a gesture (lightning_bolt)', () => {
@@ -80,6 +153,22 @@ describe('player gesture release on cast fx (review #2961)', () => {
     });
     expect(triggerAttack).toHaveBeenCalledWith(SOURCE_ID, 'lightning_bolt');
   });
+
+  it.each([SOURCE_ID, TARGET_ID])(
+    'preserves the target of a friendly ceremony (%s)',
+    (targetId) => {
+      const { painter, triggerAttack, triggerCastRelease } = makePainter(() => true, false, true);
+      painter.handleSpellfx({
+        sourceId: SOURCE_ID,
+        targetId,
+        school: 'holy',
+        fx: 'selfCast',
+        ability: 'flash_heal',
+      });
+      expect(triggerCastRelease).toHaveBeenCalledWith(SOURCE_ID, 'flash_heal', targetId);
+      expect(triggerAttack).not.toHaveBeenCalled();
+    },
+  );
 
   it('plays the authored clip for a player nova cast with a gesture (thunder_clap)', () => {
     const { painter, triggerAttack } = makePainter((_id, ability) => ability === 'thunder_clap');

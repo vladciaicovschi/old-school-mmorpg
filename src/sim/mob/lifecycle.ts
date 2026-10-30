@@ -41,6 +41,7 @@ import type { SimContext } from '../sim_context';
 import { clearThreat } from '../threat';
 import { dist2d, type Entity, IGNIVAR_BOSS_ID, NYTHRAXIS_BOSS_ID } from '../types';
 import { groundHeight } from '../world';
+import { cancelTimedMobSpell } from './caster_spell';
 import { resetMobCharge } from './charge';
 import { idleRng, wanderPause } from './idle_rng';
 import { resetMechanicSpacing } from './mechanic_spacing';
@@ -53,6 +54,7 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
     ctx.despawnPersistentPet(mob);
     return;
   }
+  cancelTimedMobSpell(ctx, mob);
   ctx.clearNonPlayerStatAuras(mob);
   // The entity id is about to be reused for a live mob: a corpse-harvest
   // reservation must not survive it (Intentional Gathering, PR3). A no-op

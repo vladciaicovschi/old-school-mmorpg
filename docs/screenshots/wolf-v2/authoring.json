@@ -1,0 +1,39 @@
+{
+  "source_sha256": "840671509d895aec77813cadf6ffcab2cd7af87f6545da48d112553fa39ef419",
+  "bones": 47,
+  "normalization": {
+    "heading_radians": 0.2872812451509179,
+    "floor_shift": 0.021699056029319763,
+    "normalization_reach_clamp": 0
+  },
+  "gaits": {
+    "walk": {
+      "duration": 1.12,
+      "stride": 0.64,
+      "stance": 0.67,
+      "lift": 0.16
+    },
+    "trot": {
+      "duration": 0.64,
+      "stride": 0.6,
+      "stance": 0.54,
+      "lift": 0.18
+    },
+    "run": {
+      "duration": 0.52,
+      "stride": 0.76,
+      "stance": 0.46,
+      "lift": 0.22
+    }
+  },
+  "max_ik_reach_clamp": 0,
+  "min_fold_margin": 0.09579624784878499,
+  "idle_height": 1.6082890129182488,
+  "walkRef": 1.0903637006883669,
+  "runRef": 4.076008520135496,
+  "baked_durations": {
+    "walk": 1.1166666666666667,
+    "trot": 0.6333333333333333,
+    "run": 0.5166666666666667
+  }
+}

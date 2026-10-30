@@ -1,0 +1,107 @@
+{
+  "source_sha256": "4704eb3c89a0ce66e8fef1266ac25aaf9eb3cebebb9c608217c4e33934de4100",
+  "bones": 52,
+  "height": 2.4,
+  "gaits": {
+    "walk": {
+      "duration": 1.24,
+      "stride": 0.5,
+      "stance": 0.7,
+      "lift": 0.09
+    },
+    "trot": {
+      "duration": 0.8,
+      "stride": 0.65,
+      "stance": 0.58,
+      "lift": 0.12
+    },
+    "run": {
+      "duration": 0.62,
+      "stride": 0.72,
+      "stance": 0.5,
+      "lift": 0.16
+    }
+  },
+  "clips": {
+    "Buffalo_Idle": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.36530905519975665
+    },
+    "Buffalo_CombatIdle": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.3003187516540655
+    },
+    "Buffalo_Walk": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.20237992978574487
+    },
+    "Buffalo_Trot": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.16814378994325857
+    },
+    "Buffalo_Run": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.09081714050153838
+    },
+    "Buffalo_HornLeft": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.29584005211030523
+    },
+    "Buffalo_HornRight": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2953114580417649
+    },
+    "Buffalo_Charge": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2953267192204623
+    },
+    "Buffalo_Hit": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.34789264342563775
+    },
+    "Buffalo_Death": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": null
+    },
+    "Buffalo_Bellow": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.37030840806744403
+    },
+    "Buffalo_AlertLook": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.37030840806744403
+    },
+    "Buffalo_Graze": {
+      "reach_clamp": 0.0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2755736647604795
+    }
+  },
+  "walkRef": 0.813228517213337,
+  "runRef": 3.278937381404174
+}

@@ -33,6 +33,7 @@ import { vertexColorEmissiveInternalsForTest } from '../src/render/vertex_color_
 import { BUILDING_TERRAIN_SAMPLE_STEP } from '../src/sim/building_layout';
 import { BUILTIN_WORLD } from '../src/sim/data';
 import { EASTBROOK_LAYOUT, localToWorld } from '../src/sim/eastbrook_layout';
+import { isSettlementBuilding, SETTLEMENTS } from '../src/sim/settlements_layout';
 import { terrainHeight } from '../src/sim/world';
 
 let restoreGfx: (() => void) | null = null;
@@ -889,16 +890,36 @@ describe('Eastbrook town renderer', () => {
     expect(() => view.update(0, 0, 0, 0, 0, 0, 100, 1)).not.toThrow();
   });
 
-  it('recognizes only the exact built-in records replaced by the dedicated renderer', () => {
+  it('recognizes exact legacy layout fixtures without depending on the replacement world inventory', () => {
     for (const building of EASTBROOK_LAYOUT.buildings) {
-      const record = BUILTIN_WORLD.props.buildings.find((item) => item.id === building.id);
-      if (!record) throw new Error(`missing ${building.id}`);
+      const record = {
+        id: building.id,
+        kind: building.kind,
+        x: building.position.x,
+        z: building.position.z,
+        w: building.nativeDimensions.width,
+        d: building.nativeDimensions.depth,
+        rot: building.rotation,
+      };
       expect(isEastbrookRebuildBuilding(record)).toBe(true);
       expect(isEastbrookRebuildBuilding({ ...record, x: record.x + 0.01 })).toBe(false);
     }
-    const well = BUILTIN_WORLD.props.wells[0];
-    const stall = BUILTIN_WORLD.props.stalls[0];
-    const fence = BUILTIN_WORLD.props.fences[0];
+    const monument = EASTBROOK_LAYOUT.civic.monument;
+    const market = EASTBROOK_LAYOUT.market.stalls[0];
+    const barrier = EASTBROOK_LAYOUT.fences[0];
+    const well = { x: monument.position.x, z: monument.position.z, r: monument.radius };
+    const stall = {
+      x: market.position.x,
+      z: market.position.z,
+      rot: market.rotation,
+      r: Math.hypot(market.width / 2, market.depth / 2),
+    };
+    const fence = {
+      x1: barrier.start.x,
+      z1: barrier.start.z,
+      x2: barrier.end.x,
+      z2: barrier.end.z,
+    };
     expect(isEastbrookRebuildWell(well)).toBe(true);
     expect(isEastbrookRebuildWell({ ...well, x: well.x + 0.01 })).toBe(false);
     expect(isEastbrookRebuildStall(stall)).toBe(true);
@@ -923,15 +944,28 @@ describe('Eastbrook town renderer', () => {
       path.join(__dirname, '..', 'src/render/renderer.ts'),
       'utf8',
     );
-    expect(rendererSource).toContain('buildEastbrookTownView(this.sim.cfg.seed)');
+    expect(rendererSource).toContain('buildSettlementsTownView(this.sim.cfg.seed)');
+    expect(rendererSource).not.toContain('buildEastbrookTownView(this.sim.cfg.seed)');
     expect(rendererSource).toContain("setRenderCategory(this.eastbrookTownView.group, 'props')");
     expect(rendererSource.match(/this\.eastbrookTownView\.update\(/g)).toHaveLength(2);
+    expect(rendererSource).toContain('this.eastbrookTownView.staticRevealRoots(key)');
 
     const propsSource = readFileSync(path.join(__dirname, '..', 'src/render/props.ts'), 'utf8');
-    expect(propsSource).toContain('builtInWorld && isEastbrookRebuildBuilding(b)');
-    expect(propsSource).toContain('builtInWorld && isEastbrookRebuildWell(w)');
-    expect(propsSource).toContain('builtInWorld && isEastbrookRebuildStall(s)');
-    expect(propsSource).toContain('builtInWorld && isEastbrookRebuildFence(f)');
+    expect(propsSource.match(/isSettlementBuilding\(b\)/g)).toHaveLength(2);
+    expect(propsSource).not.toContain("from './eastbrook_town'");
+    const settlement = SETTLEMENTS.find((s) => s.id === 'eastbrook');
+    const buildings = BUILTIN_WORLD.props.buildings.filter((b) =>
+      b.id?.startsWith('settlement:eastbrook:'),
+    );
+    expect(buildings).toHaveLength(settlement?.lots.length ?? 0);
+    expect(buildings.length).toBeGreaterThan(0);
+    expect(buildings.every(isSettlementBuilding)).toBe(true);
+    for (const legacy of EASTBROOK_LAYOUT.buildings) {
+      expect(
+        BUILTIN_WORLD.props.buildings.some((b) => b.id === legacy.id),
+        legacy.id,
+      ).toBe(false);
+    }
 
     const view = eastbrookTownInternalsForTest.buildFromSources(fixtureSources(), () => 0, true);
     expect(view.update.toString()).not.toMatch(/\bnew\s+/);

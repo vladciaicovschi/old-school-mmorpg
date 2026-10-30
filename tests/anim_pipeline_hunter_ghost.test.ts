@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ABILITIES } from '../src/sim/data';
+import { HUNTER_T1_MOTION_CLIPS } from '../src/render/characters/hunter_t1_motion';
 
 const ROOT = join(__dirname, '..');
 
@@ -56,42 +57,36 @@ describe('hunter ability-specific attacks (issue #2889 follow-up batch)', () => 
     expect(meshCountOf(glbPath)).toBe(0);
   });
 
-  it('wires both donor GLBs (the pre-existing bow_anims.glb and the new one) and an attackByAbility override for every mapped ability', () => {
+  it('replaces legacy KayKit hunter donors with the target-specific T1 companion', () => {
     const block = manifestBlock('player_hunter: swims({', 'player_rogue: swims({');
-    expect(block).toContain('bow_anims.glb');
-    expect(block).toContain('hunter_ability_anims.glb');
-    expect(block).toContain('attackByAbility');
-    for (const clip of HUNTER_BAKED_CLIPS) expect(block).toContain(`'${clip}'`);
+    expect(block).toContain('hunter_t1_motion_anims.glb');
+    expect(block).toContain('clips: HUNTER_T1_MOTION_CLIPS');
+    expect(block).not.toContain('bow_anims.glb');
+    expect(block).not.toContain('hunter_ability_anims.glb');
   });
 
   it('every mapped ability id is a real hunter ability, and every referenced clip is shipped or an existing rig clip', () => {
-    const hunterBlock = manifestBlock('player_hunter: swims({', 'player_rogue: swims({');
-    const abilityStart = hunterBlock.indexOf('attackByAbility: {');
-    expect(abilityStart).toBeGreaterThanOrEqual(0);
-    const abilityEnd = hunterBlock.indexOf('\n      },', abilityStart);
-    expect(abilityEnd).toBeGreaterThan(abilityStart);
-    const block = hunterBlock.slice(abilityStart, abilityEnd);
-    const rows = [...block.matchAll(/^\s*([a-z_]+): '([A-Za-z_]+)',$/gm)];
-    expect(rows.length).toBeGreaterThan(10); // catches a wholesale accidental deletion
-    for (const [, abilityId, clip] of rows) {
+    const map = { ...HUNTER_T1_MOTION_CLIPS.attackByAbility, ...HUNTER_T1_MOTION_CLIPS.weaponMotions?.crossbow?.attackByAbility };
+    const shipped = clipNamesOf('public/models/chars/players/hunter_t1_motion_anims.glb');
+    expect(Object.keys(map).length).toBeGreaterThan(10);
+    for (const [abilityId, clip] of Object.entries(map)) {
       expect(
         ABILITIES[abilityId],
         `attackByAbility key '${abilityId}' is not a real ability id`,
       ).toBeTruthy();
       expect(ABILITIES[abilityId]?.class, `'${abilityId}' is not a hunter ability`).toBe('hunter');
       expect(
-        HUNTER_MAPPED_CLIPS,
+        shipped,
         `attackByAbility value '${clip}' for '${abilityId}' is not a shipped or existing clip`,
       ).toContain(clip);
     }
-    const map = Object.fromEntries(rows.map(([, id, clip]) => [id, clip]));
     // The three melee abilities each get their own bespoke swing.
     expect(map.raptor_strike).toBe('Hunter_Melee_Gut');
     expect(map.mongoose_bite).toBe('Hunter_Melee_Counter');
     expect(map.wing_clip).toBe('Hunter_Melee_Clip');
     // Long Draw names the slow full-draw clip; Volley gets its own barrage.
-    expect(map.aimed_shot).toBe('Hunter_Shot_LongDraw');
-    expect(map.volley).toBe('Hunter_Shot_Volley');
+    expect(map.aimed_shot).toBe('HunterT1_Crossbow_Release');
+    expect(map.volley).toBe('HunterT1_Crossbow_Shot');
     // The three aspects and Fevered Draw share the raw, unbaked Spellcast_Raise.
     expect(map.aspect_of_the_hawk).toBe('Spellcast_Raise');
     expect(map.aspect_of_the_monkey).toBe('Spellcast_Raise');
