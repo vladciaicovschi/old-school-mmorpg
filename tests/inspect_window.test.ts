@@ -65,6 +65,18 @@ describe('inspect_window: WCAG 2.2 AA focus trap (new to the extraction)', () =>
 });
 
 describe('inspect_window: thin painter, deps-only Hud access', () => {
+  it('resolves the inspected chest in the HUD preview boundary, keeping Mech priority', () => {
+    const hud = readFileSync(join(__dirname, '../src/ui/hud.ts'), 'utf8');
+    const start = hud.indexOf('private mountInspectPreview(');
+    const boundary = hud
+      .slice(start, hud.indexOf('private renderCharSkinPicker()', start))
+      .replace(/\s+/g, ' ');
+    expect(boundary).toContain(
+      'playerArmorVisualKey(params.cls, params.equipment, ITEMS, VISUALS)',
+    );
+    expect(boundary).toContain("preview.visualKey === 'player_mech' ? preview.visualKey");
+    expect(boundary).not.toContain('this.sim.equipment');
+  });
   it('imports no Sim / Hud / render layer and no Three', () => {
     expect(painter).not.toMatch(/from\s+['"]\.\.\/render\//);
     expect(painter).not.toMatch(/from\s+['"]three['"]/);
@@ -358,6 +370,7 @@ describe('inspect_window: the real painter over a Sim-shaped and a ranked entity
   // Hud dep, so the SELF-override pin below can see exactly what a hover reads.
   const tooltipCalls: Array<{ itemId: string; instance: ItemInstancePayload | undefined }> = [];
   const attachedTooltips: Array<{ el: HTMLElement; build: () => string }> = [];
+  const mountPreview = vi.fn();
   const openWith = (
     e: InspectEntity,
     selfStanding?: { curatorRank: number; owned: number; total: number } | null,
@@ -366,6 +379,7 @@ describe('inspect_window: the real painter over a Sim-shaped and a ranked entity
   ): HTMLElement => {
     tooltipCalls.length = 0;
     attachedTooltips.length = 0;
+    mountPreview.mockClear();
     const realCreate = document.createElement.bind(document);
     vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
       const el = realCreate(tag);
@@ -385,7 +399,7 @@ describe('inspect_window: the real painter over a Sim-shaped and a ranked entity
       restoreFocus: vi.fn(),
       slotName: (slot) => slot,
       showDevBadges: () => showDevBadges,
-      mountPreview: vi.fn(),
+      mountPreview,
       // The real icon resolver (what Hud.itemIcon binds), so the filled-slot
       // rows carry the `.item-icon q-<quality>` markup the row pins read; its
       // src is a data URL off the stubbed canvas (an empty-string src would
@@ -416,6 +430,20 @@ describe('inspect_window: the real painter over a Sim-shaped and a ranked entity
     // The card itself still painted, so the absence above is a real gate and not
     // a render that never happened.
     expect(root.querySelector('.inspect-name')?.textContent).toBe('Aurelia');
+  });
+
+  it('shows every warrior slot and passes authoritative chest gear to the preview boundary', () => {
+    const equipment = {
+      chest: 'warrior_knight_suit',
+      helmet: 'cryptbone_helm',
+      feet: 'oiled_boots',
+    };
+    const root = openWith({ ...baseEntity, equippedItems: equipment });
+    expect(root.querySelectorAll('.equip-slot').length).toBe(12);
+    expect(mountPreview).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ equipment }),
+    );
   });
 
   it('renders BOTH the line and the sigil for a rank-5 entity', () => {

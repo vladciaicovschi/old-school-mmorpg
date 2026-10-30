@@ -1,6 +1,7 @@
 import type { Collider } from './colliders';
 import type { WorldContent } from './types';
-import { groundHeight } from './world';
+import { isWickharborShip, wickharborShipCollider } from './wickharbor_boarding';
+import { groundHeight, WATER_LEVEL } from './world';
 
 type DecorProp = NonNullable<WorldContent['props']['decorProps']>[number];
 
@@ -28,6 +29,10 @@ function topY(seed: number, x: number, z: number, height: number): number {
 export function buildDecorPropColliders(seed: number, decorProps: DecorProp[]): Collider[] {
   const out: Collider[] = [];
   for (const d of decorProps) {
+    if (isWickharborShip(d.key)) {
+      out.push(wickharborShipCollider(d, WATER_LEVEL));
+      continue;
+    }
     const cameraTopY = topY(seed, d.x, d.z, d.h ?? 4);
     const stand =
       d.standableTop === undefined

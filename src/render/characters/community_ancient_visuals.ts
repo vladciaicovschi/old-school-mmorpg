@@ -1,0 +1,126 @@
+// Source-native clips only. Treant Warrior is a separate trial variety;
+// the existing treant bodies and production mappings are retained.
+import type { ClipMap, VisualDef } from './manifest';
+import { VERDANT_GOLEM_PALETTES } from './verdant_golem_palettes';
+
+const treant: ClipMap = {
+  idle: 'TreantWarrior_Idle_11',
+  combatIdle: 'TreantWarrior_Idle_5',
+  walk: 'TreantWarrior_Walking',
+  run: 'TreantWarrior_Running',
+  attack: ['TreantWarrior_Shield_Push_Left'],
+  death: 'TreantWarrior_Fall_Dead_from_Abdominal_Injury',
+  studioClips: [
+    'TreantWarrior_Fall_Dead_from_Abdominal_Injury',
+    'TreantWarrior_Idle_11',
+    'TreantWarrior_Idle_5',
+    'TreantWarrior_Left_Hook_from_Guard',
+    'TreantWarrior_Right_Hand_Sword_Slash',
+    'TreantWarrior_Running',
+    'TreantWarrior_Shield_Push_Left',
+    'TreantWarrior_Spartan_Kick',
+    'TreantWarrior_Walking',
+    'TreantWarrior_Weapon_Combo',
+    'TreantWarrior_Weapon_Combo_1',
+  ],
+};
+
+const warden: ClipMap = {
+  idle: 'WreckWarden_Axe_Breathe_and_Look_Around',
+  combatIdle: 'WreckWarden_Alert',
+  walk: 'WreckWarden_Walking',
+  run: 'WreckWarden_Running',
+  attack: ['WreckWarden_Shield_Push_Left'],
+  death: 'WreckWarden_Dead',
+  studioClips: [
+    'WreckWarden_Alert',
+    'WreckWarden_Axe_Breathe_and_Look_Around',
+    'WreckWarden_Charged_Spell_Cast',
+    'WreckWarden_Charged_Upward_Slash',
+    'WreckWarden_Dead',
+    'WreckWarden_Idle_5',
+    'WreckWarden_Left_Hook_from_Guard',
+    'WreckWarden_Right_Hand_Sword_Slash',
+    'WreckWarden_Running',
+    'WreckWarden_Shield_Push_Left',
+    'WreckWarden_Spartan_Kick',
+    'WreckWarden_Walking',
+    'WreckWarden_Weapon_Combo',
+    'WreckWarden_Weapon_Combo_1',
+  ],
+};
+
+const surface = {
+  authoredAtlas: true,
+  matte: true,
+  attackTimeScale: 1.35,
+  gait: { runEnter: 3.5, runExit: 3.0 },
+} as const;
+const golem: ClipMap = {
+  idle: 'VerdantGolem_Alert',
+  combatIdle: 'VerdantGolem_Idle_5',
+  walk: 'VerdantGolem_Slow_Orc_Walk',
+  run: 'VerdantGolem_Running',
+  attack: ['VerdantGolem_Attack'],
+  death: 'VerdantGolem_dying_backwards',
+  studioClips: [
+    'Charged_Ground_Slam',
+    'Charged_Upward_Slash',
+    'dying_backwards',
+    'Left_Hook_from_Guard',
+    'Right_Hand_Sword_Slash',
+    'Running',
+    'Shield_Push_Left',
+    'Spartan_Kick',
+    'Walking',
+    'Weapon_Combo',
+    'Weapon_Combo_1',
+    'Idle_5',
+    'Alert',
+    'Attack',
+    'Casual_Walk',
+    'Dead',
+    'Extra_Running',
+    'Skill_03',
+    'Slow_Orc_Walk',
+    'Extra_Walking',
+  ].map((name) => `VerdantGolem_${name}`),
+};
+export const COMMUNITY_ANCIENT_VISUALS: Record<string, VisualDef> = {
+  mob_treant_warrior: {
+    ...surface,
+    url: 'models/creatures/community_treant_warrior.glb',
+    height: 2.8,
+    clips: treant,
+    walkRef: 2.6911687819,
+    runRef: 5.8892183464,
+  },
+  mob_wreck_warden: {
+    ...surface,
+    url: 'models/creatures/community_wreck_warden.glb',
+    height: 2.6,
+    clips: warden,
+    walkRef: 3.3193119317,
+    runRef: 7.1644207538,
+  },
+  mob_ancient_guardian: {
+    ...surface,
+    attackTimeScale: 1.4,
+    url: 'models/creatures/community_verdant_golem.glb',
+    height: 3.4,
+    clips: golem,
+    atlasDye: VERDANT_GOLEM_PALETTES.guardian,
+    walkRef: 2.5710980578,
+    runRef: 5.094449575,
+  },
+  mob_waking_warden: {
+    ...surface,
+    attackTimeScale: 1.4,
+    url: 'models/creatures/community_verdant_golem.glb',
+    height: 3.4,
+    clips: golem,
+    atlasDye: VERDANT_GOLEM_PALETTES.warden,
+    walkRef: 3.2138725723,
+    runRef: 6.3680619687,
+  },
+};

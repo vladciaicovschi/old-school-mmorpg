@@ -163,16 +163,18 @@ void main() {`,
  * copied into userData. A no-op for a clone whose source never carried a dye,
  * so it can run unconditionally on the clone path.
  *
- * The isMeshStandardMaterial guard mirrors where the factories actually attach
- * the layer (recolored() dyes the standard GLB material, and the standard arm
- * of buildTintedClone re-attaches it): the low tier rebuilds rig materials as
- * Lambert from scratch and so never carries the SHADER SPEC at all. Low tier
- * is not left with no dye, though: recolored() also stashes a flat,
- * multiply-safe `userData.armorDyeFallbackHex` (assets.ts), which the
- * Lambert branch of buildTintedClone reads instead.
+ * Legacy outfit dyes attach only to standard materials; the low-tier outfit
+ * uses armorDyeFallbackHex instead. Selective atlas palettes explicitly opt
+ * into the shader on Lambert too, so teeth and clothing keep their colours
+ * on that tier and on its effect clones.
  */
 export function reapplyArmorDyeToClone(clone: THREE.Material): void {
-  if (!(clone as THREE.MeshStandardMaterial).isMeshStandardMaterial) return;
+  if (
+    !(clone as THREE.MeshStandardMaterial).isMeshStandardMaterial &&
+    !clone.userData.selectiveAtlasDye
+  ) {
+    return;
+  }
   const spec = (clone.userData as { armorDye?: ArmorDyeSpec }).armorDye;
   if (!spec) return;
   attachArmorDye(clone, spec);

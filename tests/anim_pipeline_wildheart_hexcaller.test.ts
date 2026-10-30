@@ -1,5 +1,6 @@
+// These legacy donor contracts remain valid for the retained comparison rigs.
 // Wildheart Basin round 2 (issue #2889): the Sunbone Hexcaller's own bespoke
-// attack/cast clip. mob_wildheart_hexcaller shared the literal TRIPO_BIPED_FULL_RIG
+// attack/cast clip. dev_legacy_wildheart_hexcaller shared the literal TRIPO_BIPED_FULL_RIG
 // ClipMap object, by reference, with the other 4 Wildheart Basin mobs; this clip is
 // authored by pose-sample-and-blend (scripts/anim/pose_blend.mjs,
 // scripts/build_wildheart_hexcaller_anims.mjs) off the rig's own Cast and Attack
@@ -42,10 +43,10 @@ describe('Sunbone Hexcaller bespoke attack/cast (issue #2889 round 2)', () => {
     expect(meshCountOf(glbPath)).toBe(0);
   });
 
-  it('gives mob_wildheart_hexcaller its own ClipMap (attack and cast) instead of mutating the shared TRIPO_BIPED_FULL_RIG constant', () => {
+  it('gives dev_legacy_wildheart_hexcaller its own ClipMap (attack and cast) instead of mutating the shared TRIPO_BIPED_FULL_RIG constant', () => {
     const hexcallerBlock = manifestBlock(
-      'mob_wildheart_hexcaller: {',
-      'mob_wildheart_beastmaster: {',
+      'dev_legacy_wildheart_hexcaller: {',
+      'dev_legacy_wildheart_beastmaster: {',
     );
     expect(hexcallerBlock).toContain('wildheart_hexcaller_ability_anims.glb');
     expect(hexcallerBlock).toContain('clips: WILDHEART_HEXCALLER');
@@ -63,7 +64,7 @@ describe('Sunbone Hexcaller bespoke attack/cast (issue #2889 round 2)', () => {
     expect(rigConstBlock).toContain("cast: 'Cast'");
 
     // Every other VisualDef still pointing at the shared constant is untouched: exactly 1
-    // remaining direct `clips: TRIPO_BIPED_FULL_RIG,` usage (mob_wildheart_beastmaster; 5
+    // remaining direct `clips: TRIPO_BIPED_FULL_RIG,` usage (dev_legacy_wildheart_beastmaster; 5
     // originally, minus the ones migrated to WILDHEART_HEXCALLER above, WILDHEART_STALKER,
     // WILDHEART_RAVAGER, and WILDHEART_HIGH_PRIEST, issue #2889 round 2).
     const remaining = [...MANIFEST_SRC.matchAll(/clips: TRIPO_BIPED_FULL_RIG,/g)].length;

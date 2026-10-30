@@ -1,0 +1,61 @@
+{
+  "items": [
+    {
+      "out": "models/wolf_run_fort/barracks.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/barracks.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/store.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/store.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/stone_tower.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/stone-tower.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/stone_gate.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/stone-gate.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/stone_wall.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/stone-wall.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/stone_corner.glb",
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/fort/stone-corner.glb",
+      "keepExtras": true,
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/dummy.glb",
+      "keepExtras": true,
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/props-pro-source/Exports/glTF/Dummy.gltf",
+      "maxTex": 512,
+      "type": "static"
+    },
+    {
+      "out": "models/wolf_run_fort/whetstone.glb",
+      "keepExtras": true,
+      "src": "D:/THE_GAME/artifacts/eastbrook-megakit-study/props-pro-source/Exports/glTF/Whetstone.gltf",
+      "maxTex": 512,
+      "type": "static"
+    }
+  ],
+  "source": "Approved Wolf Run garrison study; Medieval Village MegaKit Pro and Fantasy Props MegaKit Pro"
+}

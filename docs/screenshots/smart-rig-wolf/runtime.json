@@ -1,0 +1,59 @@
+{
+  "idle": {
+    "clip": "Wolf_Idle",
+    "time": 1.016666666666668,
+    "base": "idle",
+    "oneShot": false
+  },
+  "walk": {
+    "clip": "Wolf_Walk",
+    "time": 0.031639702652296806,
+    "base": "walk",
+    "oneShot": false
+  },
+  "run": {
+    "clip": "Wolf_Run",
+    "time": 0.13292681735020817,
+    "base": "run",
+    "oneShot": false
+  },
+  "attacks": [
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_Lunge",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_Lunge"
+  ],
+  "recovery": {
+    "clip": "Wolf_AlertLook",
+    "time": 0.6166666666666669,
+    "base": "idle",
+    "oneShot": true
+  },
+  "death": {
+    "clip": "Wolf_Death",
+    "time": 1.350000023841858,
+    "base": "idle",
+    "oneShot": false
+  },
+  "clips": [
+    "Wolf_AlertLook",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_CombatIdle",
+    "Wolf_Death",
+    "Wolf_Hit",
+    "Wolf_Howl",
+    "Wolf_Idle",
+    "Wolf_Lunge",
+    "Wolf_Run",
+    "Wolf_Trot",
+    "Wolf_Walk"
+  ],
+  "errors": []
+}

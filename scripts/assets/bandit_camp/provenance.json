@@ -1,0 +1,176 @@
+{
+  "study": "artifacts/eastbrook-megakit-study/bandit-camp",
+  "archives": {
+    "campaign": {
+      "archive": "D:\\THE_GAME\\bible\\models\\ambient\\constructions\\Meshy_AI_Medieval_Campaign_Ten_1021065829_texture_fbx.zip",
+      "sha256": "7ae9e293884af377eedf323f3bdcef0d58b8a5c1f59c8df77fcdae9c59eeb2f2",
+      "sourceTriangles": 1113004,
+      "sourceMin": [-94.8406982421875, -52.7301025390625, -74.20480346679688],
+      "sourceMax": [94.66709899902344, 51.505001068115234, 74.07780456542969],
+      "scale": 0.057562179849021074,
+      "bounds": {
+        "min": [-5.448318004608154, 0.000007992323096672749, -4.259323340490841],
+        "max": [5.441220760345459, 5.995950812761132, 4.261349421576046]
+      },
+      "triangles": 11978,
+      "bytes": 346380
+    },
+    "canvas": {
+      "archive": "D:\\THE_GAME\\bible\\models\\ambient\\constructions\\Meshy_AI_Canvas_Tent_1026123645_texture_fbx.zip",
+      "sha256": "be67387f88a8fe71df167e15a3dc09d0a306ce8604f3ce06fd018a49f9b79eb7",
+      "sourceTriangles": 535499,
+      "preparedTriangles": 514487,
+      "removedTriangles": 21012,
+      "cleanup": "Removed only disconnected scan fragments below 50 triangles; no loose props in this supplied canvas model. Opened the front hanging cloth for a full-height character entrance; kept structural posts and ropes.",
+      "sourceMin": [-95.0698013305664, -53.91619873046875, -86.50151824951172],
+      "sourceMax": [94.86959838867188, 53.823204040527344, 86.31250762939453],
+      "scale": 0.05940259399435716,
+      "bounds": {
+        "min": [-5.6374006271362305, 0.010174518863008686, -5.121845396713141],
+        "max": [5.63776969909668, 6.400137376559629, 5.116891535476569]
+      },
+      "triangles": 15999,
+      "bytes": 362920
+    },
+    "tavern": {
+      "archive": "D:\\THE_GAME\\bible\\models\\ambient\\constructions\\Meshy_AI_Medieval_Tavern_Tent_1026123728_texture_fbx.zip",
+      "sha256": "e002a01f5ccede0977e9a523b1b1cdb50e89b7d196d07e0594dff45cf73c1dea",
+      "sourceTriangles": 1977907,
+      "preparedTriangles": 1246460,
+      "removedTriangles": 731447,
+      "cleanup": "Removed the fused exterior tavern furniture, cart, barrels and shop sign; preserved the tent shell and guy ropes. Retained four complete original guy ropes; furniture-fused extra guy ropes and disconnected chips removed. Opened the front hanging cloth for a full-height character entrance; kept structural posts and ropes.",
+      "sourceMin": [-94.0999984741211, -56.90449905395508, -84.91629791259766],
+      "sourceMax": [94.5851058959961, 56.489402770996094, 82.56420135498047],
+      "scale": 0.07231429196961049,
+      "bounds": {
+        "min": [-6.807042121887207, 0.025145270106554207, -4.513284678228803],
+        "max": [6.278966903686523, 8.198559397655368, 4.57707261539311]
+      },
+      "triangles": 23998,
+      "bytes": 524328
+    },
+    "emerald": {
+      "archive": "D:\\THE_GAME\\bible\\models\\ambient\\constructions\\Meshy_AI_Emerald_Camp_Tent_20260303_texture_remesh_tri_fbx.zip",
+      "sha256": "7907a81e1c863eaa438064d02524e67950443d8003e67eac6d6f1d022945503e",
+      "sourceTriangles": 52594,
+      "preparedTriangles": 52594,
+      "removedTriangles": 0,
+      "cleanup": "None. Complete source model, including cloth, poles, ropes and existing entrances.",
+      "sourceMin": [-99.5426025390625, -60.30769348144531, -100.91520690917969],
+      "sourceMax": [99.5614013671875, 60.543190002441406, 100.7853012084961],
+      "scale": 0.05544022357845091,
+      "triangleBudget": 16000,
+      "triangleTarget": 16000,
+      "albedo": "albedo-camp.png",
+      "palette": "Desaturated warm grey-brown canvas; original wood, ropes, seams and wear retained",
+      "gangPalette": "burgundy",
+      "gangAccent": "#70464a",
+      "bounds": {
+        "min": [-5.519292025933257, 0.00018912511767332774, -5.5852227210998535],
+        "max": [5.519292025933257, 6.699811160984622, 5.591160297393799]
+      },
+      "triangles": 15968,
+      "bytes": 391212
+    },
+    "pavilion": {
+      "archive": "D:\\THE_GAME\\bible\\models\\ambient\\constructions\\Meshy_AI_A_realistically_shaped_medium_sized_20251225_texture_fbx.zip",
+      "sha256": "489c1e58f06b98439399eab2f1f2bb14e42103f2dd0c27dcfd1fced0d514320e",
+      "sourceTriangles": 1615597,
+      "preparedTriangles": 1615597,
+      "removedTriangles": 0,
+      "cleanup": "None. Complete source model, including cloth, poles, ropes and existing entrances.",
+      "sourceMin": [-94.04600524902344, -71.76219940185547, -94.1012954711914],
+      "sourceMax": [93.87279510498047, 70.60769653320312, 94.04859924316406],
+      "scale": 0.06953716868620419,
+      "triangleBudget": 48000,
+      "triangleTarget": 24000,
+      "albedo": "albedo-camp.png",
+      "palette": "Gang accent burgundy (#70464a); original aged light roof, warm wood, trim and wear retained",
+      "gangPalette": "burgundy",
+      "gangAccent": "#70464a",
+      "bounds": {
+        "min": [-6.528098548142974, 0.0011606470964160565, -6.535990238189697],
+        "max": [6.5325498230148, 9.889931569848837, 6.540621280670166]
+      },
+      "triangles": 41699,
+      "bytes": 824136
+    }
+  },
+  "models": [
+    {
+      "id": "emerald",
+      "source": "bandit-camp/emerald.glb",
+      "sha256": "15ec5acd56922c6c71294509e1f75acd283df6d1bdc2e5739eaca68cd1cb3f1b"
+    },
+    {
+      "id": "pavilion",
+      "source": "bandit-camp/pavilion.glb",
+      "sha256": "12590993a0b36ba427cb3060b6ed7810f8f423c03e5866659a9ab1aa7ef26f4e"
+    },
+    {
+      "id": "fire",
+      "source": "bandit-camp/campfire-logs.glb",
+      "sha256": "0bf9106e1162fbcfa853a1b31c0aca6d206834d305f914d3569ae5f353b74ba8"
+    },
+    {
+      "id": "rack",
+      "source": "bandit-camp/weapon-rack-filled.glb",
+      "sha256": "941e022141afab6a22c0b9e60fe0ee7872620e98738511859db59bb0995f2e0d"
+    },
+    {
+      "id": "chest",
+      "source": "props-pro-source/Exports/glTF/Chest_Wood.gltf",
+      "sha256": "b2022f69b76526fcbbc7f7a8855848beeefa6e8a6f55337d923bce38ed03b2b6"
+    },
+    {
+      "id": "stool",
+      "source": "props-pro-source/Exports/glTF/Stool.gltf",
+      "sha256": "55a111d97463adb71a59eddb8bbee777c5743e66a58403b06e869cc35e4da670"
+    },
+    {
+      "id": "chair",
+      "source": "props-pro-source/Exports/glTF/Chair_2.gltf",
+      "sha256": "84ec8f43e340dda0613956f2b62ce30637734a9725beac6f5a247bfa5af88146"
+    },
+    {
+      "id": "tripod",
+      "source": "props-pro-source/Exports/glTF/CampfireTripod.gltf",
+      "sha256": "85314d47a80c5b3f36e1315a6c4532f58681e4bc13cd2f228de52d1e1c2cb1d1"
+    },
+    {
+      "id": "crate",
+      "source": "props-pro-source/Exports/glTF/Crate_Wooden.gltf",
+      "sha256": "fb06d4b7b9bbfbb9dc51fa56ecff3fe7ba8e9142d643cabedd17a55d7ea46ee5"
+    },
+    {
+      "id": "barrel",
+      "source": "props-pro-source/Exports/glTF/Barrel.gltf",
+      "sha256": "cececb2da345addb21567e3ce1b30a9da071b689bcec59d85cd7a4446f531e87"
+    },
+    {
+      "id": "bag",
+      "source": "props-pro-source/Exports/glTF/Bag.gltf",
+      "sha256": "ccbf22a9162a2a2173caa7346e796b8f92a86dbbbe02a196530bf5642293e545"
+    },
+    {
+      "id": "bucket",
+      "source": "props-pro-source/Exports/glTF/Bucket_Wooden_1.gltf",
+      "sha256": "b4f93568d96d38dca162098e75fb3eb4ffaf5ff6e41f8f788476abd3be4984cf"
+    },
+    {
+      "id": "table",
+      "source": "props-pro-source/Exports/glTF/Workbench.gltf",
+      "sha256": "518fc5c955def18cfcb781b3b955da0e8edcf4f37830a21561ef32c03ad0397e"
+    },
+    {
+      "id": "bench",
+      "source": "props-pro-source/Exports/glTF/Bench.gltf",
+      "sha256": "0184d3b128a8a3bcc828d7bc6aa867038e2a85a339130ed015f2727e739f9ab7"
+    },
+    {
+      "id": "wood",
+      "source": "icemantle/woodpile-small.glb",
+      "sha256": "b0334e9e026c89c5e03820cbb5677a59d11b68665eb3d6b386860cdff4e81b20"
+    }
+  ]
+}

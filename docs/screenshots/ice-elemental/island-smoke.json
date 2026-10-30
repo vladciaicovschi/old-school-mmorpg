@@ -1,0 +1,126 @@
+{
+  "results": [
+    {
+      "element": "ice",
+      "templateId": "dev_ice_elemental",
+      "key": "npc_dev_ice_elemental",
+      "clip": "Ice_Idle",
+      "pos": {
+        "x": 812,
+        "y": 1.7000000000000002,
+        "z": -24
+      },
+      "meshes": [
+        {
+          "name": "Ashcaller",
+          "triangles": 9712,
+          "uv": true
+        },
+        {
+          "name": "IceCrystal_head",
+          "triangles": 36,
+          "uv": true
+        },
+        {
+          "name": "elemental_mist_head",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_mist_hand.l",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "IceCrystal_upperarml",
+          "triangles": 24,
+          "uv": true
+        },
+        {
+          "name": "elemental_mist_vfx_hand.r",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "IceCrystal_upperarmr",
+          "triangles": 24,
+          "uv": true
+        },
+        {
+          "name": "elemental_mist_vfx_core",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_mist_hips",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "character_far_mesh",
+          "triangles": 9796,
+          "uv": true
+        },
+        {
+          "name": "",
+          "triangles": 32,
+          "uv": true
+        }
+      ]
+    },
+    {
+      "element": "fire",
+      "templateId": "dev_fire_elemental",
+      "key": "npc_dev_fire_elemental",
+      "clip": "Fire_Idle",
+      "pos": {
+        "x": 812,
+        "y": 1.7000000000000002,
+        "z": 0
+      },
+      "meshes": [
+        {
+          "name": "Ashcaller",
+          "triangles": 9712,
+          "uv": true
+        },
+        {
+          "name": "elemental_flame_head",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_flame_hand.l",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_flame_vfx_hand.r",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_flame_vfx_core",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "elemental_flame_hips",
+          "triangles": 2,
+          "uv": true
+        },
+        {
+          "name": "character_far_mesh",
+          "triangles": 9712,
+          "uv": true
+        },
+        {
+          "name": "",
+          "triangles": 32,
+          "uv": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

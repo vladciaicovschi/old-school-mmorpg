@@ -1,0 +1,143 @@
+{
+  "facts": [
+    {
+      "id": "the_wreck_warden",
+      "key": "mob_wreck_warden",
+      "clips": [
+        "WreckWarden_Shield_Push_Left",
+        "WreckWarden_Alert"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "WreckWarden_Shield_Push_Left",
+          "time": 0.05
+        },
+        {
+          "ability": null,
+          "clip": "WreckWarden_Shield_Push_Left",
+          "time": 2.3499999999999996
+        },
+        {
+          "ability": null,
+          "clip": "WreckWarden_Shield_Push_Left",
+          "time": 4.6499999999999915
+        },
+        {
+          "ability": null,
+          "clip": "WreckWarden_Shield_Push_Left",
+          "time": 6.949999999999983
+        }
+      ],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "WreckWarden_Dead"
+    },
+    {
+      "id": "dev_treant_warrior",
+      "key": "mob_treant_warrior",
+      "clips": [
+        "TreantWarrior_Running",
+        "TreantWarrior_Shield_Push_Left",
+        "TreantWarrior_Idle_5"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "TreantWarrior_Shield_Push_Left",
+          "time": 0.2
+        },
+        {
+          "ability": null,
+          "clip": "TreantWarrior_Shield_Push_Left",
+          "time": 2.849999999999998
+        },
+        {
+          "ability": null,
+          "clip": "TreantWarrior_Shield_Push_Left",
+          "time": 5.4999999999999885
+        },
+        {
+          "ability": null,
+          "clip": "TreantWarrior_Shield_Push_Left",
+          "time": 8.14999999999998
+        }
+      ],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "TreantWarrior_Fall_Dead_from_Abdominal_Injury"
+    },
+    {
+      "id": "ancient_guardian",
+      "key": "mob_ancient_guardian",
+      "clips": [
+        "VerdantGolem_Running",
+        "VerdantGolem_Attack",
+        "VerdantGolem_Idle_5"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 0.1
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 2.3
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 4.499999999999992
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 6.699999999999984
+        }
+      ],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "VerdantGolem_dying_backwards"
+    },
+    {
+      "id": "waking_warden",
+      "key": "mob_waking_warden",
+      "clips": [
+        "VerdantGolem_Attack",
+        "VerdantGolem_Idle_5"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 0.05
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 2.1500000000000004
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 4.249999999999993
+        },
+        {
+          "ability": null,
+          "clip": "VerdantGolem_Attack",
+          "time": 6.349999999999985
+        }
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "VerdantGolem_dying_backwards"
+    }
+  ],
+  "errors": []
+}

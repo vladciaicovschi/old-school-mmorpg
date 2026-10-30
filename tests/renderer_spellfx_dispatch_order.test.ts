@@ -7,6 +7,8 @@
 // shape of the regression it guards: a mob-cue branch above the warrior plan
 // that broke unconditionally, so raised_guard's flourish lost its authored Block
 // gesture to a playFlourish() no-op on a rig with no flourish clip.
+
+import { Vector3 } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import { Renderer } from '../src/render/renderer';
 import { WARRIOR_SHOUT_COLORS } from '../src/render/warrior_cast_fx_core';
@@ -23,21 +25,35 @@ const SOURCE_ID = 7;
  *  touch, with the source entity's kind as the one variable. The per-ability
  *  painter declines here, which is the real path for 'flourish' (never in its
  *  claim set) and the defensive fallback for a specless 'shout'. */
-function dispatchHarness(sourceKind: 'player' | 'mob') {
+function dispatchHarness(sourceKind: 'player' | 'mob', joined = false) {
   const calls = {
     playFlourish: vi.fn(),
     pulseAt: vi.fn(),
     triggerAttack: vi.fn(),
+    triggerCastRelease: vi.fn(),
     playShoutFx: vi.fn(),
     nova: vi.fn(),
+    playMagicAutoAttack: vi.fn(() => true),
+    castPalmWorldPosition: vi.fn((out: Vector3) => {
+      out.set(3, 4, 5);
+      return true;
+    }),
+    projectileForEvent: vi.fn(),
   };
   const renderer = Object.create(Renderer.prototype) as EventHarness & Record<string, unknown>;
   renderer.abilityVfx = { handleSpellfx: vi.fn().mockReturnValue(false) };
-  renderer.vfx = { nova: calls.nova };
+  renderer.vfx = { nova: calls.nova, projectileForEvent: calls.projectileForEvent };
   renderer.pulseAt = calls.pulseAt;
   renderer.triggerAttack = calls.triggerAttack;
+  renderer.triggerCastRelease = calls.triggerCastRelease;
   renderer.playShoutFx = calls.playShoutFx;
-  renderer.activeVisual = () => ({ playFlourish: calls.playFlourish });
+  renderer.activeVisual = () => ({
+    playFlourish: calls.playFlourish,
+    supportsJoinedCastRelease: joined,
+    isMidOneShot: false,
+    playMagicAutoAttack: calls.playMagicAutoAttack,
+    castPalmWorldPosition: calls.castPalmWorldPosition,
+  });
   renderer.views = new Map([[SOURCE_ID, {}]]);
   renderer.sim = {
     player: { id: 1 },
@@ -58,6 +74,81 @@ function cue(fx: 'shout' | 'flourish', ability?: string): SimEvent {
 }
 
 describe('handleEvent spellfx: the mob engage cue never swallows a warrior castFx', () => {
+  it.each(['mage', 'priest', 'druid', 'warlock'])(
+    'starts %s magical auto animation at launch, independently of registry claims',
+    (cls) => {
+      const { harness, calls } = dispatchHarness('player', true);
+      const renderer = harness as unknown as {
+        sim: { entities: Map<number, unknown> };
+        abilityVfx: { handleSpellfx: ReturnType<typeof vi.fn> };
+      };
+      renderer.sim.entities.set(SOURCE_ID, { id: SOURCE_ID, kind: 'player', templateId: cls });
+      renderer.abilityVfx.handleSpellfx.mockReturnValue(true);
+      const event = {
+        type: 'spellfx',
+        sourceId: SOURCE_ID,
+        targetId: 9,
+        fx: 'projectile',
+        school: 'arcane',
+        wand: true,
+      } as const;
+      harness.handleEvent(event);
+      expect(calls.playMagicAutoAttack).toHaveBeenCalledOnce();
+      expect(calls.projectileForEvent).toHaveBeenCalledExactlyOnceWith(event, new Vector3(3, 4, 5));
+      expect(calls.triggerAttack).not.toHaveBeenCalled();
+      expect(calls.triggerCastRelease).not.toHaveBeenCalled();
+      expect(renderer.abilityVfx.handleSpellfx).not.toHaveBeenCalled();
+    },
+  );
+  it('keeps an ordinary ability projectile off the magical-auto route', () => {
+    const { harness, calls } = dispatchHarness('player', true);
+    const event = {
+      type: 'spellfx',
+      sourceId: SOURCE_ID,
+      targetId: 9,
+      fx: 'projectile',
+      school: 'frost',
+      ability: 'frostbolt',
+    } as const;
+    harness.handleEvent(event);
+    expect(calls.playMagicAutoAttack).not.toHaveBeenCalled();
+    expect(calls.castPalmWorldPosition).not.toHaveBeenCalled();
+    expect(calls.projectileForEvent).toHaveBeenCalledExactlyOnceWith(event);
+  });
+  it.each([SOURCE_ID, 9])(
+    'releases an opted-in mob unknown-spec friendly cast before the no-nova early exit (%s)',
+    (targetId) => {
+      const { harness, calls } = dispatchHarness('mob', true);
+      harness.handleEvent({
+        type: 'spellfx',
+        sourceId: SOURCE_ID,
+        targetId,
+        school: 'holy',
+        fx: 'selfCast',
+        ability: 'unknown_test_heal',
+      } as SimEvent);
+      expect(calls.triggerCastRelease).toHaveBeenCalledWith(
+        SOURCE_ID,
+        'unknown_test_heal',
+        targetId,
+      );
+      expect(calls.triggerAttack).not.toHaveBeenCalled();
+      expect(calls.nova).not.toHaveBeenCalled();
+    },
+  );
+  it('does not add a release or a nova to an unopted unknown friendly cue', () => {
+    const { harness, calls } = dispatchHarness('mob');
+    harness.handleEvent({
+      type: 'spellfx',
+      sourceId: SOURCE_ID,
+      targetId: SOURCE_ID,
+      school: 'holy',
+      fx: 'selfCast',
+      ability: 'unknown_test_heal',
+    } as SimEvent);
+    expect(calls.triggerCastRelease).not.toHaveBeenCalled();
+    expect(calls.nova).not.toHaveBeenCalled();
+  });
   it("routes a player's raised_guard flourish to its authored gesture clip", () => {
     const { harness, calls } = dispatchHarness('player');
 

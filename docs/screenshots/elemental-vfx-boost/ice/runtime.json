@@ -1,0 +1,110 @@
+{
+  "low": false,
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "type": "MeshPhysicalMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "IceCrystal_head",
+      "type": "MeshPhysicalMaterial",
+      "triangles": 36,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_head",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_hand.l",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "IceCrystal_upperarml",
+      "type": "MeshPhysicalMaterial",
+      "triangles": 24,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_upperarm.l",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_vfx_hand.r",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "IceCrystal_upperarmr",
+      "type": "MeshPhysicalMaterial",
+      "triangles": 24,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_upperarm.r",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_vfx_core",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_rock_low1",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_rock_low11",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_mist_hips",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "character_far_mesh",
+      "triangles": 9796,
+      "uv": true
+    },
+    {
+      "name": "character_shadow_proxy",
+      "type": "MeshBasicMaterial",
+      "triangles": 9796,
+      "uv": true
+    },
+    {
+      "name": "",
+      "type": "MeshBasicMaterial",
+      "triangles": 32,
+      "uv": true
+    }
+  ],
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Ice_Idle",
+    "Ice_Move"
+  ],
+  "particles": 112,
+  "billboardCount": 9,
+  "errors": []
+}

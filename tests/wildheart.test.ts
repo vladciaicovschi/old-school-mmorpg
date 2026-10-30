@@ -39,7 +39,7 @@ import {
   weaponDpsBudget,
 } from '../src/sim/item_budget';
 import { expectedStatBudget, itemLevel, primaryStatSum } from '../src/sim/item_level';
-import { combatProfileForMob, scaledDefaultMobMeleeRange } from '../src/sim/mob_combat';
+import { combatProfileForMob } from '../src/sim/mob_combat';
 import type { InstanceSlot } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
 import type { Entity, WorldContent } from '../src/sim/types';
@@ -98,8 +98,9 @@ describe('Wildheart Basin dungeon content', () => {
     expect(MOBS.wildheart_beastmaster.warcry?.name).toBe('Call of the Hunt');
     for (const id of Object.keys(WILDHEART_MOBS)) {
       const visual = VISUALS[`mob_${id}`];
-      expect(visual?.yaw, `${id} faces the game +Z movement axis`).toBe(-Math.PI / 2);
-      expect(visual?.clips.run, `${id} carries its run clip`).toBe('Run');
+      // The replacement uses its native forward axis and native run alias.
+      expect(visual?.yaw ?? 0, `${id} uses its native forward axis`).toBe(0);
+      expect(visual?.clips.run, `${id} carries its run clip`).toBe('Wildheart_Run');
     }
   });
 
@@ -278,19 +279,16 @@ describe('Wildheart Basin dungeon content', () => {
     // bare toBeGreaterThan(RUN_SPEED) would have accepted that regression, so
     // pin the margin.
     expect(MOBS.wildheart_ravager.moveSpeed).toBeGreaterThanOrEqual(RUN_SPEED + 0.5);
-    // The bruisers keep their scale-derived reach but close to visual contact
-    // before trading, so landed hits no longer read as whiffs. Reach is driven
-    // by the AUTHORED scale (mob_combat.ts hardcodes it per the Nythraxis
-    // pattern), so read it from the template: a scale retune that forgets the
-    // profile now fails here instead of drifting silently.
+    // These visually smaller bruisers close inside player melee range and no
+    // longer inherit the reach of their previous oversized models.
     const ravagerScale = MOBS.wildheart_ravager.scale ?? 1;
     const ravager = combatProfileForMob('wildheart_ravager', ravagerScale);
-    expect(ravager.meleeRange).toBe(scaledDefaultMobMeleeRange(ravagerScale));
-    expect(ravager.desiredRange).toBe(5);
+    expect(ravager.meleeRange).toBeCloseTo(5.125, 4);
+    expect(ravager.desiredRange).toBeCloseTo(4.1, 4);
     const beastmasterScale = MOBS.wildheart_beastmaster.scale ?? 1;
     const beastmaster = combatProfileForMob('wildheart_beastmaster', beastmasterScale);
-    expect(beastmaster.meleeRange).toBe(scaledDefaultMobMeleeRange(beastmasterScale));
-    expect(beastmaster.desiredRange).toBe(5.5);
+    expect(beastmaster.meleeRange).toBeCloseTo(5.378125, 4);
+    expect(beastmaster.desiredRange).toBeCloseTo(4.3025, 4);
   });
 
   it('lets the Idol Guardian phase through the ruin-ring relic debris', () => {

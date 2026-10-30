@@ -1,0 +1,10 @@
+{
+  "items": [{
+    "src": "tmp/asset_src/community_sporeling/community_sporeling.glb",
+    "out": "models/creatures/community_sporeling.glb",
+    "type": "character",
+    "maxTex": 2048,
+    "keepExtras": true,
+    "keepClips": ["Sporeling_Idle", "Sporeling_CombatIdle", "Sporeling_Walk", "Sporeling_Run", "Sporeling_Attack", "Sporeling_Kick", "Sporeling_Spin", "Sporeling_Combo", "Sporeling_Death", "Sporeling_Hit"]
+  }]
+}

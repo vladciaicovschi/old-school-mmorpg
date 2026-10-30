@@ -8,100 +8,103 @@
 // painted item WebP in the same change. Values name both the GLBs and their legacy JPG previews
 // under public/ui/weapons/, which remain useful to Armory and asset-pipeline tooling.
 export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
-  // ---- swords (sword_a..g + the adv set; legendary/epic kept distinct) --------
-  worn_sword: 'sword_a',
-  eastbrook_arming_sword: 'sword_b',
-  ironedge_longsword: 'sword_b', // crafted (weaponcrafting tier 2)
-  thorium_warblade: 'adv_sword_1handed', // crafted; warblades share adv_sword_1handed
-  gravecaller_blade: 'sword_c',
-  emberfang_warblade: 'sword_c',
-  redbrook_blade: 'sword_d',
-  crossroads_saber: 'sword_d',
-  mistcallers_edge: 'sword_e',
-  zealotsbane_blade: 'sword_e',
-  hoarfrost_edge: 'sword_e', // rift rare 1H sword (heroic clone rides heroicOf)
-  veilsteel_blade: 'sword_b', // realm uncommon 1H sword (arming-sword sibling)
-  kingsbane_last_oath: 'sword_f', // LEGENDARY: the flaming blade (exclusive)
-  valeborn_spellblade: 'sword_g', // crystalline
-  maldrecs_soulbinder: 'sword_g',
-  highwatch_warblade: 'adv_sword_1handed',
-  duskforged_warblade: 'adv_sword_1handed', // crafted apex 1H (masterwrought); warblades share adv_sword_1handed
-  eastbrook_greatsword: 'adv_sword_2handed',
-  highwatch_greatsword: 'adv_sword_2handed',
-  verlans_oathblade: 'adv_sword_2handed',
-  moonscale_saber: 'adv_sword_2handed',
-  wyrmfang_greatblade: 'adv_sword_2handed_color', // EPIC: gold greatblade
-  deathless_greatblade: 'adv_sword_2handed_color', // EPIC: Heroic Nythraxis greatblade
-  final_argument_greatblade: 'adv_sword_2handed_color', // WARFARE Strength main hand
-  bonewrought_greatsword: 'adv_sword_2handed_color', // EPIC: Nythraxis raid 2H
-  direfang_greatblade: 'adv_sword_2handed_color', // EPIC: Nythraxis hunter 2H
-  wildheart_tuskblade: 'adv_sword_2handed_color',
-  greatfang_of_the_basin: 'adv_sword_2handed_color', // EPIC: Heroic Zulgar 2H
+  dev_hunter_practice_bow: 'meshy/arcane_longbow_1',
+  dev_hunter_practice_crossbow: 'meshy/test_crossbow_1',
+  // ---- swords (separate Meshy one-handed and two-handed tiers) ---------------
+  worn_sword: 'meshy/ascendance_sword_1',
+  eastbrook_arming_sword: 'meshy/ascendance_sword_2',
+  ironedge_longsword: 'meshy/ascendance_sword_2', // crafted (weaponcrafting tier 2)
+  thorium_warblade: 'meshy/ascendance_sword_3', // crafted 1H fallback
+  gravecaller_blade: 'meshy/ascendance_sword_3',
+  emberfang_warblade: 'meshy/ascendance_sword_3',
+  redbrook_blade: 'meshy/ascendance_sword_4',
+  crossroads_saber: 'meshy/ascendance_sword_4',
+  mistcallers_edge: 'meshy/ascendance_sword_5',
+  zealotsbane_blade: 'meshy/ascendance_sword_5',
+  hoarfrost_edge: 'meshy/ascendance_sword_5', // rift rare 1H sword (heroic clone rides heroicOf)
+  veilsteel_blade: 'meshy/ascendance_sword_2', // realm uncommon 1H sword (arming-sword sibling)
+  kingsbane_last_oath: 'meshy/ascendance_sword_5',
+  valeborn_spellblade: 'meshy/ascendance_sword_5',
+  maldrecs_soulbinder: 'meshy/ascendance_sword_5',
+  highwatch_warblade: 'meshy/ascendance_sword_4',
+  duskforged_warblade: 'meshy/ascendance_sword_5', // crafted apex 1H (masterwrought)
+  // These names do not imply two-handed mechanics: their actual item hand is 1H.
+  verlans_oathblade: 'meshy/ascendance_sword_3',
+  moonscale_saber: 'meshy/ascendance_sword_4',
+  final_argument_greatblade: 'meshy/ascendance_sword_5', // WARFARE Strength one-hander
+  eastbrook_greatsword: 'meshy/claymore_sword_1', // plain starter two-hander
+  highwatch_greatsword: 'meshy/claymore_sword_2',
+  wyrmfang_greatblade: 'meshy/claymore_sword_3',
+  bonewrought_greatsword: 'meshy/claymore_sword_4',
+  direfang_greatblade: 'meshy/claymore_sword_4',
+  wildheart_tuskblade: 'meshy/claymore_sword_4',
+  deathless_greatblade: 'meshy/claymore_sword_5',
+  greatfang_of_the_basin: 'meshy/claymore_sword_5',
 
-  // ---- daggers (only 4 models for ~21 daggers; spread as evenly as art allows)-
-  rusty_dagger: 'dagger_a',
-  vale_carving_knife: 'dagger_a',
-  mirefen_skinner: 'dagger_a',
-  ironvein_pickblade: 'dagger_a',
-  caravan_warden_dirk: 'dagger_a',
-  icevein_dirk: 'dagger_b',
-  keen_dirk: 'dagger_b',
-  whetted_iron_dirk: 'dagger_b', // crafted; dirks share dagger_b
-  mistbinder_kris: 'dagger_b',
-  mirejaw_biteblade: 'dagger_b',
-  cultist_flayer: 'dagger_b',
-  tideglass_dirk: 'dagger_b',
-  duskfang_dirk: 'dagger_b', // realm uncommon dirk (dirks share dagger_b)
-  moggers_shiv: 'dagger_c',
-  widowfang_dirk: 'dagger_c',
-  nhalias_dirgeblade: 'dagger_c',
-  riptide_dirk: 'dagger_c',
-  gutripper_shiv: 'dagger_c',
-  fang_of_korzul: 'dagger_c',
-  gravewardens_shiv: 'adv_dagger',
-  drownedmoon_kris: 'adv_dagger',
-  sloomtooth_tidefang: 'adv_dagger',
-  skullsplitter_dirk: 'adv_dagger',
-  first_blood_razor: 'adv_dagger', // WARFARE Agility main hand
-  mirejaw_fang_knife: 'dagger_a', // knives share dagger_a (vale_carving_knife)
-  drowned_choir_fang: 'dagger_c', // fangs share dagger_c (fang_of_korzul)
-  mistcallers_fang: 'adv_dagger', // EPIC: Heroic Vael dagger
-  wildheart_fangknife: 'adv_dagger',
-  voidsong_dirk: 'adv_dagger', // LEGENDARY: the S-rift caster dirk
-  // New rogue epics/rare, each a distinct unused dagger model (not adv_dagger)
-  rimefang: 'ice_fang', // EPIC: Rift frost dagger
-  marrowpoint: 'redskull_dagger', // EPIC: Cindraleth (Drakelands) bone dagger
-  duskwhisper: 'purple_dagger', // EPIC: Wildheart Beastmaster shadow dagger
+  // ---- daggers (five Meshy tiers, from plain iron to the ornate arcane blade) --
+  rusty_dagger: 'meshy/arcane_dagger_1',
+  vale_carving_knife: 'meshy/arcane_dagger_1',
+  mirefen_skinner: 'meshy/arcane_dagger_1',
+  ironvein_pickblade: 'meshy/arcane_dagger_1',
+  caravan_warden_dirk: 'meshy/arcane_dagger_1',
+  icevein_dirk: 'meshy/arcane_dagger_2',
+  keen_dirk: 'meshy/arcane_dagger_2',
+  whetted_iron_dirk: 'meshy/arcane_dagger_2', // crafted; dirks share dagger_b
+  mistbinder_kris: 'meshy/arcane_dagger_2',
+  mirejaw_biteblade: 'meshy/arcane_dagger_2',
+  cultist_flayer: 'meshy/arcane_dagger_2',
+  tideglass_dirk: 'meshy/arcane_dagger_2',
+  duskfang_dirk: 'meshy/arcane_dagger_2', // realm uncommon dirk (dirks share dagger_b)
+  moggers_shiv: 'meshy/arcane_dagger_3',
+  widowfang_dirk: 'meshy/arcane_dagger_3',
+  nhalias_dirgeblade: 'meshy/arcane_dagger_4',
+  riptide_dirk: 'meshy/arcane_dagger_4',
+  gutripper_shiv: 'meshy/arcane_dagger_4',
+  fang_of_korzul: 'meshy/arcane_dagger_4',
+  gravewardens_shiv: 'meshy/arcane_dagger_5',
+  drownedmoon_kris: 'meshy/arcane_dagger_5',
+  sloomtooth_tidefang: 'meshy/arcane_dagger_5',
+  skullsplitter_dirk: 'meshy/arcane_dagger_5',
+  first_blood_razor: 'meshy/arcane_dagger_5', // WARFARE Agility main hand
+  mirejaw_fang_knife: 'meshy/arcane_dagger_1', // knives share dagger_a (vale_carving_knife)
+  drowned_choir_fang: 'meshy/arcane_dagger_4', // fangs share dagger_c (fang_of_korzul)
+  mistcallers_fang: 'meshy/arcane_dagger_5', // EPIC: Heroic Vael dagger
+  wildheart_fangknife: 'meshy/arcane_dagger_5',
+  voidsong_dirk: 'meshy/arcane_dagger_5', // LEGENDARY: the S-rift caster dirk
+  // Meshy has a complete five-tier dagger family, including the end-game fallback.
+  rimefang: 'meshy/arcane_dagger_5',
+  marrowpoint: 'meshy/arcane_dagger_5',
+  duskwhisper: 'meshy/arcane_dagger_5',
   // heroic_duskwhisper inherits the base variant via heroicOf (auto-generated);
   // it must NOT have its own entry here (held_weapon_models pins that).
-  boneglass_shiv: 'whittler_s_knife', // RARE: Basin Lv17-19 filler
+  boneglass_shiv: 'meshy/arcane_dagger_3', // RARE: Basin Lv17-19 filler
 
-  // ---- staves (staff_a..d + adv_staff + adv_druid_staff) ----------------------
-  gnarled_staff: 'staff_a',
-  hickory_shortstaff: 'staff_a',
-  fenreed_staff: 'staff_a',
-  craghorn_staff: 'staff_b',
-  apprentice_staff: 'staff_b',
-  staff_of_drowned_prayers: 'staff_b',
-  gravecaller_staff: 'staff_c', // "Staff of the Hollow"
-  mirejaw_oracle_staff: 'staff_c',
-  hollow_vigil_staff: 'staff_c',
-  emberwood_staff: 'staff_d',
-  ironvein_lantern_staff: 'staff_d',
-  elderwood_battle_staff: 'staff_d', // crafted (weaponcrafting tier 3)
-  staff_of_velkhar: 'staff_d',
-  vaels_mist_staff: 'adv_staff',
-  ogre_bonecharm_staff: 'adv_staff',
-  briarroot_staff: 'staff_b', // feral ladder, zone-1 rung
-  cragthorn_greatstaff: 'staff_c', // feral ladder, zone-3 rung
-  nightfangs_greatstaff: 'adv_staff', // feral ladder, Korzul epic rung
-  gleamwood_stave: 'staff_b', // realm uncommon caster stave (apprentice-tier)
-  staff_of_the_gravewyrm: 'adv_druid_staff',
-  deathless_heartwood: 'adv_druid_staff', // LEGENDARY druid relic (antler staff)
-  drovers_staff: 'adv_druid_staff',
-  emberglass_warstaff: 'adv_staff', // WARFARE caster main hand
-  lunar_tide_greatstaff: 'adv_staff', // EPIC: Heroic Ysolei staff
-  wildheart_hexwood_staff: 'adv_druid_staff',
+  // ---- staves (the longer Meshy five-tier family) ------------------------------
+  gnarled_staff: 'meshy/arcane_staff_1',
+  hickory_shortstaff: 'meshy/arcane_staff_1',
+  fenreed_staff: 'meshy/arcane_staff_1',
+  craghorn_staff: 'meshy/arcane_staff_2',
+  apprentice_staff: 'meshy/arcane_staff_2',
+  staff_of_drowned_prayers: 'meshy/arcane_staff_2',
+  gravecaller_staff: 'meshy/arcane_staff_3', // "Staff of the Hollow"
+  mirejaw_oracle_staff: 'meshy/arcane_staff_3',
+  hollow_vigil_staff: 'meshy/arcane_staff_3',
+  emberwood_staff: 'meshy/arcane_staff_4',
+  ironvein_lantern_staff: 'meshy/arcane_staff_4',
+  elderwood_battle_staff: 'meshy/arcane_staff_4', // crafted (weaponcrafting tier 3)
+  staff_of_velkhar: 'meshy/arcane_staff_4',
+  vaels_mist_staff: 'meshy/arcane_staff_5',
+  ogre_bonecharm_staff: 'meshy/arcane_staff_5',
+  briarroot_staff: 'meshy/arcane_staff_1', // feral ladder, zone-1 rung
+  cragthorn_greatstaff: 'meshy/arcane_staff_3', // feral ladder, zone-3 rung
+  nightfangs_greatstaff: 'meshy/arcane_staff_5', // feral ladder, Korzul epic rung
+  gleamwood_stave: 'meshy/arcane_staff_2', // realm uncommon caster stave
+  staff_of_the_gravewyrm: 'meshy/arcane_staff_5',
+  deathless_heartwood: 'meshy/arcane_staff_5',
+  drovers_staff: 'meshy/arcane_staff_3',
+  emberglass_warstaff: 'meshy/arcane_staff_4', // WARFARE caster main hand
+  lunar_tide_greatstaff: 'meshy/arcane_staff_5',
+  wildheart_hexwood_staff: 'meshy/arcane_staff_5',
 
   // ---- wands (1H caster: scepters / rods / foci) ------------------------------
   drowned_tide_scepter: 'wand_a',
@@ -112,46 +115,40 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
   stormcallers_focus: 'wand_b', // EPIC: Nythraxis raid caster focus
   scepter_of_the_deathless_court: 'adv_wand', // EPIC: Nythraxis raid scepter
 
-  // ---- maces (only 4 hammer models for ~9 maces) -----------------------------
-  training_mace: 'hammer_a',
-  bronzework_mace: 'hammer_a',
-  copper_flanged_mace: 'hammer_a', // crafted (weaponcrafting tier 1)
-  moggers_copper_cudgel: 'hammer_b',
-  crag_warden_cudgel: 'hammer_b',
-  voss_sanctified_mace: 'hammer_c',
-  bogiron_mace: 'hammer_c',
-  bristleback_maul: 'hammer_d',
-  brutoks_maul: 'hammer_d',
-  drownedmoon_maul: 'hammer_d',
-  nhalias_bell_maul: 'hammer_d', // mauls share hammer_d
-  ironshod_maul: 'hammer_d', // crafted 2H maul
-  fenshadow_maul: 'hammer_d', // feral ladder maul
-  gravewyrm_thornmaul: 'hammer_d', // feral ladder maul
-  maul_of_the_scourged_wilds: 'hammer_d', // feral ladder, Nythraxis raid rung
-  wildsoul_maul: 'hammer_d', // feral ladder, heroic-only ilvl 31 rung
-  ridgebreaker: 'hammer_d', // crafted apex 2H maul (masterwrought); mauls share hammer_d
+  // ---- maces (actual handedness chooses Lion 1H or Dwarven 2H) ---------------
+  training_mace: 'meshy/lion_warhammer_1h_1',
+  bronzework_mace: 'meshy/lion_warhammer_1h_1',
+  copper_flanged_mace: 'meshy/lion_warhammer_1h_1', // crafted starter
+  bristleback_maul: 'meshy/lion_warhammer_1h_2', // mechanically one-handed despite the id
+  voss_sanctified_mace: 'meshy/lion_warhammer_1h_2',
+  bogiron_mace: 'meshy/lion_warhammer_1h_2',
+  moggers_copper_cudgel: 'meshy/lion_warhammer_1h_3',
+  crag_warden_cudgel: 'meshy/lion_warhammer_1h_3',
+  brutoks_maul: 'meshy/lion_warhammer_1h_4', // mechanically one-handed
+  drownedmoon_maul: 'meshy/lion_warhammer_1h_4',
+  nhalias_bell_maul: 'meshy/lion_warhammer_1h_5',
+  ironshod_maul: 'meshy/dwarven_warhammer_2h_1', // crafted 2H on-ramp
+  fenshadow_maul: 'meshy/dwarven_warhammer_2h_2',
+  gravewyrm_thornmaul: 'meshy/dwarven_warhammer_2h_3',
+  maul_of_the_scourged_wilds: 'meshy/dwarven_warhammer_2h_4',
+  wildsoul_maul: 'meshy/dwarven_warhammer_2h_5',
+  ridgebreaker: 'meshy/dwarven_warhammer_2h_5', // crafted apex (masterwrought)
   varkhul_forgebreaker: 'hammer_varkhul', // LEGENDARY: Ignivar raid (animated engine maul)
 
-  // ---- axes (axe_a..d + adv axes) --------------------------------------------
-  rusty_hatchet: 'axe_a',
-  copper_bearded_axe: 'axe_a', // crafted (weaponcrafting tier 1)
-  drogmars_skullcleaver: 'axe_b',
-  deacons_cleaver: 'axe_c',
-  gorraks_cruel_chopper: 'axe_d',
-  arcanite_war_axe: 'axe_d', // crafted (weaponcrafting tier 3)
-  gorraks_cleaver: 'adv_axe_1handed',
-  tradesman_hatchet: 'adv_axe_1handed',
-  gravewyrm_cleaver: 'adv_axe_1handed', // EPIC: Heroic Korzul axe
-  // Nythraxis gap-fill one-handers (content/zone3.ts): the violet-gem KayKit
-  // set, the Deathless Court's bone-and-violet palette in hand (purple_dagger
-  // is shared with Duskwhisper; the sword and axe were unused). Their
-  // inventory icons are in-engine stills of these models
-  // (scripts/render_weapon_still_icons.mjs over the jobs table in
-  // docs/achievements/nythraxis-gap-weapon-renders-2026-09-04/).
-  courtiers_bonefang: 'purple_dagger',
-  thornpeak_wardblade: 'purple_sword',
-  gravecourt_hewer: 'purple_axe',
-  pitlords_cleaver: 'adv_axe_1handed', // rift rare cleaver (heroic clone rides heroicOf)
+  // ---- axes (Meshy one-handed tiers; two-handed art remains separate) ---------
+  rusty_hatchet: 'meshy/evolution_axe_1',
+  copper_bearded_axe: 'meshy/evolution_axe_1', // crafted (weaponcrafting tier 1)
+  drogmars_skullcleaver: 'meshy/evolution_axe_2',
+  deacons_cleaver: 'meshy/evolution_axe_3',
+  gorraks_cruel_chopper: 'meshy/evolution_axe_4',
+  arcanite_war_axe: 'meshy/evolution_axe_4', // crafted (weaponcrafting tier 3)
+  gorraks_cleaver: 'meshy/evolution_axe_5',
+  tradesman_hatchet: 'meshy/evolution_axe_5',
+  gravewyrm_cleaver: 'meshy/evolution_axe_5', // EPIC: Heroic Korzul axe
+  courtiers_bonefang: 'meshy/arcane_dagger_5',
+  thornpeak_wardblade: 'meshy/ascendance_sword_5',
+  gravecourt_hewer: 'meshy/evolution_axe_5',
+  pitlords_cleaver: 'meshy/evolution_axe_5', // rift rare cleaver (heroic clone rides heroicOf)
   tunnelkings_spade: 'adv_axe_2handed',
 
   // ---- polearms --------------------------------------------------------------
@@ -162,13 +159,13 @@ export const ITEM_WEAPON_VARIANTS: Record<string, string> = {
 
   // ---- Crucible of the Last Spring raid weapons (ignivar_loot.ts) -------------
   // Held models reuse shipped GLBs.
-  forgefathers_warhammer: 'hammer_c',
-  springtouched_crozier: 'hammer_c',
-  cinderfang_kris: 'adv_dagger',
-  slagrender_cleaver: 'adv_axe_1handed',
-  anvilguard_blade: 'adv_sword_1handed',
-  heart_of_the_end_greatblade: 'adv_sword_2handed_color',
-  staff_of_the_last_spring: 'adv_staff',
-  forgefire_spire: 'adv_staff',
+  forgefathers_warhammer: 'meshy/lion_warhammer_1h_5',
+  springtouched_crozier: 'meshy/lion_warhammer_1h_5',
+  cinderfang_kris: 'meshy/arcane_dagger_5',
+  slagrender_cleaver: 'meshy/evolution_axe_5',
+  anvilguard_blade: 'meshy/ascendance_sword_5',
+  heart_of_the_end_greatblade: 'meshy/claymore_sword_5',
+  staff_of_the_last_spring: 'meshy/arcane_staff_5',
+  forgefire_spire: 'meshy/arcane_staff_5',
   wand_of_quenched_sparks: 'adv_wand',
 };

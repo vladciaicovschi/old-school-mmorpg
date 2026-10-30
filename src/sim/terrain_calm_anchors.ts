@@ -20,6 +20,7 @@
 // caller-supplied probe: no Math.random, no clocks, no state. Every host
 // computes the same rings from the one shipped WORLD_SEED.
 
+import { BANDIT_CAMP_OLD_SUPPLIES, banditCampCalmProps } from './bandit_camp';
 import { OVERWORLD_GRAVEYARDS } from './content/graveyards';
 import { MAILBOXES } from './content/mailboxes';
 import { MUSTER_BOARDS, NOTICEBOARDS } from './content/noticeboards';
@@ -199,7 +200,10 @@ export function collectCalmAnchorPads(): CalmPadRow[] {
   for (const board of MUSTER_BOARDS) pad('musterBoard', board.x, board.z, 3.5, 9);
   // Quest/collectible ground objects (every authored position).
   for (const def of GROUND_OBJECTS) {
-    for (const p of def.positions) pad('groundObject', p.x, p.z, 3.5, 9);
+    for (const [i, position] of def.positions.entries()) {
+      const p = def.itemId === 'supply_crate' && i < 4 ? BANDIT_CAMP_OLD_SUPPLIES[i] : position;
+      pad('groundObject', p.x, p.z, 3.5, 9);
+    }
   }
   // Hand-authored tunnel mouths: the terrain must meet the carved opening.
   for (const tunnel of TUNNELS) {
@@ -257,9 +261,10 @@ export function collectCalmAnchorPads(): CalmPadRow[] {
   for (const stall of PROPS.stalls) pad('stall', stall.x, stall.z, 3, 9);
   for (const mine of PROPS.mines) pad('mine', mine.x, mine.z, 6, 13);
   for (const dock of PROPS.docks) pad('dock', dock.x, dock.z, 8, 16);
-  for (const tent of PROPS.tents) pad('tent', tent.x, tent.z, 4, 10);
-  for (const [cx, cz] of PROPS.crates) pad('crate', cx, cz, 2.5, 7.5);
-  for (const [cx, cz] of PROPS.campfires) pad('campfire', cx, cz, 2.5, 7.5);
+  const campCalm = banditCampCalmProps(PROPS);
+  for (const tent of campCalm.tents) pad('tent', tent.x, tent.z, 4, 10);
+  for (const [cx, cz] of campCalm.crates) pad('crate', cx, cz, 2.5, 7.5);
+  for (const [cx, cz] of campCalm.campfires) pad('campfire', cx, cz, 2.5, 7.5);
   for (const [cx, cz] of PROPS.mudHuts) pad('mudHut', cx, cz, 5, 11);
   for (const ring of PROPS.ruinRings) {
     pad('ruinRing', ring.x, ring.z, ring.ringR + 2, ring.ringR + 9);

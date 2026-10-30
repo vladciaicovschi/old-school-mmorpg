@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_treant_warrior/community_treant_warrior.glb",
+      "out": "models/creatures/community_treant_warrior.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+        "TreantWarrior_Idle_11",
+        "TreantWarrior_Idle_5",
+        "TreantWarrior_Left_Hook_from_Guard",
+        "TreantWarrior_Right_Hand_Sword_Slash",
+        "TreantWarrior_Running",
+        "TreantWarrior_Shield_Push_Left",
+        "TreantWarrior_Spartan_Kick",
+        "TreantWarrior_Walking",
+        "TreantWarrior_Weapon_Combo",
+        "TreantWarrior_Weapon_Combo_1"
+      ]
+    }
+  ]
+}

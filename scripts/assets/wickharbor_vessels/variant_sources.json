@@ -1,0 +1,406 @@
+{
+  "acceptedBlendSha256": "b4d57e57cb45d5a08da8b2a6d2950a274c1ce1c8a79b6b46066808e7e982db44",
+  "authoringSources": {
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\village-pro-source\\glTF\\Balcony_Simple_Straight.gltf": "00b028b35860ca9a8c6af8e4b1946ca39a4b6cac29a8d283164f41f1d27f0360",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\village-pro-source\\glTF\\Balcony_Simple_Straight.bin": "1b74ba722dfd97e4511a630cb709e1be73bb08070cd4ad8c5d59c62f55bd51a2",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\village-pro-source\\glTF\\T_WoodTrim_Normal.png": "5847623e4ed6c206e59f32d1718ee75dcb2b49a1d55ede7ef70a254739caf4a8",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\village-pro-source\\glTF\\T_WoodTrim_BaseColor.png": "a59f410b07a9bc5f0664df3ba7a2c1e37acffc7979795911f3fc8730ab60e33e",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\village-pro-source\\glTF\\T_WoodTrim_Roughness.png": "e888464fd4199d458d8cf39e00fa07d56f8a0bcb658aa03b4a7c95d466ceefa3",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Crate_Wooden.gltf": "fb06d4b7b9bbfbb9dc51fa56ecff3fe7ba8e9142d643cabedd17a55d7ea46ee5",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Crate_Wooden.bin": "7ae016386790e5998fbdf1656a5dc53a3f1374c3525b22798d84397a36ae937b",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Furniture_Normal.png": "3340c4cc47ff06d5e94a2dbe2a2a12d914d0ef055fcf66f63d876666bd160e42",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Furniture_BaseColor.png": "075fbc9ec2fabc15732bd4025b6f63a0b25762df38440d06bf30437565d39bab",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Furniture_ORM.png": "7bf417e82baf313793c5791bf48cdc8e573f1f7136197785bf0eb235cb0f8153",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Metal_Normal.png": "ab7315c864c9a9e6d716c940a599928506e1569d3b0c9085f8f1a64ec520d790",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Metal_BaseColor.png": "50422bbda9661effc259caf8b386224cac4b5ca811d2c5b3b8b25ae8efc714db",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Metal_ORM.png": "7407bccfc39ca74ecd68a61217395959bf56ac2063e6c93b384b11f07f5687c5",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Bag.gltf": "ccbf22a9162a2a2173caa7346e796b8f92a86dbbbe02a196530bf5642293e545",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Bag.bin": "6bf8ad99d0048264aa37157a92f394ab32aeeb5270dab2f3f76282b1eda4e012",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Cloth_Normal.png": "e91a490f94bc00707fb5be08045e316b4a18962f07a3b6e3d9d7c2058cfc51c0",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Cloth_BaseColor.png": "c4d0e14506e05cc56e7ca62ebeeb2d45de055296a55e5a8e9c1330ff8ff1833a",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Cloth_ORM.png": "9bdaa0d1be8c393b07d6185165d73c7cddc058d5c123ad49449945f45a7e0c0d",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel.gltf": "cececb2da345addb21567e3ce1b30a9da071b689bcec59d85cd7a4446f531e87",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel.bin": "d8f963e2975b6bbd4b631b5cd7ade2d5dfc76dfb9f8387e2d398935f5405cf20",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel_Dark.gltf": "fffba2bd545a2234c5ac267226849c87d02d23636587459dd34abfdcb6ec9095",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel_Dark.bin": "2093dabb9e24ab5574a9cf95cbb768461f94ce2b5c75c376127edf9eb3c51569",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\FarmCrate_Apple.gltf": "56de7097ddbf22801537f38b77335b2d85a4e2d24bdcbe9ceb1b3bc666a24997",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\FarmCrate_Apple.bin": "9f764bf2f2e960ec32ff31198f6b54787391e71bec166da59372f596299d24e6",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Props_Normal.png": "c4b28a8ba8efe3108cd11356ecab67e8bf75a10cebf29c78ee7724552c305a3e",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Props_BaseColor.png": "75225a4ccfd8cc358c871de7a7a3cab7118ef197419a88464e807b81716215c8",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\T_Trim_Props_ORM.png": "2d83d8df79aca2c8f630d389b43f09113afee98e746dfd42ddc3ce3302a136a2",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\FarmCrate_Carrot.gltf": "6aaa750a27ee652c8090fe7415f1bdd1d66b17d6cfecafc0767559afaef3248c",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\FarmCrate_Carrot.bin": "18858970c67b1e6fb2d174a4b4a946787cdde12b42d88cce9d846fc4ede50e19",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel_Apples.gltf": "07520279b51bd1cc75b6db88b572b5ec445fc7decf0b115fba5c9e20f8caa111",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Barrel_Apples.bin": "774c97d9b2b2faa04ef40c681540ca3be74a3942ab8bbbd8c8d260b66121f8c8",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Bag_2.gltf": "0cac74cf290001ac99e1ab390d33bacfd4fc687d76e43575770f622238434e5d",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Bag_2.bin": "a793f7282e616e4fb3cc89aa95821ab3a4a28ac2414a6c10825e895471d19398",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Chest_Wood.gltf": "b2022f69b76526fcbbc7f7a8855848beeefa6e8a6f55337d923bce38ed03b2b6",
+    "D:\\THE_GAME\\artifacts\\eastbrook-megakit-study\\props-pro-source\\Exports\\glTF\\Chest_Wood.bin": "e4aea6f99587b8ad9ac08fac82013c55111a748c2e3febedbc4de3e301253901"
+  },
+  "variants": [
+    {
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Simple_Straight"],
+        "aft": ["Balcony_Simple_Straight"]
+      },
+      "id": "blue",
+      "sailTint": [0.42, 0.63, 0.77, 1],
+      "foreRail": "simple",
+      "aftRail": "simple",
+      "cargo": [
+        {
+          "name": "Fore_Crate_A",
+          "source": "Crate_Wooden",
+          "min": [-4.2918195724487305, 0.17603008449077606, 3.430000066757202],
+          "max": [-3.6095192432403564, 0.9241235852241516, 4.188440799713135],
+          "routeClearanceM": 0.6353083279736728
+        },
+        {
+          "name": "Fore_Crate_B",
+          "source": "Crate_Wooden",
+          "min": [-3.3016409873962402, 0.17190256714820862, 3.430000066757202],
+          "max": [-2.5940020084381104, 0.9277901649475098, 4.188440799713135],
+          "routeClearanceM": 0.8918936476981822
+        },
+        {
+          "name": "Fore_Bag",
+          "source": "Bag",
+          "min": [-4.112626075744629, 1.2039012908935547, 3.430000066757202],
+          "max": [-3.593503713607788, 1.6387370824813843, 4.070000171661377],
+          "routeClearanceM": 1.6786819985814163
+        },
+        {
+          "name": "Aft_Barrel_Port",
+          "source": "Barrel",
+          "min": [9.919624328613281, 0.8496248126029968, 3.430000066757202],
+          "max": [10.580375671386719, 1.5103751420974731, 4.28000020980835],
+          "routeClearanceM": 0.8496248126029968
+        },
+        {
+          "name": "Aft_Barrel_Starboard",
+          "source": "Barrel_Dark",
+          "min": [9.917634010314941, -1.512365460395813, 3.430000066757202],
+          "max": [10.582365989685059, -0.847634494304657, 4.28000020980835],
+          "routeClearanceM": 0.847634494304657
+        }
+      ],
+      "retainedPosts": 8,
+      "roles": {
+        "railings": {
+          "triangles": 21472,
+          "objects": 26
+        },
+        "cargo": {
+          "triangles": 7118,
+          "objects": 6
+        }
+      },
+      "patchSha256": "b18b9511e9e22ede00dde25feb089a87a5b44d1275fffb54b815b80c8e9ef6c3",
+      "key": "wickSailingShipBlue",
+      "file": "sailing-variants-v2/output/blue.patch.glb",
+      "rig": "brigantine",
+      "style": "blue",
+      "outputFile": "sailship-blue.glb",
+      "triangles": 157390
+    },
+    {
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Cross_Straight"],
+        "aft": ["Balcony_Cross_Straight"]
+      },
+      "id": "ochre",
+      "sailTint": [0.88, 0.71, 0.42, 1],
+      "foreRail": "cross",
+      "aftRail": "cross",
+      "cargo": [
+        {
+          "name": "Fore_Apples",
+          "source": "FarmCrate_Apple",
+          "min": [-4.309999942779541, 0.3411206305027008, 3.430000066757202],
+          "max": [-3.5899999141693115, 0.7588793635368347, 3.6758954524993896],
+          "routeClearanceM": 0.7962235002225674
+        },
+        {
+          "name": "Fore_Carrots",
+          "source": "FarmCrate_Carrot",
+          "min": [-3.309999942779541, 0.2640385925769806, 3.430000066757202],
+          "max": [-2.5899999141693115, 0.8359614014625549, 3.8448970317840576],
+          "routeClearanceM": 0.9752264289025513
+        },
+        {
+          "name": "Fore_Apple_Barrel",
+          "source": "Barrel_Apples",
+          "min": [-4.268316745758057, 1.1016833782196045, 3.430000066757202],
+          "max": [-3.631683349609375, 1.738316535949707, 4.25],
+          "routeClearanceM": 1.5572609883031014
+        },
+        {
+          "name": "Fore_Bag",
+          "source": "Bag_2",
+          "min": [-3.2265853881835938, 1.1779747009277344, 3.430000066757202],
+          "max": [-2.678598642349243, 1.6505193710327148, 3.990000009536743],
+          "routeClearanceM": 1.875351344538408
+        },
+        {
+          "name": "Aft_Chest",
+          "source": "Chest_Wood",
+          "min": [9.936150550842285, -1.5099999904632568, 3.430000066757202],
+          "max": [10.563849449157715, -0.8500000238418579, 4.090000152587891],
+          "routeClearanceM": 0.8500000238418579
+        },
+        {
+          "name": "Aft_Bag",
+          "source": "Bag",
+          "min": [9.989720344543457, 0.9841856360435486, 3.430000066757202],
+          "max": [10.49808120727539, 1.4256845712661743, 4.070000171661377],
+          "routeClearanceM": 0.9841856360435486
+        }
+      ],
+      "retainedPosts": 8,
+      "roles": {
+        "railings": {
+          "triangles": 3688,
+          "objects": 26
+        },
+        "cargo": {
+          "triangles": 17572,
+          "objects": 9
+        }
+      },
+      "patchSha256": "6cb8fe3f2f1a5538e92bf973461676b72c71e1e1165410bc7f14f25dab1d2cfa",
+      "key": "wickSailingShipOchre",
+      "file": "sailing-variants-v2/output/ochre.patch.glb",
+      "rig": "brig",
+      "style": "ochre",
+      "outputFile": "sailship-ochre.glb",
+      "triangles": 164112
+    },
+    {
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Simple_Straight"],
+        "aft": ["Balcony_Simple_Straight"]
+      },
+      "id": "russet",
+      "sailTint": [0.76, 0.39, 0.29, 1],
+      "foreRail": "simple",
+      "aftRail": "simple",
+      "cargo": [
+        {
+          "name": "Fore_Barrel_A",
+          "source": "Barrel",
+          "min": [-4.426080226898193, 0.2539196014404297, 3.430000066757202],
+          "max": [-3.7739195823669434, 0.906080424785614, 4.269999980926514],
+          "routeClearanceM": 0.7039196014404296
+        },
+        {
+          "name": "Fore_Barrel_B",
+          "source": "Barrel_Dark",
+          "min": [-3.4784553050994873, 0.25154468417167664, 3.430000066757202],
+          "max": [-2.821544647216797, 0.9084553122520447, 4.269999980926514],
+          "routeClearanceM": 0.9153125970952112
+        },
+        {
+          "name": "Fore_Barrel_C",
+          "source": "Barrel_Dark",
+          "min": [-4.427223205566406, 1.0927766561508179, 3.430000066757202],
+          "max": [-3.7727766036987305, 1.7472233772277832, 4.269999980926514],
+          "routeClearanceM": 1.5427766561508178
+        },
+        {
+          "name": "Fore_Barrel_D",
+          "source": "Barrel",
+          "min": [-3.4748573303222656, 1.0951426029205322, 3.430000066757202],
+          "max": [-2.8251426219940186, 1.7448573112487793, 4.269999980926514],
+          "routeClearanceM": 1.7313464477034322
+        },
+        {
+          "name": "Aft_Crate",
+          "source": "Crate_Wooden",
+          "min": [9.879080772399902, -1.5800000429153442, 3.430000066757202],
+          "max": [10.620919227600098, -0.7799999713897705, 4.249936103820801],
+          "routeClearanceM": 0.7799999713897705
+        },
+        {
+          "name": "Aft_Barrel",
+          "source": "Barrel_Dark",
+          "min": [9.767634391784668, 0.9176344871520996, 3.430000066757202],
+          "max": [10.432365417480469, 1.5823655128479004, 4.28000020980835],
+          "routeClearanceM": 0.8691094420774301
+        }
+      ],
+      "retainedPosts": 8,
+      "roles": {
+        "railings": {
+          "triangles": 21472,
+          "objects": 26
+        },
+        "cargo": {
+          "triangles": 7156,
+          "objects": 7
+        }
+      },
+      "patchSha256": "c2c63caa5c0f38af3ec1e897313e1f7293f62fb68192f385539405aefa693dc2",
+      "key": "wickSailingShipRusset",
+      "file": "sailing-variants-v2/output/russet.patch.glb",
+      "rig": "brigantine",
+      "style": "russet",
+      "outputFile": "sailship-russet.glb",
+      "triangles": 157428
+    },
+    {
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Simple_Straight"],
+        "aft": ["Balcony_Simple_Straight"]
+      },
+      "id": "ketch-blue",
+      "sailTint": [0.42, 0.63, 0.77, 1],
+      "foreRail": "simple",
+      "aftRail": "simple",
+      "cargo": [
+        {
+          "name": "Fore_Crate_A",
+          "source": "Crate_Wooden",
+          "min": [-4.2918195724487305, 0.17603008449077606, 3.430000066757202],
+          "max": [-3.6095192432403564, 0.9241235852241516, 4.188440799713135],
+          "routeClearanceM": 0.6353083279736728
+        },
+        {
+          "name": "Fore_Crate_B",
+          "source": "Crate_Wooden",
+          "min": [-3.3016409873962402, 0.17190256714820862, 3.430000066757202],
+          "max": [-2.5940020084381104, 0.9277901649475098, 4.188440799713135],
+          "routeClearanceM": 0.8918936476981822
+        },
+        {
+          "name": "Fore_Bag",
+          "source": "Bag",
+          "min": [-4.112626075744629, 1.2039012908935547, 3.430000066757202],
+          "max": [-3.593503713607788, 1.6387370824813843, 4.070000171661377],
+          "routeClearanceM": 1.6786819985814163
+        },
+        {
+          "name": "Aft_Barrel_Port",
+          "source": "Barrel",
+          "min": [9.919624328613281, 0.8496248126029968, 3.430000066757202],
+          "max": [10.580375671386719, 1.5103751420974731, 4.28000020980835],
+          "routeClearanceM": 0.8496248126029968
+        },
+        {
+          "name": "Aft_Barrel_Starboard",
+          "source": "Barrel_Dark",
+          "min": [9.917634010314941, -1.512365460395813, 3.430000066757202],
+          "max": [10.582365989685059, -0.847634494304657, 4.28000020980835],
+          "routeClearanceM": 0.847634494304657
+        }
+      ],
+      "retainedPosts": 8,
+      "roles": {
+        "railings": {
+          "triangles": 21472,
+          "objects": 26
+        },
+        "cargo": {
+          "triangles": 7118,
+          "objects": 6
+        }
+      },
+      "patchSha256": "b18b9511e9e22ede00dde25feb089a87a5b44d1275fffb54b815b80c8e9ef6c3",
+      "key": "wickKetchBlue",
+      "file": "sailing-variants-v2/output/blue.patch.glb",
+      "rig": "ketch",
+      "style": "blue",
+      "outputFile": "ketch-blue.glb",
+      "triangles": 156686
+    },
+    {
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Cross_Straight"],
+        "aft": ["Balcony_Cross_Straight"]
+      },
+      "id": "ketch-ochre",
+      "sailTint": [0.88, 0.71, 0.42, 1],
+      "foreRail": "cross",
+      "aftRail": "cross",
+      "cargo": [
+        {
+          "name": "Fore_Apples",
+          "source": "FarmCrate_Apple",
+          "min": [-4.309999942779541, 0.3411206305027008, 3.430000066757202],
+          "max": [-3.5899999141693115, 0.7588793635368347, 3.6758954524993896],
+          "routeClearanceM": 0.7962235002225674
+        },
+        {
+          "name": "Fore_Carrots",
+          "source": "FarmCrate_Carrot",
+          "min": [-3.309999942779541, 0.2640385925769806, 3.430000066757202],
+          "max": [-2.5899999141693115, 0.8359614014625549, 3.8448970317840576],
+          "routeClearanceM": 0.9752264289025513
+        },
+        {
+          "name": "Fore_Apple_Barrel",
+          "source": "Barrel_Apples",
+          "min": [-4.268316745758057, 1.1016833782196045, 3.430000066757202],
+          "max": [-3.631683349609375, 1.738316535949707, 4.25],
+          "routeClearanceM": 1.5572609883031014
+        },
+        {
+          "name": "Fore_Bag",
+          "source": "Bag_2",
+          "min": [-3.2265853881835938, 1.1779747009277344, 3.430000066757202],
+          "max": [-2.678598642349243, 1.6505193710327148, 3.990000009536743],
+          "routeClearanceM": 1.875351344538408
+        },
+        {
+          "name": "Aft_Chest",
+          "source": "Chest_Wood",
+          "min": [9.936150550842285, -1.5099999904632568, 3.430000066757202],
+          "max": [10.563849449157715, -0.8500000238418579, 4.090000152587891],
+          "routeClearanceM": 0.8500000238418579
+        },
+        {
+          "name": "Aft_Bag",
+          "source": "Bag",
+          "min": [9.989720344543457, 0.9841856360435486, 3.430000066757202],
+          "max": [10.49808120727539, 1.4256845712661743, 4.070000171661377],
+          "routeClearanceM": 0.9841856360435486
+        }
+      ],
+      "retainedPosts": 8,
+      "roles": {
+        "railings": {
+          "triangles": 3688,
+          "objects": 26
+        },
+        "cargo": {
+          "triangles": 17572,
+          "objects": 9
+        }
+      },
+      "patchSha256": "6cb8fe3f2f1a5538e92bf973461676b72c71e1e1165410bc7f14f25dab1d2cfa",
+      "key": "wickKetchOchre",
+      "file": "sailing-variants-v2/output/ochre.patch.glb",
+      "rig": "ketch",
+      "style": "ochre",
+      "outputFile": "ketch-ochre.glb",
+      "triangles": 149356
+    },
+    {
+      "foreRail": "cross",
+      "aftRail": "cross",
+      "retainedPosts": 8,
+      "cargo": [],
+      "panelSourcesByZone": {
+        "fore": ["Balcony_Cross_Straight"],
+        "aft": ["Balcony_Cross_Straight"]
+      },
+      "id": "brig",
+      "key": "wickBrig",
+      "file": null,
+      "rig": "brig",
+      "style": "linen",
+      "outputFile": "brig.glb",
+      "patchSha256": null,
+      "triangles": 153624
+    }
+  ]
+}

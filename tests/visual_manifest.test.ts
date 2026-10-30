@@ -537,11 +537,11 @@ describe('character visual manifest', () => {
       .registerExtensions(ALL_EXTENSIONS)
       .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
     for (const key of [
-      'mob_wildheart_stalker',
-      'mob_wildheart_ravager',
-      'mob_wildheart_hexcaller',
-      'mob_wildheart_beastmaster',
-      'mob_wildheart_high_priest',
+      'dev_legacy_wildheart_stalker',
+      'dev_legacy_wildheart_ravager',
+      'dev_legacy_wildheart_hexcaller',
+      'dev_legacy_wildheart_beastmaster',
+      'dev_legacy_wildheart_high_priest',
     ] as const) {
       const visual = VISUALS[key];
       const doc = await io.read(`public/${visual.url}`);

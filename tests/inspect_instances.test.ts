@@ -257,6 +257,7 @@ describe('inspect_window painter instance threading (source pins)', () => {
     expect(view).toContain(
       'buildPaperdollView(input.equippedItems, items, input.equippedInstances)',
     );
+    expect(view).not.toContain("input.cls === 'warrior',");
   });
 
   it('the slot row reads the cell payload and forwards it into the tooltip builder', () => {

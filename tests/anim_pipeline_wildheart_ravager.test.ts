@@ -1,5 +1,6 @@
+// These legacy donor contracts remain valid for the retained comparison rigs.
 // Wildheart Basin round 2 (issue #2889): the Bloodmane Ravager's own bespoke attack.
-// mob_wildheart_ravager shared the literal TRIPO_BIPED_FULL_RIG ClipMap object, by
+// dev_legacy_wildheart_ravager shared the literal TRIPO_BIPED_FULL_RIG ClipMap object, by
 // reference, with the other 4 Wildheart Basin mobs; this clip is authored by
 // pose-sample-and-blend (scripts/anim/pose_blend.mjs, scripts/build_wildheart_ravager_anims.mjs)
 // off the rig's own Attack and Hit donors. Follows the shipped-GLB-plus-manifest-source
@@ -42,8 +43,8 @@ describe('Bloodmane Ravager bespoke attack (issue #2889 round 2)', () => {
     expect(meshCountOf(glbPath)).toBe(0);
   });
 
-  it('gives mob_wildheart_ravager its own ClipMap instead of mutating the shared TRIPO_BIPED_FULL_RIG constant', () => {
-    const ravagerBlock = manifestBlock('mob_wildheart_ravager: {', 'mob_wildheart_hexcaller: {');
+  it('gives dev_legacy_wildheart_ravager its own ClipMap instead of mutating the shared TRIPO_BIPED_FULL_RIG constant', () => {
+    const ravagerBlock = manifestBlock('dev_legacy_wildheart_ravager: {', 'dev_legacy_wildheart_hexcaller: {');
     expect(ravagerBlock).toContain('wildheart_ravager_ability_anims.glb');
     expect(ravagerBlock).toContain('clips: WILDHEART_RAVAGER');
     expect(ravagerBlock).not.toContain('clips: TRIPO_BIPED_FULL_RIG,');
@@ -55,9 +56,9 @@ describe('Bloodmane Ravager bespoke attack (issue #2889 round 2)', () => {
     expect(rigConstBlock).toContain("attack: ['Attack']");
 
     // Every other VisualDef still pointing at the shared constant is untouched: exactly 1
-    // remaining direct `clips: TRIPO_BIPED_FULL_RIG,` usage (mob_wildheart_beastmaster; 5
+    // remaining direct `clips: TRIPO_BIPED_FULL_RIG,` usage (dev_legacy_wildheart_beastmaster; 5
     // originally, minus the one migrated to WILDHEART_RAVAGER above, minus
-    // mob_wildheart_stalker's, mob_wildheart_hexcaller's, and mob_wildheart_high_priest's
+    // dev_legacy_wildheart_stalker's, dev_legacy_wildheart_hexcaller's, and dev_legacy_wildheart_high_priest's
     // parallel migrations to WILDHEART_STALKER, WILDHEART_HEXCALLER, and
     // WILDHEART_HIGH_PRIEST, issue #2889 round 2).
     const remaining = [...MANIFEST_SRC.matchAll(/clips: TRIPO_BIPED_FULL_RIG,/g)].length;

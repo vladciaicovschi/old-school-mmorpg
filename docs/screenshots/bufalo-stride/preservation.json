@@ -1,0 +1,24 @@
+[
+  {
+    "animal": "bufalo",
+    "revised": [
+      "Buffalo_Walk",
+      "Buffalo_Trot",
+      "Buffalo_Run",
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_Charge"
+    ],
+    "preserved": [
+      "Buffalo_Idle",
+      "Buffalo_CombatIdle",
+      "Buffalo_Hit",
+      "Buffalo_Death",
+      "Buffalo_Bellow",
+      "Buffalo_AlertLook",
+      "Buffalo_Graze"
+    ],
+    "geometryIdentical": true,
+    "texturesIdentical": true
+  }
+]

@@ -1,0 +1,67 @@
+{
+  "facts": [
+    {
+      "key": "mob_ghost",
+      "low": false,
+      "visible": true,
+      "bones": 67,
+      "clips": [
+        "Ghost_Attack",
+        "Ghost_CombatIdle",
+        "Ghost_Death",
+        "Ghost_Hit",
+        "Ghost_Idle",
+        "Ghost_Move"
+      ],
+      "material": "MeshStandardMaterial"
+    },
+    {
+      "key": "mob_glub",
+      "low": false,
+      "visible": true,
+      "bones": 22,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ],
+      "material": "MeshStandardMaterial"
+    },
+    {
+      "key": "mob_ghost",
+      "low": true,
+      "visible": true,
+      "bones": 67,
+      "clips": [
+        "Ghost_Attack",
+        "Ghost_CombatIdle",
+        "Ghost_Death",
+        "Ghost_Hit",
+        "Ghost_Idle",
+        "Ghost_Move"
+      ],
+      "material": "MeshLambertMaterial"
+    },
+    {
+      "key": "mob_glub",
+      "low": true,
+      "visible": true,
+      "bones": 22,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ],
+      "material": "MeshLambertMaterial"
+    }
+  ],
+  "errors": []
+}

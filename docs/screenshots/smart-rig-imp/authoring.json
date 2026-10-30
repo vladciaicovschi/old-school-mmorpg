@@ -1,0 +1,89 @@
+{
+  "source_sha256": "74db4af0ccabaa67cc98b2d0e5b718948f1d4d883ccd080b1ee3171aa16e996f",
+  "bones": 56,
+  "height": 1.65,
+  "hover": 0.6,
+  "idle_height": 1.659653589129448,
+  "idle_floor": 0.0714615136384964,
+  "death_floor": -0.5320488824085756,
+  "clips": {
+    "Imp_Hover": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.27651205608069196
+    },
+    "Imp_CombatHover": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.291676532225444
+    },
+    "Imp_Fly": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.28307296570699836
+    },
+    "Imp_FlyFast": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2691354650941328
+    },
+    "Imp_ClawLeft": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.23225028380084412
+    },
+    "Imp_ClawRight": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2322507085730849
+    },
+    "Imp_Dive": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.1920256430541559
+    },
+    "Imp_Hit": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2978902882106588
+    },
+    "Imp_Death": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": null
+    },
+    "Imp_Threat": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.27651205608069196
+    },
+    "Imp_AlertLook": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.27651205608069196
+    },
+    "Imp_Cast": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.24634263007257845
+    },
+    "Imp_CastRelease": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.24850024794652487
+    }
+  }
+}

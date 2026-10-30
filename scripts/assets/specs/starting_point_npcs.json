@@ -1,0 +1,16 @@
+{
+  "defaults": {
+    "type": "character",
+    "maxTex": 1024
+  },
+  "items": [
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_bursar_wick/starting_point_bursar_wick.glb", "out": "models/chars/npcs/starting_point_bursar_wick.glb", "keepClips": ["StartingPoint_BursarWick_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_drillmaster_rook/starting_point_drillmaster_rook.glb", "out": "models/chars/npcs/starting_point_drillmaster_rook.glb", "keepClips": ["StartingPoint_DrillmasterRook_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_ferryman_odo/starting_point_ferryman_odo.glb", "out": "models/chars/npcs/starting_point_ferryman_odo.glb", "keepClips": ["StartingPoint_FerrymanOdo_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_instructor_maren/starting_point_instructor_maren.glb", "out": "models/chars/npcs/starting_point_instructor_maren.glb", "keepClips": ["StartingPoint_InstructorMaren_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_overseer_pell/starting_point_overseer_pell.glb", "out": "models/chars/npcs/starting_point_overseer_pell.glb", "keepClips": ["StartingPoint_OverseerPell_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_quartermaster_finch/starting_point_quartermaster_finch.glb", "out": "models/chars/npcs/starting_point_quartermaster_finch.glb", "keepClips": ["StartingPoint_QuartermasterFinch_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_tidewarden_nel/starting_point_tidewarden_nel.glb", "out": "models/chars/npcs/starting_point_tidewarden_nel.glb", "keepClips": ["StartingPoint_TidewardenNel_Idle"] },
+    { "src": "tmp/asset_src/npcs/starting_point/starting_point_warden_tam/starting_point_warden_tam.glb", "out": "models/chars/npcs/starting_point_warden_tam.glb", "keepClips": ["StartingPoint_WardenTam_Idle"] }
+  ]
+}

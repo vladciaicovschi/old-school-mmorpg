@@ -8,6 +8,7 @@ import {
   getActiveWorldContent,
   WORLD_MAX_X,
   WORLD_MAX_Z,
+  WORLD_MIN_X,
   WORLD_MIN_Z,
 } from '../sim/data';
 import { inDawnholdBailey } from '../sim/dawnhold_layout';
@@ -204,9 +205,18 @@ const GRASS_WIND_STRENGTH = 0.16;
 // sphere target keeps the shaded side lit through the sky term while giving
 // the canopy a real lit side and shade side.
 const LEAF_UP_NORMAL_BLEND = 0.7;
-// two x-halves x 240u z-bands: bucket count x variants-per-bucket is the
-// foliage draw budget — see the perBucket caps in the species specs
+// Square spatial buckets keep every island's trunks and crowns in the same
+// local culling slab. The old two-world-halves scheme became a 900-yard-wide
+// bucket when Model Test Island was added east of the mainland: its centre sat
+// beyond barkFar while nearby canopies remained live, leaving crown-only trees.
 const BUCKET_DEPTH = 240;
+const BUCKET_WIDTH = 240;
+
+function foliageBucketKey(x: number, z: number): string {
+  const band = Math.floor((z - WORLD_MIN_Z) / BUCKET_DEPTH);
+  const col = Math.floor((x - WORLD_MIN_X) / BUCKET_WIDTH);
+  return `${band}:${col}`;
+}
 
 const MODEL_DIR = 'models/foliage/';
 const FOLIAGE_MODEL_URLS_HIGH = {
@@ -1701,9 +1711,9 @@ function buildTrees(
     : decos.filter((d) => survivesLeanDecimation(d, hashAt(d.x, d.z, 83), GFX.standardMaterials));
   const buckets = new Map<string, Bucket>();
   for (const d of sourceDecos) {
-    const col = d.x < 0 ? 0 : 1;
+    const col = Math.floor((d.x - WORLD_MIN_X) / BUCKET_WIDTH);
     const band = Math.floor((d.z - WORLD_MIN_Z) / BUCKET_DEPTH);
-    const key = `${band}:${col}`;
+    const key = foliageBucketKey(d.x, d.z);
     let bucket = buckets.get(key);
     if (!bucket) {
       bucket = { band, col, items: [] };
@@ -2319,7 +2329,7 @@ function buildDressing(
     : null;
   const buckets = new Map<string, DressingSpot[]>();
   for (const spot of generateDressing(seed)) {
-    const key = `${Math.floor((spot.z - WORLD_MIN_Z) / BUCKET_DEPTH)}:${spot.x < 0 ? 0 : 1}`;
+    const key = foliageBucketKey(spot.x, spot.z);
     const list = buckets.get(key);
     if (list) list.push(spot);
     else buckets.set(key, [spot]);

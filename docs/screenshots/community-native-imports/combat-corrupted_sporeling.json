@@ -1,0 +1,45 @@
+{
+  "facts": [
+    {
+      "id": "corrupted_sporeling",
+      "key": "mob_corrupted_sporeling",
+      "clips": [
+        "Infected_Hit",
+        "Infected_Attack",
+        "Infected_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Infected_Attack",
+          "time": 0.15000000000000002
+        },
+        {
+          "ability": null,
+          "clip": "Infected_Attack",
+          "time": 2.1500000000000004
+        },
+        {
+          "ability": null,
+          "clip": "Infected_Attack",
+          "time": 4.149999999999993
+        },
+        {
+          "ability": null,
+          "clip": "Infected_Attack",
+          "time": 6.149999999999986
+        },
+        {
+          "ability": null,
+          "clip": "Infected_Attack",
+          "time": 8.14999999999998
+        }
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Infected_Death"
+    }
+  ],
+  "errors": []
+}

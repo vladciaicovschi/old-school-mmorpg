@@ -45,6 +45,7 @@ import {
   waterCoverageGaps,
   zoneSheetRects,
 } from './water_coverage_core';
+import { applyPhongWaterHullClip, createWaterHullClip } from './water_hull_clip';
 import { WaterSimulation, type WaterWaveUniforms } from './water_simulation';
 import { WATER_TIME_PERIOD, WATER_WAVE_GLSL } from './water_wave_core';
 import { zoneBuildPool } from './zone_build_pool';
@@ -920,6 +921,7 @@ export function createWaterSurfaceMaterial(
   // uniforms are the shared objects, never clones, so the water follows the
   // same camera and day/night grade the terrain layers do.
   const zoneHaze = hasBiomeHazeField();
+  const hullClip = createWaterHullClip();
   return new THREE.ShaderMaterial({
     defines: {
       ...(opts?.underside ? { WATER_UNDERSIDE: '' } : {}),
@@ -927,6 +929,7 @@ export function createWaterSurfaceMaterial(
       ...(zoneHaze ? { WOC_ZONE_HAZE: '' } : {}),
     },
     uniforms: {
+      ...hullClip.uniforms,
       ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog),
       ...(zoneHaze ? biomeHazeUniforms() : {}),
       uNorm1: { value: WATER_TEX.n1 },
@@ -947,7 +950,9 @@ export function createWaterSurfaceMaterial(
       uScatter: { value: SCATTER_COLOR },
     },
     vertexShader: WATER_VERT,
-    fragmentShader: WATER_FRAG,
+    fragmentShader:
+      hullClip.declarations +
+      WATER_FRAG.replace('void main() {', `void main() {\n${hullClip.fragment}`),
     transparent: true,
     depthWrite: false,
     // The from-below ceiling is a separate BackSide mesh (see addUnderside in
@@ -1646,6 +1651,7 @@ function buildPhongWater(): WaterView {
     normalMap: norm,
     normalScale: new THREE.Vector2(0.8, 0.8),
   });
+  applyPhongWaterHullClip(mat);
   // low tier gets the same to-the-horizon apron by simply oversizing the
   // one plane (the tiled texture keeps its density via the repeat bump)
   const worldDepth = WORLD_MAX_Z - WORLD_MIN_Z + 2400;

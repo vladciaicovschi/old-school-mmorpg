@@ -1,0 +1,17 @@
+{
+  "kind": "storm",
+  "low": true,
+  "runtime": {
+    "surface": false,
+    "streams": [],
+    "arcTriangles": 2304
+  },
+  "contact": {
+    "pieces": 28,
+    "min": -0.0002474034531843583,
+    "maxContact": 0.000100674957751401,
+    "meshOffset": -0.3394981158798652,
+    "clip": "Death"
+  },
+  "errors": []
+}

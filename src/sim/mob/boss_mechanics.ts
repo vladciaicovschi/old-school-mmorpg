@@ -11,6 +11,7 @@
 // mob_desperate_heal / mob_warcry / delves / sloomtooth_drowned /
 // summon_threat_seed), the resetNythraxisEncounter precedent.
 import { isLockedOut, isSilenced } from '../combat/cc';
+import { communityMobAnimationCue } from '../community_mob_animation_ids';
 import { isRiftPos, MOBS } from '../data';
 import { onBossAddsSummonedForDeeds } from '../deeds';
 import { findDelveObject } from '../delves/runs';
@@ -129,7 +130,14 @@ export function updateBossMechanics(ctx: SimContext, mob: Entity): void {
       );
       if (wounded.length > 0) {
         const school = tmpl.mendAlly.school ?? 'nature';
-        ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
+        ctx.emit({
+          type: 'spellfx',
+          sourceId: mob.id,
+          targetId: mob.id,
+          school,
+          fx: 'nova',
+          ...communityMobAnimationCue(mob.templateId, 'mend'),
+        });
         ctx.emit({
           type: 'log',
           text: `${mob.name} channels ${tmpl.mendAlly.name}.`,
@@ -157,7 +165,14 @@ export function updateBossMechanics(ctx: SimContext, mob: Entity): void {
       const allies = findNearbyAllies(ctx.grid, mob, tmpl.wardAllies.radius);
       if (allies.length > 0) {
         const school = tmpl.wardAllies.school ?? 'holy';
-        ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
+        ctx.emit({
+          type: 'spellfx',
+          sourceId: mob.id,
+          targetId: mob.id,
+          school,
+          fx: 'nova',
+          ...communityMobAnimationCue(mob.templateId, 'ward'),
+        });
         ctx.emit({
           type: 'log',
           text: `${mob.name} channels ${tmpl.wardAllies.name}.`,
@@ -304,7 +319,14 @@ export function updateBossMechanics(ctx: SimContext, mob: Entity): void {
       if (allies.length > 0) {
         const school = tmpl.warcry.school ?? 'physical';
         const auraId = `warcry_${mob.templateId}`;
-        ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
+        ctx.emit({
+          type: 'spellfx',
+          sourceId: mob.id,
+          targetId: mob.id,
+          school,
+          fx: 'nova',
+          ...communityMobAnimationCue(mob.templateId, 'warcry'),
+        });
         ctx.emit({
           type: 'log',
           text: `${mob.name} channels ${tmpl.warcry.name}.`,

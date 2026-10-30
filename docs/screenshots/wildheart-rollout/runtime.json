@@ -1,0 +1,395 @@
+{
+  "facts": [
+    {
+      "key": "mob_wildheart_stalker",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_SpearThrow",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/stone_tipped_spear.glb",
+          "position": [
+            0,
+            0.045,
+            0
+          ],
+          "rotation": [
+            -0.11538842923832551,
+            -0.1465671655288774,
+            -2.953114896732776,
+            "XYZ"
+          ],
+          "scale": [
+            0.500005,
+            0.500005,
+            0.500005
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_stalker",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_SpearThrow",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/stone_tipped_spear.glb",
+          "position": [
+            0,
+            0.045,
+            0
+          ],
+          "rotation": [
+            -0.11538842923832551,
+            -0.1465671655288774,
+            -2.953114896732776,
+            "XYZ"
+          ],
+          "scale": [
+            0.500005,
+            0.500005,
+            0.500005
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_ravager",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_AxeThrow",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/savage_axe.glb",
+          "position": [
+            0.004657,
+            0.071094,
+            0.007007
+          ],
+          "rotation": [
+            -0.11689342665232022,
+            -0.21553210559218136,
+            -2.9613652426398787,
+            "XYZ"
+          ],
+          "scale": [
+            0.579994,
+            0.579994,
+            0.579994
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_ravager",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_AxeThrow",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/savage_axe.glb",
+          "position": [
+            0.004657,
+            0.071094,
+            0.007007
+          ],
+          "rotation": [
+            -0.11689342665232022,
+            -0.21553210559218136,
+            -2.9613652426398787,
+            "XYZ"
+          ],
+          "scale": [
+            0.579994,
+            0.579994,
+            0.579994
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_hexcaller",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Slam",
+        "Wildheart_Walk"
+      ],
+      "held": []
+    },
+    {
+      "key": "mob_wildheart_hexcaller",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Slam",
+        "Wildheart_Walk"
+      ],
+      "held": []
+    },
+    {
+      "key": "mob_wildheart_beastmaster",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/ancient_ram_spear.glb",
+          "position": [
+            0.004187,
+            0.094849,
+            0.003503
+          ],
+          "rotation": [
+            -0.12041113775971479,
+            -0.3236110959231546,
+            -2.9747604701160095,
+            "XYZ"
+          ],
+          "scale": [
+            0.480001,
+            0.480001,
+            0.480001
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_beastmaster",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": [
+        {
+          "url": "models/weapons/community_tribal/ancient_ram_spear.glb",
+          "position": [
+            0.004187,
+            0.094849,
+            0.003503
+          ],
+          "rotation": [
+            -0.12041113775971479,
+            -0.3236110959231546,
+            -2.9747604701160095,
+            "XYZ"
+          ],
+          "scale": [
+            0.480001,
+            0.480001,
+            0.480001
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mob_wildheart_high_priest",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": []
+    },
+    {
+      "key": "mob_wildheart_high_priest",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 1,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_Channel",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Release",
+        "Wildheart_Run",
+        "Wildheart_Walk"
+      ],
+      "held": []
+    },
+    {
+      "key": "mob_mogger",
+      "low": false,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "rules": 0,
+      "clips": [
+        "Mogger_Attack",
+        "Mogger_Cast",
+        "Mogger_CombatIdle",
+        "Mogger_Death",
+        "Mogger_GroundPound",
+        "Mogger_GroundPoundRelease",
+        "Mogger_Hit",
+        "Mogger_Idle",
+        "Mogger_Order",
+        "Mogger_Run",
+        "Mogger_Walk"
+      ],
+      "held": []
+    },
+    {
+      "key": "mob_mogger",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 0,
+      "clips": [
+        "Mogger_Attack",
+        "Mogger_Cast",
+        "Mogger_CombatIdle",
+        "Mogger_Death",
+        "Mogger_GroundPound",
+        "Mogger_GroundPoundRelease",
+        "Mogger_Hit",
+        "Mogger_Idle",
+        "Mogger_Order",
+        "Mogger_Run",
+        "Mogger_Walk"
+      ],
+      "held": []
+    }
+  ],
+  "errors": []
+}

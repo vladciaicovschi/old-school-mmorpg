@@ -175,12 +175,12 @@ describe('gamepad dispatch covers every action the controller panel offers', () 
     const at = body.indexOf("case 'sheathe':");
     expect(at).toBeGreaterThan(-1);
     const sheathe = body.slice(at, body.indexOf('break;', at));
-    expect(sheathe).toContain('toggleSheatheWithCue(world, audio);');
+    expect(sheathe).toContain('toggleSheatheWithCue(world, audio, renderer?.views);');
     const keyboardAt = mainTs.indexOf("case 'sheathe':");
     expect(keyboardAt).toBeGreaterThan(-1);
     expect(keyboardAt).toBeLessThan(mainTs.indexOf('function dispatchGamepadAction'));
     expect(mainTs.slice(keyboardAt, mainTs.indexOf('break;', keyboardAt))).toContain(
-      'toggleSheatheWithCue(world, audio);',
+      'toggleSheatheWithCue(world, audio, renderer?.views);',
     );
   });
 });

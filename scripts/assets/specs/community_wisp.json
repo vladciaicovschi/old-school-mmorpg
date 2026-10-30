@@ -1,0 +1,10 @@
+{
+  "items": [{
+    "src": "tmp/asset_src/spirits/community_wisp.glb",
+    "out": "models/creatures/community_wisp.glb",
+    "type": "character",
+    "maxTex": 2048,
+    "keepExtras": true,
+    "keepClips": ["Wisp_Idle", "Wisp_Move", "Wisp_Attack", "Wisp_Hit", "Wisp_Death"]
+  }]
+}

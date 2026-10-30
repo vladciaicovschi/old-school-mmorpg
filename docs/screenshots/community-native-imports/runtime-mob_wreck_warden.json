@@ -1,0 +1,317 @@
+{
+  "facts": [
+    {
+      "key": "mob_wreck_warden",
+      "low": false,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "clips": [
+        "WreckWarden_Alert",
+        "WreckWarden_Axe_Breathe_and_Look_Around",
+        "WreckWarden_Charged_Spell_Cast",
+        "WreckWarden_Charged_Upward_Slash",
+        "WreckWarden_Dead",
+        "WreckWarden_Idle_5",
+        "WreckWarden_Left_Hook_from_Guard",
+        "WreckWarden_Right_Hand_Sword_Slash",
+        "WreckWarden_Running",
+        "WreckWarden_Shield_Push_Left",
+        "WreckWarden_Spartan_Kick",
+        "WreckWarden_Walking",
+        "WreckWarden_Weapon_Combo",
+        "WreckWarden_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "WreckWarden_Axe_Breathe_and_Look_Around",
+        "combatIdle": "WreckWarden_Alert",
+        "walk": "WreckWarden_Walking",
+        "run": "WreckWarden_Running",
+        "attack": [
+          "WreckWarden_Shield_Push_Left"
+        ],
+        "death": "WreckWarden_Dead",
+        "studioClips": [
+          "WreckWarden_Alert",
+          "WreckWarden_Axe_Breathe_and_Look_Around",
+          "WreckWarden_Charged_Spell_Cast",
+          "WreckWarden_Charged_Upward_Slash",
+          "WreckWarden_Dead",
+          "WreckWarden_Idle_5",
+          "WreckWarden_Left_Hook_from_Guard",
+          "WreckWarden_Right_Hand_Sword_Slash",
+          "WreckWarden_Running",
+          "WreckWarden_Shield_Push_Left",
+          "WreckWarden_Spartan_Kick",
+          "WreckWarden_Walking",
+          "WreckWarden_Weapon_Combo",
+          "WreckWarden_Weapon_Combo_1"
+        ]
+      }
+    },
+    {
+      "key": "mob_wreck_warden",
+      "low": true,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "clips": [
+        "WreckWarden_Alert",
+        "WreckWarden_Axe_Breathe_and_Look_Around",
+        "WreckWarden_Charged_Spell_Cast",
+        "WreckWarden_Charged_Upward_Slash",
+        "WreckWarden_Dead",
+        "WreckWarden_Idle_5",
+        "WreckWarden_Left_Hook_from_Guard",
+        "WreckWarden_Right_Hand_Sword_Slash",
+        "WreckWarden_Running",
+        "WreckWarden_Shield_Push_Left",
+        "WreckWarden_Spartan_Kick",
+        "WreckWarden_Walking",
+        "WreckWarden_Weapon_Combo",
+        "WreckWarden_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "WreckWarden_Axe_Breathe_and_Look_Around",
+        "combatIdle": "WreckWarden_Alert",
+        "walk": "WreckWarden_Walking",
+        "run": "WreckWarden_Running",
+        "attack": [
+          "WreckWarden_Shield_Push_Left"
+        ],
+        "death": "WreckWarden_Dead",
+        "studioClips": [
+          "WreckWarden_Alert",
+          "WreckWarden_Axe_Breathe_and_Look_Around",
+          "WreckWarden_Charged_Spell_Cast",
+          "WreckWarden_Charged_Upward_Slash",
+          "WreckWarden_Dead",
+          "WreckWarden_Idle_5",
+          "WreckWarden_Left_Hook_from_Guard",
+          "WreckWarden_Right_Hand_Sword_Slash",
+          "WreckWarden_Running",
+          "WreckWarden_Shield_Push_Left",
+          "WreckWarden_Spartan_Kick",
+          "WreckWarden_Walking",
+          "WreckWarden_Weapon_Combo",
+          "WreckWarden_Weapon_Combo_1"
+        ]
+      }
+    },
+    {
+      "key": "mob_treant_warrior",
+      "low": false,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "clips": [
+        "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+        "TreantWarrior_Idle_11",
+        "TreantWarrior_Idle_5",
+        "TreantWarrior_Left_Hook_from_Guard",
+        "TreantWarrior_Right_Hand_Sword_Slash",
+        "TreantWarrior_Running",
+        "TreantWarrior_Shield_Push_Left",
+        "TreantWarrior_Spartan_Kick",
+        "TreantWarrior_Walking",
+        "TreantWarrior_Weapon_Combo",
+        "TreantWarrior_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "TreantWarrior_Idle_11",
+        "combatIdle": "TreantWarrior_Idle_5",
+        "walk": "TreantWarrior_Walking",
+        "run": "TreantWarrior_Running",
+        "attack": [
+          "TreantWarrior_Shield_Push_Left"
+        ],
+        "death": "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+        "studioClips": [
+          "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+          "TreantWarrior_Idle_11",
+          "TreantWarrior_Idle_5",
+          "TreantWarrior_Left_Hook_from_Guard",
+          "TreantWarrior_Right_Hand_Sword_Slash",
+          "TreantWarrior_Running",
+          "TreantWarrior_Shield_Push_Left",
+          "TreantWarrior_Spartan_Kick",
+          "TreantWarrior_Walking",
+          "TreantWarrior_Weapon_Combo",
+          "TreantWarrior_Weapon_Combo_1"
+        ]
+      }
+    },
+    {
+      "key": "mob_treant_warrior",
+      "low": true,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "clips": [
+        "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+        "TreantWarrior_Idle_11",
+        "TreantWarrior_Idle_5",
+        "TreantWarrior_Left_Hook_from_Guard",
+        "TreantWarrior_Right_Hand_Sword_Slash",
+        "TreantWarrior_Running",
+        "TreantWarrior_Shield_Push_Left",
+        "TreantWarrior_Spartan_Kick",
+        "TreantWarrior_Walking",
+        "TreantWarrior_Weapon_Combo",
+        "TreantWarrior_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "TreantWarrior_Idle_11",
+        "combatIdle": "TreantWarrior_Idle_5",
+        "walk": "TreantWarrior_Walking",
+        "run": "TreantWarrior_Running",
+        "attack": [
+          "TreantWarrior_Shield_Push_Left"
+        ],
+        "death": "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+        "studioClips": [
+          "TreantWarrior_Fall_Dead_from_Abdominal_Injury",
+          "TreantWarrior_Idle_11",
+          "TreantWarrior_Idle_5",
+          "TreantWarrior_Left_Hook_from_Guard",
+          "TreantWarrior_Right_Hand_Sword_Slash",
+          "TreantWarrior_Running",
+          "TreantWarrior_Shield_Push_Left",
+          "TreantWarrior_Spartan_Kick",
+          "TreantWarrior_Walking",
+          "TreantWarrior_Weapon_Combo",
+          "TreantWarrior_Weapon_Combo_1"
+        ]
+      }
+    },
+    {
+      "key": "mob_ancient_guardian",
+      "low": false,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "clips": [
+        "VerdantGolem_Alert",
+        "VerdantGolem_Attack",
+        "VerdantGolem_Casual_Walk",
+        "VerdantGolem_Charged_Ground_Slam",
+        "VerdantGolem_Charged_Upward_Slash",
+        "VerdantGolem_Dead",
+        "VerdantGolem_dying_backwards",
+        "VerdantGolem_Extra_Running",
+        "VerdantGolem_Extra_Walking",
+        "VerdantGolem_Idle_5",
+        "VerdantGolem_Left_Hook_from_Guard",
+        "VerdantGolem_Right_Hand_Sword_Slash",
+        "VerdantGolem_Running",
+        "VerdantGolem_Shield_Push_Left",
+        "VerdantGolem_Skill_03",
+        "VerdantGolem_Slow_Orc_Walk",
+        "VerdantGolem_Spartan_Kick",
+        "VerdantGolem_Walking",
+        "VerdantGolem_Weapon_Combo",
+        "VerdantGolem_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "VerdantGolem_Alert",
+        "combatIdle": "VerdantGolem_Idle_5",
+        "walk": "VerdantGolem_Slow_Orc_Walk",
+        "run": "VerdantGolem_Running",
+        "attack": [
+          "VerdantGolem_Attack"
+        ],
+        "death": "VerdantGolem_dying_backwards",
+        "studioClips": [
+          "VerdantGolem_Charged_Ground_Slam",
+          "VerdantGolem_Charged_Upward_Slash",
+          "VerdantGolem_dying_backwards",
+          "VerdantGolem_Left_Hook_from_Guard",
+          "VerdantGolem_Right_Hand_Sword_Slash",
+          "VerdantGolem_Running",
+          "VerdantGolem_Shield_Push_Left",
+          "VerdantGolem_Spartan_Kick",
+          "VerdantGolem_Walking",
+          "VerdantGolem_Weapon_Combo",
+          "VerdantGolem_Weapon_Combo_1",
+          "VerdantGolem_Idle_5",
+          "VerdantGolem_Alert",
+          "VerdantGolem_Attack",
+          "VerdantGolem_Casual_Walk",
+          "VerdantGolem_Dead",
+          "VerdantGolem_Extra_Running",
+          "VerdantGolem_Skill_03",
+          "VerdantGolem_Slow_Orc_Walk",
+          "VerdantGolem_Extra_Walking"
+        ]
+      }
+    },
+    {
+      "key": "mob_ancient_guardian",
+      "low": true,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "clips": [
+        "VerdantGolem_Alert",
+        "VerdantGolem_Attack",
+        "VerdantGolem_Casual_Walk",
+        "VerdantGolem_Charged_Ground_Slam",
+        "VerdantGolem_Charged_Upward_Slash",
+        "VerdantGolem_Dead",
+        "VerdantGolem_dying_backwards",
+        "VerdantGolem_Extra_Running",
+        "VerdantGolem_Extra_Walking",
+        "VerdantGolem_Idle_5",
+        "VerdantGolem_Left_Hook_from_Guard",
+        "VerdantGolem_Right_Hand_Sword_Slash",
+        "VerdantGolem_Running",
+        "VerdantGolem_Shield_Push_Left",
+        "VerdantGolem_Skill_03",
+        "VerdantGolem_Slow_Orc_Walk",
+        "VerdantGolem_Spartan_Kick",
+        "VerdantGolem_Walking",
+        "VerdantGolem_Weapon_Combo",
+        "VerdantGolem_Weapon_Combo_1"
+      ],
+      "mapping": {
+        "idle": "VerdantGolem_Alert",
+        "combatIdle": "VerdantGolem_Idle_5",
+        "walk": "VerdantGolem_Slow_Orc_Walk",
+        "run": "VerdantGolem_Running",
+        "attack": [
+          "VerdantGolem_Attack"
+        ],
+        "death": "VerdantGolem_dying_backwards",
+        "studioClips": [
+          "VerdantGolem_Charged_Ground_Slam",
+          "VerdantGolem_Charged_Upward_Slash",
+          "VerdantGolem_dying_backwards",
+          "VerdantGolem_Left_Hook_from_Guard",
+          "VerdantGolem_Right_Hand_Sword_Slash",
+          "VerdantGolem_Running",
+          "VerdantGolem_Shield_Push_Left",
+          "VerdantGolem_Spartan_Kick",
+          "VerdantGolem_Walking",
+          "VerdantGolem_Weapon_Combo",
+          "VerdantGolem_Weapon_Combo_1",
+          "VerdantGolem_Idle_5",
+          "VerdantGolem_Alert",
+          "VerdantGolem_Attack",
+          "VerdantGolem_Casual_Walk",
+          "VerdantGolem_Dead",
+          "VerdantGolem_Extra_Running",
+          "VerdantGolem_Skill_03",
+          "VerdantGolem_Slow_Orc_Walk",
+          "VerdantGolem_Extra_Walking"
+        ]
+      }
+    }
+  ],
+  "errors": []
+}

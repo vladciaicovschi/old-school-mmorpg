@@ -1,0 +1,164 @@
+{
+  "key": "npc_dev_ice_elemental",
+  "low": false,
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Ice_Idle",
+    "Ice_Move"
+  ],
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "materials": [
+        {
+          "name": "IceElemental_Frost",
+          "type": "MeshPhysicalMaterial",
+          "emissiveMap": "IceElemental_Cracks"
+        }
+      ],
+      "triangles": 9712,
+      "uv": true,
+      "skinned": true
+    },
+    {
+      "name": "IceCrystal_head",
+      "materials": [
+        {
+          "name": "IceElemental_Crystal",
+          "type": "MeshPhysicalMaterial"
+        }
+      ],
+      "triangles": 36,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_mist_head",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_mist_hand.l",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "IceCrystal_upperarml",
+      "materials": [
+        {
+          "name": "IceElemental_Crystal",
+          "type": "MeshPhysicalMaterial"
+        }
+      ],
+      "triangles": 24,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_mist_vfx_hand.r",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "IceCrystal_upperarmr",
+      "materials": [
+        {
+          "name": "IceElemental_Crystal",
+          "type": "MeshPhysicalMaterial"
+        }
+      ],
+      "triangles": 24,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_mist_vfx_core",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_mist_hips",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "character_far_mesh",
+      "materials": [
+        {
+          "name": "IceElemental_Frost",
+          "type": "MeshPhysicalMaterial",
+          "emissiveMap": "IceElemental_Cracks"
+        },
+        {
+          "name": "IceElemental_Crystal",
+          "type": "MeshPhysicalMaterial"
+        }
+      ],
+      "triangles": 9796,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "character_shadow_proxy",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshBasicMaterial"
+        }
+      ],
+      "triangles": 9796,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshBasicMaterial"
+        }
+      ],
+      "triangles": 32,
+      "uv": true,
+      "skinned": false
+    }
+  ],
+  "errors": []
+}

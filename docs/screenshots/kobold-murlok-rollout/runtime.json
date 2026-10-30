@@ -1,0 +1,99 @@
+{
+  "tunnel_rat": {
+    "key": "npc_dev_kobold",
+    "labels": [
+      "Кобольд (заменен)",
+      "Морлок (заменен)"
+    ],
+    "clips": [
+      "Kobold_Standing_Block_Idle",
+      "Kobold_Standing_Idle",
+      "Kobold_Standing_Melee_Attack_360_Low",
+      "Kobold_Standing_Melee_Attack_Backhand",
+      "Kobold_Standing_Melee_Attack_Downward",
+      "Kobold_Standing_Melee_Attack_Horizontal",
+      "Kobold_Standing_React_Death_Backward",
+      "Kobold_Standing_React_Large_From_Left",
+      "Kobold_Standing_React_Large_From_Right",
+      "Kobold_Standing_Run_Forward",
+      "Kobold_Standing_Walk_Forward"
+    ],
+    "walk": {
+      "clip": "Kobold_Standing_Walk_Forward",
+      "time": 0.9090909090909084,
+      "base": "walk",
+      "oneShot": false
+    },
+    "run": {
+      "clip": "Kobold_Standing_Run_Forward",
+      "time": 0.26666665077209534,
+      "base": "run",
+      "oneShot": false
+    },
+    "attack": {
+      "clip": "Kobold_Standing_Melee_Attack_Backhand",
+      "time": 0.39,
+      "base": "idle",
+      "oneShot": true
+    },
+    "recovered": {
+      "clip": "Kobold_Standing_Idle",
+      "time": 0.06666671435038098,
+      "base": "idle",
+      "oneShot": false
+    },
+    "death": {
+      "clip": "Kobold_Standing_React_Death_Backward",
+      "time": 3.633333444595337,
+      "base": "idle",
+      "oneShot": false
+    }
+  },
+  "mudfin_murloc": {
+    "key": "npc_dev_meshy_murlok",
+    "labels": [
+      "Кобольд (заменен)",
+      "Морлок (заменен)"
+    ],
+    "clips": [
+      "MeshyMurlokNative_AxeSpinAttack",
+      "MeshyMurlokNative_Death",
+      "MeshyMurlokNative_DoubleCombo",
+      "MeshyMurlokNative_Idle",
+      "MeshyMurlokNative_Run",
+      "MeshyMurlokNative_TripleCombo",
+      "MeshyMurlokNative_Walk"
+    ],
+    "walk": {
+      "clip": "MeshyMurlokNative_Walk",
+      "time": 0.9090909090909084,
+      "base": "walk",
+      "oneShot": false
+    },
+    "run": {
+      "clip": "MeshyMurlokNative_Run",
+      "time": 0.3333333134651188,
+      "base": "run",
+      "oneShot": false
+    },
+    "attack": {
+      "clip": "MeshyMurlokNative_AxeSpinAttack",
+      "time": 0.39,
+      "base": "idle",
+      "oneShot": true
+    },
+    "recovered": {
+      "clip": "MeshyMurlokNative_Idle",
+      "time": 0.5083333333333315,
+      "base": "idle",
+      "oneShot": false
+    },
+    "death": {
+      "clip": "MeshyMurlokNative_Death",
+      "time": 3,
+      "base": "idle",
+      "oneShot": false
+    }
+  },
+  "errors": []
+}

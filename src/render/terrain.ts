@@ -25,7 +25,7 @@ import { GFX, type GfxSettings, SUN_DIR, sharedUniforms } from './gfx';
 import {
   cellCountsAsPending,
   islandIsolationActive,
-  islandScopeStreamsZone,
+  islandScopeAt,
 } from './island_isolation_core';
 import {
   hasNightLightField,
@@ -2087,12 +2087,20 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
   // isPending is called in the clamp's tight grid walk (every frame, over
   // hundreds of cells), so resolving the owning rectangle per call would put
   // a rect scan on that hot path.
-  const islandCell = new Uint8Array(chunksX * chunksZ);
-  for (let cz = 0; cz < chunksZ; cz++) {
-    for (let cx = 0; cx < chunksX; cx++) {
-      islandCell[cz * chunksX + cx] = islandScopeStreamsZone(cellOwnerId(cx, cz)) ? 1 : 0;
+  const islandCells = new Map<string, Uint8Array>();
+  const islandCellFor = (zoneId: string): Uint8Array => {
+    const cached = islandCells.get(zoneId);
+    if (cached) return cached;
+    const cells = new Uint8Array(chunksX * chunksZ);
+    for (let cz = 0; cz < chunksZ; cz++) {
+      for (let cx = 0; cx < chunksX; cx++) {
+        cells[cz * chunksX + cx] = cellOwnerId(cx, cz) === zoneId ? 1 : 0;
+      }
     }
-  }
+    islandCells.set(zoneId, cells);
+    return cells;
+  };
+  let islandCell = islandCellFor('proving_shore');
   // "Pending" means ground that WILL be built and is not yet, never merely
   // ground that exists in the grid: the outdoor fog clamp pins the horizon at
   // the nearest pending cell, so a cell nobody intends to build would wall the
@@ -2318,6 +2326,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
     isZoneLoaded: (zoneId: string) => loadedZones.has(zoneId),
     groundResidency: (view: { x: number; z: number }) => {
       islandScoped = islandIsolationActive(view.x, view.z);
+      const scope = islandScopeAt(view.x, view.z);
+      if (scope) islandCell = islandCellFor(scope.zoneId);
       return residency;
     },
     cancelStreaming(): void {

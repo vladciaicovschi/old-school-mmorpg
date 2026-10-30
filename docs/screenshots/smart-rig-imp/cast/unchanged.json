@@ -1,0 +1,17 @@
+{
+  "preservedClips": [
+    "Imp_Hover",
+    "Imp_CombatHover",
+    "Imp_Fly",
+    "Imp_FlyFast",
+    "Imp_ClawLeft",
+    "Imp_ClawRight",
+    "Imp_Dive",
+    "Imp_Hit",
+    "Imp_Threat",
+    "Imp_AlertLook",
+    "Imp_Death"
+  ],
+  "samples": 112728,
+  "worstComponentDifference": 0
+}

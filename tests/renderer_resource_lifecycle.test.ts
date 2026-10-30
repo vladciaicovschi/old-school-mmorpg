@@ -74,6 +74,7 @@ describe('renderer resource lifecycle', () => {
       }),
     };
     const warlockMeteorFx = { dispose: vi.fn() };
+    const galeFeatures = { dispose: vi.fn() };
     const abilityVfxFx = { dispose: vi.fn() };
     const vfx = { dispose: vi.fn() };
     // The farm patch visuals joined the seam at the Phase 17 render review:
@@ -102,6 +103,7 @@ describe('renderer resource lifecycle', () => {
         prewarmDepthMaterials,
         mageGroundFx,
         warlockMeteorFx,
+        galeFeatures,
         abilityVfxFx,
         vfx,
         farmPatchVisuals,
@@ -114,6 +116,7 @@ describe('renderer resource lifecycle', () => {
     expect(depthMaterial.dispose).toHaveBeenCalledOnce();
     expect(mageGroundFx.dispose).toHaveBeenCalledOnce();
     expect(warlockMeteorFx.dispose).toHaveBeenCalledOnce();
+    expect(galeFeatures.dispose).toHaveBeenCalledOnce();
     expect(abilityVfxFx.dispose).toHaveBeenCalledOnce();
     expect(vfx.dispose).toHaveBeenCalledOnce();
     expect(farmPatchVisuals.dispose).toHaveBeenCalledOnce();

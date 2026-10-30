@@ -48,7 +48,9 @@ import {
   PLAYER_SWIM_DEPTH,
 } from '../src/sim/pathfind';
 import { isResting } from '../src/sim/progression/xp';
+import { settlementPlans } from '../src/sim/settlements_layout';
 import type { BuildingDef, Entity } from '../src/sim/types';
+import { localPoint } from '../src/sim/wickharbor_layout';
 import { groundHeight, terrainHeight, waterLevelAt } from '../src/sim/world';
 import { WORLD_SEED } from '../src/sim/world_seed';
 
@@ -168,15 +170,13 @@ describe('Eastbrook Grand Armoury retirement (round 4)', () => {
     expect(PROPS.buildings.some((building) => building.landmark)).toBe(false);
     expect(EASTBROOK_LAYOUT.preservedBuildings).toEqual([]);
     expect(EASTBROOK_BUILDINGS_BY_ID.eastbrook_grand_armoury).toBeUndefined();
-    // Round 4: the round-3 table held ten rows (armoury + nine layout lots);
-    // the armoury row left, so the table is exactly the authored lots.
-    // Round 6 (owner) then removed eastbrook_home_rise from the layout after
-    // live review, dropping the authored lots to eight rows, and afterwards
-    // appended the harbour quarter's three coastal buildings, so the table is
-    // eleven rows now.
-    expect(ZONE1_PROPS.buildings).toHaveLength(11);
+    // The approved pack assembly owns built-in town lots; the retired armoury
+    // remains available only through its explicit custom-world adapter below.
+    expect(ZONE1_PROPS.buildings).toHaveLength(18);
     expect(ZONE1_PROPS.buildings.map((building) => building.id)).toEqual(
-      EASTBROOK_LAYOUT.buildings.map((building) => building.id),
+      settlementPlans((x, z) => terrainHeight(x, z, SEED))
+        .filter((p) => p.settlement.id === 'eastbrook')
+        .map((p) => `settlement:eastbrook:${p.lot.id}`),
     );
   });
 
@@ -247,7 +247,10 @@ describe('Eastbrook Grand Armoury retirement (round 4)', () => {
 
 describe('Eastbrook Grand Armoury gameplay preservation', () => {
   it('keeps resting with the authored Eastbrook inn', () => {
-    const innRestPoint = EASTBROOK_BUILDINGS_BY_ID.eastbrook_inn.frontStandingPoint;
+    const plan = settlementPlans((x, z) => terrainHeight(x, z, SEED)).find(
+      (p) => p.settlement.id === 'eastbrook' && p.lot.id === 'hearth-inn',
+    )!;
+    const innRestPoint = localPoint(plan.lot, 0, plan.placement.landing.maxZ);
     const player = {
       inCombat: false,
       pos: {
@@ -263,8 +266,8 @@ describe('Eastbrook Grand Armoury gameplay preservation', () => {
     // The inn's rest footprint is the authored one and nothing else grants
     // rest: the inn row plus its 2 yard padding is the whole area.
     player.inCombat = false;
-    player.pos.x = EASTBROOK_BUILDINGS_BY_ID.eastbrook_inn.position.x;
-    player.pos.z = EASTBROOK_BUILDINGS_BY_ID.eastbrook_inn.position.z;
+    player.pos.x = plan.lot.x;
+    player.pos.z = plan.lot.z;
     expect(isResting(player)).toBe(true);
 
     player.pos.x = NPCS.card_master.pos.x;

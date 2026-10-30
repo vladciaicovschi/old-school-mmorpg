@@ -1,0 +1,106 @@
+{
+  "facts": [
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": false,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "clips": [
+        "Infected_Attack",
+        "Infected_Axe_Spin_Attack",
+        "Infected_Basic_Jump",
+        "Infected_Charged_Slash",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Left_Hook_from_Guard",
+        "Infected_Proud_Strut",
+        "Infected_Right_Hand_Sword_Slash",
+        "Infected_Run",
+        "Infected_Simple_Kick",
+        "Infected_Spartan_Kick",
+        "Infected_Triple_Combo_Attack",
+        "Infected_Walk"
+      ],
+      "mapping": {
+        "studioClips": [
+          "Infected_Axe_Spin_Attack",
+          "Infected_Basic_Jump",
+          "Infected_Charged_Slash",
+          "Infected_Left_Hook_from_Guard",
+          "Infected_Proud_Strut",
+          "Infected_Right_Hand_Sword_Slash",
+          "Infected_Simple_Kick",
+          "Infected_Spartan_Kick",
+          "Infected_Triple_Combo_Attack"
+        ],
+        "idle": "Infected_Idle",
+        "combatIdle": "Infected_CombatIdle",
+        "walk": "Infected_Walk",
+        "run": "Infected_Run",
+        "attack": [
+          "Infected_Attack"
+        ],
+        "hit": [
+          "Infected_Hit"
+        ],
+        "death": "Infected_Death"
+      },
+      "hitPlayback": "Infected_Hit"
+    },
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": true,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "clips": [
+        "Infected_Attack",
+        "Infected_Axe_Spin_Attack",
+        "Infected_Basic_Jump",
+        "Infected_Charged_Slash",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Left_Hook_from_Guard",
+        "Infected_Proud_Strut",
+        "Infected_Right_Hand_Sword_Slash",
+        "Infected_Run",
+        "Infected_Simple_Kick",
+        "Infected_Spartan_Kick",
+        "Infected_Triple_Combo_Attack",
+        "Infected_Walk"
+      ],
+      "mapping": {
+        "studioClips": [
+          "Infected_Axe_Spin_Attack",
+          "Infected_Basic_Jump",
+          "Infected_Charged_Slash",
+          "Infected_Left_Hook_from_Guard",
+          "Infected_Proud_Strut",
+          "Infected_Right_Hand_Sword_Slash",
+          "Infected_Simple_Kick",
+          "Infected_Spartan_Kick",
+          "Infected_Triple_Combo_Attack"
+        ],
+        "idle": "Infected_Idle",
+        "combatIdle": "Infected_CombatIdle",
+        "walk": "Infected_Walk",
+        "run": "Infected_Run",
+        "attack": [
+          "Infected_Attack"
+        ],
+        "hit": [
+          "Infected_Hit"
+        ],
+        "death": "Infected_Death"
+      }
+    }
+  ],
+  "errors": []
+}

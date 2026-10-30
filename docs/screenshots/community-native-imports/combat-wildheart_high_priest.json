@@ -1,0 +1,40 @@
+{
+  "facts": [
+    {
+      "id": "wildheart_high_priest",
+      "key": "mob_wildheart_high_priest",
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Slam",
+        "Wildheart_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 0.05
+        },
+        {
+          "ability": "wildheart_pulse",
+          "clip": "Wildheart_Slam",
+          "time": 0.65
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 5.249999999999989
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 7.84999999999998
+        }
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    }
+  ],
+  "errors": []
+}

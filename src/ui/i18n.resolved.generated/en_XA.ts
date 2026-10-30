@@ -160,6 +160,10 @@ export const en_XA: EnTranslations = {
         "label": "[Ţéļéþóŕţ]",
         "description": "[Ɱóʋé ţó éẋáçţ ŵóŕļð çóóŕðíñáţéš.]"
       },
+      "modelLab": {
+        "label": "[Ɱóðéļ ţéšţ íšļáñð]",
+        "description": "[Éñţéŕ ţĥé íšóļáţéð ÑÞÇ áñð çĥáŕáçţéŕ ɱóðéļ ţéšţ ļóçáţíóñ.]"
+      },
       "dungeon": {
         "label": "[Éñţéŕ ðúñĝéóñ]",
         "description": "[Éñţéŕ á ðúñĝéóñ ŵíţĥ ðéʋ ĝáţé ƀýþášš.]"
@@ -326,6 +330,13 @@ export const en_XA: EnTranslations = {
     }
   },
   "hudChrome": {
+    "warriorSuit": {
+      "label": "[Áŕɱóŕ šéţ]",
+      "hint": "[Éɋúíþ ţĥé çóɱþļéţé áŕɱóŕ šéţ ƒŕóɱ ýóúŕ ƀáĝš.]",
+      "recruit": "[Ŕéçŕúíţ]",
+      "militia": "[Ɱíļíţíá]",
+      "knight": "[Ķñíĝĥţ]"
+    },
     "materialStackSelectionUnavailable": "[Ţĥáţ ɱáţéŕíáļ šéļéçţíóñ íš ñó ļóñĝéŕ áʋáíļáƀļé.]",
     "warlock": {
       "doomLabel": "[Çóñðéɱñáţíóñ]",
@@ -8318,6 +8329,33 @@ export const en_XA: EnTranslations = {
     "realm": "[Ŵóŕļð]",
     "newCharacter": "[Ñéŵ Çĥáŕáçţéŕ]",
     "appearance": "[Áþþéáŕáñçé]",
+    "equipmentCalibration": "[Éɋúíþɱéñţ Ƒíţ]",
+    "equipmentCalibrationHint": "[Šéļéçţ á þáŕţ, ţĥéñ ðŕáĝ ţĥé 3Ð ĝížɱó óŕ úšé ţĥé ñúɱéŕíç çóñţŕóļš.]",
+    "equipmentCalibrationItem": "[Éɋúíþɱéñţ íţéɱ]",
+    "equipmentCalibrationMode": "[Ţŕáñšƒóŕɱ ɱóðé]",
+    "equipmentCarryLocation": "[Éɋúíþɱéñţ ļóçáţíóñ]",
+    "equipmentInHands": "[Íñ ĥáñðš]",
+    "equipmentAtBelt": "[Áţ ƀéļţ]",
+    "equipmentOnBack": "[Óñ ƀáçķ]",
+    "equipmentCalibrationValues": "[Šáʋéð ʋáļúéš]",
+    "equipmentCalibrationAxis": "[{field} {axis}]",
+    "equipmentSword": "[Šŵóŕð]",
+    "equipmentShield": "[Šĥíéļð]",
+    "equipmentBracer": "[Ɓŕáçéŕ]",
+    "equipmentLeft": "[Ļéƒţ]",
+    "equipmentRight": "[Ŕíĝĥţ]",
+    "equipmentPosition": "[Þóšíţíóñ]",
+    "equipmentRotation": "[Ŕóţáţíóñ]",
+    "equipmentScale": "[Šçáļé]",
+    "equipmentPauseAnimation": "[Þáúšé áñíɱáţíóñ]",
+    "equipmentResumeAnimation": "[Ŕéšúɱé áñíɱáţíóñ]",
+    "equipmentResetItem": "[Ŕéšéţ íţéɱ]",
+    "equipmentCopyValues": "[Çóþý ʋáļúéš]",
+    "equipmentSaveProject": "[Šáʋé ƒíţ ţó þŕóĵéçţ]",
+    "equipmentSavedProject": "[Ƒíţ šáʋéð ţó ţĥé þŕóĵéçţ.]",
+    "equipmentSaveFailed": "[Çóúļð ñóţ šáʋé. Ŕúñ ţĥé ļóçáļ ðéʋéļóþɱéñţ šéŕʋéŕ áñð ţŕý áĝáíñ.]",
+    "equipmentValuesCopied": "[Ʋáļúéš çóþíéð.]",
+    "equipmentCopyManual": "[Áúţóɱáţíç çóþý íš ƀļóçķéð. Ţĥé ʋáļúéš áŕé šéļéçţéð.]",
     "customize": "[Çúšţóɱížé]",
     "body": "[Ɓóðý]",
     "genderMale": "[Ɱáļé]",
@@ -15530,6 +15568,12 @@ export const en_XA: EnTranslations = {
       "stormhymn_chain_treads": {
         "name": "[Šţóŕɱĥýɱñ Çĥáíñ Ţŕéáðš]"
       },
+      "dev_hunter_practice_bow": {
+        "name": "[Þŕáçţíçé Ɓóŵ]"
+      },
+      "dev_hunter_practice_crossbow": {
+        "name": "[Þŕáçţíçé Çŕóššƀóŵ]"
+      },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"
       },
@@ -16324,6 +16368,63 @@ export const en_XA: EnTranslations = {
       }
     },
     "mobs": {
+      "dev_the_wreck_warden": {
+        "name": "[Ţĥé Ŵŕéçķ Ŵáŕðéñ (Ŕéþļáçéð)]"
+      },
+      "dev_treant_warrior": {
+        "name": "[Ţŕéáñţ Ŵáŕŕíóŕ]"
+      },
+      "dev_ancient_guardian": {
+        "name": "[Áñçíéñţ Ĝúáŕðíáñ (Ŕéþļáçéð)]"
+      },
+      "dev_waking_warden": {
+        "name": "[Ţĥé Ŵáķíñĝ Ŵáŕðéñ (Ŕéþļáçéð)]"
+      },
+      "dev_kobold": {
+        "name": "[Ķóƀóļð (Ŕéþļáçéð)]"
+      },
+      "dev_meshy_murlok": {
+        "name": "[Ɱéšĥý Ñáţíʋé Ɱúŕļóķ (Ŕéþļáçéð)]"
+      },
+      "dev_smart_bear": {
+        "name": "[Šɱáŕţ Ŕíĝ Ɓéáŕ]"
+      },
+      "dev_smart_wolf": {
+        "name": "[Šɱáŕţ Ŕíĝ Ŵóļƒ]"
+      },
+      "dev_smart_wolf_v2": {
+        "name": "[Šɱáŕţ Ŕíĝ Ŵóļƒ Ʋ2]"
+      },
+      "dev_smart_goat": {
+        "name": "[Šɱáŕţ Ŕíĝ Ĝóáţ]"
+      },
+      "dev_smart_bufalo": {
+        "name": "[Šɱáŕţ Ŕíĝ Ɓúƒƒáļó]"
+      },
+      "dev_smart_deer": {
+        "name": "[Šɱáŕţ Ŕíĝ Ðééŕ]"
+      },
+      "dev_smart_raptor": {
+        "name": "[Šɱáŕţ Ŕíĝ Ŕáþţóŕ]"
+      },
+      "dev_smart_imp": {
+        "name": "[Šɱáŕţ Ŕíĝ Íɱþ]"
+      },
+      "dev_fire_elemental": {
+        "name": "[Ƒíŕé Éļéɱéñţáļ Þŕóţóţýþé]"
+      },
+      "dev_ice_elemental": {
+        "name": "[Íçé Éļéɱéñţáļ Þŕóţóţýþé]"
+      },
+      "dev_water_elemental": {
+        "name": "[Ŵáţéŕ Éļéɱéñţáļ Þŕóţóţýþé]"
+      },
+      "dev_stone_elemental": {
+        "name": "[Šţóñé Éļéɱéñţáļ Þŕóţóţýþé]"
+      },
+      "dev_storm_elemental": {
+        "name": "[Šţóŕɱ Éļéɱéñţáļ Þŕóţóţýþé]"
+      },
       "yumi_cat": {
         "name": "[Ýúɱí]"
       },
@@ -17595,6 +17696,1101 @@ export const en_XA: EnTranslations = {
         "name": "[Ðŕíļļɱášţéŕ Ĥáļé]",
         "title": "[Ɋúáý Šþáŕŕíñĝ Ɱášţéŕ]",
         "greeting": "[Ţĥáţ ðúɱɱý ƀéĥíñð ɱé ñéʋéŕ šŵíñĝš ƀáçķ áñð ñéʋéŕ ĝóéš ðóŵñ, {className}. Ŵĥáţ ɱáţţéŕš íš ţĥé ţáļļý: ýóúŕ Ðáɱáĝé Ɱéţéŕš çóúñţ éʋéŕý ƀļóŵ ýóú ļáñð óñ íţ. Ţáŕĝéţ íţ áñð óþéñ ţĥé ɱéţéŕš, áñð Í ŵíļļ ŵáļķ ýóú ţĥŕóúĝĥ ţĥé ŕéšţ.]"
+      },
+      "dev_compare_animal_new_wolf": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŵóļƒ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_bear": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓéáŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_deer": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ðééŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_ram": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŕáɱ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_bull": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓúļļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_raptor": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŕáþţóŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_old_alpaca": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱóóñƒļééçé Ĝŕážéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_spearjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðééþƒéñ Šþéáŕĵáŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_boar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóáŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_fox": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒóẋ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_critter": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çŕíţţéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_horse": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥóŕšé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_cat": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ýúɱí]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_greyjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Óļð Ĝŕéýĵáŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_veiled_stag": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋéíļéð Šţáĝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_veiled_doe": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋéíļéð Ðóé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_gleamstag": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝļéáɱšţáĝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_old_aurelhorn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áúŕéļĥóŕñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_animal_new_spider": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Šþíðéŕ (Ŕéþļáçéð)]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_animal_new_spider_forest": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒóŕéšţ Šþíðéŕ Ţŕíáļ (90%)]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_spider_sand": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šáñð Šþíðéŕ Ţŕíáļ (80%)]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_spider_marsh": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɱáŕšĥ Šþíðéŕ Ţŕíáļ (105%)]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_spider_frost": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒŕóšţ Šþíðéŕ Ţŕíáļ (110%)]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_spider_broodmother": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓŕóóðɱóţĥéŕ Šþíðéŕ Ţŕíáļ (130%)]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_animal_new_crab": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Çŕáƀ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_animal_new_tidepool_boss": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱíšţéŕ Çŕáƀš]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_bandit": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓáñðíţ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_assassin": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Áššáššíñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_skeleton": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ɱíñíóñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_skeleton_warrior": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ŵáŕŕíóŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_cultist": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Çúļţíšţ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_acolyte": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Áçóļýţé]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_necromancer": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ñéçŕóɱáñçéŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_caster": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Çášţéŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_skeleton_rogue": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ŕóĝúé]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_golem": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓóñé Ĝóļéɱ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_treant": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕéáñţ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_kobold": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ķóƀóļð]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_grix": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝŕíẋ ţĥé Ţúññéļķíñĝ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_deeprock_kobold": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ðééþŕóçķ Ķóƀóļð]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_burrower": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓúŕŕóŵéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_murloc": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱúŕļóç]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_frog": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóĝ Ɓļóáţ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_troll": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_troll_marsh": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Ɱáŕšĥ Šķíñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_troll_sand": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Šáñð Šķíñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_troll_rift": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Þáļé Ŕíƒţ Šķíñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_ogre": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Óĝŕé]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_imp": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Íɱþ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_old_bruiser": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕúíšéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_skeleton_boss": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱóŕţĥéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_grubjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝŕúƀĵáŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_drogmar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕļóŕð Ðŕóĝɱáŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_yeti": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ýéţí]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šţóñé Éļéɱéñţáļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_fire_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒíŕé Éļéɱéñţáļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_ice_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Íçé Éļéɱéñţáļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_water_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŵáţéŕ Éļéɱéñţáļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_storm_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šţóŕɱ Éļéɱéñţáļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_old_dragonkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáĝóñķíñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_demon": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéɱóñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_demonalt": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋóíðŵáļķéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_ghost": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝĥóšţ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_gravewing": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝŕáʋéŵíñĝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_glimmerwisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝļíɱɱéŕŵíšþ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_duskwisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ðúšķŵíšþ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_ice_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Íçé Ŵíšþ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_lily_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ļíļý Ŵíšþ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_gale_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝáļé Ŵíšþ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_sporeling": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Šþóŕéļíñĝ Ĝáţĥéŕéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_corrupted_sporeling": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Çóŕŕúþţéð Šþóŕéļíñĝ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_treant_warrior": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕéáñţ Ŵáŕŕíóŕ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_mob_new_wreck_warden": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ţĥé Ŵŕéçķ Ŵáŕðéñ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_ancient_guardian": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Áñçíéñţ Ĝúáŕðíáñ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_waking_warden": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ţĥé Ŵáķíñĝ Ŵáŕðéñ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_pixie": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱúšĥŕóóɱ Þíẋíé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_nightkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ñíĝĥţķíñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_emberkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éɱƀéŕķíñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_gloomshade": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝļóóɱšĥáðé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_pyre_colossus": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Þýŕé Çóļóššúš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mech": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéŕéļíçţ Ɱéçĥ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_mogger": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱóĝĝéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_mob_training_dummy": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţŕáíñíñĝ Ðúɱɱý]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_stalker": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Šţáļķéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_ravager": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ŕáʋáĝéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_hexcaller": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ĥéẋçáļļéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_beastmaster": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ɓéášţɱášţéŕ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_high_priest": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ĥíĝĥ Þŕíéšţ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_mob_ignivar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Íĝñíʋáŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_heart_of_the_end": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéáŕţ óƒ ţĥé Éñð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_crucible_warden": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çŕúçíƀļé Ŵáŕðéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_ember_sentinel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éɱƀéŕ Šéñţíñéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_cinder_artificer": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çíñðéŕ Áŕţíƒíçéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_varkhul_forgefather": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋáŕķĥúļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodlord": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáķéɱáŵ Ɓŕóóðļóŕð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_matriarch": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çíñðŕáļéţĥ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodguard": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕóóðĝúáŕð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_whelp": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵĥéļþ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_dragon_egg": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáĝóñ Éĝĝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_choir_thrall": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çĥóíŕ Ţĥŕáļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_tolling_bell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţóļļíñĝ Ɓéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_new_delve_skel_wraith": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ļéðĝéŕ Ŵŕáíţĥ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_mob_old_delve_skel_ringer": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒúñéŕáļ Ŕíñĝéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_delve_skel_effigy": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šáíñţļéšš Éƒƒíĝý]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_delve_skel_varric": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéáçóñ Ʋáŕŕíç]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_skel_rickshaw_puller": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíçķšĥáŵ Þúļļéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_rift_ritualist": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíţúáļíšţ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_reedbound_acolyte": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕééðƀóúñð Áçóļýţé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_spider_egg_sac": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíðéŕ Éĝĝ Šáç]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_mob_nythraxis_bone_spike": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóñé Šþíķé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_npc_edda_reedhand": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éððá Ŕééðĥáñð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_npc_villager": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éšçóŕţ Ʋíļļáĝéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_npc_knight": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéðĝé Ķñíĝĥţ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_player_warrior": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Áļðŕéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_player_mage": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Ɱáļŕíç]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_mob_old_player_rogue": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Ʋóšš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_the_merchant": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţĥé Ɱéŕçĥáñţ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_new_marshal_redbrook": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱáŕšĥáļ Ŕéðƀŕóóķ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_trader_wilkes": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ţŕáðéŕ Ŵíļķéš]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_apothecary_lin": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Áþóţĥéçáŕý Ļíñ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_brother_aldric": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɓŕóţĥéŕ Áļðŕíç]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_smith_haldren": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Šɱíţĥ Ĥáļðŕéñ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_fisherman_brandt": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ƒíšĥéŕɱáñ Ɓŕáñðţ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_new_foreman_odell": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ƒóŕéɱáñ Óðéļļ]",
+        "title": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]",
+        "greeting": "[ŔÉÞĻÁÇÉÐ ÍÑ ĜÁⱮÉ]"
+      },
+      "dev_compare_npc_old_bursar_fernando": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓúŕšáŕ Ƒéŕñáñðó]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_card_master": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çáŕð Ɱášţéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_chronicler_saul": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šáúļ ţĥé Çĥŕóñíçļéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_forgemistress_darva": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒóŕĝéɱíšţŕéšš Ðáŕʋá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_cook_marlow": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çóóķ Ɱáŕļóŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_weaver_ottilie": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵéáʋéŕ Óţţíļíé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_tinker_gizzel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţíñķéŕ Ĝížžéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_farmer_jessica": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒáŕɱéŕ Ĵéššíçá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_warden_fenwick": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕðéñ Ƒéñŵíçķ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_provisioner_hale": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Þŕóʋíšíóñéŕ Ĥáļé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_herbalist_yara": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéŕƀáļíšţ Ýáŕá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_scout_maren": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šçóúţ Ɱáŕéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_bursar_petra_vell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓúŕšáŕ Þéţŕá Ʋéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_chronicler_osric_fenn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çĥŕóñíçļéŕ Óšŕíç Ƒéññ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_tanner_hesk": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţáññéŕ Ĥéšķ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_farmer_teasel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒáŕɱéŕ Ţéášéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_captain_thessaly": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çáþţáíñ Ţĥéššáļý]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_quartermaster_bree": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɋúáŕţéŕɱášţéŕ Ɓŕéé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_armorer_hode": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áŕɱóŕéŕ Ĥóðé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_heroic_quartermaster": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɋúáŕţéŕɱášţéŕ Ʋéẋ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_warmarshal_draven_kole": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕɱáŕšĥáļ Ðŕáʋéñ Ķóļé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_loremaster_caddis": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ļóŕéɱášţéŕ Çáððíš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_auctioneer_voss": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áúçţíóñééŕ Ʋóšš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_bursar_aldous_crane": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓúŕšáŕ Áļðóúš Çŕáñé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_stablemaster_marla": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱáŕļá Ĥíţçĥéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_chronicler_edda_hartwell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çĥŕóñíçļéŕ Žéñžíé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_alchemist_verane": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áļçĥéɱíšţ Ʋéŕáñé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_farmer_hollis": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒáŕɱéŕ Ĥóļļíš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_tidewatcher_ondrel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Óñðŕéļ Ʋáñé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_fury": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] ƑÚŔÝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_brother_halven": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕóţĥéŕ Ĥáļʋéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_keeper_saelwyn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ķééþéŕ Šáéļŵýñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_loremother_bryn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ļóŕéɱóţĥéŕ Ɓŕýñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_provisioner_fenna": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Þŕóʋíšíóñéŕ Ƒéññá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_wardsmith_orun": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕðšɱíţĥ Óŕúñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_archivist_tullo": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áŕçĥíʋíšţ Ţúļļó]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_huntsman_deral": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥúñţšɱáñ Ðéŕáļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_gatecaptain_brannoc": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝáţéçáþţáíñ Ɓŕáññóç]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_quartermaster_sela": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɋúáŕţéŕɱášţéŕ Šéļá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_scout_yerrin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šçóúţ Ýéŕŕíñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_warden_kaldra": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕðéñ Ķáļðŕá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_hearthkeeper_maeve": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéáŕţĥķééþéŕ Ɱáéʋé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_scout_einna": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šçóúţ Éíññá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_aurorist_veyla": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áúŕóŕíšţ Ʋéýļá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_trapper_brosk": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţŕáþþéŕ Ɓŕóšķ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_reeve_ottoline": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕééʋé Óţţóļíñé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_waywatcher_sorrel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáýŵáţçĥéŕ Šóŕŕéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_ferrymaster_caddow": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒéŕŕýɱášţéŕ Çáððóŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_orchardist_pomeline": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Óŕçĥáŕðíšţ Þóɱéļíñé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_waykeeper_pell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáýķééþéŕ Þéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_bridgewright_alden": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕíðĝéŵŕíĝĥţ Áļðéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_netter_maris": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ñéţţéŕ Ɱáŕíš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_mother_sedge": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱóţĥéŕ Šéðĝé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_lamplighter_sorrel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ļáɱþļíĝĥţéŕ Šóŕŕéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_lira_dewsong": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ļíŕá Ðéŵšóñĝ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_weaver_amelle": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵéáʋéŕ Áɱéļļé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_astronomer_cassian": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ášţŕóñóɱéŕ Çáššíáñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_lampman_cobb": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ļáɱþɱáñ Çóƀƀ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_sexton_marrow": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šéẋţóñ Ɱáŕŕóŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_widow_tansy": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵíðóŵ Ţáñšý]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_vicar_creel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋíçáŕ Çŕééļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_strandwatcher_pell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šţŕáñðŵáţçĥéŕ Þéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_salvage_boss_ryna": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šáļʋáĝé-Ɓóšš Ŕýñá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_pearlmother_isha": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Þéáŕļ-Ɱóţĥéŕ Íšĥá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_hermit_okku": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Óķŕíɱ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_gatewarden_pell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝáţéŵáŕðéñ Þéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_head_gardener_amaranth": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéáð Ĝáŕðéñéŕ Áɱáŕáñţĥ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_wickmother_sorrel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵíçķɱóţĥéŕ Šóŕŕéļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_gardener_yew": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝáŕðéñéŕ Ýéŵ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_farmer_verbena": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒáŕɱéŕ Ʋéŕƀéñá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_watcher_maren": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáţçĥéŕ Ɱáŕéñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_harbormaster_odile": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥáŕƀóŕɱášţéŕ Óðíļé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_keeper_bram": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ķééþéŕ Ɓŕáɱ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_salvager_edda": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šáļʋáĝéŕ Éððá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_warden_coalfast": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕðéñ Çóáļƒášţ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_riftwatch_ollun": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíƒţŵáţçĥ Óļļúñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_quartermaster_edda": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɋúáŕţéŕɱášţéŕ Éððá]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_mender_saul": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱéñðéŕ Šáúļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_bellkeeper_tam": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓéļļķééþéŕ Ţáɱ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_fisher_nell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒŕíĝĥţéñéð Ñéļļ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_riftwright_maelis": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíƒţŵŕíĝĥţ Ɱáéļíš]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_wayfarer_bryn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáýƒáŕéŕ Ɓŕýñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_new_instructor_maren": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Íñšţŕúçţóŕ Ɱáŕéñ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_quartermaster_finch": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɋúáŕţéŕɱášţéŕ Ƒíñçĥ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_bursar_wick": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓúŕšáŕ Ŵíçķ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_ferryman_odo": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒéŕŕýɱáñ Óðó]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_warden_tam": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŵáŕðéñ Ţáɱ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_overseer_pell": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Óʋéŕšééŕ Þéļļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_drillmaster_rook": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ðŕíļļɱášţéŕ Ŕóóķ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_new_tidewarden_nel": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţíðéŵáŕðéñ Ñéļ]",
+        "title": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]",
+        "greeting": "[ŔÉÞĻÁÇÉⱮÉÑŢ ŔÉÁÐÝ]"
+      },
+      "dev_compare_npc_old_archivist_maelin_emberward": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áŕçĥíʋíšţ Ɱáéļíñ Éɱƀéŕŵáŕð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_archivist_maelin_ember_projection": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱáéļíñ'š Éɱƀéŕ Þŕóĵéçţíóñ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_crucible_quartermaster": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɋúáŕţéŕɱášţéŕ Ɓŕóññ Éɱƀéŕŵáŕð]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_spirit_healer": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţĥé Þáļé Ķééþéŕ]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
+      },
+      "dev_compare_npc_old_drillmaster_hale": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕíļļɱášţéŕ Ĥáļé]",
+        "title": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]",
+        "greeting": "[ÑÓ ŔÉÞĻÁÇÉⱮÉÑŢ]"
       },
       "tidewatcher_ondrel": {
         "name": "[Óñðŕéļ Ʋáñé]",
@@ -20352,6 +21548,30 @@ export const en_XA: EnTranslations = {
           },
           "4": {
             "label": "[Ţĥé Ĝáúñţļéţ]"
+          }
+        }
+      },
+      "dev_model_lab": {
+        "name": "[Ɱóðéļ Ţéšţ Íšļáñð]",
+        "welcome": "[Ðéʋéļóþéŕ ɱóðéļ ţéšţ íšļáñð. Úšé ðéʋ çóɱɱáñðš ţó ŕéƀúíļð óŕ çļéáŕ ţéšţ šúƀĵéçţš.]",
+        "pois": {
+          "0": {
+            "label": "[Çĥáŕáçţéŕ Ļíñéúþ]"
+          },
+          "1": {
+            "label": "[ÑÞÇ Ĝáļļéŕý]"
+          },
+          "2": {
+            "label": "[Çŕéáţúŕé Ŕíñĝ]"
+          },
+          "3": {
+            "label": "[Áñíɱáļ Ŕéþļáçéɱéñţš]"
+          },
+          "4": {
+            "label": "[Ɱóƀ Ŕéþļáçéɱéñţš]"
+          },
+          "5": {
+            "label": "[ÑÞÇ Ŕéþļáçéɱéñţš]"
           }
         }
       }

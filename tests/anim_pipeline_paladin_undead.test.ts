@@ -1,9 +1,8 @@
 // Follow-up batch of the large-scale animation authoring initiative (issue
-// #2889): paladin ability-specific clips + the skeleton golem's bespoke
-// attack. Both clips are authored by pose-sample-and-blend
-// (scripts/anim/pose_blend.mjs, scripts/build_paladin_ability_anims.mjs,
-// scripts/build_skeleton_golem_anims.mjs), the same technique documented in
-// .claude/skills/blender-anim-pipeline/SKILL.md and pinned for batch 1 by
+// #2889): paladin ability-specific clips, authored by pose-sample-and-blend
+// (scripts/anim/pose_blend.mjs, scripts/build_paladin_ability_anims.mjs), the
+// same technique documented in .claude/skills/blender-anim-pipeline/SKILL.md
+// and pinned for batch 1 by
 // tests/anim_pipeline_batch1.test.ts (the shipped-GLB-plus-manifest-source
 // contract test pattern, itself following tests/weapon_skins.test.ts's "bow
 // skin attack animation" describe block).
@@ -118,24 +117,16 @@ describe('paladin ability-specific clips (issue #2889 follow-up batch)', () => {
   });
 });
 
-describe('skeleton golem bespoke attack (issue #2889 follow-up batch)', () => {
-  it('ships Golem_Slam in a mesh-free donor GLB', () => {
-    const glbPath = 'public/models/chars/enemies/skeleton_golem_anims.glb';
-    expect(clipNamesOf(glbPath)).toEqual(['Golem_Slam']);
-    expect(meshCountOf(glbPath)).toBe(0);
-  });
-
-  it('gives skel_golem its own bespoke attack instead of the generic two-hand swing', () => {
+describe('skeleton golem unarmed attack', () => {
+  it('uses the base rig\'s two-arm strike, not the retired weapon slam', () => {
     const golemBlock = manifestBlock('skel_golem: {', 'mob_bandit: {');
-    expect(golemBlock).toContain('skeleton_golem_anims.glb');
-    // The clips object OVERRIDES attack to the bespoke clip; the underlying
-    // spread call still names the original generic pair it replaces (the
-    // same shape ELEMENTAL_FLOATING uses over the shared FLOATING constant:
-    // spread the old value, override just the changed field).
     expect(golemBlock).toContain(
-      "...skeletonLargeClips(['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop'])",
+      "...skeletonLargeClips(['Dualwield_Melee_Attack_Chop'])",
     );
-    expect(golemBlock).toContain("attack: ['Golem_Slam']");
+    expect(golemBlock).toContain("attack: ['Dualwield_Melee_Attack_Chop']");
+    expect(golemBlock).not.toContain("attack: ['Golem_Slam']");
+    expect(golemBlock).not.toContain('skeleton_golem_anims.glb');
+    expect(golemBlock).not.toContain('weaponFix:');
 
     // skel_golem is the ONLY VisualDef calling skeletonLargeClips; the other
     // skeleton VisualDefs share the smaller 41-joint rig via skeletonClips()

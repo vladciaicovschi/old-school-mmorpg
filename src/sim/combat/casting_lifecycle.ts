@@ -84,7 +84,7 @@ import {
   SUNDER_CAST_ID,
   TOOL_RECHARGE_CAST_ID,
 } from '../types';
-import { drawWeapon } from '../weapon_stow';
+import { prepareWeaponForAbility } from '../weapon_stow';
 import { sharedCooldownIds } from './ability_cooldown_groups';
 import {
   afflictionAdjustedCastTime,
@@ -1704,7 +1704,7 @@ export function castAbility(
   }
 
   if (p.sitting) ctx.standUp(p);
-  if (p.weaponStowed) drawWeapon(p);
+  prepareWeaponForAbility(p, ability.school);
   if (ability.id !== 'ghost_wolf' && p.auras.some((a) => a.id === 'ghost_wolf')) {
     ctx.breakGhostWolf(p);
   }

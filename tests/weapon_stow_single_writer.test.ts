@@ -48,7 +48,7 @@ describe('the weapon stow overlay is the single writer of the render-side cache'
     // extracted into. What matters is that the sim bit and the swim latch are
     // combined BEFORE the one diff, never diffed separately.
     expect(rendererSource).toMatch(
-      /const stowed = (?:e\.weaponStowed \|\| swimming|weaponStowedOverlay\(e\.weaponStowed, swimming)/,
+      /const stowed = (?:e\.weaponStowed \|\| swimming|weaponStowedOverlay\(\s*e\.weaponStowed,\s*swimming)/,
     );
   });
 

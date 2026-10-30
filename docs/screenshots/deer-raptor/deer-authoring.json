@@ -1,0 +1,113 @@
+{
+  "normalization": {
+    "heading_radians": 0.4437839447424547,
+    "reach_clamp": 0
+  },
+  "idle_height": 1.6234608758557634,
+  "source_sha256": "403cf27544effc07baa9f689ce03ce9671902030e3571060d4adc241e9552234",
+  "bones": 44,
+  "height": 2.25,
+  "gaits": {
+    "walk": {
+      "duration": 1.2,
+      "stride": 0.44,
+      "stance": 0.66,
+      "lift": 0.11
+    },
+    "trot": {
+      "duration": 0.65,
+      "stride": 0.52,
+      "stance": 0.54,
+      "lift": 0.14
+    },
+    "run": {
+      "duration": 0.55,
+      "stride": 0.5,
+      "stance": 0.46,
+      "lift": 0.13
+    }
+  },
+  "clips": {
+    "Deer_Idle": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.3222054153168377
+    },
+    "Deer_CombatIdle": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.27878374984547605
+    },
+    "Deer_Walk": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.1262372403122554
+    },
+    "Deer_Trot": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.06637965455110323
+    },
+    "Deer_Run": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.07525960527600649
+    },
+    "Deer_AntlerLeft": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.19958936625402734
+    },
+    "Deer_AntlerRight": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.191474436046922
+    },
+    "Deer_Charge": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.20336585311766966
+    },
+    "Deer_Hit": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.2902587280812553
+    },
+    "Deer_Death": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": null
+    },
+    "Deer_Challenge": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.32802474906557844
+    },
+    "Deer_AlertLook": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.32802474906557844
+    },
+    "Deer_Graze": {
+      "reach_clamp": 0,
+      "reach_leg": null,
+      "reach_phase": null,
+      "fold_margin": 0.22991442232831702
+    }
+  },
+  "walkRef": 0.7697808186093229,
+  "runRef": 2.739510923458115,
+  "normalization_sample_seconds": 0.5
+}

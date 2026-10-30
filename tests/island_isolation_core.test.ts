@@ -17,6 +17,11 @@ import {
   islandVistaBounds,
 } from '../src/render/island_isolation_core';
 import { MIN_OUTDOOR_FOG_FAR } from '../src/render/zone_streaming';
+import {
+  DEV_MODEL_LAB_ARRIVAL,
+  DEV_MODEL_LAB_RECT,
+  DEV_MODEL_LAB_ZONE_ID,
+} from '../src/sim/content/dev_model_lab';
 import { isOnProvingShore, PROVING_SHORE_ARRIVAL } from '../src/sim/content/proving_shore';
 import { ZONES } from '../src/sim/data';
 import { terrainHeight, WATER_LEVEL } from '../src/sim/world';
@@ -71,6 +76,13 @@ describe('islandScopeStreamsZone', () => {
     expect(streamed.map((z) => z.id)).toEqual([ISLAND_ZONE_ID]);
     // Decisive: the continent has many zones, and the scope drops all of them.
     expect(ZONES.length).toBeGreaterThan(10);
+  });
+
+  it('selects only the model laboratory while the developer stands there', () => {
+    const streamed = ZONES.filter((zone) =>
+      islandScopeStreamsZone(zone.id, DEV_MODEL_LAB_ARRIVAL.x, DEV_MODEL_LAB_ARRIVAL.z),
+    );
+    expect(streamed.map((zone) => zone.id)).toEqual([DEV_MODEL_LAB_ZONE_ID]);
   });
 });
 
@@ -201,5 +213,14 @@ describe('islandVistaBounds', () => {
     // The whole island, arrival included, sits inside it.
     expect(PROVING_SHORE_ARRIVAL.x).toBeGreaterThan(b.minX);
     expect(PROVING_SHORE_ARRIVAL.x).toBeLessThan(b.maxX);
+  });
+
+  it('uses the translated laboratory rectangle on the dev island', () => {
+    expect(islandVistaBounds(DEV_MODEL_LAB_ARRIVAL.x, DEV_MODEL_LAB_ARRIVAL.z)).toEqual({
+      minX: DEV_MODEL_LAB_RECT.xMin,
+      maxX: DEV_MODEL_LAB_RECT.xMax,
+      minZ: DEV_MODEL_LAB_RECT.zMin,
+      maxZ: DEV_MODEL_LAB_RECT.zMax,
+    });
   });
 });

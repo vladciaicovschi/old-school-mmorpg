@@ -484,8 +484,9 @@ export class CharWindow {
     const mwChip = item?.masterwrought
       ? ` <span class="equip-mw-chip" role="img" aria-label="${esc(t('hudChrome.masterwrought.pieceMark'))}"></span>`
       : '';
+    const slotName = this.deps.slotName(slot);
     row.innerHTML = `${icon}
-        <div><div class="slot-name">${esc(this.deps.slotName(slot))}${mwChip}</div><div class="slot-item" style="color:${qColor}">${wornName !== null ? esc(wornName) : esc(t('itemUi.equipment.empty'))}</div></div>`;
+        <div><div class="slot-name">${esc(slotName)}${mwChip}</div><div class="slot-item" style="color:${qColor}">${wornName !== null ? esc(wornName) : esc(t('itemUi.equipment.empty'))}</div></div>`;
     // The helmet-visibility eye (head socket only): a standing wardrobe control,
     // so unlike the corner x it is always visible, and it rides the socket
     // because that is where the player looks for "my helmet". State + side

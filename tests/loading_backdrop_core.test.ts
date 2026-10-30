@@ -1,5 +1,7 @@
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 import { MEDIA_ASSETS } from '../src/render/assets/manifest.generated';
 import { LOADING_BACKDROP_PATHS, selectLoadingBackdropPath } from '../src/ui/loading_backdrop_core';
@@ -48,7 +50,44 @@ describe('loading backdrop selection', () => {
       expect(MEDIA_ASSETS[manifestKey], manifestKey).toMatch(
         /^\/media\/textures\/loading\/[^/]+\.webp$/,
       );
+      const hash = createHash('sha256')
+        .update(readFileSync(join(process.cwd(), 'public', logicalPath)))
+        .digest('hex')
+        .slice(0, 12);
+      expect(MEDIA_ASSETS[manifestKey], `${manifestKey} must not serve stale artwork`).toBe(
+        `/media/${manifestKey.replace(/\.webp$/, `.${hash}.webp`)}`,
+      );
     }
+  });
+
+  it('keeps the repainted backgrounds decodable, opaque, correctly sized and distinct', async () => {
+    const hashes = new Set<string>();
+    for (const logicalPath of LOADING_BACKDROP_PATHS) {
+      const bytes = readFileSync(join(process.cwd(), 'public', logicalPath));
+      const metadata = await sharp(bytes).metadata();
+      expect(metadata, logicalPath).toMatchObject({
+        format: 'webp',
+        width: 1600,
+        height: 900,
+        space: 'srgb',
+        hasAlpha: false,
+      });
+      await sharp(bytes).raw().toBuffer();
+      hashes.add(createHash('sha256').update(bytes).digest('hex'));
+    }
+    expect(hashes.size).toBe(LOADING_BACKDROP_PATHS.length);
+
+    // The guide and server-unavailable page still reference this raw legacy URL.
+    const legacy = readFileSync(join(process.cwd(), 'public', 'loading-screen.jpg'));
+    expect(await sharp(legacy).metadata()).toMatchObject({
+      format: 'jpeg',
+      width: 1538,
+      height: 1023,
+      space: 'srgb',
+      hasAlpha: false,
+    });
+    expect(legacy.length).toBeLessThanOrEqual(600_000);
+    await sharp(legacy).raw().toBuffer();
   });
 
   it('maps the random-unit boundaries safely', () => {

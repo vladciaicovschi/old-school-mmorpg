@@ -33,12 +33,14 @@ import type { ClaudiumStoreItem } from '../net/economy_sdk';
 import { castBarState, consumeBarState, mountSummonBarState } from '../render/cast_bar';
 import {
   CharacterPreview,
+  characterBaseVisualKeyFor,
   modularKeyFor,
   modularLookFor,
   type PreviewFramingName,
 } from '../render/characters';
+import { playerArmorVisualKey } from '../render/characters/armor_tier_core';
 import { preloadMechAssets } from '../render/characters/assets';
-import { mechHeldWeaponOverride } from '../render/characters/manifest';
+import { mechHeldWeaponOverride, VISUALS } from '../render/characters/manifest';
 import type { ModularLook } from '../render/characters/modular';
 import { helmSlotAvailableForEntity } from '../render/characters/player_look_core';
 import {
@@ -16634,10 +16636,12 @@ export class Hud {
     // and wins over the authored look, matching createCharacterVisual's own
     // precedence in-world (composing over it hid a purchased cosmetic).
     const look = previewKey === 'player_mech' ? null : modularLookFor(this.sim.player);
+    const effectiveKey =
+      previewKey === 'player_mech' ? previewKey : characterBaseVisualKeyFor(this.sim.player);
     this.mountSharedPreview(container, {
       cls,
       skin,
-      previewKey,
+      previewKey: effectiveKey,
       look,
       mainhand,
       offhand: this.sim.equipment.offhand ?? null,
@@ -16664,6 +16668,7 @@ export class Hud {
       cls: PlayerClass;
       skin: number;
       skinCatalog: SkinCatalog;
+      equipment: Partial<Record<EquipSlot, string>>;
       mainhand: string | null;
       offhand: string | null;
       /** The inspected player's server-resolved active weapon skin (wire wsk). */
@@ -16675,7 +16680,10 @@ export class Hud {
       this.mountSharedPreview(container, {
         cls: params.cls,
         skin: preview.skin,
-        previewKey: preview.visualKey === 'player_mech' ? preview.visualKey : undefined,
+        previewKey:
+          preview.visualKey === 'player_mech'
+            ? preview.visualKey
+            : playerArmorVisualKey(params.cls, params.equipment, ITEMS, VISUALS),
         mainhand: params.mainhand,
         offhand: params.offhand,
         weaponSkinId: params.weaponSkinId,

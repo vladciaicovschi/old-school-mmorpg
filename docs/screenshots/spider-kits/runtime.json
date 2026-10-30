@@ -1,0 +1,191 @@
+{
+  "facts": [
+    {
+      "variant": "forest",
+      "templateId": "dev_spider_forest",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [
+        "Spider Venom",
+        "Sticky Web"
+      ],
+      "auras": [
+        {
+          "name": "Spider Venom",
+          "kind": "dot",
+          "value": 2
+        },
+        {
+          "name": "Sticky Web",
+          "kind": "root",
+          "value": 0
+        }
+      ],
+      "natureDamage": [
+        {
+          "amount": 2,
+          "ability": "Spider Venom"
+        },
+        {
+          "amount": 2,
+          "ability": "Spider Venom"
+        },
+        {
+          "amount": 2,
+          "ability": "Spider Venom"
+        },
+        {
+          "amount": 2,
+          "ability": "Spider Venom"
+        }
+      ],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    },
+    {
+      "variant": "marsh",
+      "templateId": "dev_spider_marsh",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [
+        "Exposed Wound"
+      ],
+      "auras": [
+        {
+          "name": "Exposed Wound",
+          "kind": "critvuln",
+          "value": 0.5
+        }
+      ],
+      "natureDamage": [],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    },
+    {
+      "variant": "sand",
+      "templateId": "dev_spider_sand",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [],
+      "auras": [],
+      "natureDamage": [],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    },
+    {
+      "variant": "frost",
+      "templateId": "dev_spider_frost",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [],
+      "auras": [],
+      "natureDamage": [],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    },
+    {
+      "variant": "broodmother",
+      "templateId": "dev_spider_broodmother",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [
+        "Brood Venom"
+      ],
+      "auras": [
+        {
+          "name": "Brood Venom",
+          "kind": "dot",
+          "stacks": 5,
+          "value": 15
+        }
+      ],
+      "natureDamage": [
+        {
+          "amount": 3,
+          "ability": "Brood Venom"
+        },
+        {
+          "amount": 6,
+          "ability": "Brood Venom"
+        },
+        {
+          "amount": 9,
+          "ability": "Brood Venom"
+        },
+        {
+          "amount": 12,
+          "ability": "Brood Venom"
+        }
+      ],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    },
+    {
+      "variant": "original",
+      "templateId": "dev_smart_spider",
+      "kind": "mob",
+      "forcedProcs": true,
+      "effects": [
+        "Venom",
+        "Web"
+      ],
+      "auras": [
+        {
+          "name": "Venom",
+          "kind": "dot",
+          "value": 8
+        },
+        {
+          "name": "Web",
+          "kind": "root",
+          "value": 0
+        }
+      ],
+      "natureDamage": [
+        {
+          "amount": 8,
+          "ability": "Venom"
+        },
+        {
+          "amount": 8,
+          "ability": "Venom"
+        },
+        {
+          "amount": 8,
+          "ability": "Venom"
+        },
+        {
+          "amount": 8,
+          "ability": "Venom"
+        }
+      ],
+      "clips": [
+        "Spider_Bite",
+        "Spider_CombatIdle",
+        "Spider_Lunge"
+      ],
+      "visible": true
+    }
+  ],
+  "errors": []
+}

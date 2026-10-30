@@ -315,6 +315,7 @@ interface Projectile {
   // When set, the flying head renders as a short jagged electric bolt streak
   // (a lightning "bolt-shaped" projectile) instead of a smooth glowing comet.
   lightning?: boolean;
+  streak?: boolean;
   // Visual heft multiplier (Pyroblast's heavyBolt = 2): scales the comet core,
   // trail and impact flash; mechanics and speed are untouched.
   scale?: number;
@@ -903,10 +904,38 @@ export class Vfx {
   // High-level effects
   // ---------------------------------------------------------------------
 
-  projectile(sourceId: number, targetId: number, school: string, scale = 1, color?: number): void {
-    const from = this.anchor(sourceId, 0.62);
+  projectileForEvent(
+    event: {
+      sourceId: number;
+      targetId: number;
+      school: string;
+      attackAnimation?: string;
+    },
+    origin?: THREE.Vector3,
+  ): void {
+    this.projectile(
+      event.sourceId,
+      event.targetId,
+      event.school,
+      1,
+      undefined,
+      event.attackAnimation === 'ranged-shot',
+      origin,
+    );
+  }
+
+  projectile(
+    sourceId: number,
+    targetId: number,
+    school: string,
+    scale = 1,
+    color?: number,
+    streak = false,
+    origin?: THREE.Vector3,
+  ): void {
+    const from = origin ?? this.anchor(sourceId, 0.62);
     if (!from) return;
-    this.projectileFrom(from, targetId, school, scale, 26, undefined, color);
+    this.projectileFrom(from, targetId, school, scale, streak ? 40 : 26, undefined, color, streak);
   }
 
   private projectileFrom(
@@ -917,6 +946,7 @@ export class Vfx {
     speed = 26,
     onImpact?: (position: THREE.Vector3) => void,
     color?: number,
+    streak = false,
   ): void {
     if (this.disposed) return;
     const colors = projectileSchoolColors(school, color);
@@ -933,6 +963,7 @@ export class Vfx {
       trailSprite: sprites.trail,
       scale,
       onImpact,
+      streak,
     });
   }
 
@@ -2695,7 +2726,27 @@ export class Vfx {
       const uz = dir.z / dist;
       dir.multiplyScalar(step / dist);
       pr.pos.add(dir);
-      if (pr.lightning) {
+      if (pr.streak) {
+        // A short straight, tapering trace. Reuses the pooled cloud at every
+        // quality tier, with no round comet head or wandering magic particles.
+        const scale = pr.scale ?? 1;
+        for (let sample = 0; sample < 12; sample++) {
+          const back = sample * 0.08;
+          this.spawn(
+            pr.pos.x - ux * back,
+            pr.pos.y - uy * back,
+            pr.pos.z - uz * back,
+            0,
+            0,
+            0,
+            pr.trailColor,
+            (0.18 - sample * 0.008) * scale,
+            0.11,
+            0,
+            SPR.glowCore,
+          );
+        }
+      } else if (pr.lightning) {
         // The flying head is a short jagged electric streak trailing back along
         // the travel direction: a few segments, each kicked perpendicular for the
         // zig-zag, so it reads as a lightning bolt shape rather than a round comet.

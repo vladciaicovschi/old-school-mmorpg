@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/ancient_ram_spear.glb",
+      "out": "models/weapons/community_tribal/ancient_ram_spear.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/arcanum_axe.glb",
+      "out": "models/weapons/community_tribal/arcanum_axe.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/primitive_spear.glb",
+      "out": "models/weapons/community_tribal/primitive_spear.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/savage_axe.glb",
+      "out": "models/weapons/community_tribal/savage_axe.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/stone_axe.glb",
+      "out": "models/weapons/community_tribal/stone_axe.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/stone_tipped_spear.glb",
+      "out": "models/weapons/community_tribal/stone_tipped_spear.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    },
+    {
+      "src": "tmp/asset_src/community_tribal_weapons/wooden_club.glb",
+      "out": "models/weapons/community_tribal/wooden_club.glb",
+      "type": "static",
+      "maxTex": 1024,
+      "keepExtras": true
+    }
+  ]
+}

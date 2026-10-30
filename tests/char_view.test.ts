@@ -74,6 +74,23 @@ describe('char_view: paperdoll data model', () => {
     expect(view.right[5].item).toBe(ITEMS.nielas_coldlight_band);
   });
 
+  it('keeps every independent armor slot when a tiered chest controls the body model', () => {
+    const view = buildPaperdollView(
+      {
+        chest: 'warrior_knight_suit',
+        mainhand: 'worn_sword',
+        helmet: 'cryptbone_helm',
+        feet: 'oiled_boots',
+      },
+      ITEMS,
+    );
+    expect(view.left.map((cell) => cell.slot)).toEqual(PAPERDOLL_LEFT_SLOTS);
+    expect(view.right.map((cell) => cell.slot)).toEqual(PAPERDOLL_RIGHT_SLOTS);
+    expect(view.left[0].item).toBe(ITEMS.cryptbone_helm);
+    expect(view.left[3].item).toBe(ITEMS.warrior_knight_suit);
+    expect(view.right[3].item).toBe(ITEMS.oiled_boots);
+  });
+
   it('renders an empty cell for an unequipped slot or an unknown item id', () => {
     const view = buildPaperdollView({ helmet: 'cryptbone_helm', chest: 'no_such_item' }, ITEMS);
     expect(view.left[0].item).toBe(ITEMS.cryptbone_helm);

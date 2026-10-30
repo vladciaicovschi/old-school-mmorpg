@@ -66,6 +66,7 @@ import {
   catFormDamageMult,
   normalizedInstantSpeed,
   rangedAutoProfile,
+  usesWarlockMeleeAuto,
 } from './form_swing';
 import { isTravelFormAuraKind } from './forms';
 import { tryGrantDawnsWrath } from './paladin_dawns_wrath';
@@ -151,7 +152,9 @@ export function startAutoAttack(ctx: SimContext, pid?: number): void {
   // Auto-dismount when the player is mounted and starts auto-attack.
   if (p.mountKey !== '') forceDismount(ctx, p);
   if (p.sitting) ctx.standUp(p);
-  if (p.weaponStowed) drawWeapon(p);
+  // Arming the sidearm (including Attack on Ability Use during a cast) must
+  // not undo a Warlock's persistent cast stow. Draw on the actual melee swing.
+  if (r.meta.cls !== 'warlock' && p.weaponStowed) drawWeapon(p);
   p.autoAttack = true;
   r.meta.lastActiveTick = ctx.tickCount; // starting auto-attack is a deliberate action
   // Engaging MELEE auto-attack seeds aggro at once, because the swing lands almost
@@ -253,7 +256,12 @@ export function tryPlayerSwing(ctx: SimContext, p: Entity, meta: PlayerMeta): vo
   // mirroring the ghost_wolf break pattern below and the startAutoAttack guard.
   if (p.mountKey !== '') forceDismount(ctx, p);
   const ranged = rangedAutoProfile(p, meta.cls);
-  if (ranged && d <= ranged.maxRange && d >= (ranged.wand ? 0 : ranged.minRange)) {
+  if (
+    ranged &&
+    !usesWarlockMeleeAuto(p, meta.cls, t) &&
+    d <= ranged.maxRange &&
+    d >= (ranged.wand ? 0 : ranged.minRange)
+  ) {
     if (!ctx.hasLineOfSight(p, t)) return;
     ctx.breakGhostWolf(p);
     // Hunters shoot with their equipped weapon (damage range + speed), casters
@@ -271,6 +279,7 @@ export function tryPlayerSwing(ctx: SimContext, p: Entity, meta: PlayerMeta): vo
   // combatant pressed against a wall could swing through it. See sibling
   // logic in Sim.abilityNeedsLineOfSight.
   if (isArenaPos(p.pos.x) && !ctx.hasLineOfSight(p, t)) return;
+  if (meta.cls === 'warlock' && p.weaponStowed) drawWeapon(p);
   ctx.breakGhostWolf(p);
   const dualWieldWhiteMissPenalty = hasDualWieldWhiteMissPenalty(ctx, p, meta);
 

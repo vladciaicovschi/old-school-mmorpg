@@ -7,6 +7,7 @@ import { logAssetMissOnce } from './asset_miss_log';
 import { type AssembleOptions, modularHeadFor } from './assets';
 import { composedLookPiecesFor, type LookPieceQueue, type LookPieces } from './look_pieces';
 import {
+  heldItemLayoutOverrideForVisual,
   mechHeldWeaponOverride,
   modularVisualKey,
   VISUALS,
@@ -16,6 +17,7 @@ import {
 import { MODULAR_WARRIOR_KEY, type ModularLook } from './modular';
 import { npcModularKeyFor } from './npc_looks';
 import { CharacterVisual } from './visual';
+import { characterVisualPoolKey } from './visual_pool';
 
 export { type AnimOverrideFacts, applyEntityAnimOverrides } from './anim_state_entity_core';
 export type { AssembleOptions } from './assets';
@@ -39,16 +41,59 @@ export { CharacterVisual, setWeaponVfxViewportHeight } from './visual';
 // given entity wears is app-level (see src/render/characters/player_look_core.ts),
 // while this module only needs the answer.
 let modularLookProvider: ((e: Entity) => ModularLook | null) | null = null;
+let playerVisualOverrideProvider: ((e: Entity) => string | null) | null = null;
+let npcVisualOverrideProvider: ((e: Entity) => string | null) | null = null;
 
 /** Install (or clear, with null) the entity-to-look mapping. */
 export function setModularLookProvider(fn: ((e: Entity) => ModularLook | null) | null): void {
   modularLookProvider = fn;
 }
 
+/** Install a fixed-body replacement for player entities. The provider
+ * returns a manifest key or null; forms and Combat Mech always retain their
+ * higher-priority replacement bodies. */
+export function setPlayerVisualOverrideProvider(fn: ((e: Entity) => string | null) | null): void {
+  playerVisualOverrideProvider = fn;
+}
+
+/** Install a fixed-body replacement for selected NPC entities. */
+export function setNpcVisualOverrideProvider(fn: ((e: Entity) => string | null) | null): void {
+  npcVisualOverrideProvider = fn;
+}
+
+function characterVisualOverrideFor(e: Entity): string | null {
+  if (e.kind === 'player' && isMechWearer(e)) return null;
+  const provider =
+    e.kind === 'player'
+      ? playerVisualOverrideProvider
+      : e.kind === 'npc'
+        ? npcVisualOverrideProvider
+        : null;
+  const key = provider?.(e) ?? null;
+  if (key && VISUALS[key]) return key;
+  // A chest-selected tier is a complete body, never a modular armor overlay.
+  return e.kind === 'player' && e.equippedItems !== undefined ? visualKeyFor(e) : null;
+}
+
+/** The fixed base-visual identity currently selected for an entity. This is
+ * also the renderer's live-swap key, so entering or leaving a scoped visual
+ * experiment rebuilds the body through the existing gated replacement path. */
+export function characterBaseVisualKeyFor(e: Entity): string {
+  return characterVisualOverrideFor(e) ?? visualKeyFor(e);
+}
+
+/** Pool identity must include the selected body now that one template can use
+ * different rigs on and off the tutorial island. */
+export function characterVisualPoolKeyFor(e: Entity): string | null {
+  const templateKey = characterVisualPoolKey(e);
+  return templateKey ? `${templateKey}:visual:${characterBaseVisualKeyFor(e)}` : null;
+}
+
 /** The look an entity composes with, or null if it keeps its fixed class rig.
  *  The same answer the visual factory uses, exposed so the UI can draw a
  *  PORTRAIT of the composed character instead of a generic class one. */
 export function modularLookFor(e: Entity): ModularLook | null {
+  if (isMechWearer(e) || characterVisualOverrideFor(e)) return null;
   return modularLookProvider?.(e) ?? null;
 }
 
@@ -70,6 +115,7 @@ export function modularKeyFor(e: Entity): string {
  *  keeps a fixed rig. */
 function composedLookOf(e: Entity): { def: VisualDef; look: ModularLook } | null {
   if (isMechWearer(e)) return null;
+  if (characterVisualOverrideFor(e)) return null;
   const look = modularLookProvider?.(e) ?? null;
   if (!look) return null;
   return { def: VISUALS[modularKeyFor(e)], look };
@@ -112,15 +158,20 @@ export function createCharacterVisual(
   // Shapeshift forms are their own model and never compose, and neither does a
   // Combat Mech wearer: the mech is a whole replacement body, so the cosmetic
   // must win over the authored look (composing over it hid a purchased skin).
-  const look = formKey || isMechWearer(e) ? null : (modularLookProvider?.(e) ?? null);
-  const key = formKey ?? (look ? modularKeyFor(e) : visualKeyFor(e));
+  const overrideKey = formKey ? null : characterVisualOverrideFor(e);
+  const sourceLook = formKey || isMechWearer(e) ? null : (modularLookProvider?.(e) ?? null);
+  const look = overrideKey ? null : sourceLook;
+  const key = formKey ?? overrideKey ?? (look ? modularKeyFor(e) : visualKeyFor(e));
   // The class-agnostic Combat Mech adopts the wearer's independent mainhand and
   // offhand layout. e.templateId is the player's class on every host, so this
   // matches offline and online.
-  const weaponOverride =
-    !formKey && key === 'player_mech' && e.kind === 'player'
+  const weaponOverride = !formKey
+    ? key === 'player_mech' && e.kind === 'player'
       ? mechHeldWeaponOverride(e.templateId as PlayerClass)
-      : null;
+      : VISUALS[key]?.attachmentRig !== undefined && (e.kind === 'player' || e.kind === 'npc')
+        ? heldItemLayoutOverrideForVisual(sourceLook ? modularKeyFor(e) : visualKeyFor(e))
+        : null
+    : null;
   try {
     // The world path, and the only one with a point-light budget: its weapon
     // light is born hidden and the budget decides when it shines. A rig built
@@ -134,6 +185,8 @@ export function createCharacterVisual(
       formKey ? null : e.offhandItemId,
       look,
       opts,
+      formKey ? {} : e.equippedItems,
+      formKey ? false : e.helmHidden,
     );
     visual.budgetedWeaponLight = true;
     return visual;

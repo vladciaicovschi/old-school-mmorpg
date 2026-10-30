@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/meshy_smart_rig/smart_imp/smart_imp.glb",
+      "out": "models/creatures/smart_imp.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Imp_Hover",
+        "Imp_CombatHover",
+        "Imp_Fly",
+        "Imp_FlyFast",
+        "Imp_ClawLeft",
+        "Imp_ClawRight",
+        "Imp_Dive",
+        "Imp_Hit",
+        "Imp_Death",
+        "Imp_Threat",
+        "Imp_AlertLook",
+        "Imp_Cast",
+        "Imp_CastRelease"
+      ]
+    }
+  ]
+}

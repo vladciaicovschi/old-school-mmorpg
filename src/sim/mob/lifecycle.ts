@@ -41,18 +41,22 @@ import type { SimContext } from '../sim_context';
 import { clearThreat } from '../threat';
 import { dist2d, type Entity, IGNIVAR_BOSS_ID, NYTHRAXIS_BOSS_ID } from '../types';
 import { groundHeight } from '../world';
+import { cancelTimedMobSpell } from './caster_spell';
 import { resetMobCharge } from './charge';
 import { idleRng, wanderPause } from './idle_rng';
 import { resetMechanicSpacing } from './mechanic_spacing';
 import { resetRiftMechanicWindups } from './rift_escape_window';
+import { resetMobWaterCaster } from './water_caster';
 
 const PACK_FRENZY_AURA_ID = 'pack_frenzy'; // attack-speed buff granted to surviving packmates
 
 export function respawnMob(ctx: SimContext, mob: Entity): void {
+  resetMobWaterCaster(ctx, mob);
   if (mob.ownerId !== null) {
     ctx.despawnPersistentPet(mob);
     return;
   }
+  cancelTimedMobSpell(ctx, mob);
   ctx.clearNonPlayerStatAuras(mob);
   // The entity id is about to be reused for a live mob: a corpse-harvest
   // reservation must not survive it (Intentional Gathering, PR3). A no-op

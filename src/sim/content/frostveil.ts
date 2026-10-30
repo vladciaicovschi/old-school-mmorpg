@@ -1,3 +1,4 @@
+import { applySettlementProps, settlementRoads } from '../settlements_layout';
 // The Frostveil Reach (levels 17-20). A snowbound mountain realm of terraced
 // benches, frozen tarns, and auroras, north of the Drakemaw belt. Walked
 // into like the Drakelands: the Snowline pass climbs out of the volcanic
@@ -50,7 +51,7 @@ export const FROSTVEIL_ZONE: ZoneDef = {
 
 // Bench-to-bench mountain paths; terracing is suppressed near roads so every
 // marked route stays climbable (see the frost shaping in world.ts).
-export const FROSTVEIL_ROADS: { x: number; z: number }[][] = [
+const FROSTVEIL_LEGACY_ROADS: { x: number; z: number }[][] = [
   [
     { x: -30, z: 1560 },
     { x: 10, z: 1600 },
@@ -693,7 +694,7 @@ export const FROSTVEIL_ESCORTS: Record<string, EscortDef> = {
   },
 };
 
-export const FROSTVEIL_PROPS: ZonePropsDef = {
+const FROSTVEIL_LEGACY_PROPS: ZonePropsDef = {
   ...emptyZoneProps(),
   // Icemantle: a snug village ringing its firelit market plaza (the well
   // and the great fire at the centre, stalls and crates crowding in, homes
@@ -738,3 +739,10 @@ export const FROSTVEIL_PROPS: ZonePropsDef = {
     [-83, 1746], // Brosk's camp
   ],
 };
+
+export const FROSTVEIL_PROPS: ZonePropsDef = applySettlementProps(
+  FROSTVEIL_LEGACY_PROPS,
+  'icemantle',
+);
+
+export const FROSTVEIL_ROADS = settlementRoads('icemantle', FROSTVEIL_LEGACY_ROADS);

@@ -1,0 +1,103 @@
+{
+  "low": false,
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "type": "MeshStandardMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "elemental_helmet_glow",
+      "type": "ShaderMaterial",
+      "triangles": 288,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_head",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_hand.l",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_upperarm.l",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_vfx_hand.r",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_upperarm.r",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_vfx_core",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_rock_low1",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_rock_low11",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "elemental_dust_hips",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "character_far_mesh",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "character_shadow_proxy",
+      "type": "MeshBasicMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "",
+      "type": "MeshBasicMaterial",
+      "triangles": 32,
+      "uv": true
+    }
+  ],
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Stone_Idle",
+    "Stone_Move"
+  ],
+  "particles": 80,
+  "billboardCount": 9,
+  "head": {
+    "color": "a39d72",
+    "visible": true,
+    "triangles": 288
+  },
+  "errors": []
+}

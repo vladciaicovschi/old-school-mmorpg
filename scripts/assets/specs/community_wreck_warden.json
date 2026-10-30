@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_wreck_warden/community_wreck_warden.glb",
+      "out": "models/creatures/community_wreck_warden.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "WreckWarden_Alert",
+        "WreckWarden_Axe_Breathe_and_Look_Around",
+        "WreckWarden_Charged_Spell_Cast",
+        "WreckWarden_Charged_Upward_Slash",
+        "WreckWarden_Dead",
+        "WreckWarden_Idle_5",
+        "WreckWarden_Left_Hook_from_Guard",
+        "WreckWarden_Right_Hand_Sword_Slash",
+        "WreckWarden_Running",
+        "WreckWarden_Shield_Push_Left",
+        "WreckWarden_Spartan_Kick",
+        "WreckWarden_Walking",
+        "WreckWarden_Weapon_Combo",
+        "WreckWarden_Weapon_Combo_1"
+      ]
+    }
+  ]
+}

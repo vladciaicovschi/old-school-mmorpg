@@ -1,0 +1,1103 @@
+{
+  "models": {
+    "fort:barracks": {
+      "url": "/models/wolf_run_fort/barracks.glb",
+      "metadata": {
+        "footprint": {
+          "width": 6,
+          "depth": 8
+        },
+        "entrance": {
+          "x": 0,
+          "z": 4,
+          "thresholdY": 0.03,
+          "width": 1.12
+        },
+        "foundationTop": 0.02,
+        "interior": {
+          "floorY": 0.03,
+          "items": [
+            {
+              "id": "bunk-a",
+              "name": "Bed_Bunk",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -2.5002893924713137,
+                  0.03,
+                  -3.4672980308532715
+                ],
+                "max": [
+                  -0.9997106075286865,
+                  1.7351913149654865,
+                  -1.5352407455444337
+                ]
+              }
+            },
+            {
+              "id": "bunk-b",
+              "name": "Bed_Bunk2",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -2.5002893924713137,
+                  0.03,
+                  -0.9672980308532715
+                ],
+                "max": [
+                  -0.9997106075286865,
+                  1.7351913149654865,
+                  0.9647592544555664
+                ]
+              }
+            },
+            {
+              "id": "bed-0",
+              "name": "Bed_Twin1",
+              "level": 1,
+              "surface": 3.03,
+              "bounds": {
+                "min": [
+                  -2.5002893924713137,
+                  3.03,
+                  -3.5647592544555664
+                ],
+                "max": [
+                  -0.9997106075286865,
+                  3.6740828560618684,
+                  -1.6352407455444338
+                ]
+              }
+            },
+            {
+              "id": "bed-1",
+              "name": "Bed_Twin2",
+              "level": 1,
+              "surface": 3.03,
+              "bounds": {
+                "min": [
+                  -2.5002893924713137,
+                  3.03,
+                  -1.0647592544555664
+                ],
+                "max": [
+                  -0.9997106075286865,
+                  3.6376856850413604,
+                  0.8647592544555665
+                ]
+              }
+            },
+            {
+              "id": "bed-2",
+              "name": "Bed_Twin3",
+              "level": 1,
+              "surface": 3.03,
+              "bounds": {
+                "min": [
+                  -2.5002893924713137,
+                  3.03,
+                  1.4352407455444336
+                ],
+                "max": [
+                  -0.9997106075286865,
+                  3.6376856850413604,
+                  3.3647592544555662
+                ]
+              }
+            },
+            {
+              "id": "personal-chest-ground",
+              "name": "Chest_Wood",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -0.4469122231006622,
+                  0.03,
+                  -3.464393797516823
+                ],
+                "max": [
+                  0.4463204205036163,
+                  0.5306590515375137,
+                  -2.9356062024831773
+                ]
+              }
+            },
+            {
+              "id": "personal-chest-upper",
+              "name": "Chest_Wood",
+              "level": 1,
+              "surface": 3.03,
+              "bounds": {
+                "min": [
+                  -0.6149899214506149,
+                  3.03,
+                  -3.4955085262656214
+                ],
+                "max": [
+                  0.21444039046764374,
+                  3.4948976907134055,
+                  -3.0044914737343786
+                ]
+              }
+            },
+            {
+              "id": "duty-table",
+              "name": "Table_Large",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -2.7106094658374786,
+                  0.03,
+                  1.8893122643232347
+                ],
+                "max": [
+                  -0.28939053416252136,
+                  0.7214295751601457,
+                  2.8214752554893496
+                ]
+              }
+            },
+            {
+              "id": "duty-book",
+              "name": "Book_Open",
+              "level": 0,
+              "surface": 0.7264295751601457,
+              "bounds": {
+                "min": [
+                  -1.973778420089647,
+                  0.7264295751601457,
+                  2.2266405093004247
+                ],
+                "max": [
+                  -1.6247630610933954,
+                  0.7600776008091633,
+                  2.4830099139146
+                ]
+              }
+            },
+            {
+              "id": "duty-mug",
+              "name": "Mug",
+              "level": 0,
+              "surface": 0.7264295751601457,
+              "bounds": {
+                "min": [
+                  -1.106296670436859,
+                  0.7264295751601457,
+                  2.290212744474411
+                ],
+                "max": [
+                  -0.9526306092739105,
+                  0.8735359324514865,
+                  2.4076429545879363
+                ]
+              }
+            },
+            {
+              "id": "duty-candle",
+              "name": "Candle_1",
+              "level": 0,
+              "surface": 0.7264295751601457,
+              "bounds": {
+                "min": [
+                  -2.3970159202814103,
+                  0.7264295751601457,
+                  2.292671060562134
+                ],
+                "max": [
+                  -2.303135397285223,
+                  0.8584184073051437,
+                  2.4005382493138314
+                ]
+              }
+            },
+            {
+              "id": "seat-a",
+              "name": "Stool",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -1.851968953758478,
+                  0.030000000000000002,
+                  1.2480310209095478
+                ],
+                "max": [
+                  -1.4485520996153354,
+                  0.5304145303275436,
+                  1.6514479003846645
+                ]
+              }
+            },
+            {
+              "id": "seat-b",
+              "name": "Stool",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  -1.851968953758478,
+                  0.030000000000000002,
+                  3.048031020909548
+                ],
+                "max": [
+                  -1.4485520996153354,
+                  0.5304145303275436,
+                  3.4514479003846645
+                ]
+              }
+            },
+            {
+              "id": "interior-weapons",
+              "name": "WeaponStand",
+              "level": 0,
+              "surface": 0.03,
+              "bounds": {
+                "min": [
+                  1.3608663886785508,
+                  0.03,
+                  2.8348234608769416
+                ],
+                "max": [
+                  2.539133611321449,
+                  0.9729244699073024,
+                  3.6704933911561968
+                ]
+              }
+            },
+            {
+              "id": "wall-shield-0",
+              "name": "Shield_Wooden",
+              "level": 0,
+              "surface": 1.25,
+              "bounds": {
+                "min": [
+                  -0.6765593796968461,
+                  1.25,
+                  -3.790696233462077
+                ],
+                "max": [
+                  -0.123440620303154,
+                  1.808806598186493,
+                  -3.6297542789578436
+                ]
+              }
+            },
+            {
+              "id": "wall-shield-1",
+              "name": "Shield_Metal",
+              "level": 0,
+              "surface": 1.25,
+              "bounds": {
+                "min": [
+                  0.22344062030315398,
+                  1.25,
+                  -3.790696233462077
+                ],
+                "max": [
+                  0.776559379696846,
+                  1.808806598186493,
+                  -3.6297542789578436
+                ]
+              }
+            }
+          ]
+        },
+        "walkColliders": [
+          {
+            "id": "wall-left",
+            "minX": -3.15,
+            "maxX": -2.85,
+            "minZ": -4.15,
+            "maxZ": 4.15
+          },
+          {
+            "id": "wall-right",
+            "minX": 2.85,
+            "maxX": 3.15,
+            "minZ": -4.15,
+            "maxZ": 4.15
+          },
+          {
+            "id": "wall-back",
+            "minX": -3.15,
+            "maxX": 3.15,
+            "minZ": -4.15,
+            "maxZ": -3.85
+          },
+          {
+            "id": "wall-front-left",
+            "minX": -3.15,
+            "maxX": -0.56,
+            "minZ": 3.85,
+            "maxZ": 4.15
+          },
+          {
+            "id": "wall-front-right",
+            "minX": 0.56,
+            "maxX": 3.15,
+            "minZ": 3.85,
+            "maxZ": 4.15
+          }
+        ]
+      },
+      "bounds": {
+        "min": [
+          -4.359615880132512,
+          -0.008770098790815695,
+          -4.8360066413879395
+        ],
+        "max": [
+          4.359615880132512,
+          10.65562909628891,
+          4.941406726837158
+        ]
+      }
+    },
+    "fort:store": {
+      "url": "/models/wolf_run_fort/store.glb",
+      "metadata": {
+        "footprint": {
+          "width": 4,
+          "depth": 4
+        },
+        "entrance": {
+          "x": 0,
+          "z": 2,
+          "thresholdY": 0.03,
+          "width": 1.12
+        },
+        "foundationTop": 0.02
+      },
+      "bounds": {
+        "min": [
+          -2.767246961593628,
+          -0.008544828742742538,
+          -2.794228770042145
+        ],
+        "max": [
+          2.767246961593628,
+          6.527485631145047,
+          2.8215668201446533
+        ]
+      }
+    },
+    "fort:tower": {
+      "url": "/models/wolf_run_fort/stone_tower.glb",
+      "metadata": {
+        "footprint": {
+          "width": 4,
+          "depth": 4
+        },
+        "entrance": {
+          "x": 0,
+          "z": 2,
+          "thresholdY": 0.03,
+          "width": 1.12
+        },
+        "foundationTop": 0.02
+      },
+      "bounds": {
+        "min": [
+          -2.619075974308255,
+          -0.008544828742742538,
+          -2.6033764991386406
+        ],
+        "max": [
+          2.619075974308255,
+          15.78881549835205,
+          2.59613739582138
+        ]
+      }
+    },
+    "fort:gate": {
+      "url": "/models/wolf_run_fort/stone_gate.glb",
+      "metadata": {
+        "groundAsset": true
+      },
+      "bounds": {
+        "min": [
+          -3.549999952316284,
+          0,
+          -3.256926236268857
+        ],
+        "max": [
+          3.611605529785156,
+          7.365901105007669,
+          0.8199224719727055
+        ]
+      }
+    },
+    "fort:fence": {
+      "url": "/models/wolf_run_fort/stone_wall.glb",
+      "metadata": {
+        "groundAsset": true,
+        "terrainMode": "bottom-only"
+      },
+      "bounds": {
+        "min": [
+          -1.0200341803520516,
+          0,
+          -0.550000011920929
+        ],
+        "max": [
+          1.0200341803520516,
+          4.7199947635193285,
+          0.550000011920929
+        ]
+      }
+    },
+    "fort:corner": {
+      "url": "/models/wolf_run_fort/stone_corner.glb",
+      "metadata": {
+        "groundAsset": true
+      },
+      "bounds": {
+        "min": [
+          -1.1086970122278492,
+          0,
+          -0.9088231589756224
+        ],
+        "max": [
+          0.8500000238418579,
+          4.400027421780507,
+          0.8500000238418579
+        ]
+      }
+    },
+    "fort:dummy": {
+      "url": "/models/wolf_run_fort/dummy.glb",
+      "metadata": {},
+      "bounds": {
+        "min": [
+          -0.4040466845035553,
+          -0.002887953072786331,
+          -0.2920801341533661
+        ],
+        "max": [
+          0.4044542610645294,
+          1.8597913980484009,
+          0.2925231158733368
+        ]
+      }
+    },
+    "fort:whetstone": {
+      "url": "/models/wolf_run_fort/whetstone.glb",
+      "metadata": {},
+      "bounds": {
+        "min": [
+          -0.5627491474151611,
+          0.002910962328314781,
+          -0.37483900785446167
+        ],
+        "max": [
+          0.5781391263008118,
+          1.172794222831726,
+          0.5269156694412231
+        ]
+      }
+    }
+  },
+  "settlement": {
+    "id": "wolf-run-fort",
+    "zoneId": "eastbrook_vale",
+    "bounds": {
+      "xMin": 9,
+      "xMax": 39,
+      "zMin": -25,
+      "zMax": 11
+    },
+    "models": {
+      "entrance-step": "eastbrook:entrance-step",
+      "entrance-platform": "eastbrook:entrance-platform"
+    },
+    "lots": [
+      {
+        "id": "barracks",
+        "kind": "house",
+        "modelId": "fort:barracks",
+        "x": 26.31080485502939,
+        "z": -0.9999999999999999,
+        "w": 6,
+        "d": 8,
+        "rot": -1.5707963267948966,
+        "front": {
+          "x": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "store",
+        "kind": "house",
+        "modelId": "fort:store",
+        "x": 25,
+        "z": -15.905402427514694,
+        "w": 4,
+        "d": 4,
+        "rot": 0,
+        "front": {
+          "x": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "tower",
+        "kind": "house",
+        "modelId": "fort:tower",
+        "x": 11.5,
+        "z": 7.392716683566231,
+        "w": 4,
+        "d": 4,
+        "rot": 3.141592653589793,
+        "front": {
+          "x": 0,
+          "z": 1
+        }
+      }
+    ],
+    "roads": [],
+    "fixed": [],
+    "dressing": [
+      {
+        "id": "supply-barrel-a",
+        "modelId": "eastbrook:barrel",
+        "x": 29.5,
+        "z": -11.7,
+        "rot": 0,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "supply-barrel-b",
+        "modelId": "eastbrook:barrel",
+        "x": 31,
+        "z": -12.5,
+        "rot": 0.2,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "cargo-crate-a",
+        "modelId": "eastbrook:crate",
+        "x": 28.7,
+        "z": -9.3,
+        "rot": 0.1,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "cargo-crate-b",
+        "modelId": "eastbrook:crate",
+        "x": 30.4,
+        "z": -9.3,
+        "rot": -0.2,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "supplies-bag",
+        "modelId": "bandit:bag",
+        "x": 32,
+        "z": -10,
+        "rot": 0.5,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "fire",
+        "modelId": "eastbrook:firepit",
+        "x": 14.8,
+        "z": -16,
+        "rot": 0,
+        "scale": 1.4
+      },
+      {
+        "id": "rest-bench",
+        "modelId": "eastbrook:bench",
+        "x": 17,
+        "z": -20.5,
+        "rot": 1.5707963267948966,
+        "scale": 1.15
+      },
+      {
+        "id": "barrel-water",
+        "modelId": "eastbrook:barrel",
+        "x": 14,
+        "z": -20,
+        "rot": 0.4,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "water-bucket",
+        "modelId": "bandit:bucket",
+        "x": 15.2,
+        "z": -20,
+        "rot": 0,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "woodpile",
+        "modelId": "eastbrook:woodpile-small",
+        "x": 33.8,
+        "z": 6.4,
+        "rot": 1.5707963267948966,
+        "scale": 0.8
+      },
+      {
+        "id": "weapons",
+        "modelId": "bandit:rack",
+        "x": 33.5,
+        "z": -9.3,
+        "rot": 3.141592653589793,
+        "scale": 1.4444444444444444
+      },
+      {
+        "id": "training-a",
+        "modelId": "fort:dummy",
+        "x": 33.7,
+        "z": -17,
+        "rot": 1.5707963267948966,
+        "scale": 1.35
+      },
+      {
+        "id": "training-b",
+        "modelId": "fort:dummy",
+        "x": 35.4,
+        "z": -19.4,
+        "rot": 1.5707963267948966,
+        "scale": 1.35
+      },
+      {
+        "id": "maintenance",
+        "modelId": "fort:whetstone",
+        "x": 31,
+        "z": -21.8,
+        "rot": 0,
+        "scale": 1.3
+      },
+      {
+        "id": "kitchen-tripod",
+        "modelId": "bandit:tripod",
+        "x": 14,
+        "z": -13,
+        "rot": 0,
+        "scale": 1.4
+      }
+    ],
+    "landmarks": [],
+    "fortifications": [
+      {
+        "id": "wall-1",
+        "modelId": "fort:fence",
+        "x": 11,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-2",
+        "modelId": "fort:fence",
+        "x": 13,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-3",
+        "modelId": "fort:fence",
+        "x": 15,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-4",
+        "modelId": "fort:fence",
+        "x": 17,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-5",
+        "modelId": "fort:fence",
+        "x": 19,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-6",
+        "modelId": "fort:fence",
+        "x": 21,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-7",
+        "modelId": "fort:fence",
+        "x": 23,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-8",
+        "modelId": "fort:fence",
+        "x": 25,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-9",
+        "modelId": "fort:fence",
+        "x": 27,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-10",
+        "modelId": "fort:fence",
+        "x": 29,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-11",
+        "modelId": "fort:fence",
+        "x": 31,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-12",
+        "modelId": "fort:fence",
+        "x": 33,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-13",
+        "modelId": "fort:fence",
+        "x": 35,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-14",
+        "modelId": "fort:fence",
+        "x": 37,
+        "z": -24,
+        "rot": 3.141592653589793
+      },
+      {
+        "id": "wall-15",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -23,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-16",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -21,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-17",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -19,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-18",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -17,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-19",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -15,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-20",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -13,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-21",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -11,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-22",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -9,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-23",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -7,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-24",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -5,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-25",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -3,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-26",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": -1,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-27",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": 1,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-28",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": 3,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-29",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": 5,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-30",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": 7,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-31",
+        "modelId": "fort:fence",
+        "x": 38,
+        "z": 9,
+        "rot": 1.5707963267948966
+      },
+      {
+        "id": "wall-32",
+        "modelId": "fort:fence",
+        "x": 37.02916666666667,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-33",
+        "modelId": "fort:fence",
+        "x": 35.0875,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-34",
+        "modelId": "fort:fence",
+        "x": 33.145833333333336,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-35",
+        "modelId": "fort:fence",
+        "x": 31.204166666666666,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-36",
+        "modelId": "fort:fence",
+        "x": 29.2625,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-37",
+        "modelId": "fort:fence",
+        "x": 27.320833333333333,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-38",
+        "modelId": "fort:fence",
+        "x": 25.379166666666666,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-39",
+        "modelId": "fort:fence",
+        "x": 23.4375,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-40",
+        "modelId": "fort:fence",
+        "x": 21.495833333333334,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-41",
+        "modelId": "fort:fence",
+        "x": 19.554166666666667,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-42",
+        "modelId": "fort:fence",
+        "x": 17.6125,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-43",
+        "modelId": "fort:fence",
+        "x": 15.67083333333333,
+        "z": 10,
+        "rot": 0
+      },
+      {
+        "id": "wall-44",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": 4.3725,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-45",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": 2.5175,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-46",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": 0.6624999999999996,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-47",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -1.1925,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-48",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -9.825000000000001,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-49",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -11.715,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-50",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -13.605,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-51",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -15.495000000000001,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-52",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -17.384999999999998,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-53",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -19.275,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-54",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -21.165,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "wall-55",
+        "modelId": "fort:fence",
+        "x": 10,
+        "z": -23.055,
+        "rot": 4.71238898038469
+      },
+      {
+        "id": "gate",
+        "modelId": "fort:gate",
+        "x": 10,
+        "z": -5.5,
+        "rot": -1.5707963267948966
+      },
+      {
+        "id": "corner-0",
+        "modelId": "fort:corner",
+        "x": 10,
+        "z": -24,
+        "rot": 0
+      },
+      {
+        "id": "corner-1",
+        "modelId": "fort:corner",
+        "x": 38,
+        "z": -24,
+        "rot": -1.5707963267948966
+      },
+      {
+        "id": "corner-2",
+        "modelId": "fort:corner",
+        "x": 38,
+        "z": 10,
+        "rot": 3.141592653589793
+      }
+    ]
+  }
+}

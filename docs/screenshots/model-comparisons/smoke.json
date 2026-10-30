@@ -1,0 +1,52 @@
+{
+  "smokeOnly": true,
+  "renderer": "headless SwiftShader",
+  "errors": [],
+  "shots": [
+    {
+      "pairId": "animal_wolf",
+      "old": {
+        "templateId": "dev_compare_animal_old_wolf",
+        "visualKey": "mob_wolf",
+        "side": "old",
+        "status": "ready",
+        "category": "animal",
+        "pairId": "animal_wolf",
+        "x": 592,
+        "z": -150,
+        "facing": 3.141592653589793
+      },
+      "count": 240
+    },
+    {
+      "pairId": "animal_boar",
+      "old": {
+        "templateId": "dev_compare_animal_old_boar",
+        "visualKey": "mob_boar",
+        "side": "old",
+        "status": "missing",
+        "category": "animal",
+        "pairId": "animal_boar",
+        "x": 752,
+        "z": -150,
+        "facing": 3.141592653589793
+      },
+      "count": 240
+    },
+    {
+      "pairId": "npc_apothecary_lin",
+      "old": {
+        "templateId": "dev_compare_npc_old_apothecary_lin",
+        "sourceNpcId": "apothecary_lin",
+        "side": "old",
+        "status": "installed",
+        "category": "npc",
+        "pairId": "npc_apothecary_lin",
+        "x": 872,
+        "z": -30,
+        "facing": 3.141592653589793
+      },
+      "count": 240
+    }
+  ]
+}

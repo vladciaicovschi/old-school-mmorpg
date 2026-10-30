@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/dev_rogue_minion/dev_rogue_minion.glb",
+      "out": "models/chars/npcs/dev_rogue_minion.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_minion/dev_skeleton_minion.glb",
+      "out": "models/chars/npcs/dev_skeleton_minion.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_rogue_assassin/dev_rogue_assassin.glb",
+      "out": "models/chars/npcs/dev_rogue_assassin.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_warrior/dev_skeleton_warrior.glb",
+      "out": "models/chars/npcs/dev_skeleton_warrior.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_cultist/dev_skeleton_cultist.glb",
+      "out": "models/chars/npcs/dev_skeleton_cultist.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_kobold/dev_kobold.glb",
+      "out": "models/chars/npcs/dev_kobold.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_troll/dev_troll.glb",
+      "out": "models/chars/npcs/dev_troll.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_bone_golem/dev_bone_golem.glb",
+      "out": "models/chars/npcs/dev_bone_golem.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_meshy_murlok/dev_meshy_murlok.glb",
+      "out": "models/chars/npcs/dev_meshy_murlok.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_meshy_treant/dev_meshy_treant.glb",
+      "out": "models/chars/npcs/dev_meshy_treant.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_meshy_ogre/dev_meshy_ogre.glb",
+      "out": "models/chars/npcs/dev_meshy_ogre.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_rogue/dev_skeleton_rogue.glb",
+      "out": "models/chars/npcs/dev_skeleton_rogue.glb",
+      "type": "character"
+    }
+  ]
+}

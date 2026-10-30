@@ -1,0 +1,43 @@
+{
+  "idle": {
+    "clip": "Bear_Idle",
+    "time": 2.0166666666666644,
+    "base": "idle",
+    "oneShot": false
+  },
+  "run": {
+    "clip": "Bear_Run",
+    "time": 0.262755537669539,
+    "base": "run",
+    "oneShot": false
+  },
+  "attack": {
+    "clip": "Bear_SwipeLeft",
+    "time": 0.41666666666666663,
+    "base": "idle",
+    "oneShot": true
+  },
+  "recovered": {
+    "clip": "Bear_Idle",
+    "time": 0.9833333333333347,
+    "base": "idle",
+    "oneShot": false
+  },
+  "death": {
+    "clip": "Bear_Death",
+    "time": 1.399999976158142,
+    "base": "idle",
+    "oneShot": false
+  },
+  "clips": [
+    "Bear_CombatIdle",
+    "Bear_Death",
+    "Bear_Hit",
+    "Bear_Idle",
+    "Bear_Roar",
+    "Bear_Run",
+    "Bear_SwipeLeft",
+    "Bear_SwipeRight",
+    "Bear_Walk"
+  ]
+}

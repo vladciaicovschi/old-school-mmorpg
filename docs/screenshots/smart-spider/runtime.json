@@ -1,0 +1,26 @@
+{
+  "facts": {
+    "lab": {
+      "templateId": "dev_smart_spider",
+      "name": "Spider (Replaced)",
+      "pos": {
+        "x": 836,
+        "y": 1.7000000000000002,
+        "z": 48
+      }
+    },
+    "production": "widowsilk_spinner",
+    "maxSpeed": 8.500000000000933,
+    "clips": [
+      "Spider_Run",
+      "Spider_Bite",
+      "Spider_CombatIdle",
+      "Spider_Lunge",
+      "Spider_Death"
+    ],
+    "attacks": 4,
+    "dead": true,
+    "visible": true
+  },
+  "errors": []
+}

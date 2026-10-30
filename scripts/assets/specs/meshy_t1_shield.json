@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/meshy_t1_shield/raw/battleworn_oak_shield.glb",
+      "out": "models/weapons/meshy/battleworn_oak_shield.glb",
+      "type": "static",
+      "maxTex": 512
+    }
+  ]
+}

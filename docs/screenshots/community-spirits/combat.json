@@ -1,0 +1,92 @@
+{
+  "facts": [
+    {
+      "id": "reliquary_ledger_wraith",
+      "key": "delve_skel_wraith",
+      "clips": [
+        "Ghost_Move",
+        "Ghost_Attack",
+        "Ghost_CombatIdle"
+      ],
+      "auras": [
+        "Ledger Rot"
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Ghost_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "duskwisp",
+      "key": "mob_duskwisp",
+      "clips": [
+        "Wisp_Move",
+        "Wisp_Attack",
+        "Wisp_Idle"
+      ],
+      "auras": [
+        "Duskchill"
+      ],
+      "hits": 6,
+      "dead": true,
+      "deathClip": "Wisp_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "ice_wisp",
+      "key": "mob_ice_wisp",
+      "clips": [
+        "Wisp_Move",
+        "Wisp_Attack",
+        "Wisp_Idle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Wisp_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "lily_wisp",
+      "key": "mob_lily_wisp",
+      "clips": [
+        "Wisp_Move",
+        "Wisp_Attack",
+        "Wisp_Idle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Wisp_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "gale_wisp",
+      "key": "mob_gale_wisp",
+      "clips": [
+        "Wisp_Attack",
+        "Wisp_Idle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Wisp_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "glimmerwisp",
+      "key": "mob_glimmerwisp",
+      "clips": [
+        "Wisp_Move",
+        "Wisp_Attack",
+        "Wisp_Idle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Wisp_Death",
+      "mistVisible": false
+    }
+  ],
+  "errors": []
+}

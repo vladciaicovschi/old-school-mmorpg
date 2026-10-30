@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Bear_Walk",
+    "samples": 41,
+    "lowestVertexY": -0.014828677925400683,
+    "phase": 0.175
+  },
+  {
+    "name": "Bear_Run",
+    "samples": 41,
+    "lowestVertexY": -0.021432376946211036,
+    "phase": 0.475
+  },
+  {
+    "name": "Bear_SwipeLeft",
+    "samples": 41,
+    "lowestVertexY": -0.013961967519202064,
+    "phase": 0.75
+  },
+  {
+    "name": "Bear_SwipeRight",
+    "samples": 41,
+    "lowestVertexY": -0.012561247693243148,
+    "phase": 0.75
+  },
+  {
+    "name": "Bear_DoubleSlam",
+    "samples": 41,
+    "lowestVertexY": -0.006469707717525414,
+    "phase": 0.675
+  },
+  {
+    "name": "Wolf_Idle",
+    "samples": 41,
+    "lowestVertexY": -0.001678619799780499,
+    "phase": 0.35
+  },
+  {
+    "name": "Wolf_CombatIdle",
+    "samples": 41,
+    "lowestVertexY": -0.001778385622445849,
+    "phase": 0.35
+  },
+  {
+    "name": "Wolf_Walk",
+    "samples": 41,
+    "lowestVertexY": -0.005955569005599568,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_Trot",
+    "samples": 41,
+    "lowestVertexY": -0.005990451911594895,
+    "phase": 0.55
+  },
+  {
+    "name": "Wolf_Run",
+    "samples": 41,
+    "lowestVertexY": -0.007358651146205608,
+    "phase": 0.9
+  },
+  {
+    "name": "Wolf_BiteLeft",
+    "samples": 41,
+    "lowestVertexY": -0.008028233431788337,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_BiteRight",
+    "samples": 41,
+    "lowestVertexY": -0.008068789714659762,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_Lunge",
+    "samples": 41,
+    "lowestVertexY": -0.0026115624461856006,
+    "phase": 0.575
+  },
+  {
+    "name": "Wolf_Howl",
+    "samples": 41,
+    "lowestVertexY": -0.0016451499990790689,
+    "phase": 0
+  }
+]

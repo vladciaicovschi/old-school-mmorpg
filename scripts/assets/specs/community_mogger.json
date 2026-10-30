@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_mogger/community_mogger.glb",
+      "out": "models/creatures/community_mogger.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Mogger_Idle",
+        "Mogger_CombatIdle",
+        "Mogger_Walk",
+        "Mogger_Run",
+        "Mogger_Attack",
+        "Mogger_Hit",
+        "Mogger_Death",
+        "Mogger_Cast",
+        "Mogger_GroundPound",
+        "Mogger_GroundPoundRelease",
+        "Mogger_Order"
+      ]
+    }
+  ]
+}

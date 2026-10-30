@@ -13,6 +13,11 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.warriorSuit.label': '護甲外觀',
+  'hudChrome.warriorSuit.hint': '變更此裝置上的外觀。裝備屬性保持不變。',
+  'hudChrome.warriorSuit.recruit': '新兵',
+  'hudChrome.warriorSuit.militia': '民兵',
+  'hudChrome.warriorSuit.knight': '騎士',
   'guide.professions.endgameBodyRaidCollections':
     '大師鍛造是帶有「唯一裝備：大師鍛造」標記的共同裝備家族。舊有的巔峰製作路線仍需尋找圖樣、製作每日限次的中間材料，並消耗共同的終局材料。熔爐套裝則是由團隊副本材料支持的獨立路線，並非在舊路線之上再加一套費用。兩條路線共用最多穿戴兩件的限制，因此會競爭配裝中的同兩個位置。成品在臻至完美或委託綁定該件物品之前都可自由交易。',
   'guide.professions.endgamePatternsBodyCollections':
@@ -5822,6 +5827,23 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'auth.realm': '世界',
   'auth.newCharacter': '新增角色',
   'auth.appearance': '外觀',
+  'auth.equipmentCalibration': '裝備調整',
+  'auth.equipmentCalibrationHint': '拖曳 3D 操作器或使用控制項來調整劍和盾牌。',
+  'auth.equipmentCalibrationItem': '裝備物品',
+  'auth.equipmentCalibrationMode': '變換模式',
+  'auth.equipmentCalibrationValues': '已儲存的數值',
+  'auth.equipmentCalibrationAxis': '{field} {axis}',
+  'auth.equipmentSword': '劍',
+  'auth.equipmentShield': '盾牌',
+  'auth.equipmentPosition': '位置',
+  'auth.equipmentRotation': '旋轉',
+  'auth.equipmentScale': '縮放',
+  'auth.equipmentPauseAnimation': '暫停動畫',
+  'auth.equipmentResumeAnimation': '繼續動畫',
+  'auth.equipmentResetItem': '重設物品',
+  'auth.equipmentCopyValues': '複製數值',
+  'auth.equipmentValuesCopied': '數值已複製。',
+  'auth.equipmentCopyManual': '無法自動複製，數值已選取。',
   'auth.class': '職業',
   'auth.name': '名稱',
   'auth.chromaOption': '配色 {n}',

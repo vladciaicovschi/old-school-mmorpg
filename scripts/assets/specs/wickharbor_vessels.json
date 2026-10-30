@@ -1,0 +1,19 @@
+{
+  "source": "Owner-approved modular sailship and owner-confirmed rowboat; source hashes in scripts/assets/wickharbor_vessels/upstream.json",
+  "items": [
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/sailship.glb",
+      "out": "models/wickharbor_vessels/sailship.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/rowboat.glb",
+      "out": "models/wickharbor_vessels/rowboat.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    }
+  ]
+}

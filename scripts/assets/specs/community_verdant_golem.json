@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_verdant_golem/community_verdant_golem.glb",
+      "out": "models/creatures/community_verdant_golem.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "VerdantGolem_Charged_Ground_Slam",
+        "VerdantGolem_Charged_Upward_Slash",
+        "VerdantGolem_dying_backwards",
+        "VerdantGolem_Left_Hook_from_Guard",
+        "VerdantGolem_Right_Hand_Sword_Slash",
+        "VerdantGolem_Running",
+        "VerdantGolem_Shield_Push_Left",
+        "VerdantGolem_Spartan_Kick",
+        "VerdantGolem_Walking",
+        "VerdantGolem_Weapon_Combo",
+        "VerdantGolem_Weapon_Combo_1",
+        "VerdantGolem_Idle_5",
+        "VerdantGolem_Alert",
+        "VerdantGolem_Attack",
+        "VerdantGolem_Casual_Walk",
+        "VerdantGolem_Dead",
+        "VerdantGolem_Extra_Running",
+        "VerdantGolem_Skill_03",
+        "VerdantGolem_Slow_Orc_Walk",
+        "VerdantGolem_Extra_Walking"
+      ]
+    }
+  ]
+}

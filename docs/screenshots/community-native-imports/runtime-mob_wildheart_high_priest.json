@@ -1,0 +1,152 @@
+{
+  "facts": [
+    {
+      "key": "mob_wildheart_high_priest",
+      "low": false,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshPhysicalMaterial",
+      "roughness": 1,
+      "metalness": 0,
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Native_Axe_Spin_Attack",
+        "Wildheart_Native_Charged_Ground_Slam",
+        "Wildheart_Native_Charged_Spell_Cast_1",
+        "Wildheart_Native_Dead",
+        "Wildheart_Native_Idle_11",
+        "Wildheart_Native_Idle_13",
+        "Wildheart_Native_Idle_8",
+        "Wildheart_Native_mage_soell_cast",
+        "Wildheart_Native_mage_soell_cast_3",
+        "Wildheart_Native_mage_soell_cast_6",
+        "Wildheart_Native_mage_soell_cast_7",
+        "Wildheart_Native_mage_soell_cast_8",
+        "Wildheart_Native_Proud_Strut",
+        "Wildheart_Native_Running",
+        "Wildheart_Native_Simple_Kick",
+        "Wildheart_Native_Walking",
+        "Wildheart_Run",
+        "Wildheart_Slam",
+        "Wildheart_Walk"
+      ],
+      "mapping": {
+        "idle": "Wildheart_Idle",
+        "combatIdle": "Wildheart_CombatIdle",
+        "walk": "Wildheart_Walk",
+        "run": "Wildheart_Run",
+        "attack": [
+          "Wildheart_Attack"
+        ],
+        "hit": [
+          "Wildheart_Hit"
+        ],
+        "death": "Wildheart_Death",
+        "studioClips": [
+          "Wildheart_Native_Axe_Spin_Attack",
+          "Wildheart_Native_Charged_Ground_Slam",
+          "Wildheart_Native_Charged_Spell_Cast_1",
+          "Wildheart_Native_Dead",
+          "Wildheart_Native_Idle_11",
+          "Wildheart_Native_Idle_13",
+          "Wildheart_Native_Idle_8",
+          "Wildheart_Native_mage_soell_cast",
+          "Wildheart_Native_mage_soell_cast_3",
+          "Wildheart_Native_mage_soell_cast_6",
+          "Wildheart_Native_mage_soell_cast_7",
+          "Wildheart_Native_mage_soell_cast_8",
+          "Wildheart_Native_Proud_Strut",
+          "Wildheart_Native_Running",
+          "Wildheart_Native_Simple_Kick",
+          "Wildheart_Native_Walking",
+          "Wildheart_Attack",
+          "Wildheart_Heal"
+        ],
+        "cast": "Wildheart_Cast",
+        "attackByAbility": {
+          "wildheart_pulse": "Wildheart_Slam"
+        }
+      },
+      "hitPlayback": "Wildheart_Hit"
+    },
+    {
+      "key": "mob_wildheart_high_priest",
+      "low": true,
+      "skinned": 1,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Cast",
+        "Wildheart_CombatIdle",
+        "Wildheart_Death",
+        "Wildheart_Heal",
+        "Wildheart_Hit",
+        "Wildheart_Idle",
+        "Wildheart_Native_Axe_Spin_Attack",
+        "Wildheart_Native_Charged_Ground_Slam",
+        "Wildheart_Native_Charged_Spell_Cast_1",
+        "Wildheart_Native_Dead",
+        "Wildheart_Native_Idle_11",
+        "Wildheart_Native_Idle_13",
+        "Wildheart_Native_Idle_8",
+        "Wildheart_Native_mage_soell_cast",
+        "Wildheart_Native_mage_soell_cast_3",
+        "Wildheart_Native_mage_soell_cast_6",
+        "Wildheart_Native_mage_soell_cast_7",
+        "Wildheart_Native_mage_soell_cast_8",
+        "Wildheart_Native_Proud_Strut",
+        "Wildheart_Native_Running",
+        "Wildheart_Native_Simple_Kick",
+        "Wildheart_Native_Walking",
+        "Wildheart_Run",
+        "Wildheart_Slam",
+        "Wildheart_Walk"
+      ],
+      "mapping": {
+        "idle": "Wildheart_Idle",
+        "combatIdle": "Wildheart_CombatIdle",
+        "walk": "Wildheart_Walk",
+        "run": "Wildheart_Run",
+        "attack": [
+          "Wildheart_Attack"
+        ],
+        "hit": [
+          "Wildheart_Hit"
+        ],
+        "death": "Wildheart_Death",
+        "studioClips": [
+          "Wildheart_Native_Axe_Spin_Attack",
+          "Wildheart_Native_Charged_Ground_Slam",
+          "Wildheart_Native_Charged_Spell_Cast_1",
+          "Wildheart_Native_Dead",
+          "Wildheart_Native_Idle_11",
+          "Wildheart_Native_Idle_13",
+          "Wildheart_Native_Idle_8",
+          "Wildheart_Native_mage_soell_cast",
+          "Wildheart_Native_mage_soell_cast_3",
+          "Wildheart_Native_mage_soell_cast_6",
+          "Wildheart_Native_mage_soell_cast_7",
+          "Wildheart_Native_mage_soell_cast_8",
+          "Wildheart_Native_Proud_Strut",
+          "Wildheart_Native_Running",
+          "Wildheart_Native_Simple_Kick",
+          "Wildheart_Native_Walking",
+          "Wildheart_Attack",
+          "Wildheart_Heal"
+        ],
+        "cast": "Wildheart_Cast",
+        "attackByAbility": {
+          "wildheart_pulse": "Wildheart_Slam"
+        }
+      }
+    }
+  ],
+  "errors": []
+}

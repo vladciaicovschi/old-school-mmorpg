@@ -51,7 +51,8 @@ describe('Eastbrook town grass exclusion', () => {
     // and reading-spot exclusions add two more on top.
     // The 13 town guild boards (content/noticeboards.ts, one per hub
     // settlement) each add a footprint and a reading-spot exclusion: 26 more.
-    expect(exclusions).toHaveLength(123);
+    // The 56 approved houses contribute 59 footprint pieces, including rear wings.
+    expect(exclusions).toHaveLength(182);
     expect(exclusions.some((item) => item.id.startsWith('eastbrook_grand_armoury'))).toBe(false);
     for (const building of [
       ...EASTBROOK_LAYOUT.preservedBuildings,
@@ -119,7 +120,7 @@ describe('Eastbrook town grass exclusion', () => {
       halfDepth: 0.3,
       // Re-pinned 2026-08: the noticeboard was re-laid with the harbor move
       // (d19aa33f76, docs/design/eastbrook-revamp/site-plan.md).
-      rotation: -2.17084654019665,
+      rotation: (-3 * Math.PI) / 4,
     });
     expect(byId.get('eastbrook_noticeboard:serviceApron')).toMatchObject({
       kind: 'circle',

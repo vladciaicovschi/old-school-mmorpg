@@ -1,0 +1,15 @@
+{
+  "result": {
+    "templateId": "dev_stone_elemental",
+    "key": "npc_dev_stone_elemental",
+    "clip": "Stone_Idle",
+    "pos": {
+      "x": 836,
+      "y": 1.7000000000000002,
+      "z": -48
+    },
+    "material": "MeshLambertMaterial",
+    "opacity": 1
+  },
+  "errors": []
+}

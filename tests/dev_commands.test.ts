@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import {
+  DEV_MODEL_LAB_APOTHECARY_POS,
+  DEV_MODEL_LAB_ARRIVAL,
+  DEV_MODEL_LAB_MOB_LINEUP,
+  DEV_MODEL_LAB_NPC_LINEUP,
+  isOnDevModelLab,
+} from '../src/sim/content/dev_model_lab';
 import { FARM_CROP_IDS } from '../src/sim/content/farm_crops';
 import { FARM_BED_IDS, farmBedById } from '../src/sim/content/farm_patches';
+import { DEV_MODEL_COMPARISON_GALLERY } from '../src/sim/data';
 import { parseBisGearFor } from '../src/sim/dev/parse_bis_loadouts';
 import { normalizeFarmPlots, serializeFarmPlots } from '../src/sim/professions/farm_persist';
 import { Sim } from '../src/sim/sim';
@@ -103,6 +111,121 @@ describe('dev commands', () => {
     ]);
     expect(new Set(spawned.map((mob) => `${mob.pos.x},${mob.pos.y},${mob.pos.z}`)).size).toBe(3);
     expect(draws).toBe(0);
+  });
+
+  it('/dev lab rebuilds the non-combat NPC gallery and retaliating mob ring', () => {
+    const sim = devSim();
+    sim.chat('/dev spawn forest_wolf 2');
+
+    sim.chat('/dev lab');
+
+    expect(isOnDevModelLab(sim.player.pos.x, sim.player.pos.z)).toBe(true);
+    expect(sim.player.pos.x).toBe(DEV_MODEL_LAB_ARRIVAL.x);
+    expect(sim.player.pos.z).toBe(DEV_MODEL_LAB_ARRIVAL.z);
+    const subjects = devSpawns(sim);
+    expect(subjects).toHaveLength(
+      DEV_MODEL_LAB_NPC_LINEUP.length +
+        DEV_MODEL_LAB_MOB_LINEUP.length +
+        DEV_MODEL_COMPARISON_GALLERY.subjects.length,
+    );
+    expect(subjects.map((subject) => subject.templateId)).toEqual(
+      [
+        ...DEV_MODEL_LAB_NPC_LINEUP,
+        ...DEV_MODEL_COMPARISON_GALLERY.subjects,
+        ...DEV_MODEL_LAB_MOB_LINEUP,
+      ].map(
+        (subject) =>
+          ('combatMobId' in subject ? subject.combatMobId : undefined) ?? subject.templateId,
+      ),
+    );
+    expect(subjects.slice(0, 5).every((subject) => subject.kind === 'npc')).toBe(true);
+    const npcCount = DEV_MODEL_LAB_NPC_LINEUP.length + DEV_MODEL_COMPARISON_GALLERY.subjects.length;
+    for (const [i, row] of DEV_MODEL_COMPARISON_GALLERY.subjects.entries()) {
+      const entity = subjects[DEV_MODEL_LAB_NPC_LINEUP.length + i];
+      expect(entity.kind).toBe(row.combatMobId ? 'mob' : 'npc');
+      if (row.combatMobId) {
+        expect(entity.templateId).toBe(row.combatMobId);
+        expect(subjects.some((e) => e.templateId === row.templateId)).toBe(false);
+      }
+    }
+    expect(subjects.slice(npcCount).every((subject) => subject.kind === 'mob')).toBe(true);
+    expect(subjects.every((subject) => subject.devSpawnOwnerId === sim.playerId)).toBe(true);
+    expect(subjects.some((subject) => subject.templateId === 'dev_smart_wolf')).toBe(false);
+    expect(subjects.some((subject) => subject.templateId === 'dev_compare_animal_old_wolf')).toBe(
+      false,
+    );
+    expect(subjects.some((subject) => subject.templateId === 'dev_compare_mob_old_cultist')).toBe(
+      false,
+    );
+    for (const id of [
+      'elemental',
+      'fire_elemental',
+      'ice_elemental',
+      'water_elemental',
+      'storm_elemental',
+    ]) {
+      expect(
+        subjects.filter((subject) => subject.templateId === `dev_compare_mob_new_${id}`),
+      ).toHaveLength(1);
+      expect(subjects.some((subject) => subject.templateId === `dev_compare_mob_old_${id}`)).toBe(
+        false,
+      );
+    }
+    expect(
+      subjects.some((subject) => subject.templateId === 'dev_compare_npc_old_apothecary_lin'),
+    ).toBe(false);
+    expect(subjects.some((subject) => subject.templateId === 'dev_compare_animal_old_boar')).toBe(
+      true,
+    );
+    expect(
+      subjects.some((subject) => subject.templateId === 'dev_compare_npc_old_cook_marlow'),
+    ).toBe(true);
+    expect(subjects[0].pos.x).toBe(DEV_MODEL_LAB_APOTHECARY_POS.x);
+    expect(subjects[0].pos.z).toBe(DEV_MODEL_LAB_APOTHECARY_POS.z);
+
+    // Re-entering rebuilds the owner's lane instead of accumulating copies.
+    sim.chat('/dev lab');
+    expect(devSpawns(sim)).toHaveLength(subjects.length);
+  });
+
+  it('makes an attacked lab mob acquire threat and retaliate', () => {
+    const sim = devSim();
+    sim.chat('/dev lab');
+    const mob = devSpawns(sim).find((entity) => entity.templateId === 'dev_rogue_minion');
+    if (mob?.kind !== 'mob') throw new Error('missing rogue test mob');
+
+    sim.player.pos = { x: mob.pos.x + 6, y: mob.pos.y, z: mob.pos.z };
+    sim.player.prevPos = { ...sim.player.pos };
+    sim.rebucket(sim.player);
+    sim.tick();
+    expect(mob.aggroTargetId).toBeNull();
+
+    sim.ctx.dealDamage(sim.player, mob, 1, false, 'physical', 'Test Strike', 'hit');
+    sim.tick();
+    expect(mob.threat.get(sim.playerId)).toBeGreaterThan(0);
+    expect(mob.aggroTargetId).toBe(sim.playerId);
+    expect(mob.inCombat).toBe(true);
+  });
+
+  it('rebuilds deterministic lab displays without RNG or removing another developer displays', () => {
+    const run = () => {
+      const sim = devSim(77);
+      const other = sim.addPlayer('mage', 'Other');
+      sim.chat('/dev lab', other);
+      const otherIds = devSpawns(sim, other).map((entity) => entity.id);
+      let draws = 0;
+      sim.rng.setObserver(() => draws++);
+      sim.chat('/dev lab');
+      const before = devSpawns(sim).map((entity) => [entity.templateId, { ...entity.pos }]);
+      sim.chat('/dev lab');
+      expect(devSpawns(sim).map((entity) => [entity.templateId, { ...entity.pos }])).toEqual(
+        before,
+      );
+      expect(devSpawns(sim, other).map((entity) => entity.id)).toEqual(otherIds);
+      expect(draws).toBe(0);
+      return before;
+    };
+    expect(run()).toEqual(run());
   });
 
   it('keeps spawn placement deterministic and clamps oversized batches', () => {
@@ -251,6 +374,7 @@ describe('dev commands', () => {
 
     sim.chat('/dev spawn forest_wolf 4');
     sim.chat('/dev level 60');
+    sim.chat('/dev lab');
 
     expect([...sim.entities.keys()]).toEqual(beforeIds);
     expect(sim.player.level).toBe(1);

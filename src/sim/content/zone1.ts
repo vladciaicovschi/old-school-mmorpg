@@ -1,3 +1,5 @@
+import { applyBanditCampProps, BANDIT_CAMP_SUPPLIES } from '../bandit_camp';
+import { applySettlementProps, settlementRoads } from '../settlements_layout';
 // Zone 1 — Eastbrook Vale (levels 1-7). The starter zone: town of Eastbrook,
 // wolves and boars, the bandit camp, and Brother Aldric's Gravecaller chain
 // leading to the Hollow Crypt.
@@ -1922,10 +1924,7 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
     itemId: 'supply_crate',
     name: 'Stolen Supply Crate',
     positions: [
-      { x: 58, z: -58 },
-      { x: 73, z: -70 },
-      { x: 86, z: -82 },
-      { x: 95, z: -97 },
+      ...BANDIT_CAMP_SUPPLIES.map(({ x, z }) => ({ x, z })),
       { x: 64, z: -76 },
       { x: 81, z: -94 },
     ],
@@ -1956,7 +1955,7 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
 
 // Roads from town toward each hub — used for terrain painting and the map.
 // Roads from town toward each hub — used for terrain painting and the map.
-export const ZONE1_ROADS: { x: number; z: number }[][] = [
+const ZONE1_LEGACY_ROADS: { x: number; z: number }[][] = [
   [
     ...EASTBROOK_LAYOUT.roads[0].points,
     { x: -2, z: -34 },
@@ -1996,7 +1995,7 @@ export const ZONE1_ROADS: { x: number; z: number }[][] = [
 // Static props (rendering + collision share this placement data)
 // ---------------------------------------------------------------------------
 
-export const ZONE1_PROPS: ZonePropsDef = {
+const ZONE1_LEGACY_PROPS: ZonePropsDef = {
   buildings: [
     // Round 4: the preserved Grand Armoury row left this table; the KayKit
     // barracks and its watch tower stand on the lot as decorProps below.
@@ -2264,3 +2263,9 @@ export const ZONE1_PROPS: ZonePropsDef = {
   // nearest stable ground, 18 yd off the water.
   delveMarkers: [{ x: -136, z: 112, delveId: 'collapsed_reliquary' }],
 };
+
+export const ZONE1_PROPS: ZonePropsDef = applyBanditCampProps(
+  applySettlementProps(applySettlementProps(ZONE1_LEGACY_PROPS, 'eastbrook'), 'wolf-run-fort'),
+);
+
+export const ZONE1_ROADS = settlementRoads('eastbrook', ZONE1_LEGACY_ROADS);

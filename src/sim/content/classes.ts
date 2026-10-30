@@ -451,7 +451,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     baseMana: 90,
     manaPerLevel: 22,
     resourceType: 'mana',
-    startWeapon: 'training_mace',
+    startWeapon: 'rusty_hatchet',
     startChest: 'footpad_jerkin',
     startItems: START_RATIONS_MANA,
     abilities: [

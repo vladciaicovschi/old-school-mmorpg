@@ -1,0 +1,233 @@
+{
+  "facts": [
+    {
+      "key": "mob_ice_wisp",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.94,
+      "spirit": "ice",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_lily_wisp",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.94,
+      "spirit": "lily",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_glimmerwisp",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.94,
+      "spirit": "glimmer",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_duskwisp",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.94,
+      "spirit": "dusk",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_gale_wisp",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.94,
+      "spirit": "gale",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_ghost",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.72,
+      "spirit": "ghost",
+      "clips": [
+        "Ghost_Idle",
+        "Ghost_CombatIdle",
+        "Ghost_Move",
+        "Ghost_Death",
+        "Ghost_Attack",
+        "Ghost_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "delve_skel_wraith",
+      "low": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "opacity": 0.72,
+      "spirit": "ghost",
+      "clips": [
+        "Ghost_Idle",
+        "Ghost_CombatIdle",
+        "Ghost_Move",
+        "Ghost_Death",
+        "Ghost_Attack",
+        "Ghost_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_ice_wisp",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.94,
+      "spirit": "ice",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_lily_wisp",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.94,
+      "spirit": "lily",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_glimmerwisp",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.94,
+      "spirit": "glimmer",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_duskwisp",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.94,
+      "spirit": "dusk",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_gale_wisp",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.94,
+      "spirit": "gale",
+      "clips": [
+        "Wisp_Idle",
+        "Wisp_Move",
+        "Wisp_Death",
+        "Wisp_Attack",
+        "Wisp_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "mob_ghost",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.72,
+      "spirit": "ghost",
+      "clips": [
+        "Ghost_Idle",
+        "Ghost_CombatIdle",
+        "Ghost_Move",
+        "Ghost_Death",
+        "Ghost_Attack",
+        "Ghost_Hit"
+      ],
+      "mist": 3
+    },
+    {
+      "key": "delve_skel_wraith",
+      "low": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "opacity": 0.72,
+      "spirit": "ghost",
+      "clips": [
+        "Ghost_Idle",
+        "Ghost_CombatIdle",
+        "Ghost_Move",
+        "Ghost_Death",
+        "Ghost_Attack",
+        "Ghost_Hit"
+      ],
+      "mist": 3
+    }
+  ],
+  "errors": []
+}

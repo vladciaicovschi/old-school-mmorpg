@@ -9,6 +9,7 @@ import { eastbrookDeckSurface } from './eastbrook_harbor';
 import { galeDeckSurface } from './gale_harbor';
 import { reachDeckSurface } from './reach_decks';
 import type { ZonePropsDef } from './types';
+import { wickharborBoardingSurface } from './wickharbor_boarding';
 
 export function dockSurfaceHeight(
   x: number,
@@ -19,7 +20,10 @@ export function dockSurfaceHeight(
 ): number {
   // Wickharbor's stilt piers and boardwalk ride the same raised-surface arm
   // (an absolute plank plane, never a terrain lift; see sim/gale_harbor.ts).
-  let surface = galeDeckSurface(x, z, terrainAt, waterLevel);
+  let surface = Math.max(
+    galeDeckSurface(x, z, terrainAt, waterLevel),
+    wickharborBoardingSurface(x, z, terrainAt, waterLevel),
+  );
   // ...New Eastbrook's quay boardwalk and piers, the same idiom
   surface = Math.max(surface, eastbrookDeckSurface(x, z, terrainAt, waterLevel));
   // ...and the Palmreach's river bridges and lagoon decks, the same idiom

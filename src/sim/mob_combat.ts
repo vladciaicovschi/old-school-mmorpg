@@ -1,5 +1,9 @@
 import { VARKHUL_BOSS_ID } from './ignivar_raid_ids';
 import { MELEE_RANGE } from './types';
+import {
+  WILDHEART_REFERENCE_HEIGHT,
+  WILDHEART_VISUAL_HEIGHTS,
+} from './wildheart_visual_proportions';
 
 export type MobCombatProfile = {
   meleeRange: number;
@@ -94,6 +98,17 @@ export function combatProfileCacheSizeForTest(): number {
 function buildCombatProfileForMob(templateId: string, scale: number): MobCombatProfile {
   if (templateId === 'nythraxis_scourge_of_thornpeak') return NYTHRAXIS_BOSS_COMBAT_PROFILE;
   if (templateId === 'nythraxis_skeleton_warrior') return NYTHRAXIS_ADD_COMBAT_PROFILE;
+  // Lab copies use the same models and combat kit as their dungeon counterparts.
+  // Scale reach against actual visible height, not the pre-replacement model's
+  // legacy entity scale. This leaves spell ranges and the pursuit grace intact.
+  const wildheartId = templateId.startsWith('dev_') ? templateId.slice(4) : templateId;
+  const visualHeight = WILDHEART_VISUAL_HEIGHTS[wildheartId];
+  if (Object.hasOwn(WILDHEART_VISUAL_HEIGHTS, wildheartId) && visualHeight !== undefined) {
+    const meleeRange = scaledDefaultMobMeleeRange(
+      (scale * visualHeight) / WILDHEART_REFERENCE_HEIGHT,
+    );
+    return { ...DEFAULT_MOB_COMBAT_PROFILE, meleeRange, desiredRange: meleeRange * 0.8 };
+  }
   if (templateId === VARKHUL_BOSS_ID)
     return {
       ...DEFAULT_MOB_COMBAT_PROFILE,
@@ -101,16 +116,6 @@ function buildCombatProfileForMob(templateId: string, scale: number): MobCombatP
       // must still be able to hit him while holding a crucible-beam lane.
       meleeRange: scaledDefaultMobMeleeRange(scale),
       desiredRange: 4.5,
-    };
-  if (templateId === 'wildheart_ravager')
-    return {
-      ...DEFAULT_MOB_COMBAT_PROFILE,
-      // The scale-2 default settles at desiredRange 6.4 and swings out to 9,
-      // so real landed hits read as whiffs into the ether. Keep the scaled
-      // reach but close to visual contact before trading, the Nythraxis
-      // meleeRange 8 / desiredRange 5 pattern.
-      meleeRange: scaledDefaultMobMeleeRange(2),
-      desiredRange: 5,
     };
   // The grown dragonkin (the broodlords at scale 2.25, Cindraleth at 2.85):
   // reach follows the body per the wildheart lesson (a big model on stock
@@ -136,16 +141,6 @@ function buildCombatProfileForMob(templateId: string, scale: number): MobCombatP
       ...DEFAULT_MOB_COMBAT_PROFILE,
       meleeRange: scaledDefaultMobMeleeRange(2.275),
       desiredRange: 5,
-    };
-  if (templateId === 'wildheart_beastmaster')
-    return {
-      ...DEFAULT_MOB_COMBAT_PROFILE,
-      // Same whiff geometry as the ravager, one size up (scale 2.35 settles
-      // at 7.24): the pack-leader bruiser also closes to contact. Zulgar is
-      // deliberately left on the scale default, the boss fight is built on
-      // knockback/pulse spacing and his reach reads as boss presence.
-      meleeRange: scaledDefaultMobMeleeRange(2.35),
-      desiredRange: 5.5,
     };
   if (templateId === 'thunzharr_waking_peak')
     return {

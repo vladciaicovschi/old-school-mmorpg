@@ -13,7 +13,7 @@ export interface GuideClassSpec { id: string; name: string; role: GuideRole; sig
 // Interactive 3D model data, mirrored from the renderer's VisualDef manifest. The Guide's
 // standalone viewer builds the model from one GLB on demand; entities reference a model by
 // visual key into GUIDE_MODELS and carry their own tint color.
-export interface GuideModelAttach { url: string; bone: string; position?: [number, number, number]; rotationY?: number; gripRef?: string; }
+export interface GuideModelAttach { url: string; bone: string; position?: [number, number, number]; rotationY?: number; rotationDeg?: [number, number, number]; scale?: number; gripRef?: string; }
 export interface GuideModelWeaponFix { node: string; rotX?: number; rotY?: number; rotZ?: number; }
 export interface GuideModelSpec {
   url: string;
@@ -21,6 +21,9 @@ export interface GuideModelSpec {
   height: number;
   yaw?: number;
   hover?: number;
+  spirit?: import('../render/characters/spirit_appearance').SpiritKind;
+  atlasDye?: import('../render/characters/armor_dye').ArmorDyeSpec;
+  matte?: boolean;
   show?: string[];
   attach?: GuideModelAttach[];
   weaponFix?: GuideModelWeaponFix[];
@@ -1891,9 +1894,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       }
     ],
     "model": "player_warlock",
-    "tint": "#8d5fd3",
-    "tintStrength": 0.12,
-    "still": "/guide-stills/player_warlock__8d5fd3__s12.webp"
+    "still": "/guide-stills/player_warlock.webp"
   },
   {
     "id": "druid",
@@ -2474,6 +2475,24 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
     "families": [
       "beast"
     ]
+  },
+  {
+    "id": "dev_model_lab",
+    "name": "Model Test Island",
+    "min": 1,
+    "max": 60,
+    "biome": "vale",
+    "hub": "Test Camp",
+    "pois": [
+      "Character Lineup",
+      "NPC Gallery",
+      "Creature Ring",
+      "Animal Replacements",
+      "Mob Replacements",
+      "NPC Replacements"
+    ],
+    "welcome": "Developer model test island. Use dev commands to rebuild or clear test subjects.",
+    "families": []
   }
 ];
 
@@ -2589,10 +2608,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 2,
         "rare": false,
         "templateId": "shore_scuttler",
-        "model": "mob_crab",
-        "tint": "#7a5a3a",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_crab__7a5a3a__s35.webp"
+        "model": "mob_proving_shore_scuttler",
+        "still": "/guide-stills/mob_proving_shore_scuttler.webp"
       },
       {
         "name": "Wild Boar",
@@ -2810,8 +2827,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "templateId": "webwood_spider",
         "model": "mob_spider",
         "tint": "#4a235a",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_spider__4a235a__s35.webp"
+        "tintStrength": 0.12,
+        "still": "/guide-stills/mob_spider__4a235a__s12.webp"
       },
       {
         "name": "Mirefen Widow",
@@ -2821,8 +2838,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "templateId": "mire_widow",
         "model": "mob_spider",
         "tint": "#283747",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_spider__283747__s35.webp"
+        "tintStrength": 0.12,
+        "still": "/guide-stills/mob_spider__283747__s12.webp"
       },
       {
         "name": "Broodmother Egg",
@@ -2841,8 +2858,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "templateId": "canopy_weaver",
         "model": "mob_spider",
         "tint": "#4e8a3c",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_spider__4e8a3c__s35.webp"
+        "tintStrength": 0.12,
+        "still": "/guide-stills/mob_spider__4e8a3c__s12.webp"
       },
       {
         "name": "Widowsilk Spinner",
@@ -2852,8 +2869,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "templateId": "widowsilk_spinner",
         "model": "mob_spider",
         "tint": "#3a3440",
-        "tintStrength": 0.35,
-        "still": "/guide-stills/mob_spider__3a3440__s35.webp"
+        "tintStrength": 0.12,
+        "still": "/guide-stills/mob_spider__3a3440__s12.webp"
       }
     ]
   },
@@ -2866,10 +2883,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 5,
         "rare": false,
         "templateId": "mudfin_murloc",
-        "model": "mob_murloc",
-        "tint": "#52be80",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_murloc__52be80__s45.webp"
+        "model": "npc_dev_meshy_murlok",
+        "still": "/guide-stills/npc_dev_meshy_murlok.webp"
       },
       {
         "name": "Deepfen Snapper",
@@ -2877,10 +2892,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 9,
         "rare": false,
         "templateId": "deepfen_murloc",
-        "model": "mob_murloc",
-        "tint": "#45b39d",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_murloc__45b39d__s45.webp"
+        "model": "npc_dev_meshy_murlok",
+        "still": "/guide-stills/npc_dev_meshy_murlok.webp"
       },
       {
         "name": "Glimmermere Wader",
@@ -2888,10 +2901,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 16,
         "rare": false,
         "templateId": "glimmermere_wader",
-        "model": "mob_murloc",
-        "tint": "#8fb6c4",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_murloc__8fb6c4__s45.webp"
+        "model": "npc_dev_meshy_murlok",
+        "still": "/guide-stills/npc_dev_meshy_murlok.webp"
       },
       {
         "name": "Bogtoad",
@@ -2910,10 +2921,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "mere_lurker",
-        "model": "mob_murloc",
-        "tint": "#a8b048",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_murloc__a8b048__s45.webp"
+        "model": "npc_dev_meshy_murlok",
+        "still": "/guide-stills/npc_dev_meshy_murlok.webp"
       }
     ]
   },
@@ -2937,10 +2946,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 6,
         "rare": false,
         "templateId": "tunnel_rat",
-        "model": "mob_kobold_digger",
-        "tint": "#9c640c",
-        "tintStrength": 0.12,
-        "still": "/guide-stills/mob_kobold_digger__9c640c__s12.webp"
+        "model": "npc_dev_kobold",
+        "still": "/guide-stills/npc_dev_kobold.webp"
       },
       {
         "name": "Deeprock Tunneler",
@@ -2948,10 +2955,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 15,
         "rare": false,
         "templateId": "deeprock_kobold",
-        "model": "mob_kobold",
-        "tint": "#9c7a3c",
-        "tintStrength": 0.2,
-        "still": "/guide-stills/mob_kobold__9c7a3c__s20.webp"
+        "model": "npc_dev_kobold",
+        "still": "/guide-stills/npc_dev_kobold.webp"
       },
       {
         "name": "Gleamfolk Pixie",
@@ -2971,9 +2976,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "rare": false,
         "templateId": "sporeling_gatherer",
         "model": "mob_glub",
-        "tint": "#d8b98a",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_glub__d8b98a__s45.webp"
+        "still": "/guide-stills/mob_glub.webp"
       },
       {
         "name": "Corrupted Sporeling",
@@ -2981,10 +2984,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 17,
         "rare": false,
         "templateId": "corrupted_sporeling",
-        "model": "mob_glub",
-        "tint": "#5e4a72",
-        "tintStrength": 0.45,
-        "still": "/guide-stills/mob_glub__5e4a72__s45.webp"
+        "model": "mob_corrupted_sporeling",
+        "still": "/guide-stills/mob_corrupted_sporeling.webp"
       },
       {
         "name": "Fen Sprite",
@@ -3308,10 +3309,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 18,
         "rare": false,
         "templateId": "ice_wisp",
-        "model": "mob_ghost",
-        "tint": "#bfe4ff",
-        "tintStrength": 0.55,
-        "still": "/guide-stills/mob_ghost__bfe4ff__s55.webp"
+        "model": "mob_ice_wisp",
+        "still": "/guide-stills/mob_ice_wisp.webp"
       },
       {
         "name": "Stormcrag Elemental",
@@ -3352,10 +3351,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "lily_wisp",
-        "model": "mob_ghost",
-        "tint": "#d0f2c8",
-        "tintStrength": 0.55,
-        "still": "/guide-stills/mob_ghost__d0f2c8__s55.webp"
+        "model": "mob_lily_wisp",
+        "still": "/guide-stills/mob_lily_wisp.webp"
       },
       {
         "name": "Gale Wisp",
@@ -3363,10 +3360,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 20,
         "rare": false,
         "templateId": "gale_wisp",
-        "model": "mob_elemental",
-        "tint": "#bfe0e8",
-        "tintStrength": 0.4,
-        "still": "/guide-stills/mob_elemental__bfe0e8.webp"
+        "model": "mob_gale_wisp",
+        "still": "/guide-stills/mob_gale_wisp.webp"
       },
       {
         "name": "Gloamkin Stargazer",
@@ -3397,9 +3392,7 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "rare": false,
         "templateId": "wood_wraith",
         "model": "mob_ghost",
-        "tint": "#9ab4a0",
-        "tintStrength": 0.55,
-        "still": "/guide-stills/mob_ghost__9ab4a0__s55.webp"
+        "still": "/guide-stills/mob_ghost.webp"
       }
     ]
   },
@@ -20113,13 +20106,9 @@ export const GUIDE_PROF_PAGES: string[] = [
 
 export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   "player_warrior": {
-    "url": "models/chars/players/knight.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_warrior.glb",
+    "idle": "WarriorT1_OneHand_Idle",
     "height": 2.6,
-    "show": [
-      "Knight_Helmet",
-      "Knight_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/sword_1handed.glb",
@@ -20132,8 +20121,8 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_paladin": {
-    "url": "models/chars/players/paladin.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_paladin.glb",
+    "idle": "T1Paladin_Idle",
     "height": 2.6,
     "attach": [
       {
@@ -20147,23 +20136,20 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_hunter": {
-    "url": "models/chars/players/ranger.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_hunter.glb",
+    "idle": "HunterT1_Crossbow_Idle",
     "height": 2.6,
     "attach": [
       {
-        "url": "models/weapons/crossbow_1handed.glb",
+        "url": "models/weapons/meshy/test_crossbow_1.glb",
         "bone": "handslot.r"
       }
     ]
   },
   "player_rogue": {
-    "url": "models/chars/players/rogue.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_rogue.glb",
+    "idle": "Warrior_TravelIdle",
     "height": 2.6,
-    "show": [
-      "Rogue_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/dagger.glb",
@@ -20176,10 +20162,9 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_priest": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_priest.glb",
+    "idle": "T1PriestMotion_TravelIdle",
     "height": 2.6,
-    "show": [],
     "attach": [
       {
         "url": "models/weapons/staff.glb",
@@ -20189,12 +20174,9 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.12
   },
   "player_shaman": {
-    "url": "models/chars/players/barbarian.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_shaman.glb",
+    "idle": "Warrior_TravelIdle",
     "height": 2.6,
-    "show": [
-      "Barbarian_BearHat"
-    ],
     "attach": [
       {
         "url": "models/weapons/axe_1handed.glb",
@@ -20208,12 +20190,9 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.12
   },
   "player_mage": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_mage.glb",
+    "idle": "T1MageMotion_TravelIdle",
     "height": 2.6,
-    "show": [
-      "Mage_Cape"
-    ],
     "attach": [
       {
         "url": "models/weapons/staff.glb",
@@ -20222,26 +20201,19 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ]
   },
   "player_warlock": {
-    "url": "models/chars/players/mage.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/warlock_t1.glb",
+    "idle": "WarlockT1_TravelIdle",
     "height": 2.6,
-    "show": [],
     "attach": [
       {
-        "url": "models/weapons/wand.glb",
+        "url": "models/weapons/staff.glb",
         "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/spellbook_open.glb",
-        "bone": "handslot.l",
-        "gripRef": "Spellbook_open"
       }
-    ],
-    "tintStrength": 0.12
+    ]
   },
   "player_druid": {
-    "url": "models/chars/players/druid.glb",
-    "idle": "Idle",
+    "url": "models/chars/players/t1_druid.glb",
+    "idle": "T1DruidMotion_TravelIdle",
     "height": 2.6,
     "attach": [
       {
@@ -20302,23 +20274,56 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.4
   },
   "mob_spider": {
-    "url": "models/creatures/spider.glb",
+    "url": "models/creatures/smart_spider.glb",
     "idle": "Spider_Idle",
-    "height": 1.4,
-    "tintStrength": 0.35
-  },
-  "mob_murloc": {
-    "url": "models/creatures/frog.glb",
-    "idle": "Idle",
-    "height": 1.7,
-    "tintStrength": 0.45
-  },
-  "mob_kobold_digger": {
-    "url": "models/creatures/kobold.glb",
-    "idle": "Idle",
-    "height": 2.1,
-    "hover": -0.2,
+    "height": 0.85,
     "tintStrength": 0.12
+  },
+  "npc_dev_meshy_murlok": {
+    "url": "models/chars/npcs/dev_meshy_murlok.glb",
+    "idle": "MeshyMurlokNative_Idle",
+    "height": 2.2,
+    "matte": true,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_murloc_pitchfork.glb",
+        "bone": "mixamorig:RightHand",
+        "position": [
+          -0.162295,
+          0.14361,
+          0.138836
+        ],
+        "rotationDeg": [
+          6.881684,
+          47.056093,
+          81.408112
+        ],
+        "scale": 0.527538
+      }
+    ]
+  },
+  "npc_dev_kobold": {
+    "url": "models/chars/npcs/dev_kobold.glb",
+    "idle": "Kobold_Standing_Idle",
+    "height": 1.8,
+    "matte": true,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_kobold_pickaxe.glb",
+        "bone": "mixamorig:RightHand",
+        "position": [
+          0.160471,
+          0.170779,
+          0.035399
+        ],
+        "rotationDeg": [
+          24.76039,
+          5.547959,
+          -69.889917
+        ],
+        "scale": 0.35
+      }
+    ]
   },
   "mob_bandit": {
     "url": "models/chars/players/rogue_hooded.glb",
@@ -20340,6 +20345,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "url": "models/chars/enemies/skeleton_minion.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_sword_1.glb",
+        "bone": "handslot.r"
+      }
+    ],
     "tintStrength": 0.25
   },
   "mob_spider_egg_sac": {
@@ -20374,16 +20385,51 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     ],
     "tintStrength": 0.5
   },
-  "mob_kobold": {
-    "url": "models/creatures/goblin.glb",
+  "mob_murloc": {
+    "url": "models/creatures/frog.glb",
     "idle": "Idle",
-    "height": 2.1,
-    "tintStrength": 0.2
+    "height": 1.7,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_murloc_pitchfork.glb",
+        "bone": "LowerArm.R",
+        "position": [
+          -0.015621,
+          -0.003374,
+          -0.012698
+        ],
+        "rotationDeg": [
+          127.128479,
+          -46.261414,
+          -13.761711
+        ],
+        "scale": 0.1
+      }
+    ],
+    "tintStrength": 0.45
   },
   "mob_ogre": {
-    "url": "models/creatures/ogre.glb",
-    "idle": "Idle",
+    "url": "models/creatures/ogre_meshy_native.glb",
+    "idle": "MeshyOgreNative_Idle",
     "height": 2.8,
+    "matte": true,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_ogre_club.glb",
+        "bone": "mixamorig:RightHand",
+        "position": [
+          -0.094606,
+          0.26015,
+          0.229822
+        ],
+        "rotationDeg": [
+          -129.435865,
+          -59.142522,
+          167.627439
+        ],
+        "scale": 0.498293
+      }
+    ],
     "tintStrength": 0.12
   },
   "mob_elemental": {
@@ -20397,6 +20443,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "url": "models/chars/enemies/skeleton_warrior.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_sword_2.glb",
+        "bone": "handslot.r"
+      }
+    ],
     "tintStrength": 0.25
   },
   "mob_dragonkin": {
@@ -20407,18 +20459,72 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.2
   },
   "mob_glimmerwisp": {
-    "url": "models/creatures/glimmerwisp.glb",
-    "idle": "Flying_Idle",
-    "height": 1.6,
-    "yaw": -1.5707963267948966,
-    "hover": 0.4
+    "url": "models/creatures/community_wisp.glb",
+    "idle": "Wisp_Idle",
+    "height": 1.15,
+    "hover": 0.28,
+    "spirit": "glimmer",
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "val": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 43,
+          "satMul": 0.12,
+          "satAdd": 0.34,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
   },
   "mob_duskwisp": {
-    "url": "models/creatures/duskwisp.glb",
-    "idle": "Flying_Idle",
-    "height": 1.6,
-    "yaw": -1.5707963267948966,
-    "hover": 0.4
+    "url": "models/creatures/community_wisp.glb",
+    "idle": "Wisp_Idle",
+    "height": 1.15,
+    "hover": 0.28,
+    "spirit": "dusk",
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "val": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 270,
+          "satMul": 0.12,
+          "satAdd": 0.38,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
   },
   "mob_veiled_stag": {
     "url": "models/creatures/veiled_stag.glb",
@@ -20438,16 +20544,206 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.2
   },
   "mob_glub": {
-    "url": "models/creatures/glubevolved.glb",
-    "idle": "Flying_Idle",
-    "height": 1.4,
-    "hover": 0.15,
-    "tintStrength": 0.45
+    "url": "models/creatures/community_sporeling.glb",
+    "idle": "Sporeling_Idle",
+    "height": 1.45,
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 8,
+          "band": 25,
+          "sat": [
+            0.2,
+            0.3,
+            0.85,
+            0.98
+          ],
+          "val": [
+            0.34,
+            0.46,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 16,
+          "satMul": 1.08,
+          "satAdd": 0.015,
+          "valMul": 1.06,
+          "valAdd": 0
+        },
+        {
+          "ref": 78,
+          "band": 36,
+          "sat": [
+            0.22,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.08,
+            0.18,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 72,
+          "satMul": 0.6,
+          "satAdd": 0,
+          "valMul": 0.91,
+          "valAdd": 0
+        },
+        {
+          "ref": 52,
+          "band": 32,
+          "sat": [
+            0.02,
+            0.08,
+            0.36,
+            0.5
+          ],
+          "val": [
+            0.5,
+            0.62,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 39,
+          "satMul": 0.85,
+          "satAdd": 0,
+          "valMul": 1.03,
+          "valAdd": 0.01
+        },
+        {
+          "ref": 24,
+          "band": 14,
+          "sat": [
+            0.12,
+            0.2,
+            0.32,
+            0.4
+          ],
+          "val": [
+            0.13,
+            0.2,
+            0.43,
+            0.53
+          ],
+          "hueMode": "abs",
+          "hue": 30,
+          "satMul": 0.9,
+          "satAdd": 0,
+          "valMul": 1.18,
+          "valAdd": 0.008
+        }
+      ]
+    },
+    "matte": true
+  },
+  "mob_corrupted_sporeling": {
+    "url": "models/creatures/community_sporeling_infected.glb",
+    "idle": "Infected_Idle",
+    "height": 1.45,
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 14,
+          "band": 30,
+          "sat": [
+            0.12,
+            0.22,
+            0.85,
+            0.98
+          ],
+          "val": [
+            0.3,
+            0.42,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 17,
+          "satMul": 1.15,
+          "satAdd": 0.04,
+          "valMul": 1.08,
+          "valAdd": 0
+        },
+        {
+          "ref": 78,
+          "band": 36,
+          "sat": [
+            0.22,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.08,
+            0.18,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 70,
+          "satMul": 0.56,
+          "satAdd": 0,
+          "valMul": 0.86,
+          "valAdd": 0
+        },
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            0.18,
+            0.3
+          ],
+          "val": [
+            0.1,
+            0.19,
+            0.58,
+            0.7
+          ],
+          "hueMode": "abs",
+          "hue": 39,
+          "satMul": 0.35,
+          "satAdd": 0.15,
+          "valMul": 1.4,
+          "valAdd": 0.035
+        },
+        {
+          "ref": 48,
+          "band": 35,
+          "sat": [
+            0.02,
+            0.08,
+            0.34,
+            0.48
+          ],
+          "val": [
+            0.55,
+            0.68,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 38,
+          "satMul": 0.85,
+          "satAdd": 0,
+          "valMul": 1.03,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
   },
   "mob_dragon_egg": {
     "url": "models/creatures/dragon_egg.glb",
     "idle": "Idle",
     "height": 0.95,
+    "matte": true,
     "tintStrength": 0.08
   },
   "mob_dragonkin_broodguard": {
@@ -20456,12 +20752,51 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.2,
     "tintStrength": 0.1
   },
-  "mob_ghost": {
-    "url": "models/creatures/ghost.glb",
-    "idle": "Flying_Idle",
-    "height": 1.6,
-    "hover": 0.4,
-    "tintStrength": 0.55
+  "mob_ice_wisp": {
+    "url": "models/creatures/community_wisp.glb",
+    "idle": "Wisp_Idle",
+    "height": 1.15,
+    "hover": 0.28,
+    "spirit": "ice",
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "val": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 195,
+          "satMul": 0.12,
+          "satAdd": 0.3,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
+  },
+  "mob_kobold": {
+    "url": "models/creatures/goblin.glb",
+    "idle": "Idle",
+    "height": 2.1,
+    "attach": [
+      {
+        "url": "models/weapons/rusted_kobold_pickaxe.glb",
+        "bone": "Arm.R_end"
+      }
+    ],
+    "tintStrength": 0.2
   },
   "mob_stag": {
     "url": "models/creatures/stag.glb",
@@ -20474,6 +20809,40 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 1,
     "tintStrength": 0.35
+  },
+  "mob_lily_wisp": {
+    "url": "models/creatures/community_wisp.glb",
+    "idle": "Wisp_Idle",
+    "height": 1.15,
+    "hover": 0.28,
+    "spirit": "lily",
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "val": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 91,
+          "satMul": 0.12,
+          "satAdd": 0.36,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
   },
   "mob_alpaca": {
     "url": "models/creatures/alpaca.glb",
@@ -20494,6 +20863,14 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "hover": 0.3,
     "tintStrength": 0.3
   },
+  "mob_ghost": {
+    "url": "models/creatures/community_ghost.glb",
+    "idle": "Ghost_Idle",
+    "height": 1.9,
+    "hover": 0.28,
+    "spirit": "ghost",
+    "matte": true
+  },
   "mob_treant": {
     "url": "models/creatures/yeti.glb",
     "idle": "Idle",
@@ -20501,9 +20878,10 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.72
   },
   "mob_crab": {
-    "url": "models/creatures/crabenemy.glb",
+    "url": "models/creatures/proving_shore_scuttler.glb",
     "idle": "Idle",
     "height": 1.7,
+    "matte": true,
     "tintStrength": 0.35
   },
   "npc_knight": {
@@ -20521,10 +20899,50 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
       }
     ]
   },
+  "mob_gale_wisp": {
+    "url": "models/creatures/community_wisp.glb",
+    "idle": "Wisp_Idle",
+    "height": 1.15,
+    "hover": 0.28,
+    "spirit": "gale",
+    "atlasDye": {
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "val": [
+            -0.02,
+            -0.01,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 168,
+          "satMul": 0.12,
+          "satAdd": 0.24,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    "matte": true
+  },
   "mob_demonalt": {
     "url": "models/creatures/demonalt.glb",
     "idle": "Idle",
     "height": 2.1,
     "tintStrength": 0.35
+  },
+  "mob_proving_shore_scuttler": {
+    "url": "models/creatures/proving_shore_scuttler.glb",
+    "idle": "Idle",
+    "height": 1.7,
+    "matte": true
   }
 };

@@ -6,6 +6,7 @@ import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
+  previewPresentationPose,
 } from '../src/render/characters/preview_appearance';
 import { createPreviewOpenGate } from '../src/render/characters/preview_open_gate_core';
 
@@ -38,8 +39,11 @@ vi.mock('../src/render/characters/visual', () => ({
   // A recording double: setVisualKey constructs one per rebuild, so tests can
   // assert what the REAL rebuild path did to the freshly built visual.
   CharacterVisual: class {
-    root = {};
+    root = { traverse: () => undefined };
     setWeaponSkin = vi.fn();
+    setWeaponStowed = vi.fn();
+    clearPose = vi.fn();
+    poseFreeze = vi.fn(() => 'Warrior_TravelIdle');
     setSkin = vi.fn();
     dispose = vi.fn();
     constructor() {
@@ -103,9 +107,73 @@ describe('previewAppearanceVisual', () => {
     expect(v.weaponItemId).toBeNull();
   });
 
+  it('keeps the equipped caster weapon in the character-select portrait', () => {
+    const v = previewAppearanceVisual(
+      appearance({
+        cls: 'mage',
+        mainhandItemId: 'arcane_staff_1',
+        offhandItemId: 'spellbook_open',
+        presentation: 'charselect',
+      }),
+    );
+    expect(v.weaponItemId).toBe('arcane_staff_1');
+    expect(v.offhandItemId).toBe('spellbook_open');
+  });
+
+  it('selects a calm stowed pose regardless of the roster equipment', () => {
+    expect(
+      previewPresentationPose(
+        appearance({
+          cls: 'warrior',
+          mainhandItemId: 'worn_sword',
+          offhandItemId: 'eastbrook_buckler',
+          presentation: 'charselect',
+        }),
+      ),
+    ).toEqual({ clips: ['Warrior_TravelIdle'], fraction: 0.1 });
+    expect(
+      previewPresentationPose(
+        appearance({ cls: 'warrior', mainhandItemId: 'worn_sword', presentation: 'charselect' }),
+      ),
+    ).toEqual({
+      clips: ['Warrior_TravelIdle'],
+      fraction: 0.1,
+    });
+    expect(
+      previewPresentationPose(appearance({ cls: 'warlock', presentation: 'charselect' })),
+    ).toEqual({
+      clips: ['WarlockT1_TravelIdle'],
+      fraction: 0.1,
+    });
+  });
+
   it('uses the Combat Mech body for an event skin (skinCatalog mech)', () => {
     const v = previewAppearanceVisual(appearance({ cls: 'warrior', skinCatalog: 'mech' }));
     expect(v.visualKey).toBe('player_mech');
+  });
+  it('uses migrated native resting poses instead of frozen spell or shield attacks', () => {
+    for (const [cls, mainhandItemId, offhandItemId, expected] of [
+      ['mage', 'gnarled_staff', null, 'T1MageMotion_TravelIdle'],
+      ['priest', null, null, 'T1PriestMotion_TravelIdle'],
+      ['druid', 'gnarled_staff', null, 'T1DruidMotion_TravelIdle'],
+      ['shaman', 'rusty_hatchet', 'eastbrook_buckler', 'Warrior_TravelIdle'],
+      ['shaman', 'ironshod_maul', null, 'Warrior_TravelIdle'],
+      ['rogue', 'rusty_dagger', 'rusty_dagger', 'Warrior_TravelIdle'],
+      ['paladin', 'ironshod_maul', null, 'Warrior_TravelIdle'],
+      ['hunter', 'dev_hunter_practice_bow', null, 'T1Hunter_Idle'],
+      ['hunter', 'dev_hunter_practice_crossbow', null, 'T1Hunter_Idle'],
+    ] as const) {
+      expect(
+        previewPresentationPose(
+          appearance({ cls, mainhandItemId, offhandItemId, presentation: 'charselect' }),
+        ),
+      ).toEqual({ clips: [expected], fraction: 0.1 });
+    }
+    expect(
+      previewPresentationPose(
+        appearance({ cls: 'mage', skinCatalog: 'mech', presentation: 'charselect' }),
+      )?.clips,
+    ).toEqual(['Idle']);
   });
 
   it('mirrors the wearer class hand layout and actual offhand on the mech', () => {
@@ -141,6 +209,7 @@ describe('appearanceSignature', () => {
     expect(appearanceSignature({ ...base, skinCatalog: 'mech' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, mainhandItemId: 'b' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, offhandItemId: 'b' })).not.toBe(sig);
+    expect(appearanceSignature({ ...base, presentation: 'charselect' })).not.toBe(sig);
   });
 
   it('changes when the Armory weapon skin changes (apply, swap, and remove)', () => {
@@ -157,6 +226,73 @@ describe('appearanceSignature', () => {
 });
 
 describe('CharacterPreview.setAppearance', () => {
+  it('keeps late-loading cosmetic bodies calm and stowed before and after replacement', async () => {
+    const { preview } = barePreview();
+    const visual = {
+      setSkin: vi.fn(),
+      setWeaponStowed: vi.fn(),
+      poseFreeze: vi.fn(() => 'Idle'),
+      clearPose: vi.fn(),
+    };
+    Object.assign(preview, { currentVisual: visual });
+    preview.setAppearance(
+      appearance({ cls: 'mage', skinCatalog: 'mech', presentation: 'charselect' }),
+    );
+    expect(visual.poseFreeze).toHaveBeenLastCalledWith(['T1MageMotion_TravelIdle'], 0.1);
+    expect(visual.setWeaponStowed).toHaveBeenLastCalledWith(true, true);
+    await finishMechLoad();
+    expect(visual.poseFreeze).toHaveBeenLastCalledWith(['Idle'], 0.1);
+    expect(visual.setWeaponStowed).toHaveBeenLastCalledWith(true, true);
+  });
+  it.each(['class', 'calibration'] as const)(
+    'clears a roster pose before switching to a live %s view',
+    (mode) => {
+      const { preview } = barePreview();
+      const visual = {
+        setSkin: vi.fn(),
+        setWeaponStowed: vi.fn(),
+        poseFreeze: vi.fn(() => 'Warrior_TravelIdle'),
+        clearPose: vi.fn(),
+      };
+      Object.assign(preview, { currentVisual: visual });
+      preview.setAppearance(appearance({ presentation: 'charselect' }));
+      if (mode === 'class') preview.setClass('warrior');
+      else preview.setEquipmentCalibrationVisual('player_warrior');
+      expect(visual.setWeaponStowed).toHaveBeenLastCalledWith(false, true);
+      expect(visual.clearPose).toHaveBeenCalledOnce();
+      expect((preview as unknown as { presentationPose: unknown }).presentationPose).toBeNull();
+    },
+  );
+  it('stows before freezing the roster and restores the shared preview for the live sheet', () => {
+    const { preview } = barePreview();
+    const visual = {
+      setSkin: vi.fn(),
+      setWeaponStowed: vi.fn(),
+      poseFreeze: vi.fn(() => 'Warrior_TravelIdle'),
+      clearPose: vi.fn(),
+    };
+    Object.assign(preview, { currentVisual: visual });
+    preview.setAppearance(
+      appearance({
+        presentation: 'charselect',
+        mainhandItemId: 'worn_sword',
+        offhandItemId: 'eastbrook_buckler',
+      }),
+    );
+    expect(visual.setWeaponStowed).toHaveBeenLastCalledWith(true, true);
+    expect(visual.setWeaponStowed.mock.invocationCallOrder[0]).toBeLessThan(
+      visual.poseFreeze.mock.invocationCallOrder[0],
+    );
+    expect(visual.poseFreeze).toHaveBeenCalledWith(['Warrior_TravelIdle'], 0.1);
+    preview.setAppearance(
+      appearance({ mainhandItemId: 'worn_sword', offhandItemId: 'eastbrook_buckler' }),
+    );
+    expect(visual.setWeaponStowed).toHaveBeenLastCalledWith(false, true);
+    expect(visual.clearPose).toHaveBeenCalled();
+    expect(
+      (preview as unknown as { presentationAnimationFrozen: boolean }).presentationAnimationFrozen,
+    ).toBe(false);
+  });
   it('persists the appearance weapon skin so the rebuilt visual re-applies it', () => {
     const { preview } = barePreview();
     const state = preview as unknown as Record<string, unknown>;
@@ -183,7 +319,14 @@ describe('CharacterPreview.setAppearance', () => {
 
     preview.setAppearance(mech);
     expect(setVisualKey).toHaveBeenCalledOnce();
-    expect(setVisualKey).toHaveBeenLastCalledWith('player_rogue', 'dagger_x', null, 'dagger_y');
+    expect(setVisualKey).toHaveBeenLastCalledWith(
+      'player_rogue',
+      'dagger_x',
+      null,
+      'dagger_y',
+      false,
+      true,
+    );
 
     await finishMechLoad();
 
@@ -194,6 +337,8 @@ describe('CharacterPreview.setAppearance', () => {
       'dagger_x',
       mechHeldWeaponOverride('rogue'),
       'dagger_y',
+      false,
+      true,
     );
   });
 
@@ -205,12 +350,26 @@ describe('CharacterPreview.setAppearance', () => {
     );
 
     expect(setVisualKey).toHaveBeenCalledTimes(2);
-    expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null, null);
+    expect(setVisualKey).toHaveBeenLastCalledWith(
+      'player_mage',
+      'staff_x',
+      null,
+      null,
+      false,
+      true,
+    );
 
     await finishMechLoad();
 
     expect(setVisualKey).toHaveBeenCalledTimes(2);
-    expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null, null);
+    expect(setVisualKey).toHaveBeenLastCalledWith(
+      'player_mage',
+      'staff_x',
+      null,
+      null,
+      false,
+      true,
+    );
   });
 });
 
@@ -244,6 +403,7 @@ describe('CharacterPreview visual reuse', () => {
       currentVisual: null,
       currentVisualSig: null,
       currentSkin: 0,
+      equipmentDefaultTransforms: new Map(),
       closeupCache: new Map(),
       characterGroup: { add: vi.fn(), remove: vi.fn(), rotation: { y: 1 } },
       // A rebuild forgets the gate's linked signature (three releases a
@@ -253,6 +413,23 @@ describe('CharacterPreview visual reuse', () => {
     return preview;
   }
 
+  it('clears roster carry/freeze on a direct raw-key live preview even when reusing the same visual', () => {
+    const preview = livePreview();
+    preview.setAppearance(appearance({ presentation: 'charselect' }));
+    const built = visualInstances[0] as unknown as {
+      setWeaponStowed: ReturnType<typeof vi.fn>;
+      clearPose: ReturnType<typeof vi.fn>;
+      poseFreeze: ReturnType<typeof vi.fn>;
+    };
+    expect(built.setWeaponStowed).toHaveBeenLastCalledWith(true, true);
+    preview.setAppearance(appearance({ presentation: 'charselect' }));
+    expect(built.poseFreeze).toHaveBeenCalledOnce();
+    preview.setVisualKey('player_warrior');
+    expect(visualInstances).toHaveLength(1);
+    expect(built.setWeaponStowed).toHaveBeenLastCalledWith(false, true);
+    expect(built.clearPose).toHaveBeenCalled();
+    expect((preview as unknown as { presentationPose: unknown }).presentationPose).toBeNull();
+  });
   it('keeps the warm rig and closeup cache when an identical sheet repaint remounts it', () => {
     const preview = livePreview();
     preview.setVisualKey('player_warrior', 'sword_a');
@@ -289,6 +466,7 @@ describe('CharacterPreview visual lifecycle', () => {
     const add = vi.fn();
     state.destroyed = false;
     state.currentSkin = 0;
+    state.equipmentDefaultTransforms = new Map();
     state.closeupCache = new Map();
     state.currentVisual = { root: {}, dispose };
     state.characterGroup = { remove, add, rotation: { y: 1 } };
@@ -311,6 +489,7 @@ describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () =
     state.currentWeaponSkinId = persistedSkin;
     state.currentVisual = null;
     state.closeupCache = new Map();
+    state.equipmentDefaultTransforms = new Map();
     state.characterGroup = { add: vi.fn(), remove: vi.fn(), rotation: { y: 1 } };
     return preview;
   }

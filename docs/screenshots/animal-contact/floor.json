@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Wolf_BiteLeft",
+    "samples": 41,
+    "lowestVertexY": -0.008028233431788337,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_BiteRight",
+    "samples": 41,
+    "lowestVertexY": -0.008068789714659762,
+    "phase": 0.275
+  },
+  {
+    "name": "Wolf_Lunge",
+    "samples": 41,
+    "lowestVertexY": -0.0026115624461856006,
+    "phase": 0.575
+  },
+  {
+    "name": "Goat_HeadbuttLeft",
+    "samples": 41,
+    "lowestVertexY": -0.00015859889644744872,
+    "phase": 0.4
+  },
+  {
+    "name": "Goat_HeadbuttRight",
+    "samples": 41,
+    "lowestVertexY": -0.0001602054575545707,
+    "phase": 0.4
+  },
+  {
+    "name": "Goat_Ram",
+    "samples": 41,
+    "lowestVertexY": -0.00013857839954766214,
+    "phase": 0.4
+  }
+]

@@ -108,6 +108,32 @@ describe('render dev flags: the GPU-preparation mode switch', () => {
   });
 });
 
+describe('render dev flags: the tutorial-island character-body slice', () => {
+  it('uses Meshy by default and keeps Quaternius comparison plus KayKit rollback', async () => {
+    for (const search of ['', '?charbody=', '?charbody=elf', null]) {
+      const flags = await loadFlags(search);
+      expect(flags.characterBodyMode(), String(search)).toBe('meshy');
+      expect(flags.quaterniusCharacterBodyEnabled(), String(search)).toBe(true);
+    }
+    for (const search of ['?charbody=quaternius', '?charbody=QUATERNIUS']) {
+      const flags = await loadFlags(search);
+      expect(flags.characterBodyMode(), search).toBe('quaternius');
+      expect(flags.quaterniusCharacterBodyEnabled(), search).toBe(true);
+    }
+    const kaykit = await loadFlags('?charbody=kaykit');
+    expect(kaykit.characterBodyMode()).toBe('kaykit');
+    expect(kaykit.quaterniusCharacterBodyEnabled()).toBe(false);
+  });
+
+  it('is independent of the render-layer and scheduler switches', async () => {
+    const flags = await loadFlags('?charbody=quaternius&n8ao=off&prep=legacy');
+    expect(flags.quaterniusCharacterBodyEnabled()).toBe(true);
+    expect(flags.renderLayerDisabled('charbody')).toBe(false);
+    expect(flags.renderLayerDisabled('n8ao')).toBe(true);
+    expect(flags.gpuPrepMode()).toBe('legacy');
+  });
+});
+
 describe('render dev flags: the blade-grass sector split', () => {
   it('splits four ways per axis by default', async () => {
     const { bladeSectorAxis, BLADE_SECTOR_AXIS_DEFAULT } = await loadFlags('');

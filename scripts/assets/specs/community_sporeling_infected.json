@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_sporeling_infected/community_sporeling_infected.glb",
+      "out": "models/creatures/community_sporeling_infected.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Infected_Axe_Spin_Attack",
+        "Infected_Basic_Jump",
+        "Infected_Charged_Slash",
+        "Infected_Death",
+        "Infected_CombatIdle",
+        "Infected_Idle",
+        "Infected_Left_Hook_from_Guard",
+        "Infected_Proud_Strut",
+        "Infected_Right_Hand_Sword_Slash",
+        "Infected_Run",
+        "Infected_Simple_Kick",
+        "Infected_Spartan_Kick",
+        "Infected_Triple_Combo_Attack",
+        "Infected_Walk",
+        "Infected_Hit",
+        "Infected_Attack"
+      ]
+    }
+  ]
+}

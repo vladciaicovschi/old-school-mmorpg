@@ -19,6 +19,9 @@ import { stillUrl } from './still_key.mjs';
 import { patternChannelSets, recipeAcquisitionChannel } from './vendor_channel.mjs';
 
 const root = process.cwd();
+const savedHeldFits = JSON.parse(
+  readFileSync(path.join(root, 'src/render/characters/held_attachment_fit.generated.json'), 'utf8'),
+);
 // Output-path plumbing. The bare invocation writes the committed file, byte for
 // byte as it always has. `--out <path>` writes elsewhere (relative to cwd): the
 // freshness gate in tests/guide.test.ts generates into a temp file and compares
@@ -266,6 +269,11 @@ function modelKeyFor(visualKey) {
     const spec = { url: def.url, idle: def.clips?.idle ?? null, height: def.height };
     if (def.yaw) spec.yaw = def.yaw;
     if (def.hover) spec.hover = def.hover;
+    if (def.spirit) {
+      spec.spirit = def.spirit;
+    }
+    if (def.atlasDye) spec.atlasDye = def.atlasDye;
+    if (def.matte) spec.matte = true;
     if (def.show) spec.show = def.show;
     if (def.attach) {
       // swapOnly entries are pure swap-slot bases the game never renders (an
@@ -281,6 +289,17 @@ function modelKeyFor(visualKey) {
           if (a.position) o.position = a.position;
           if (a.rotationY) o.rotationY = a.rotationY;
           if (a.gripRef) o.gripRef = a.gripRef;
+          if (a.scaleMultiplier !== undefined) o.scale = a.scaleMultiplier;
+          const fit =
+            a.calibrationSlot &&
+            (savedHeldFits[def.equipmentFitKey ?? visualKey] ?? def.heldAttachmentFit)?.[
+              a.calibrationSlot
+            ];
+          if (fit) {
+            o.position = fit.position;
+            o.rotationDeg = fit.rotationDeg;
+            o.scale = fit.scale;
+          }
           return o;
         });
       }
@@ -1410,7 +1429,7 @@ export interface GuideClassSpec { id: string; name: string; role: GuideRole; sig
 // Interactive 3D model data, mirrored from the renderer's VisualDef manifest. The Guide's
 // standalone viewer builds the model from one GLB on demand; entities reference a model by
 // visual key into GUIDE_MODELS and carry their own tint color.
-export interface GuideModelAttach { url: string; bone: string; position?: [number, number, number]; rotationY?: number; gripRef?: string; }
+export interface GuideModelAttach { url: string; bone: string; position?: [number, number, number]; rotationY?: number; rotationDeg?: [number, number, number]; scale?: number; gripRef?: string; }
 export interface GuideModelWeaponFix { node: string; rotX?: number; rotY?: number; rotZ?: number; }
 export interface GuideModelSpec {
   url: string;
@@ -1418,6 +1437,9 @@ export interface GuideModelSpec {
   height: number;
   yaw?: number;
   hover?: number;
+  spirit?: import('../render/characters/spirit_appearance').SpiritKind;
+  atlasDye?: import('../render/characters/armor_dye').ArmorDyeSpec;
+  matte?: boolean;
   show?: string[];
   attach?: GuideModelAttach[];
   weaponFix?: GuideModelWeaponFix[];

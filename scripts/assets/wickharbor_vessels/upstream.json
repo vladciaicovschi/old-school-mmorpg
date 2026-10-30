@@ -1,0 +1,21 @@
+{
+  "sailship": {
+    "file": "sailing-modular-v1/output/sailing-modular.glb",
+    "sourceSha256": "7533ef9f68f80cb497ca954907d823ae375ca689799502660e3b459d8ba6f1d1",
+    "source": "Accepted owner-approved modular sailship, hawse-chain-v20",
+    "triangles": 122808,
+    "draftM": 1.3799982070922852
+  },
+  "rowboat": {
+    "file": "rowboat-v1/output/rowboat.raw.glb",
+    "sourceSha256": "d04366db669232399a20988f36955dfbf819e0a0666edb9f9fb9a2b8c4a0d94e",
+    "source": "Meshy_AI_Create_a_wooden_raft_which_is_textured_20260105_texture_fbx.zip",
+    "archiveSha256": "9af77bd03477e72445d10ff47c8b1148c82fbc811d60e740e5ca62c315434703",
+    "triangles": 9998,
+    "draftM": 0.20188717544078827,
+    "baseColorFactor": [0.63, 0.66, 0.6, 1],
+    "roughness": 0.97,
+    "metallic": 0,
+    "normalStrength": 0.25
+  }
+}

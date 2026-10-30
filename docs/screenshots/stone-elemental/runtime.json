@@ -1,0 +1,36 @@
+{
+  "low": false,
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "type": "MeshStandardMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "character_far_mesh",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "character_shadow_proxy",
+      "type": "MeshBasicMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "",
+      "type": "MeshBasicMaterial",
+      "triangles": 32,
+      "uv": true
+    }
+  ],
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Stone_Idle",
+    "Stone_Move"
+  ],
+  "errors": []
+}

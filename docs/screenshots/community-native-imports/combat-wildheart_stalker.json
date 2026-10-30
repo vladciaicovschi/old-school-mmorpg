@@ -1,0 +1,199 @@
+{
+  "facts": [
+    {
+      "id": "wildheart_stalker",
+      "key": "mob_wildheart_stalker",
+      "clips": [
+        "Wildheart_Hit",
+        "Wildheart_SpearThrow",
+        "Wildheart_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_SpearThrow",
+          "time": 0.1
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_SpearThrow",
+          "time": 2.9499999999999975
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_SpearThrow",
+          "time": 5.799999999999987
+        }
+      ],
+      "hits": 3,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    },
+    {
+      "id": "wildheart_ravager",
+      "key": "mob_wildheart_ravager",
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 0.05
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 2.3
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 4.549999999999992
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 6.799999999999984
+        }
+      ],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    },
+    {
+      "id": "wildheart_hexcaller",
+      "key": "mob_wildheart_hexcaller",
+      "clips": [
+        "Wildheart_Hit",
+        "Wildheart_Cast",
+        "Wildheart_Heal",
+        "Wildheart_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_Cast",
+          "time": 0.1
+        },
+        {
+          "ability": "wildheart_ancestral_sap",
+          "clip": "Wildheart_Heal",
+          "time": 0.3
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Cast",
+          "time": 3.149999999999997
+        },
+        {
+          "ability": "wildheart_ancestral_sap",
+          "clip": "Wildheart_Heal",
+          "time": 4.299999999999993
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Cast",
+          "time": 6.199999999999986
+        }
+      ],
+      "hits": 3,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    },
+    {
+      "id": "wildheart_beastmaster",
+      "key": "mob_wildheart_beastmaster",
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Heal",
+        "Wildheart_Release",
+        "Wildheart_CombatIdle",
+        "Wildheart_Cast"
+      ],
+      "auras": [
+        "Beast Pit Quake"
+      ],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 0.05
+        },
+        {
+          "ability": "wildheart_thickhide_ward",
+          "clip": "Wildheart_Heal",
+          "time": 0.25
+        },
+        {
+          "ability": "wildheart_beast_pit_quake",
+          "clip": "Wildheart_Release",
+          "time": 0.65
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 2.6999999999999984
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 4.899999999999991
+        },
+        {
+          "ability": "wildheart_call_of_the_hunt",
+          "clip": "Wildheart_Cast",
+          "time": 6.999999999999983
+        }
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    },
+    {
+      "id": "wildheart_high_priest",
+      "key": "mob_wildheart_high_priest",
+      "clips": [
+        "Wildheart_Attack",
+        "Wildheart_Release",
+        "Wildheart_CombatIdle"
+      ],
+      "auras": [],
+      "gestures": [
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 0.05
+        },
+        {
+          "ability": "wildheart_pulse",
+          "clip": "Wildheart_Release",
+          "time": 0.65
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 2.6499999999999986
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 5.249999999999989
+        },
+        {
+          "ability": null,
+          "clip": "Wildheart_Attack",
+          "time": 7.84999999999998
+        }
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Wildheart_Death"
+    }
+  ],
+  "errors": []
+}

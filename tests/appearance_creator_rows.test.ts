@@ -179,6 +179,16 @@ describe('creator: the customizer mount point exists on every entry that creates
     expect(hostIds(read('src/main.ts'))).toEqual(['charcreate-appearance', 'offline-appearance']);
   });
 
+  it('uses fixed T1 bodies in the normal creator and reserves the hosts for weapon fitting', () => {
+    const source = read('src/main.ts');
+    const preview = source.match(/function previewClassBody\([\s\S]*?\n\}/)?.[0] ?? '';
+    expect(preview).toContain('previewCharselectClassBody(cls);');
+    expect(preview).not.toContain('setModular(');
+    expect(source).toContain("get('weaponfit') === '1'");
+    expect(source).toContain('if (WEAPON_FIT_MODE) {\n    syncWeaponFitUi(panelId, host);');
+    expect(source).toContain('host.hidden = true;');
+  });
+
   it('index.html carries both hosts (it owns the offline flow too)', () => {
     const html = read('index.html');
     for (const id of hostIds(read('src/main.ts'))) {

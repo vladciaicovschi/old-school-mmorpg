@@ -1,0 +1,25 @@
+{
+  "defaults": { "type": "character", "maxTex": 2048, "keepExtras": true },
+  "items": [
+    {
+      "src": "tmp/asset_src/community_wildhearts/community_wildheart_cycle8.glb",
+      "out": "models/creatures/community_wildheart_cycle8.glb"
+    },
+    {
+      "src": "tmp/asset_src/community_wildhearts/community_wildheart_silent1.glb",
+      "out": "models/creatures/community_wildheart_silent1.glb"
+    },
+    {
+      "src": "tmp/asset_src/community_wildhearts/community_wildheart_silent4.glb",
+      "out": "models/creatures/community_wildheart_silent4.glb"
+    },
+    {
+      "src": "tmp/asset_src/community_wildhearts/community_wildheart_silent6.glb",
+      "out": "models/creatures/community_wildheart_silent6.glb"
+    },
+    {
+      "src": "tmp/asset_src/community_wildhearts/community_wildheart_silent8.glb",
+      "out": "models/creatures/community_wildheart_silent8.glb"
+    }
+  ]
+}

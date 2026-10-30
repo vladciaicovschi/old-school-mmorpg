@@ -1,0 +1,16 @@
+{
+  "result": {
+    "templateId": "dev_fire_elemental",
+    "key": "npc_dev_fire_elemental",
+    "clip": "Fire_Idle",
+    "pos": {
+      "x": 812,
+      "y": 1.7000000000000002,
+      "z": 0
+    },
+    "material": "MeshLambertMaterial",
+    "particles": 128,
+    "opacity": 1
+  },
+  "errors": []
+}

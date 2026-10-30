@@ -781,6 +781,8 @@ export interface SimContextCallbacks {
       max: number;
       range: number;
       every: number;
+      windup?: number;
+      ability?: string;
     },
   ): void;
   fleeMoveSpeed(e: Entity): number;

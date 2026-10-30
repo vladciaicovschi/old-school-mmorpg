@@ -1,0 +1,78 @@
+{
+  "facts": {
+    "debug": [
+      {
+        "time": 0.05,
+        "duration": 3,
+        "cast": null,
+        "channel": false,
+        "aggro": 44,
+        "playerId": 44,
+        "combat": true,
+        "ai": "attack",
+        "stun": false,
+        "silence": false,
+        "lock": false,
+        "los": true
+      },
+      {
+        "time": 8.04999999999998,
+        "duration": 3,
+        "cast": null,
+        "channel": false,
+        "aggro": 44,
+        "playerId": 44,
+        "combat": true,
+        "ai": "attack",
+        "stun": false,
+        "silence": false,
+        "lock": false,
+        "los": true
+      }
+    ],
+    "channelCount": 2,
+    "projectileCount": 3,
+    "damage": [
+      {
+        "school": "frost",
+        "amount": 10
+      },
+      {
+        "school": "frost",
+        "amount": 10
+      },
+      {
+        "school": "frost",
+        "amount": 10
+      },
+      {
+        "school": "frost",
+        "amount": 29
+      },
+      {
+        "school": "frost",
+        "amount": 26
+      },
+      {
+        "school": "frost",
+        "amount": 30
+      },
+      {
+        "school": "frost",
+        "amount": 10
+      },
+      {
+        "school": "frost",
+        "amount": 10
+      },
+      {
+        "school": "frost",
+        "amount": 10
+      }
+    ],
+    "currentClip": "Water_Idle",
+    "modelVisible": true,
+    "targetAlive": true
+  },
+  "errors": []
+}

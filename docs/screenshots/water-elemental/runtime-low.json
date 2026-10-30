@@ -1,0 +1,103 @@
+{
+  "low": true,
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "type": "MeshLambertMaterial",
+      "opacity": 0.72,
+      "depthWrite": false,
+      "triangles": 9712,
+      "uv": true,
+      "skinned": true
+    },
+    {
+      "name": "elemental_stream_head",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_stream_hand.l",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_stream_vfx_hand.r",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_stream_vfx_core",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_stream_hips",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_water_surface",
+      "type": "ShaderMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 9712,
+      "uv": true,
+      "skinned": true
+    },
+    {
+      "name": "character_far_mesh",
+      "triangles": 9712,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "character_shadow_proxy",
+      "type": "MeshBasicMaterial",
+      "opacity": 1,
+      "depthWrite": false,
+      "triangles": 9712,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "",
+      "type": "MeshBasicMaterial",
+      "opacity": 1,
+      "depthWrite": true,
+      "triangles": 32,
+      "uv": true,
+      "skinned": false
+    }
+  ],
+  "sharedGeometry": true,
+  "sharedSkeleton": true,
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Water_Idle",
+    "Water_Move"
+  ],
+  "surfaceVisible": true,
+  "errors": []
+}

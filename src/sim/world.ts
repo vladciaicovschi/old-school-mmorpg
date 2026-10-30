@@ -1,10 +1,13 @@
+import { gradeBanditCamp } from './bandit_camp';
 import { bgFieldHeightLocal } from './battleground_field';
 import { BORDER_EDGES } from './border_edges';
+import { DEV_MODEL_LAB_X_OFFSET, isOnDevModelLab } from './content/dev_model_lab';
 import { EMBER_BAYS, EMBER_LAND_LOBES, forgefatherScatterExcluded } from './content/ember_coast';
 import { STABLE_FLAT, STABLE_PADDOCK } from './content/mounts';
 import { PALMREACH_PROPS } from './content/palmreach';
 import { VALE_BAYS, VALE_LAND_LOBES } from './content/vale_coast';
 import {
+  BUILTIN_WORLD,
   bgOriginAt,
   CAMPS,
   COLUMN_ZONES,
@@ -30,6 +33,8 @@ import {
 } from './data';
 import { dawnholdPadTarget, dawnholdPadWeight } from './dawnhold_layout';
 import { dockSurfaceHeight } from './deck_surfaces';
+import { isExcludedDecoration } from './decoration_exclusions';
+import { devModelLabFlatHeight, devModelLabPadLandness } from './dev_model_lab_terrain';
 import { dungeonFloorLift } from './dungeon_floor';
 import { dawnholdKeepLiftAt, lastKeepLiftAt } from './dungeon_layout';
 import { eastbrookDeckSurface } from './eastbrook_harbor';
@@ -41,8 +46,9 @@ import {
   emberNearestOnLink,
 } from './ember_lava_layout';
 import { GALE_DECK_FREEBOARD, galeDeckSurface } from './gale_harbor';
+import { galeLevelPads } from './gale_level_pads';
 import { KEEP_SITE, keepSitePadWeight } from './keep_site';
-import { reachDeckClear, reachDeckSurface } from './reach_decks';
+import { reachDeckClear } from './reach_decks';
 import { fbm2, hash2, noise2 } from './rng';
 import {
   CALM_SKIRT_MAX_WIDTH,
@@ -76,6 +82,7 @@ const HILL_SCALE = 0.013;
 const DETAIL_SCALE = 0.05;
 
 export const WATER_LEVEL = -4.3;
+const GALE_LEVEL_PADS = galeLevelPads(WATER_LEVEL);
 
 // The ACTIVE water surface height: the custom map's level if one is loaded, else
 // the built-in constant. Cheap (identity-cached content lookup), safe in hot
@@ -1780,6 +1787,11 @@ export function provingLandness(x: number, z: number): number {
   return metaballLandness(PS_LAND_FIELD, PS_BAY_FIELD, x, z);
 }
 
+/** Copied shoreline, with small bays filled around the level testing floor. */
+export function devModelLabLandness(x: number, z: number): number {
+  return Math.max(provingLandness(x - DEV_MODEL_LAB_X_OFFSET, z), devModelLabPadLandness(x, z));
+}
+
 // The tutorial island's coast: the applyIsleCoast recipe with the vale-facing
 // seam mirrored to the cell's vale-side edge (x = -180). Every window edge
 // fades.
@@ -2870,6 +2882,7 @@ export function inHollowOpenSea(x: number, z: number): boolean {
     // the starter sea: open water past the vale's and the island's organic
     // shores carries the fatigue turnback. The Ferrywalk sandbar is land you
     // walk, never open sea.
+    if (isOnDevModelLab(x, z)) return devModelLabLandness(x, z) < 0.02;
     if (Math.abs(x) > 620 || z < -215) return false; // the far void keeps legacy rules
     if (onCauseway(x, z)) return false;
     return valeLandness(x, z) < 0.02 && isleLandness(x, z) < 0.02 && provingLandness(x, z) < 0.02;
@@ -4020,25 +4033,10 @@ function applyTerrainPads(x: number, z: number, seed: number, h0: number): numbe
       }
     }
   }
-  return h;
+  return getActiveWorldContent() === BUILTIN_WORLD
+    ? gradeBanditCamp(x, z, h, (ax, az) => terrainHeightUnpadded(ax, az, seed))
+    : h;
 }
-
-// The Galecrest's level ground (terrainHeight above): each pad blends the
-// finished height to its center's, wide enough that every tent, tower,
-// palisade run, and barn sits flush instead of sinking into a rise.
-const GALE_LEVEL_PADS: { x: number; z: number; r: number; h?: number }[] = [
-  { x: 252, z: 250, r: 14 },
-  { x: 210, z: 410, r: 14 },
-  { x: 354, z: 664, r: 14 },
-  // the stable barns' lakeside terrace on the Mirror Tarn's north bank: an
-  // explicit height keeps it a low shelf above the beach, the downs rising
-  // behind it, instead of a high pad with a sheer rim over the water
-  { x: 299, z: 531, r: 12, h: WATER_LEVEL + 3.2 },
-  // the Old Beacon's lawn: one flat disc under the whole tower and spiral
-  // stair, so the stair foot always meets level ground (a sloping lawn left
-  // the first tread hovering and broke click-to-move approaches)
-  { x: 498, z: 308, r: 11 },
-];
 
 function borderSeaGate(x: number, z: number): number {
   if (!Number.isFinite(x) || !Number.isFinite(z)) {
@@ -4316,6 +4314,12 @@ function terrainHeightUnpadded(x: number, z: number, seed: number, skipEdits = f
   if (terrainRegionHas(region, TERRAIN_APPLIER.provingMoat)) {
     h = applyProvingMoat(x, z, h);
   }
+  if (terrainRegionHas(region, TERRAIN_APPLIER.devModelLabCoast)) {
+    h = applyProvingCoast(x - DEV_MODEL_LAB_X_OFFSET, z, h);
+  }
+  if (terrainRegionHas(region, TERRAIN_APPLIER.devModelLabMoat)) {
+    h = applyProvingMoat(x - DEV_MODEL_LAB_X_OFFSET, z, h);
+  }
   if (terrainRegionHas(region, TERRAIN_APPLIER.columnStraits)) {
     h = applyColumnStraits(x, z, h);
   }
@@ -4428,8 +4432,7 @@ function terrainHeightUnpadded(x: number, z: number, seed: number, skipEdits = f
       h += (ridged2(rw.x * 0.02, rw.z * 0.02, seed + 57, 3) - 0.4) * 6.5 * highT * calmHere;
     }
   }
-  // the Tablecrag's crown: a level table cut into the eastern border range
-  // (flattened AFTER the rims so the top is a true plateau, not rim noise)
+  // Tablecrag's level crown, after rims so the plateau has no rim noise.
   const dMesa = Math.hypot(x + 168, z - 1195);
   if (dMesa < 30) {
     const t = smoothstep(14, 30, dMesa);
@@ -4550,6 +4553,7 @@ function terrainHeightUnpadded(x: number, z: number, seed: number, skipEdits = f
     ? stableFlattenWeight(x, z)
     : 0;
   if (stable > 0) h = lerp(h, STABLE_FLAT.height, stable);
+  if (isOnDevModelLab(x, z)) h = devModelLabFlatHeight(h, devModelLabLandness(x, z), WATER_LEVEL);
   // The custom-map sculpt edits are the LAST word over the finished overworld
   // height (the editor's height stamps; a no-op for the built-in world, which has
   // no terrainEdits). Kept in terrainHeight so the render mesh (which samples
@@ -4905,15 +4909,6 @@ export interface Decoration {
   biome: BiomeId;
 }
 
-const DECORATION_EXCLUSION_RADIUS = 1.2;
-const DECORATION_EXCLUSIONS = [{ x: 2.456450840458274, z: 211.33819991815835 }];
-
-function isExcludedDecoration(x: number, z: number): boolean {
-  return DECORATION_EXCLUSIONS.some(
-    (p) => Math.hypot(x - p.x, z - p.z) < DECORATION_EXCLUSION_RADIUS,
-  );
-}
-
 export function zoneBiomeAt(x: number, z: number): BiomeId {
   // Delegates to zoneAt rather than repeating its rect walk over the static
   // ZONES const: zoneAt resolves the ACTIVE content's zones (builtin
@@ -5078,7 +5073,10 @@ function decorationAt(seed: number, gx: number, gz: number): Decoration | null {
   const oz = (hash2(Math.round(gx), Math.round(gz), seed + 91) - 0.5) * DECORATION_STEP;
   const x = gx + ox,
     z = gz + oz;
-  if (isExcludedDecoration(x, z)) return null;
+  if (
+    isExcludedDecoration(x, z, kind === 'rock' ? 1.2 : 4.5, getActiveWorldContent().props.buildings)
+  )
+    return null;
   // The Galecrest paddock is a worked yard and race course. Keep the same
   // deterministic decoration field out of its apron so no tree becomes an
   // invisible obstacle across a jump line.

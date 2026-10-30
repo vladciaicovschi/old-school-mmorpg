@@ -1,0 +1,154 @@
+{
+  "renderer": "headless SwiftShader",
+  "audit": [
+    {
+      "tier": "medium",
+      "name": "town",
+      "phase": "before",
+      "key": "npc_apothecary_lin",
+      "materials": [
+        {
+          "name": "Apothecary_Lin_PBR",
+          "type": "MeshStandardMaterial",
+          "metalness": 1,
+          "roughness": 0.9,
+          "metalnessMap": true,
+          "roughnessMap": true,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "medium",
+      "name": "town",
+      "phase": "after",
+      "key": "npc_apothecary_lin",
+      "materials": [
+        {
+          "name": "Apothecary_Lin_PBR",
+          "type": "MeshStandardMaterial",
+          "metalness": 0,
+          "roughness": 1,
+          "metalnessMap": false,
+          "roughnessMap": false,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "medium",
+      "name": "cultist",
+      "phase": "before",
+      "key": "npc_dev_skeleton_cultist",
+      "materials": [
+        {
+          "name": "meshy_dev_skeleton_cultist_pbr",
+          "type": "MeshStandardMaterial",
+          "metalness": 1,
+          "roughness": 0.9,
+          "metalnessMap": true,
+          "roughnessMap": true,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "medium",
+      "name": "cultist",
+      "phase": "after",
+      "key": "npc_dev_skeleton_cultist",
+      "materials": [
+        {
+          "name": "meshy_dev_skeleton_cultist_pbr",
+          "type": "MeshStandardMaterial",
+          "metalness": 0,
+          "roughness": 1,
+          "metalnessMap": false,
+          "roughnessMap": false,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "medium",
+      "name": "wolf",
+      "phase": "before",
+      "key": "npc_dev_smart_wolf_v2",
+      "materials": [
+        {
+          "name": "BakedMaterial",
+          "type": "MeshStandardMaterial",
+          "metalness": 1,
+          "roughness": 0.9,
+          "metalnessMap": true,
+          "roughnessMap": true,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "medium",
+      "name": "wolf",
+      "phase": "after",
+      "key": "npc_dev_smart_wolf_v2",
+      "materials": [
+        {
+          "name": "BakedMaterial",
+          "type": "MeshStandardMaterial",
+          "metalness": 0,
+          "roughness": 1,
+          "metalnessMap": false,
+          "roughnessMap": false,
+          "map": true,
+          "normalMap": true,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "low",
+      "name": "town",
+      "phase": "before",
+      "key": "npc_apothecary_lin",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshLambertMaterial",
+          "metalnessMap": false,
+          "roughnessMap": false,
+          "map": true,
+          "normalMap": false,
+          "emissiveMap": false
+        }
+      ]
+    },
+    {
+      "tier": "low",
+      "name": "town",
+      "phase": "after",
+      "key": "npc_apothecary_lin",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshLambertMaterial",
+          "metalnessMap": false,
+          "roughnessMap": false,
+          "map": true,
+          "normalMap": false,
+          "emissiveMap": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

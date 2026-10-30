@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/fisherman_brandt/fisherman_brandt_ktx2.glb",
+      "out": "models/chars/npcs/fisherman_brandt.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/trader_wilkes/trader_wilkes_ktx2.glb",
+      "out": "models/chars/npcs/trader_wilkes.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/smith_haldren/smith_haldren_ktx2.glb",
+      "out": "models/chars/npcs/smith_haldren.glb",
+      "type": "character"
+    },
+    {
+      "src": "tmp/asset_src/npcs/marshal_redbrook/marshal_redbrook_ktx2.glb",
+      "out": "models/chars/npcs/marshal_redbrook.glb",
+      "type": "character"
+    }
+  ]
+}

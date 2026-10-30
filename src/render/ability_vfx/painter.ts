@@ -23,6 +23,7 @@ import {
 import { holdsBuffVfxWhileWorn } from '../ability_vfx_longbuff_core';
 import { isVisuallyDead } from '../anim_state';
 import type { AbilityAudioKind, AbilityAudioOpts } from '../audio_sink';
+import { usesHandCastPreparation } from '../cast_hand_glow_core';
 import { attackAbilityId } from '../characters/weapon_attack_style_core';
 import { ignivarAllowsBodyGlow } from '../ignivar_encounter_core';
 import { abilityVfxFullSpecFor, abilityVfxSpecFor } from './encounter_specs';
@@ -42,6 +43,7 @@ export interface AbilityVfxPrimitives {
     school: string,
     scale?: number,
     color?: number,
+    streak?: boolean,
   ): void;
   lightningProjectile(sourceId: number, targetId: number, color?: number): void;
   burst(at: VfxPoint, school: string, count?: number, power?: number, color?: number): void;
@@ -70,6 +72,9 @@ export interface AbilityVfxDeps {
   anchor: (id: number, heightFrac: number) => VfxPoint | null;
   spawnAoeRing: (x: number, z: number, radius: number, school: string, colorHex?: number) => void;
   triggerAttack: (entityId: number, abilityId?: string) => void;
+  /** Resume an already-held cast at its authored release frame. Optional so
+   * isolated painter tests can retain the ordinary attack callback. */
+  triggerCastRelease?: (entityId: number, abilityId: string, targetId?: number) => void;
   // The renderer's pooled talent-moment point light (pulseAt); optional so
   // tests can omit it.
   lightPulse?: (
@@ -97,6 +102,8 @@ export interface AbilityVfxDeps {
   // gesture below: without an authored clip, triggerAttack would fall back to
   // a weapon swing, which a blessing must never read as. Optional for tests.
   hasGestureClip?: (entityId: number, abilityId: string) => boolean;
+  /** Only rigs with a fitted preparation/release pair, excluding live channels. */
+  hasJoinedCastRelease?: (entityId: number) => boolean;
   // Whether a cast may draw at all: false while a program the pooled
   // primitives or the lazy spell stand-ins need is still unlinked (the boot
   // manifest missed them and the resume lane has not reached them yet), so a
@@ -608,7 +615,16 @@ export class AbilityVfx {
           }
         } else {
           for (let i = 0; i < plan.volley; i++) {
-            this.deps.vfx.projectile(ev.sourceId, ev.targetId, ev.school, scale, plan.color);
+            if (full?.bolt?.style === 'arrow')
+              this.deps.vfx.projectile(
+                ev.sourceId,
+                ev.targetId,
+                ev.school,
+                scale,
+                plan.color,
+                true,
+              );
+            else this.deps.vfx.projectile(ev.sourceId, ev.targetId, ev.school, scale, plan.color);
             this.spawned++;
           }
           // The gallery bolt read: release flash + a flowing comet trail
@@ -632,7 +648,7 @@ export class AbilityVfx {
         }
         if (!plan.whirl && ev.attackAnimation !== 'ranged-shot') {
           this.mobThrowFallback(ev.sourceId, ev.ability);
-          this.playerGestureRelease(ev.sourceId, ev.ability);
+          this.playerGestureRelease(ev.sourceId, ev.ability, ev.targetId);
         }
         break;
       }
@@ -647,7 +663,7 @@ export class AbilityVfx {
         }
         if (!plan.whirl) {
           this.mobThrowFallback(ev.sourceId, ev.ability);
-          this.playerGestureRelease(ev.sourceId, ev.ability);
+          this.playerGestureRelease(ev.sourceId, ev.ability, ev.targetId);
         }
         break;
       case 'beam':
@@ -659,7 +675,11 @@ export class AbilityVfx {
           fx.beamRibbon(ev.sourceId, ev.targetId, plan.color);
           this.spawned++;
         }
-        if (!plan.whirl) this.mobThrowFallback(ev.sourceId, ev.ability);
+        if (!plan.whirl) {
+          this.mobThrowFallback(ev.sourceId, ev.ability);
+          if (this.deps.isMob?.(ev.sourceId) && this.deps.hasJoinedCastRelease?.(ev.sourceId))
+            this.playerGestureRelease(ev.sourceId, ev.ability, ev.targetId);
+        }
         break;
       case 'windup':
         // The generic windup arm's whole job is the throw animation: keep it.
@@ -700,7 +720,7 @@ export class AbilityVfx {
           this.spawned++;
         }
         this.spawnRing(ev.targetId, plan, ev.school);
-        if (!plan.whirl) this.playerGestureRelease(ev.sourceId, ev.ability);
+        if (!plan.whirl) this.playerGestureRelease(ev.sourceId, ev.ability, ev.targetId);
         break;
       }
       case 'tick':
@@ -751,7 +771,12 @@ export class AbilityVfx {
         // spectators too. The authored-clip gate keeps this data-driven and
         // means an un-authored ceremony changes nothing.
         if (!contact && !plan.whirl && this.deps.hasGestureClip?.(ev.sourceId, ev.ability)) {
-          this.deps.triggerAttack(ev.sourceId, ev.ability);
+          if (
+            this.deps.triggerCastRelease &&
+            (!this.deps.isMob?.(ev.sourceId) || this.deps.hasJoinedCastRelease?.(ev.sourceId))
+          ) {
+            this.playerGestureRelease(ev.sourceId, ev.ability, ev.targetId);
+          } else this.deps.triggerAttack(ev.sourceId, ev.ability);
         }
         // A shout barks from the caster whether it is a targeted taunt (Menace)
         // or a self-centered untargeted AoE roar (Craven Roar): the wave, ring
@@ -837,6 +862,8 @@ export class AbilityVfx {
       };
       this.beamChannels.set(ev.sourceId, ch);
       this.mobThrowFallback(ev.sourceId, ev.ability);
+      if (this.deps.isMob?.(ev.sourceId) && this.deps.hasJoinedCastRelease?.(ev.sourceId))
+        this.playerGestureRelease(ev.sourceId, abilityId, ev.targetId);
     }
     ch.lastAt = nowSec;
     ch.targetId = ev.targetId;
@@ -1233,15 +1260,19 @@ export class AbilityVfx {
     let glowColor = 0;
     let glowStrength = 0;
     let glowSlow = false;
-    if (e.castingAbility) {
+    if (e.castingAbility && !isVisuallyDead({ dead: e.dead === true, hp: e.hp ?? 1 })) {
       const spec = abilityVfxSpecFor(e.castingAbility);
       if (spec) {
         const progress =
           e.castTotal > 0 ? Math.min(1, Math.max(0, 1 - e.castRemaining / e.castTotal)) : 0;
         const full = abilityVfxFullSpecFor(e.castingAbility);
         const style = full?.windupStyle ?? 'orb';
-        glowColor = rimColorOf(full, spec);
-        glowStrength = 1.2 * (full?.power ?? 1);
+        // These casters concentrate preparation at the palms. Do not tint
+        // the whole body; independent transformative aura rims still work.
+        if (!usesHandCastPreparation(e.kind, e.templateId)) {
+          glowColor = rimColorOf(full, spec);
+          glowStrength = 1.2 * (full?.power ?? 1);
+        }
         // the local player is priority: guaranteed a windup slot even when
         // a crowded hub saturates the pool
         const windupStarted = fx.windup(
@@ -1547,6 +1578,7 @@ export class AbilityVfx {
   private mobThrowFallback(sourceId: number, abilityId?: string): void {
     const d = this.deps;
     if (!d.isMob?.(sourceId)) return;
+    if (d.hasJoinedCastRelease?.(sourceId)) return;
     if (d.castingAbilityOf?.(sourceId)) return;
     if (d.isMidOneShot?.(sourceId)) return;
     d.triggerAttack(
@@ -1561,11 +1593,13 @@ export class AbilityVfx {
   // player caster whose ability authors a bespoke clip (Cast_Bolt, Cast_Shock,
   // Cast_Quake, ...) now plays it here too, on every client that sees the
   // cue, the same authored-clip gate selfCast already uses.
-  private playerGestureRelease(sourceId: number, abilityId: string): void {
+  private playerGestureRelease(sourceId: number, abilityId: string, targetId?: number): void {
     const d = this.deps;
-    if (d.isMob?.(sourceId)) return;
+    if (d.isMob?.(sourceId) && (!d.hasJoinedCastRelease?.(sourceId) || d.isMidOneShot?.(sourceId)))
+      return;
     if (!d.hasGestureClip?.(sourceId, abilityId)) return;
-    d.triggerAttack(sourceId, abilityId);
+    if (d.triggerCastRelease) d.triggerCastRelease(sourceId, abilityId, targetId);
+    else d.triggerAttack(sourceId, abilityId);
   }
 
   /** What a refused cast still owes the player. Two reads are telegraphs the
@@ -1588,6 +1622,13 @@ export class AbilityVfx {
     if (plan.whirl || ev.fx === 'windup') this.deps.triggerAttack(ev.sourceId, ev.ability);
     if (ev.fx === 'shout') this.spawnRing(ev.sourceId, plan, ev.school);
     else if (ev.fx === 'nova') this.spawnRing(ev.targetId, plan, ev.school);
+    // A refused particle program must not hide an opted-in mob's release.
+    if (
+      this.deps.isMob?.(ev.sourceId) &&
+      this.deps.hasJoinedCastRelease?.(ev.sourceId) &&
+      ['projectile', 'lightning', 'nova', 'selfCast'].includes(ev.fx)
+    )
+      this.playerGestureRelease(ev.sourceId, ev.ability ?? '', ev.targetId);
   }
 
   private spawnRing(entityId: number, plan: AbilityVfxPlan, school: string): void {

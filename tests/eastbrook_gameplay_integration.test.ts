@@ -1,24 +1,23 @@
 import { createHash } from 'node:crypto';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildingContainsPoint } from '../src/sim/building_layout';
+import { buildingContainsPoint, buildingRestPadding } from '../src/sim/building_layout';
 import {
   colliderInternalsForTest,
   isBlocked,
   lineOfSightClear,
   pathCrossesFence,
-  resolveMovement,
 } from '../src/sim/colliders';
 import { MAILBOXES } from '../src/sim/content/mailboxes';
+import { NOTICEBOARDS } from '../src/sim/content/noticeboards';
 import { STATION_RADIUS, STATIONS } from '../src/sim/content/professions';
 import { FURY_ENTITY_ID, FURY_NPC_ID } from '../src/sim/content/pvp_honor';
 import { ZONE1_CAMPS, ZONE1_NPCS, ZONE1_PROPS, ZONE1_ROADS } from '../src/sim/content/zone1';
-import { BUILTIN_WORLD, CAMPS, PLAYER_START, QUESTS, setActiveWorldContent } from '../src/sim/data';
+import { BUILTIN_WORLD, CAMPS, PLAYER_START, setActiveWorldContent } from '../src/sim/data';
 import {
   EASTBROOK_LAYOUT,
   EASTBROOK_NPC_PLACEMENTS_BY_ID,
   EASTBROOK_STATIONS_BY_ID,
   localToWorld,
-  samplePolyline,
 } from '../src/sim/eastbrook_layout';
 import {
   findPath,
@@ -27,19 +26,36 @@ import {
   PLAYER_SWIM_DEPTH,
 } from '../src/sim/pathfind';
 import { petOf, setPetMode, summonPet } from '../src/sim/pet/pet_commands';
+import {
+  type CharacterMoveResult,
+  floorHeightAt,
+  MAX_STEP_HEIGHT,
+  moveCharacter,
+} from '../src/sim/physics';
+import { isSwimming, swimSurfaceY } from '../src/sim/player_motion';
 import { isAtStation } from '../src/sim/professions/stations';
 import { isResting } from '../src/sim/progression/xp';
-import { Sim } from '../src/sim/sim';
 import {
-  dist2d,
-  type Entity,
-  INTERACT_RANGE,
-  type NpcDef,
-  type ZonePropsDef,
-} from '../src/sim/types';
-import { groundHeight, waterLevelAt } from '../src/sim/world';
+  SETTLEMENTS,
+  settlementItemPlacement,
+  settlementPlans,
+} from '../src/sim/settlements_layout';
+import { Sim } from '../src/sim/sim';
+import { dist2d, type Entity, INTERACT_RANGE, type NpcDef } from '../src/sim/types';
+import { localPoint } from '../src/sim/wickharbor_layout';
+import { groundHeight, terrainHeight, waterLevelAt } from '../src/sim/world';
 
 const SEED = 20061;
+const approved = SETTLEMENTS.find((s) => s.id === 'eastbrook')!;
+const approvedPlans = settlementPlans((x, z) => terrainHeight(x, z, SEED)).filter(
+  (p) => p.settlement.id === 'eastbrook',
+);
+const boardDef = NOTICEBOARDS.find((p) => p.id === EASTBROOK_LAYOUT.services.noticeboard.id)!;
+const mailboxDef = MAILBOXES[0];
+function entranceFoot(plan: (typeof approvedPlans)[number]) {
+  const p = plan.placement;
+  return localPoint(plan.lot, (p.landing.minX + p.landing.maxX) / 2, p.approach.maxZ + 0.8);
+}
 const ZONE1_TOWN_NPC_IDS = EASTBROOK_LAYOUT.services.npcs
   .map((npc) => npc.id)
   .filter((id) => id in ZONE1_NPCS);
@@ -73,8 +89,37 @@ function stableTownNpcPayload(): Record<string, Omit<NpcDef, 'pos' | 'facing'> |
   );
 }
 
-function midpoint(a: { x: number; z: number }, b: { x: number; z: number }) {
-  return { x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 };
+function standingBody(point: { x: number; z: number }, radius: number, label: string) {
+  const y = floorHeightAt(
+    SEED,
+    point.x,
+    point.z,
+    radius,
+    terrainHeight(point.x, point.z, SEED) + MAX_STEP_HEIGHT,
+  );
+  const probe: CharacterMoveResult = { ...point, y, blocked: false, stepped: 0 };
+  moveCharacter(
+    {
+      seed: SEED,
+      radius,
+      stepHeight: MAX_STEP_HEIGHT,
+      maxSlope: PLAYER_MAX_CLIMB_SLOPE,
+      grounded: true,
+      swimming: false,
+      ignoreFences: false,
+    },
+    point.x,
+    y,
+    point.z,
+    0,
+    0,
+    probe,
+  );
+  expect(
+    Math.hypot(probe.x - point.x, probe.z - point.z),
+    `${label} body overlaps at ${point.x},${y},${point.z}`,
+  ).toBeLessThan(0.001);
+  return { ...point, y };
 }
 
 function expectWalkableRoute(
@@ -82,25 +127,34 @@ function expectWalkableRoute(
   from: { x: number; z: number },
   to: { x: number; z: number },
   bodyRadius: number,
+  maxSpan = 128,
 ): void {
   const options = {
     seed: SEED,
     bodyRadius,
     maxClimbSlope: PLAYER_MAX_CLIMB_SLOPE,
     minGround: (x: number, z: number) => waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH,
-    maxSpan: 128,
+    maxSpan,
   } as const;
   let route = findPath(from, to, options);
   expect(route.length, `${label} has no route`).toBeGreaterThan(0);
-  let current = { ...from };
+  let current = standingBody(from, bodyRadius, `${label} start`);
+  standingBody(to, bodyRadius, `${label} destination`);
+  const movement = {
+    seed: SEED,
+    radius: bodyRadius,
+    stepHeight: MAX_STEP_HEIGHT,
+    maxSlope: PLAYER_MAX_CLIMB_SLOPE,
+    grounded: true,
+    swimming: false,
+    ignoreFences: false,
+  };
+  const resolved: CharacterMoveResult = { ...current, blocked: false, stepped: 0 };
   let waypointIndex = 0;
   let stalledTicks = 0;
-  expect(isBlocked(SEED, current.x, current.z, bodyRadius), `${label} start blocked`).toBe(false);
-  expect(isBlocked(SEED, to.x, to.z, bodyRadius), `${label} destination blocked`).toBe(false);
-
-  // Follow the path through the real collision resolver. This mirrors runtime
-  // movement: a tangent grid waypoint may slide around a collider before the
-  // follower reaches it, so proof is based on actual resolved positions.
+  // Follow the actual open-world character solver, including standable treads
+  // and raised floors. The retired 2D resolver cannot prove player movement
+  // across those surfaces because it treats their supports as full-height walls.
   for (let stepIndex = 0; stepIndex < 2_000; stepIndex++) {
     if (Math.hypot(to.x - current.x, to.z - current.z) <= 0.2) break;
     while (
@@ -118,25 +172,32 @@ function expectWalkableRoute(
       x: current.x + (dx / distance) * stride,
       z: current.z + (dz / distance) * stride,
     };
-    const resolved = resolveMovement(SEED, current.x, current.z, desired.x, desired.z, bodyRadius);
+    movement.swimming = isSwimming({ pos: current } as Entity, SEED);
+    movement.grounded = !movement.swimming;
+    moveCharacter(
+      movement,
+      current.x,
+      current.y,
+      current.z,
+      desired.x - current.x,
+      desired.z - current.z,
+      resolved,
+    );
     expect(
       pathCrossesFence(current.x, current.z, resolved.x, resolved.z, bodyRadius),
       `${label} crosses a fence`,
     ).toBe(false);
-    expect(isBlocked(SEED, resolved.x, resolved.z, bodyRadius), `${label} resolved blocked`).toBe(
-      false,
-    );
     const moved = Math.hypot(resolved.x - current.x, resolved.z - current.z);
-    const previousGround = groundHeight(current.x, current.z, SEED);
-    const nextGround = groundHeight(resolved.x, resolved.z, SEED);
-    expect(nextGround, `${label} enters deep water`).toBeGreaterThanOrEqual(
-      waterLevelAt(resolved.x, resolved.z, SEED) - PLAYER_SWIM_DEPTH,
-    );
+    const floor = floorHeightAt(SEED, resolved.x, resolved.z, bodyRadius, resolved.y + 0.001);
     expect(
-      (nextGround - previousGround) / Math.max(moved, Number.EPSILON),
-      `${label} exceeds climb slope`,
-    ).toBeLessThanOrEqual(PLAYER_MAX_CLIMB_SLOPE);
-    current = resolved;
+      floor,
+      `${label} enters deep water at ${resolved.x},${resolved.z}`,
+    ).toBeGreaterThanOrEqual(waterLevelAt(resolved.x, resolved.z, SEED) - PLAYER_SWIM_DEPTH);
+    current = {
+      x: resolved.x,
+      z: resolved.z,
+      y: movement.swimming ? Math.max(floor, swimSurfaceY(resolved.x, resolved.z, SEED)) : floor,
+    };
     stalledTicks = moved < 1e-4 ? stalledTicks + 1 : 0;
     if (stalledTicks >= 4) {
       route = findPath(current, to, options);
@@ -144,9 +205,10 @@ function expectWalkableRoute(
       stalledTicks = 0;
     }
   }
-  expect(Math.hypot(to.x - current.x, to.z - current.z), `${label} endpoint`).toBeLessThanOrEqual(
-    0.2,
-  );
+  expect(
+    Math.hypot(to.x - current.x, to.z - current.z),
+    `${label} endpoint at ${current.x},${current.y},${current.z}`,
+  ).toBeLessThanOrEqual(0.2);
 }
 
 function placeEntity(sim: Sim, entity: Entity, point: { x: number; z: number }): void {
@@ -160,177 +222,51 @@ function placeEntity(sim: Sim, entity: Entity, point: { x: number; z: number }):
   sim.rebucket(entity);
 }
 
-// Re-minted 2026-08-18 for the harbor move (commit d19aa33f76,
-// docs/design/eastbrook-revamp/site-plan.md): the fixture's premise is "the
-// same world with the town expressed as plain legacy prop rows", so both
-// worlds present identical collision everywhere. The old-town rows that used
-// to sit here now stand on ground that became Wolf Run open country, and a
-// scattered wolf spawn deflected off a house row that existed only in this
-// fixture. Every row below is probed from the live derived ZONE1_PROPS and
-// EASTBROOK_LAYOUT values: the six harbor lots as plain building rows (the
-// chapel keeps its assetId because an assetId-less chapel collides as the
-// legacy COMPOSED tower-and-hall pair, not the authored single OBB the live
-// town presents), the well beacon row at its civic square position, the two
-// sized market stalls (w/d/height drive the authored OBB collider), the
-// three smithy-yard fences at their probed endpoints, and no town campfire
-// (the retired [3, -4] row sat inside what is now Wolf Run: exactly the
-// class of collider that forked the wolf projection). Round 4 dropped the
-// armoury landmark row: the live town no longer places it, and the barracks
-// garrison that took the lot rides through unchanged as decorProps in BOTH
-// worlds via the ...current spread. Round 6b re-probed the two stall rows to
-// the opened-out market square: this fixture only holds if its plain rows carry
-// the SAME collision as the live authored stalls, so a stale position here
-// forks the wolf projection at the bottom of this file rather than the town.
-function legacyEastbrookProps(current: ZonePropsDef): ZonePropsDef {
-  const townBuildingIds = new Set(
-    [...EASTBROOK_LAYOUT.preservedBuildings, ...EASTBROOK_LAYOUT.buildings].map(
-      (building) => building.id,
-    ),
-  );
-  return {
-    ...current,
-    buildings: [
-      { kind: 'house', x: 12, z: -94, w: 7, d: 5.5, rot: -2.356194490192345 },
-      { kind: 'house', x: -2, z: -122, w: 7, d: 5.5, rot: -2.0344439357957027 },
-      { kind: 'inn', x: -38, z: -88, w: 7.5, d: 6, rot: -2.5535900500422257 },
-      {
-        kind: 'chapel',
-        assetId: '/models/props/eastbrook_chapel.glb',
-        x: 2,
-        z: -78,
-        w: 5.5,
-        d: 6,
-        rot: 0.7853981633974483,
-      },
-      { kind: 'house', x: -28, z: -122, w: 5.5, d: 4.5, rot: 2.5535900500422257 },
-      { kind: 'house', x: -16, z: -128, w: 5.5, d: 4.5, rot: 0.5880026035475675 },
-      ...current.buildings.filter((building) => !building.id || !townBuildingIds.has(building.id)),
-    ],
-    wells: [
-      // The legacy fixture is the PRE-rebuild world, so it keeps an unnamed
-      // well on the civic point and strips whatever the rebuild seats there.
-      // The RADIUS follows the live centrepiece rather than the old 1.5, for
-      // the same reason the mailbox row below follows the live pillar: this
-      // test's whole premise is identical collision in both worlds, and a
-      // 0.1 yard difference on a solid in the middle of the square is exactly
-      // the kind of thing that deflects one wanderer 2,000 ticks later and
-      // reds this as a mystery.
-      { x: -14.75, z: -102, r: EASTBROOK_LAYOUT.civic.monument.radius },
-      ...current.wells.filter((well) => well.id !== EASTBROOK_LAYOUT.civic.monument.id),
-    ],
-    stalls: [
-      {
-        x: -20.5,
-        z: -94,
-        rot: 2.4805494847391065,
-        r: 1.7804493814764857,
-        w: 2.8,
-        d: 2.2,
-        height: 2.7,
-      },
-      {
-        x: -19,
-        z: -108,
-        rot: 0.6610431688506869,
-        r: 1.7804493814764857,
-        w: 2.8,
-        d: 2.2,
-        height: 2.7,
-      },
-      ...current.stalls.filter((stall) => !stall.id?.startsWith('eastbrook_market_stall_')),
-    ],
-    fences: [
-      {
-        x1: 4.395154415649398,
-        z1: -123.83357574154984,
-        x2: 2.8746281909495415,
-        z2: -124.59383885389975,
-        width: 0.28,
-        height: 0.9,
-      },
-      {
-        x1: 4.529318494299386,
-        z1: -123.43108350559987,
-        x2: 0.7727242920997393,
-        z2: -115.91789510120057,
-        width: 0.28,
-        height: 0.9,
-      },
-      {
-        x1: 0.37023205614977694,
-        z1: -115.78373102255058,
-        x2: -1.1502941685500798,
-        z2: -116.5439941349005,
-        width: 0.28,
-        height: 0.9,
-      },
-      ...current.fences.filter((fence) => !fence.id?.startsWith('eastbrook_fence_')),
-    ],
-    benches: current.benches?.filter((bench) => !bench.id.startsWith('eastbrook_')),
-    walls: current.walls?.filter((wall) => !wall.id.startsWith('eastbrook_wall_')),
-  };
-}
-
 describe('Eastbrook authored gameplay data integration', () => {
-  it('replaces only the town prop inventory and preserves every exterior prop row in order', () => {
-    // Round 4: the preserved Grand Armoury row retired with the barracks
-    // swap; the building table is exactly the authored layout lots now, and
-    // the KayKit barracks + watch tower garrison the old lot as decorProps
-    // (pinned in tests/eastbrook_grand_armoury.test.ts).
-    expect(ZONE1_PROPS.buildings.map((building) => building.id)).toEqual(
-      EASTBROOK_LAYOUT.buildings.map((building) => building.id),
+  it('replaces the approved town inventory and preserves remote camps and landmarks', () => {
+    expect(ZONE1_PROPS.buildings).toHaveLength(18);
+    expect(ZONE1_PROPS.buildings.map((b) => b.id)).toEqual(
+      [
+        'bank-hall',
+        'hearth-inn',
+        'chapel',
+        'smith-house',
+        'weaver-house',
+        'toolworks',
+        'market-home',
+        'east-home',
+        'harbor-apothecary',
+        'harbor-office',
+        'dock-home',
+        'quay-warehouse',
+        'quay-smokehouse',
+        'quay-cottage',
+        'ridge-home',
+        'lane-home',
+        'green-home',
+        'craft-cottage',
+      ].map((id) => `settlement:eastbrook:${id}`),
     );
-    expect(ZONE1_PROPS.buildings.some((building) => building.landmark)).toBe(false);
-    // Re-pinned 2026-08-18 for the harbor move (commit d19aa33f76,
-    // docs/design/eastbrook-revamp/site-plan.md): the well beacon moved with
-    // the civic square to the harbor site. Round 7 replaced it in place with
-    // the Realm Builder monument, which keeps the point and tightens the
-    // radius onto its own art.
-    expect(ZONE1_PROPS.wells).toEqual([
+    expect(ZONE1_PROPS.buildings.some((b) => b.landmark)).toBe(false);
+    expect(ZONE1_PROPS.wells).toEqual([]);
+    expect(ZONE1_PROPS.stalls).toEqual([]);
+    expect(ZONE1_PROPS.benches).toEqual([]);
+    expect(ZONE1_PROPS.walls).toEqual([]);
+    expect(ZONE1_PROPS.fences).toEqual([]);
+    expect(approved.dressing.filter((p) => p.modelId === approved.models.stall)).toHaveLength(2);
+    expect(approved.dressing.filter((p) => p.id.startsWith('chapel-grave-'))).toHaveLength(9);
+    expect(approved.landmarks).toEqual([
       expect.objectContaining({
-        id: EASTBROOK_LAYOUT.civic.monument.id,
+        id: 'monument',
+        modelId: 'eastbrook:monument',
         x: -14.75,
         z: -102,
-        r: 3.19,
       }),
     ]);
-    expect(
-      ZONE1_PROPS.stalls.map((stall) => [stall.id, stall.x, stall.z, stall.w, stall.d]),
-    ).toEqual(
-      EASTBROOK_LAYOUT.market.stalls.map((stall) => [
-        stall.id,
-        stall.position.x,
-        stall.position.z,
-        stall.width,
-        stall.depth,
-      ]),
-    );
-    expect(ZONE1_PROPS.stalls.map((stall) => stall.id)).not.toContain(
-      'eastbrook_market_stall_artisans',
-    );
-    expect(ZONE1_PROPS.benches?.map((bench) => bench.id)).toEqual(
-      EASTBROOK_LAYOUT.civic.benches.map((bench) => bench.id),
-    );
-    expect(ZONE1_PROPS.walls?.map((wall) => wall.id)).toEqual(
-      EASTBROOK_LAYOUT.wall.segments.map((segment) => segment.id),
-    );
-    expect(ZONE1_PROPS.fences.map((fence) => fence.id)).toEqual(
-      EASTBROOK_LAYOUT.fences.map((fence) => fence.id),
-    );
-
     expect(ZONE1_PROPS.mines).toEqual([{ x: -38, z: 138, rot: 0.8 }]);
     expect(ZONE1_PROPS.docks).toEqual([
       { x: -64, z: 60, rot: -2.2, hutLocal: { x: 2.8, z: 2.4, hw: 1.7, hd: 1.5 } },
     ]);
-    // Re-pinned for owner refinement round 6: the vale bandit camp swapped
-    // centers with the wild boar camp, so the first two tents, the first two
-    // crates and the first campfire (the band's own dressing) travelled north
-    // with it, while Gorrak's rows stayed put. The same round added a
-    // fisherman's camp on the strand south of the quay, one tent and one fire
-    // beside the beached rowboats.
-    // Re-pinned again for owner round 6b: Gorrak's camp joined the main bandit
-    // band northeast, so his two tents, his two crates and his fire travelled
-    // with the boss to the reunited camp around (115, 42).
     expect(ZONE1_PROPS.tents).toEqual([
       { x: 58, z: 25, rot: 0.4, scale: 1 },
       { x: 68, z: 16, rot: 2.1, scale: 1 },
@@ -348,7 +284,6 @@ describe('Eastbrook authored gameplay data integration', () => {
     expect(ZONE1_PROPS.campfires).toEqual([
       [59, 17],
       [111, 46],
-      [-93.5, -76.5],
       [-30, 146],
       [-61, 56],
     ]);
@@ -361,24 +296,7 @@ describe('Eastbrook authored gameplay data integration', () => {
       { x: 80, z: 78, ringR: 7, columns: 7 },
       { x: -5, z: -60, ringR: 8, columns: 6 },
     ]);
-    // Re-pinned 2026-08-18 for the harbor move (commit d19aa33f76): the
-    // Eastbrook graveyard row moved to the chapel green; the second
-    // (exterior) row is unchanged. Re-pinned again for owner refinement
-    // round 6, which added two anchors: the north-Vale yard on the Copper Dig
-    // road that gives the new gy_vale_north release its headstones, and a
-    // second chapel-green plot filling the west half of the wrought-iron
-    // churchyard enclosure.
-    // Re-pinned for owner round 6b: the retired Vale Chapel Yard anchor at
-    // (4, -56) is gone with its graveyard record, because its Pale Keeper stood
-    // 15 yd from the rebuilt Eastbrook Rest and read as a duplicate.
-    expect(ZONE1_PROPS.graveyards).toEqual([
-      { x: -2, z: -70 },
-      { x: -22, z: 118 },
-      { x: -9, z: -70 },
-    ]);
-    // Re-pinned for owner refinement round 6b: the Collapsed Reliquary mouth
-    // left the town chapel rise and moved to the Mirror Lake shore, so the
-    // delve marker travels with it (src/sim/content/zone1.ts delveMarkers).
+    expect(ZONE1_PROPS.graveyards).toEqual([{ x: -22, z: 118 }]);
     expect(ZONE1_PROPS.delveMarkers).toEqual([{ x: -136, z: 112, delveId: 'collapsed_reliquary' }]);
   });
 
@@ -389,22 +307,20 @@ describe('Eastbrook authored gameplay data integration', () => {
   // added the inn lane (appended last, the by-index spread rule), trimmed
   // the beach promenade to the pulled-in strand, and re-tied the coast
   // track to hug the new waterline.
-  it('keeps every preserved exterior road on its authored prefix with no gate crossing', () => {
-    expect(ZONE1_ROADS).toHaveLength(7);
-    for (let index = 0; index < EASTBROOK_LAYOUT.roads.length; index++) {
-      const authored = EASTBROOK_LAYOUT.roads[index];
-      expect(ZONE1_ROADS[index].slice(0, authored.points.length)).toEqual(authored.points);
-      expect(authored.gateId).toBeNull();
-    }
-    expect(ZONE1_ROADS.map((road) => road.at(-1))).toEqual([
+  it('connects the approved roads while retaining the remote road endpoints', () => {
+    for (const endpoint of [
       { x: -32, z: 140 },
       { x: -92, z: -56 },
       { x: 65, z: -65 },
-      { x: -9.2, z: -134 },
-      { x: -9, z: -100.4 },
-      { x: -96, z: -66 },
-      { x: -44, z: -98 },
-    ]);
+    ])
+      expect(
+        ZONE1_ROADS.some((r) => r.some((p) => p.x === endpoint.x && p.z === endpoint.z)),
+        JSON.stringify(endpoint),
+      ).toBe(true);
+    for (const road of approved.roads)
+      expect(ZONE1_ROADS).toContainEqual(road.points.map(([x, z]) => ({ x, z })));
+    expect(approved.roads.length).toBeGreaterThan(3);
+    expect(EASTBROOK_LAYOUT.wall.gates).toEqual([]);
   });
 
   it('moves only the 15 town NPC placement fields and preserves key order and all other payload', () => {
@@ -775,35 +691,33 @@ describe('Eastbrook authored gameplay data integration', () => {
     expect(STATION_RADIUS).toBe(20);
   });
 
-  it('moves only the Eastbrook mailbox and keeps the player and graveyard contracts', () => {
+  it('moves the approved settlement mailboxes and preserves the other service rows', () => {
+    // The four rebuilt facades can move their service anchors with the
+    // architecture frame. Other towns keep their exact established rows.
+    const authoredMailbox = (settlementId: string) => {
+      const service = SETTLEMENTS.find((s) => s.id === settlementId)?.fixed.find(
+        (item) => item.id === 'mailbox',
+      );
+      if (!service) throw new Error(`missing authored mailbox for ${settlementId}`);
+      return { x: service.x, z: service.z, facing: service.rot ?? 0 };
+    };
     expect(MAILBOXES).toEqual([
-      {
-        x: EASTBROOK_LAYOUT.services.mailbox.position.x,
-        z: EASTBROOK_LAYOUT.services.mailbox.position.z,
-      },
+      authoredMailbox('eastbrook'),
       { x: 6, z: 294 },
       { x: 6, z: 654 },
       { x: -33, z: 1025 },
       { x: 397, z: 1905 },
-      { x: -23, z: 1555 },
+      authoredMailbox('icemantle'),
       { x: -353, z: 2067 },
       { x: -354, z: 356 },
       { x: -364, z: 1415 },
-      { x: 354, z: 1436 },
+      authoredMailbox('gibbetmere'),
       { x: -294, z: 815 },
       { x: 314, z: 816 },
-      { x: 427, z: 355 },
-      { x: 299, z: 76 },
-      // The Proving Shore tutorial island's camp mailbox (Dawnrest Camp hub
-      // at (-300, 50) offset (-6, 6)), the one authored row carrying a
-      // facing (rotated to face the camp ground).
+      { x: 420, z: 352 },
+      authoredMailbox('gullhaven'),
       { x: -306, z: 56, facing: Math.PI },
     ]);
-    // Re-pinned 2026-08-18 for the harbor move (commit d19aa33f76,
-    // docs/design/eastbrook-revamp/site-plan.md): the spawn moved to the
-    // harbor quay and the graveyard contract to the chapel green. Every
-    // behavioral test in this file consumes PLAYER_START symbolically, so
-    // the moved spawn is re-pinned here as exported data.
     expect(PLAYER_START).toEqual({ x: -94, z: -58 });
     expect(EASTBROOK_LAYOUT.services.graveyard.position).toEqual({ x: -2, z: -70 });
     expect(EASTBROOK_LAYOUT.services.graveyard.legacyReleasePoint).toEqual({ x: 0, z: -70 });
@@ -824,158 +738,75 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     }
   });
 
-  it('blocks every wall wing while players and pets pass through all six exact gate centers', () => {
-    for (const segment of EASTBROOK_LAYOUT.wall.segments) {
-      expect(
-        isBlocked(SEED, segment.footprint.center.x, segment.footprint.center.z, 0.5),
-        segment.id,
-      ).toBe(true);
-    }
-    for (const gate of EASTBROOK_LAYOUT.wall.gates) {
-      const length = Math.hypot(gate.crossing.x, gate.crossing.z);
-      const ux = gate.crossing.x / length;
-      const uz = gate.crossing.z / length;
-      const from = { x: ux * 26.5, z: uz * 26.5 };
-      const to = { x: ux * 32.5, z: uz * 32.5 };
-      for (const bodyRadius of [0.5, 0.6]) {
-        const result = resolveMovement(SEED, from.x, from.z, to.x, to.z, bodyRadius);
-        expect(
-          Math.hypot(result.x - to.x, result.z - to.z),
-          `${gate.id} radius ${bodyRadius}`,
-        ).toBeLessThan(0.05);
-      }
-    }
+  it('keeps the retired stone wall and gate rows absent', () => {
+    expect(EASTBROOK_LAYOUT.wall.segments).toEqual([]);
+    expect(EASTBROOK_LAYOUT.wall.gates).toEqual([]);
+    expect(ZONE1_PROPS.walls).toEqual([]);
   });
 
-  it('uses exact authored collider shapes and visual heights', () => {
+  it('uses the native settlement prop footprints and active noticeboard dimensions', () => {
     const colliders = colliderInternalsForTest.staticWorldColliders(SEED);
-    const stall = EASTBROOK_LAYOUT.market.stalls[0];
-    const stallCollider = colliders.find(
-      (collider) =>
-        collider.type === 'obb' &&
-        collider.x === stall.position.x &&
-        collider.z === stall.position.z,
-    );
-    expect(stallCollider).toMatchObject({
-      type: 'obb',
-      hw: stall.width / 2,
-      hd: stall.depth / 2,
-      rot: stall.rotation,
-    });
+    for (const item of [
+      ...approved.dressing.filter((p) => p.modelId === approved.models.stall),
+      ...approved.landmarks,
+    ]) {
+      const seated = settlementItemPlacement(item, (x, z) => terrainHeight(x, z, SEED)),
+        r = seated.seating.rect,
+        center = localPoint(
+          { ...item, rot: item.rot ?? 0 },
+          (r.minX + r.maxX) / 2,
+          (r.minZ + r.maxZ) / 2,
+        );
+      expect(colliders).toContainEqual(
+        expect.objectContaining({
+          type: 'obb',
+          x: center.x,
+          z: center.z,
+          hw: (r.maxX - r.minX) / 2,
+          hd: (r.maxZ - r.minZ) / 2,
+          rot: item.rot ?? 0,
+        }),
+      );
+    }
     expect(
-      colliders.find(
-        (collider) =>
-          collider.type === 'obb' &&
-          collider.x === 3.5 &&
-          collider.z === 11.5 &&
-          collider.hw === 1.4 &&
-          collider.hd === 1.1 &&
-          collider.rot === -2.788602,
-      ),
-      'retired artisan stall collider',
-    ).toBeUndefined();
-
-    const well = EASTBROOK_LAYOUT.civic.monument;
-    const wellCollider = colliders.find(
-      (collider) =>
-        collider.type === 'circle' &&
-        collider.x === well.position.x &&
-        collider.z === well.position.z,
-    );
-    expect(wellCollider).toMatchObject({ type: 'circle', r: well.radius });
-    expect(wellCollider?.cameraTopY).toBeCloseTo(
-      groundHeight(well.position.x, well.position.z, SEED) + well.height,
-    );
-
-    // Re-pinned 2026-08-18 for the harbor move (commit d19aa33f76,
-    // docs/design/eastbrook-revamp/site-plan.md): the town wall is retired
-    // by design, so this is now an ABSENCE pin, mirroring the retired
-    // artisan stall above: the layout exposes zero segments and no static
-    // OBB stands on the old wall ring.
+      colliders.some((c) => c.type === 'circle' && c.x === -14.75 && c.z === -102),
+      'retired monument cylinder',
+    ).toBe(false);
     expect(EASTBROOK_LAYOUT.wall.segments).toHaveLength(0);
     expect(EASTBROOK_LAYOUT.wall.gates).toHaveLength(0);
-    expect(
-      colliders.filter(
-        (collider) =>
-          collider.type === 'obb' &&
-          Math.abs(Math.hypot(collider.x, collider.z) - EASTBROOK_LAYOUT.wall.radius) < 1.5,
-      ),
-      'retired wall ring colliders',
-    ).toHaveLength(0);
-
-    const fence = EASTBROOK_LAYOUT.fences[0];
-    const fenceCenter = midpoint(fence.start, fence.end);
-    const fenceCollider = colliders.find(
-      (collider) =>
-        collider.type === 'obb' &&
-        collider.isFence === true &&
-        collider.x === fenceCenter.x &&
-        collider.z === fenceCenter.z,
-    );
-    expect(fenceCollider).toMatchObject({
+    const board = boardDef;
+    const collider = colliders.find((c) => c.type === 'obb' && c.x === board.x && c.z === board.z);
+    expect(collider).toMatchObject({
       type: 'obb',
-      hd: fence.width / 2,
-      isFence: true,
-    });
-    expect(fenceCollider?.cameraTopY).toBeCloseTo(
-      groundHeight(fenceCenter.x, fenceCenter.z, SEED) + fence.height,
-    );
-
-    const board = EASTBROOK_LAYOUT.services.noticeboard;
-    const boardCollider = colliders.find(
-      (collider) =>
-        collider.type === 'obb' &&
-        collider.x === board.position.x &&
-        collider.z === board.position.z,
-    );
-    expect(boardCollider).toMatchObject({
-      type: 'obb',
-      hw: board.nativeDimensions.width / 2,
-      hd: board.nativeDimensions.depth / 2,
+      hw: board.width / 2,
+      hd: board.depth / 2,
       rot: board.rotation,
     });
-    expect(boardCollider?.cameraTopY).toBeCloseTo(
-      groundHeight(board.position.x, board.position.z, SEED) + board.nativeDimensions.height,
-    );
+    expect(collider?.cameraTopY).toBeCloseTo(groundHeight(board.x, board.z, SEED) + board.height);
   });
 
-  it('keeps every standing point, station, service route, quest NPC, and graveyard route clear', () => {
-    for (const building of [
-      ...EASTBROOK_LAYOUT.preservedBuildings,
-      ...EASTBROOK_LAYOUT.buildings,
-    ]) {
-      expect(
-        isBlocked(SEED, building.frontStandingPoint.x, building.frontStandingPoint.z, 0.6),
-        building.id,
-      ).toBe(false);
+  it('keeps approved entrance feet, stations, quest NPCs and service standing points clear', () => {
+    for (const plan of approvedPlans) {
+      const point = entranceFoot(plan);
+      // A stair foot can overlap its standable support in the old 2D query.
+      // Resolve a full body at the actual floor, then the route proof below
+      // verifies the player can reach this point from the square.
+      standingBody(point, PLAYER_BODY_RADIUS, plan.lot.id);
     }
-    for (const stall of EASTBROOK_LAYOUT.market.stalls) {
-      expect(
-        isBlocked(SEED, stall.frontStandingPoint.x, stall.frontStandingPoint.z, 0.5),
-        stall.id,
-      ).toBe(false);
-    }
-    const boardStanding = EASTBROOK_LAYOUT.services.noticeboard.frontStandingPoint;
-    expect(isBlocked(SEED, boardStanding.x, boardStanding.z, 0.6), 'noticeboard').toBe(false);
+    expect(
+      isBlocked(SEED, boardDef.frontStandingPoint.x, boardDef.frontStandingPoint.z, 0.6),
+      'noticeboard',
+    ).toBe(false);
     for (const station of EASTBROOK_LAYOUT.services.stations) {
       expect(isBlocked(SEED, station.position.x, station.position.z, 0.8), station.id).toBe(false);
       expect(isAtStation(STATIONS, station.position, station.type), station.id).toBe(true);
     }
-    for (const route of EASTBROOK_LAYOUT.services.routes) {
-      for (const point of samplePolyline(route.points, 0.2)) {
-        expect(isBlocked(SEED, point.x, point.z, route.bodyRadius), route.id).toBe(false);
-      }
-    }
-    const questNpcIds = new Set<string>();
-    for (const quest of Object.values(QUESTS)) {
-      questNpcIds.add(quest.giverNpcId);
-      questNpcIds.add(quest.turnInNpcId);
-      for (const id of quest.turnInNpcIds ?? []) questNpcIds.add(id);
-    }
-    for (const id of ZONE1_TOWN_NPC_IDS.filter((candidate) => questNpcIds.has(candidate))) {
+    for (const id of ZONE1_TOWN_NPC_IDS) {
       const npc = ZONE1_NPCS[id];
       expect(isBlocked(SEED, npc.pos.x, npc.pos.z, 0.6), id).toBe(false);
     }
+    const grave = EASTBROOK_LAYOUT.services.graveyard.position;
+    expect(isBlocked(SEED, grave.x, grave.z, 0.5), 'spirit release').toBe(false);
   });
 
   // Re-anchored 2026-08-18 for the harbor move (commit d19aa33f76,
@@ -1011,56 +842,61 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       })),
       {
         id: EASTBROOK_LAYOUT.services.mailbox.id,
-        point: EASTBROOK_LAYOUT.services.mailbox.frontStandingPoint,
+        point: {
+          x: mailboxDef.x + Math.sin(mailboxDef.facing ?? 0) * 1.5,
+          z: mailboxDef.z + Math.cos(mailboxDef.facing ?? 0) * 1.5,
+        },
       },
       {
         id: EASTBROOK_LAYOUT.services.noticeboard.id,
-        point: EASTBROOK_LAYOUT.services.noticeboard.frontStandingPoint,
+        point: boardDef.frontStandingPoint,
       },
       {
         id: EASTBROOK_LAYOUT.services.graveyard.id,
         point: EASTBROOK_LAYOUT.services.graveyard.position,
       },
-      ...[...EASTBROOK_LAYOUT.preservedBuildings, ...EASTBROOK_LAYOUT.buildings].map(
-        (building) => ({ id: `${building.id}:entrance`, point: building.frontStandingPoint }),
-      ),
+      ...approvedPlans.map((plan) => ({
+        id: `${plan.lot.id}:entrance`,
+        point: entranceFoot(plan),
+      })),
     ];
-    expect(destinations).toHaveLength(34);
-    const moverProfiles = [
-      { id: 'player', bodyRadius: PLAYER_BODY_RADIUS },
-      // Pet locomotion deliberately shares PLAYER_BODY_RADIUS; keep this
-      // explicit so the town route proof cannot drift to a guessed pet size.
-      { id: 'pet', bodyRadius: PLAYER_BODY_RADIUS },
-    ] as const;
+    expect(destinations).toHaveLength(41);
+    // Player and pet navigation share the same body radius. Prove the shared
+    // geometry once here; the next case drives an actual following pet.
     for (const destination of destinations) {
-      for (const mover of moverProfiles) {
-        expectWalkableRoute(
-          `${destination.id} outbound ${mover.id} r${mover.bodyRadius}`,
-          square,
-          destination.point,
-          mover.bodyRadius,
-        );
-        expectWalkableRoute(
-          `${destination.id} inbound ${mover.id} r${mover.bodyRadius}`,
-          destination.point,
-          square,
-          mover.bodyRadius,
-        );
-      }
+      expectWalkableRoute(
+        `${destination.id} outbound r${PLAYER_BODY_RADIUS}`,
+        square,
+        destination.point,
+        PLAYER_BODY_RADIUS,
+      );
+      expectWalkableRoute(
+        `${destination.id} inbound r${PLAYER_BODY_RADIUS}`,
+        destination.point,
+        square,
+        PLAYER_BODY_RADIUS,
+      );
     }
   });
 
-  it('summons a passive pet and follows its owner through every gate in both directions', () => {
-    const sim = new Sim({ seed: SEED, playerClass: 'warlock', noPlayer: true });
-    const pid = sim.addPlayer('warlock', 'Gatekeeper');
-    const owner = sim.entities.get(pid);
-    if (!owner) throw new Error('missing pet owner');
+  it('summons a passive pet and follows its owner along an approved square lane in both directions', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warlock', noPlayer: true }),
+      pid = sim.addPlayer('warlock', 'Follower');
+    const owner = sim.entities.get(pid)!;
     summonPet(sim.ctx, owner, 'gloomshade');
-    const pet = petOf(sim.ctx, pid);
-    if (!pet) throw new Error('missing summoned pet');
+    const pet = petOf(sim.ctx, pid)!;
+    expect(pet).toBeDefined();
     setPetMode(sim.ctx, 'passive', pid);
-
-    const follow = (ownerPoint: { x: number; z: number }, petPoint: { x: number; z: number }) => {
+    for (const [ownerPoint, petPoint] of [
+      [
+        { x: -19, z: -100 },
+        { x: -19, z: -105 },
+      ],
+      [
+        { x: -19, z: -105 },
+        { x: -19, z: -100 },
+      ],
+    ]) {
       placeEntity(sim, owner, ownerPoint);
       placeEntity(sim, pet, petPoint);
       pet.aggroTargetId = null;
@@ -1068,38 +904,24 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       pet.inCombat = false;
       for (let tick = 0; tick < 100 && dist2d(owner.pos, pet.pos) > 3.5; tick++) sim.tick();
       expect(dist2d(owner.pos, pet.pos)).toBeLessThanOrEqual(3.5);
-    };
-
-    for (const gate of EASTBROOK_LAYOUT.wall.gates) {
-      const length = Math.hypot(gate.crossing.x, gate.crossing.z);
-      const ux = gate.crossing.x / length;
-      const uz = gate.crossing.z / length;
-      const inside = { x: ux * 24, z: uz * 24 };
-      const outside = { x: ux * 32, z: uz * 32 };
-      follow(outside, inside);
-      expect(Math.hypot(pet.pos.x, pet.pos.z), `${gate.id} outward`).toBeGreaterThan(
-        EASTBROOK_LAYOUT.wall.radius,
-      );
-      follow(inside, outside);
-      expect(Math.hypot(pet.pos.x, pet.pos.z), `${gate.id} return`).toBeLessThan(
-        EASTBROOK_LAYOUT.wall.radius,
-      );
     }
   });
 
   it('makes the new inn the sole Eastbrook rest area and uses rotation-correct local transforms', () => {
-    const inn = ZONE1_PROPS.buildings.find((building) => building.id === 'eastbrook_inn');
+    const inn = ZONE1_PROPS.buildings.find(
+      (building) => building.id === 'settlement:eastbrook:hearth-inn',
+    );
     if (!inn) throw new Error('missing Eastbrook rest fixtures');
     // Round 4: the armoury retired from placement, so no zone1 building row
     // carries its landmark and the barracks lot front grants no rest.
     expect(ZONE1_PROPS.buildings.some((building) => building.landmark)).toBe(false);
-    const innPlacement = EASTBROOK_LAYOUT.buildings.find(
-      (building) => building.id === 'eastbrook_inn',
-    );
-    if (!innPlacement) throw new Error('missing authored Eastbrook inn');
-    const restPoint = innPlacement.frontStandingPoint;
+    const innPlacement = approvedPlans.find((p) => p.lot.id === 'hearth-inn')!;
+    const restPoint = localPoint(innPlacement.lot, 0, innPlacement.placement.landing.maxZ);
     const barracksFront = { x: 12, z: -5.5 };
-    expect(isBlocked(SEED, restPoint.x, restPoint.z, 0.5)).toBe(false);
+
+    expect(buildingContainsPoint(inn, restPoint.x, restPoint.z, buildingRestPadding(inn))).toBe(
+      true,
+    );
     expect(isResting({ inCombat: false, pos: { ...restPoint, y: 0 } } as Entity)).toBe(true);
     expect(isResting({ inCombat: false, pos: { ...barracksFront, y: 0 } } as Entity)).toBe(false);
 
@@ -1116,18 +938,19 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     const saul = npcEntity(sim, 'chronicler_saul');
     const mailbox = sim.entities.get(sim.postOffice.mailboxIds[0]);
     if (!mailbox) throw new Error('missing Eastbrook mailbox');
-    // Re-measured 2026-08-18 for the harbor move (commit d19aa33f76,
-    // docs/design/eastbrook-revamp/site-plan.md): Saul now works beside the
-    // noticeboard at the bank corner and the mailbox pillar moved across the
-    // square, so the measured face point (saul.pos plus 1.5 yd along his
-    // facing, taken from the runtime entity) is far outside mailbox reach
-    // rather than a stride from it. The targetless-interact regression this
-    // stages is unchanged.
-    const facePoint = { x: 11.032050294337843, z: -86.25192455849323 };
+    // Approach the NPC along his actual facing. The mailbox now belongs at
+    // the hall entrance, so its service reach must not steal this interaction.
+    const facePoint = {
+      x: saul.pos.x + Math.sin(saul.facing) * 1.5,
+      z: saul.pos.z + Math.cos(saul.facing) * 1.5,
+    };
 
     expect(Math.hypot(facePoint.x - saul.pos.x, facePoint.z - saul.pos.z)).toBeCloseTo(1.5, 12);
     const mailboxDistance = Math.hypot(facePoint.x - mailbox.pos.x, facePoint.z - mailbox.pos.z);
-    expect(mailboxDistance).toBe(24.090753748334464);
+    expect(mailboxDistance).toBeCloseTo(
+      Math.hypot(facePoint.x - mailboxDef.x, facePoint.z - mailboxDef.z),
+      8,
+    );
     expect(mailboxDistance).toBeGreaterThan(INTERACT_RANGE);
 
     const talkToNpc = vi.spyOn(sim, 'talkToNpc');
@@ -1168,11 +991,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       (entity) => entity.kind === 'object' && entity.templateId === 'noticeboard_eastbrook',
     );
     if (!noticeboard) throw new Error('missing Eastbrook noticeboard');
-    const atNoticeboard = standAt(
-      sim,
-      first,
-      EASTBROOK_LAYOUT.services.noticeboard.frontStandingPoint,
-    );
+    const atNoticeboard = standAt(sim, first, boardDef.frontStandingPoint);
     atNoticeboard.targetId = noticeboard.id;
     sim.interact(first);
     expect(sim.drainEvents()).toContainEqual({
@@ -1221,53 +1040,14 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     timeout: 180000,
   }, () => {
     const stabilitySeed = 4_242;
-    const legacyWorld = {
-      ...BUILTIN_WORLD,
-      props: legacyEastbrookProps(BUILTIN_WORLD.props),
-      services: {
-        ...BUILTIN_WORLD.services,
-        // Re-probed from the live layout for owner round 6b. The fixture used
-        // to hold the OLD town's mailbox literal (7, -8) in this slot, and that
-        // is the same trap the legacy town campfire fell into above: the old
-        // post spot is Wolf Run open country now, so it was a collider present
-        // in this world and nowhere else. It went unnoticed until this round's
-        // camp and graveyard moves reflowed the shared wander stream and walked
-        // wolf 88 across it at tick 547, deflecting it in the legacy world
-        // only. The premise here is identical collision in both worlds, so the
-        // row follows the live pillar.
-        mailboxes: [
-          {
-            x: EASTBROOK_LAYOUT.services.mailbox.position.x,
-            z: EASTBROOK_LAYOUT.services.mailbox.position.z,
-          },
-          ...MAILBOXES.slice(1),
-        ],
-      },
-    };
-    setActiveWorldContent(legacyWorld);
-    const legacy = new Sim({
-      seed: stabilitySeed,
-      playerClass: 'warrior',
-      noPlayer: true,
-      world: legacyWorld,
-    });
-    setActiveWorldContent(BUILTIN_WORLD);
+    // Both hosts consume the same approved geometry. Comparing a custom world
+    // with retired solid building rows no longer represents identical collision.
+    const legacy = new Sim({ seed: stabilitySeed, playerClass: 'warrior', noPlayer: true });
     const rebuilt = new Sim({ seed: stabilitySeed, playerClass: 'warrior', noPlayer: true });
 
     const stableProjection = (sim: Sim) =>
       [...sim.entities.values()]
         .filter((entity) => entity.kind === 'mob' || entity.kind === 'object')
-        // The mailbox and the Realm Builder monument are static services the
-        // REBUILT world seats and the legacy fixture has no equivalent for.
-        // Both are inert click targets with no collider of their own (the
-        // monument's solid is the wells row above, which both worlds carry),
-        // so neither can move a wanderer: excluding them compares the two
-        // worlds' actual simulations rather than their service rosters.
-        .filter(
-          (entity) =>
-            entity.templateId !== 'mailbox' &&
-            entity.templateId !== EASTBROOK_LAYOUT.civic.monument.templateId,
-        )
         .map((entity) => ({
           id: entity.id,
           kind: entity.kind,
@@ -1286,16 +1066,18 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
     expect(stableProjection(rebuilt)).toEqual(stableProjection(legacy));
     expect(rebuilt.postOffice.mailboxIds).toEqual(legacy.postOffice.mailboxIds);
     expect(rebuilt.entities.get(rebuilt.postOffice.mailboxIds[0])?.pos).toMatchObject({
-      x: EASTBROOK_LAYOUT.services.mailbox.position.x,
-      z: EASTBROOK_LAYOUT.services.mailbox.position.z,
+      x: mailboxDef.x,
+      z: mailboxDef.z,
     });
     expect(CAMPS).toEqual(BUILTIN_WORLD.camps);
     expect(ZONE1_CAMPS).toHaveLength(14);
 
+    // Both hosts use the same content. Swapping it before each tick would
+    // invalidate terrain/collider caches through contentGeneration, measuring
+    // thousands of editor world reloads rather than normal runtime ticks.
+    setActiveWorldContent(BUILTIN_WORLD);
     for (let tick = 0; tick < 2_500; tick++) {
-      setActiveWorldContent(legacyWorld);
       legacy.tick();
-      setActiveWorldContent(BUILTIN_WORLD);
       rebuilt.tick();
     }
     expect(rebuilt.tickCount).toBe(2_500);
@@ -1315,9 +1097,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
       wolf.corpseTimer = 0;
       wolf.respawnTimer = 0;
     }
-    setActiveWorldContent(legacyWorld);
     legacy.ctx.respawnMob(legacyWolf);
-    setActiveWorldContent(BUILTIN_WORLD);
     rebuilt.ctx.respawnMob(rebuiltWolf);
     expect(stableProjection(rebuilt)).toEqual(stableProjection(legacy));
     expect(rebuilt.rng.next()).toBe(legacy.rng.next());
@@ -1334,6 +1114,10 @@ describe('the first sixty seconds: starter pull lanes from spawn', () => {
     // at. (The spider wood is a later, longer walk whose winding route the
     // simple follower here cannot prove; its lane is covered by the
     // route-existence check below.)
+    // The furthest starter camp is 152 yards east of spawn. Its search box
+    // includes the pathfinder's margins, so a 160-cell cap silently returned
+    // a straight-line fallback instead of searching around the coastal rise.
+    const maxSpan = 192;
     const starterMobs = new Set(['wild_boar', 'forest_wolf']);
     const nearest = [...CAMPS]
       .map((camp) => ({
@@ -1354,14 +1138,14 @@ describe('the first sixty seconds: starter pull lanes from spawn', () => {
         bodyRadius: 0.5,
         maxClimbSlope: PLAYER_MAX_CLIMB_SLOPE,
         minGround: (x: number, z: number) => waterLevelAt(x, z, SEED) - PLAYER_SWIM_DEPTH,
-        maxSpan: 160,
+        maxSpan,
       });
       expect(route.length, `${camp.mobId} has a route from spawn`).toBeGreaterThan(0);
       const pull =
         route.find((p) => Math.hypot(p.x - camp.center.x, p.z - camp.center.z) <= 25) ??
         route[route.length - 1];
       expect(isBlocked(SEED, pull.x, pull.z, 0.5), `${camp.mobId} pull spot`).toBe(false);
-      expectWalkableRoute(`${camp.mobId} camp approach`, PLAYER_START, pull, 0.5);
+      expectWalkableRoute(`${camp.mobId} camp approach`, PLAYER_START, pull, 0.5, maxSpan);
       expect(lineOfSightClear(SEED, pull, camp.center), `${camp.mobId} pull sight lane`).toBe(true);
       expect(
         Math.hypot(pull.x - camp.center.x, pull.z - camp.center.z),

@@ -1608,7 +1608,9 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned at the 2026-09-07 release/v0.42.0 sync of the Drakelands
     // map-improvements epic (PR #3746): the castle pad chain and the Last Spring bank left with the castle (keep_site.ts holds the new pad). Measured with wc -l on the
     // merged tree. Exact merged count, zero headroom.
-    ceiling: 5216,
+    // Gorrak camp integration: Gale level-pad records moved to their own leaf;
+    // the late shared camp grading fits without growing this coordinator.
+    ceiling: 5214,
     seam: 'zone/terrain data as content records; logic as sim sibling modules',
   },
   {
@@ -1859,7 +1861,9 @@ const MONOLITHS: MonolithRow[] = [
     // Re-pinned at the 2026-09-07 release/v0.42.0 sync of the Drakelands
     // map-improvements epic (PR #3746): the keep wall-ledge and parapet loops retired and the Wildheart static set moved beside its field data. Measured with wc -l on the
     // merged tree. Exact merged count, zero headroom.
-    ceiling: 2548,
+    // Wickharbor: NPC reservation queries moved to collider_npc_clearance.ts.
+    // Approved settlements: town and decor assembly moved to settlement_collision_integration.ts.
+    ceiling: 2525,
     seam: 'per-zone collider data beside the zone content; shared logic stays here',
   },
   {

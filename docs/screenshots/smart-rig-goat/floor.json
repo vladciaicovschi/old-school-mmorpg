@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Goat_Idle",
+    "samples": 41,
+    "lowestVertexY": -0.002093927062851178,
+    "phase": 0.125
+  },
+  {
+    "name": "Goat_CombatIdle",
+    "samples": 41,
+    "lowestVertexY": -0.0013573474490637457,
+    "phase": 0.125
+  },
+  {
+    "name": "Goat_Walk",
+    "samples": 41,
+    "lowestVertexY": -0.0013388874261915842,
+    "phase": 0.625
+  },
+  {
+    "name": "Goat_Trot",
+    "samples": 41,
+    "lowestVertexY": -0.0010607253119380817,
+    "phase": 0.5
+  },
+  {
+    "name": "Goat_Run",
+    "samples": 41,
+    "lowestVertexY": -0.0017606785254808822,
+    "phase": 0.4
+  },
+  {
+    "name": "Goat_HeadbuttLeft",
+    "samples": 41,
+    "lowestVertexY": -0.0009502817654268615,
+    "phase": 0.925
+  },
+  {
+    "name": "Goat_HeadbuttRight",
+    "samples": 41,
+    "lowestVertexY": -0.0009407836776557504,
+    "phase": 0.925
+  },
+  {
+    "name": "Goat_Ram",
+    "samples": 41,
+    "lowestVertexY": -0.0009085109440363609,
+    "phase": 0.85
+  },
+  {
+    "name": "Goat_Hit",
+    "samples": 41,
+    "lowestVertexY": -0.0010518409654819998,
+    "phase": 0.85
+  },
+  {
+    "name": "Goat_Death",
+    "samples": 41,
+    "lowestVertexY": 0.000647148672355686,
+    "phase": 0.4
+  },
+  {
+    "name": "Goat_Bleat",
+    "samples": 41,
+    "lowestVertexY": -0.001293164332303066,
+    "phase": 0.175
+  },
+  {
+    "name": "Goat_AlertLook",
+    "samples": 41,
+    "lowestVertexY": -0.0010186877584861236,
+    "phase": 0.025
+  },
+  {
+    "name": "Goat_Graze",
+    "samples": 41,
+    "lowestVertexY": -0.0009941241751644473,
+    "phase": 0.1
+  }
+]

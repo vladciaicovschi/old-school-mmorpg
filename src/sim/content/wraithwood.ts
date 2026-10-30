@@ -1,3 +1,4 @@
+import { applySettlementProps, settlementRoads } from '../settlements_layout';
 // The Wraithwood (level 20). North past the Nightbloom's dream the road
 // slips under the Crowgate and the canopy closes overhead: a drowned-grey
 // haunted forest where giant overgrown trees shut out the sky, a drizzle
@@ -56,7 +57,7 @@ export const WRAITHWOOD_ZONE: ZoneDef = {
   welcomeQuestId: 'q_ww_bells_of_gallowmere',
 };
 
-export const WRAITHWOOD_ROADS: { x: number; z: number }[][] = [
+const WRAITHWOOD_LEGACY_ROADS: { x: number; z: number }[][] = [
   [
     { x: 390, z: 1268 },
     { x: 384, z: 1326 },
@@ -594,7 +595,7 @@ export const WRAITHWOOD_ESCORTS: Record<string, EscortDef> = {
   },
 };
 
-export const WRAITHWOOD_PROPS: ZonePropsDef = {
+const WRAITHWOOD_LEGACY_PROPS: ZonePropsDef = {
   ...emptyZoneProps(),
   // Gibbetmere: a shuttered hamlet under the eaves
   buildings: [
@@ -645,3 +646,10 @@ export const WRAITHWOOD_PROPS: ZonePropsDef = {
     { x: 250, z: 1440, r: 2.6 },
   ],
 };
+
+export const WRAITHWOOD_PROPS: ZonePropsDef = applySettlementProps(
+  WRAITHWOOD_LEGACY_PROPS,
+  'gibbetmere',
+);
+
+export const WRAITHWOOD_ROADS = settlementRoads('gibbetmere', WRAITHWOOD_LEGACY_ROADS);

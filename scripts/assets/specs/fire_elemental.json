@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/elementals/fire_elemental.glb",
+      "out": "models/creatures/fire_elemental_prototype.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepExtras": true,
+      "keepClips": ["Fire_Idle", "Fire_Move", "Cast", "ChannelStart", "Channel", "Death"]
+    }
+  ]
+}

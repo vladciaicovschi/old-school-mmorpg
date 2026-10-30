@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_sword_1.glb", "out": "models/weapons/rusted_sword_1.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_sword_2.glb", "out": "models/weapons/rusted_sword_2.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_sword_3.glb", "out": "models/weapons/rusted_sword_3.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_ogre_club.glb", "out": "models/weapons/rusted_ogre_club.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_kobold_pickaxe.glb", "out": "models/weapons/rusted_kobold_pickaxe.glb", "type": "static", "maxTex": 512 },
+    { "src": "tmp/asset_src/mobs_rusted_weapons/raw/rusted_murloc_pitchfork.glb", "out": "models/weapons/rusted_murloc_pitchfork.glb", "type": "static", "maxTex": 512 }
+  ]
+}

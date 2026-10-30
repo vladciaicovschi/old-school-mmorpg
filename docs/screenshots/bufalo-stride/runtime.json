@@ -1,0 +1,208 @@
+{
+  "runtime": [
+    {
+      "run": {
+        "clip": "Buffalo_Run",
+        "time": 0.3584424764090101,
+        "speed": 4.199999911657605,
+        "globalRunning": false
+      },
+      "attacks": [
+        "Buffalo_HornLeft",
+        "Buffalo_HornRight",
+        "Buffalo_HornLeft",
+        "Buffalo_HornRight",
+        "Buffalo_Charge"
+      ],
+      "recovery": {
+        "clip": "Buffalo_AlertLook",
+        "time": 0.15,
+        "base": "idle",
+        "oneShot": true
+      },
+      "transition": [
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.01,
+          "speed": 0.2,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.03000128888905291,
+          "speed": 0.488,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.05588003377836621,
+          "speed": 0.67232,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.08719843050776871,
+          "speed": 0.7902848,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.12199820441482831,
+          "speed": 0.865782272,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.15902605971558845,
+          "speed": 0.9141006540800001,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.19747988710831693,
+          "speed": 0.9450244186112,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.23684633663990518,
+          "speed": 0.9648156279111679,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.27679686434036366,
+          "speed": 0.9774820018631475,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.3171212020688991,
+          "speed": 0.9855884811924144,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.35768477821540373,
+          "speed": 0.9907766279631451,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.3984014669494087,
+          "speed": 0.9940970418964129,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.43921614773941386,
+          "speed": 0.9962221068137043,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.4800935434452592,
+          "speed": 0.9975821483607707,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.5210110766972421,
+          "speed": 0.9984525749508932,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.5619542979787533,
+          "speed": 0.9990096479685716,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.6029139595991625,
+          "speed": 0.9993661746998859,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.6438841430364663,
+          "speed": 0.999594351807927,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.6848610604365828,
+          "speed": 0.9997403851570732,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.7258422875728993,
+          "speed": 0.9998338465005269,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.7668262729403837,
+          "speed": 0.9998936617603371,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.8078120235758158,
+          "speed": 0.9999319435266157,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.8487989039827344,
+          "speed": 0.9999564438570341,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.8897865074434043,
+          "speed": 0.9999721240685018,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.930774573658475,
+          "speed": 0.9999821594038412,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 0.9717629360363623,
+          "speed": 0.9999885820184583,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 1.012751487958452,
+          "speed": 0.9999926924918133,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 1.0537401611888315,
+          "speed": 0.9999953231947606,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 1.0947289120565162,
+          "speed": 0.9999970068446468,
+          "globalRunning": false
+        },
+        {
+          "clip": "Buffalo_Walk",
+          "time": 1.1357177126120765,
+          "speed": 0.9999980843805739,
+          "globalRunning": false
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1100,27 +1100,41 @@ const INN = buildingById('eastbrook_inn');
 const CHAPEL = buildingById('eastbrook_chapel');
 const WEAVING_HOUSE = buildingById('eastbrook_weaving_workshop');
 const TOOLWORKS = buildingById('eastbrook_toolworks');
+const KITCHENS_FRONT = localToWorld(
+  INN.position,
+  INN.rotation,
+  2.5,
+  INN.nativeDimensions.depth / 2 + 1.5,
+);
 
 const STATIONS = [
   {
     id: 'station_eastbrook_forge',
     type: 'forge',
     masterNpcId: 'forgemistress_darva',
-    position: SMITHY.frontStandingPoint,
+    // Keep the shared forge cluster west of the enlarged smithy's steps and
+    // the native workbench beside its entrance.
+    position: { x: SMITHY.frontStandingPoint.x - 3, z: SMITHY.frontStandingPoint.z },
     interactionRadius: 20,
   },
   {
     id: 'station_eastbrook_kitchens',
     type: 'kitchens',
     masterNpcId: 'cook_marlow',
-    position: localToWorld(INN.position, INN.rotation, 2.5, INN.nativeDimensions.depth / 2 + 1.5),
+    // Keep the complete cooking cluster beside the enlarged inn's stair lane.
+    position: { x: KITCHENS_FRONT.x - 2, z: KITCHENS_FRONT.z + 2 },
     interactionRadius: 20,
   },
   {
     id: 'station_eastbrook_loom',
     type: 'loom',
     masterNpcId: 'weaver_ottilie',
-    position: WEAVING_HOUSE.frontStandingPoint,
+    // The enlarged weaving house extends into the old work yard. Keep both
+    // the loom cluster and its derived master on the open southeast verge.
+    position: {
+      x: WEAVING_HOUSE.frontStandingPoint.x + 4.3,
+      z: WEAVING_HOUSE.frontStandingPoint.z - 1.3,
+    },
     interactionRadius: 20,
   },
   {
@@ -1187,6 +1201,7 @@ const COOK_POSITION = {
 const WEAVER_POSITION = localToWorld(LOOM_STATION.position, WEAVING_HOUSE.rotation, 2, 0);
 const TINKER_POSITION = localToWorld(TOOLWORKS_STATION.position, TOOLWORKS.rotation, -3.2, 0);
 const SAUL_POSITION = { x: 10.2, z: -87.5 } as const;
+const ALDRIC_POSITION = { x: -17, z: -92 } as const;
 // Round 6b (owner): off the chapel step, where he stood 7 yd from Brother
 // Aldric. FURY is a service NPC (the honor quartermaster), so he belongs on
 // the town's edge rather than in the churchyard approach.
@@ -1222,7 +1237,14 @@ const NPCS = [
     facingToward(APOTHECARY_POSITION, CIVIC_CENTER),
     'eastbrook_quayside_home',
   ),
-  makeNpc('brother_aldric', CHAPEL.frontStandingPoint, CHAPEL.rotation, CHAPEL.id),
+  // Keep the priest beside the southwest entrance, clear of the enlarged
+  // chapel steps and the bell tower occupying the old northeast standing point.
+  makeNpc(
+    'brother_aldric',
+    ALDRIC_POSITION,
+    facingToward(ALDRIC_POSITION, CIVIC_CENTER),
+    CHAPEL.id,
+  ),
   makeNpc(
     'smith_haldren',
     SMITH_POSITION,
@@ -1231,7 +1253,7 @@ const NPCS = [
     facingToward(BLACKSMITH_SHOP_CENTER, SMITH_POSITION),
     'eastbrook_blacksmith',
   ),
-  makeNpc('fisherman_brandt', { x: -95, z: -50 }, -1.5707963267948966, 'eastbrook_quay'),
+  makeNpc('fisherman_brandt', { x: -97.5, z: -50 }, -1.5707963267948966, 'eastbrook_quay'),
   makeNpc('foreman_odell', { x: -84, z: -63 }, 0.6747409422235526, 'eastbrook_quay'),
   makeNpc('bursar_fernando', BANK.frontStandingPoint, BANK.rotation, BANK.id),
   makeNpc('card_master', { x: 20, z: -98 }, -2.677945044588987, 'eastbrook_bank'),

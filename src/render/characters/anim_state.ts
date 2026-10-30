@@ -23,6 +23,12 @@ export interface AnimState {
    *  alone is true for a hunter's tame_beast (6s) and revive_pet (3s) as well
    *  as Long Draw. Display-only; never gates gameplay. */
   castingAbility?: string | null;
+  /** Authoritative cast clock, used only by opted-in duration-fitted motions. */
+  castTotal?: number;
+  castRemaining?: number;
+  /** Relation of the cast target to its caster. It selects a presentation
+   * gesture only; targeting and effect resolution remain simulation-owned. */
+  castTargetMode?: 'self' | 'ally' | 'hostile' | null;
   /** Channeling a self-centered whirl such as Bladestorm. This wins over the
    *  generic cast and locomotion poses. */
   spinning?: boolean;
@@ -156,7 +162,8 @@ export function isSwimmingAtDepth(
 
 /**
  * Should the rig show its weapon sheathed this frame? An OVERLAY on the sim's
- * cosmetic `weaponStowed` bit, not a write to it: swimming and riding both
+ * cosmetic `weaponStowed` bit (or an opted-in automatic policy), not a write
+ * to it: swimming and riding both
  * force the sheathed pose (nobody swims or rides with a sword in hand)
  * without touching the player's own sheathe choice, so surfacing or
  * dismounting restores exactly what they had drawn. The caller MUST diff the
@@ -168,8 +175,9 @@ export function weaponStowedOverlay(
   weaponStowed: boolean,
   swimming: boolean,
   mounted: boolean,
+  automatic?: boolean,
 ): boolean {
-  return weaponStowed || swimming || mounted;
+  return swimming || mounted || (automatic ?? weaponStowed);
 }
 
 /**

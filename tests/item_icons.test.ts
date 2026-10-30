@@ -319,7 +319,7 @@ describe('item webp icons', () => {
     // (nythraxis-gap-weapon-renders-2026-09-04) to 136. This merge unions both waves
     // plus this branch's own Crucible professions weapon additions; re-counted directly
     // off the merged src/ui/weapon_variants.ts (Object.keys(ITEM_WEAPON_VARIANTS).size).
-    expect(WEAPON_IMAGE_IDS.size).toBe(138);
+    expect(WEAPON_IMAGE_IDS.size).toBe(140);
   });
 
   it('A) every image-backed item and weapon resolves to a committed, decodable .webp', async () => {

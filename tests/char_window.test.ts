@@ -3,6 +3,17 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+// The injected paperdoll preview and portrait boundary are not WebGL tests.
+// Keep asset fetches and portrait contexts out of the DOM fixture lifecycle.
+vi.mock('../src/ui/portrait_chip', () => ({
+  hydratePortraits: () => undefined,
+  onPortraitUpdate: () => () => undefined,
+  modularLookFor: () => null,
+  isComposedPortraitKey: () => false,
+  portraitChipHtml: () => '',
+}));
+
 import { CRAFT_RING } from '../src/sim/content/professions';
 import { ITEMS } from '../src/sim/data';
 import { itemCopyPin } from '../src/sim/item_copy_ref';
@@ -83,7 +94,7 @@ describe('char_window: WCAG 2.2 AA', () => {
 });
 
 describe('char_window: paperdoll helm-visibility eye', () => {
-  function renderHelmetSlot(helmSlotAvailable: boolean) {
+  function renderHelmetSlot(helmSlotAvailable: boolean, cls = 'rogue') {
     let canvasContext: unknown;
     canvasContext = new Proxy(
       {},
@@ -98,7 +109,7 @@ describe('char_window: paperdoll helm-visibility eye', () => {
     );
     const root = document.createElement('div');
     const world = {
-      cfg: { playerClass: 'rogue' },
+      cfg: { playerClass: cls },
       player: { name: 'Aurelia', level: 60, skin: 0 },
       equipment: {},
       honor: 0,
@@ -153,6 +164,14 @@ describe('char_window: paperdoll helm-visibility eye', () => {
   it('shows the eye for a class kit that has a head piece', () => {
     const root = renderHelmetSlot(true);
     expect(root.querySelector('.equip-helm-eye')).not.toBeNull();
+  });
+
+  it('renders all twelve independent equipment rows for a warrior', () => {
+    const root = renderHelmetSlot(false, 'warrior');
+    expect(root.querySelectorAll('.equip-slot[data-equip-slot]').length).toBe(12);
+    for (const slot of ['helmet', 'shoulder', 'gloves', 'waist', 'legs', 'feet']) {
+      expect(root.querySelector(`#equip-slot-${slot}`)).not.toBeNull();
+    }
   });
 });
 
@@ -436,9 +455,8 @@ describe('char_window: paperdoll core + HUD-owned preview boundary', () => {
   it('drives the paperdoll off the pure char_view core', () => {
     // The instances argument rides along since phase 13 so each socket row can
     // describe the worn COPY (color and chosen name).
-    expect(painter).toContain(
-      'buildPaperdollView(world.equipment, ITEMS, world.equipmentInstances)',
-    );
+    expect(painter).toContain('world.equipmentInstances,');
+    expect(painter).not.toContain("world.cfg.playerClass === 'warrior',");
   });
 
   it('preserves the unequip / drag / context-menu dispatch', () => {

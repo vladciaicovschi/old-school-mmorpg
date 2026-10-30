@@ -1,6 +1,14 @@
 import * as THREE from 'three';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { CLASSES } from '../../sim/data';
 import type { PlayerClass } from '../../sim/types';
+import type {
+  EquipmentCalibrationLocation,
+  EquipmentCalibrationMode,
+  EquipmentCalibrationTarget,
+  EquipmentCalibrationTransform,
+} from '../../ui/equipment_calibration_core';
+import { EQUIPMENT_CALIBRATION_TARGETS } from '../../ui/equipment_calibration_core';
 import { GPU_WORK_PRIORITY } from '../background_gpu_queue';
 import { trackWebGLContext } from '../context_release';
 import { gpuPrepNow, recordGpuPrepEvent } from '../gpu_prep_events';
@@ -15,8 +23,18 @@ import {
   uploadTexturesInSlices,
   yieldToMainThread,
 } from '../texture_prewarm';
-import { mechAssetsReady, preloadMechAssets } from './assets';
-import { modularVisualKey, VISUALS, type WeaponLayoutOverride } from './manifest';
+import {
+  applyEquipmentCalibrationPivotTransform,
+  mechAssetsReady,
+  preloadMechAssets,
+} from './assets';
+import { EquipmentCarryPreview } from './equipment_carry_preview';
+import {
+  MESHY_SENTINEL_VISUAL_KEY,
+  modularVisualKey,
+  VISUALS,
+  type WeaponLayoutOverride,
+} from './manifest';
 import {
   type ArmorLoadout,
   type ModularAppearance,
@@ -27,6 +45,7 @@ import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
+  previewPresentationPose,
 } from './preview_appearance';
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { createPreviewOpenGate, type PreviewOpenGate } from './preview_open_gate_core';
@@ -91,6 +110,28 @@ export class CharacterPreview {
   // weapon (the in-world renderer and the store preview both apply it; the
   // paperdoll must match or a purchased skin reads as missing).
   private currentWeaponSkinId: string | null = null;
+  // Final local transforms of the held payload roots as first assembled for
+  // the active visual. The equipment fitting panel resets against these and
+  // edits the same bone children the live renderer draws.
+  private equipmentDefaultTransforms = new Map<
+    EquipmentCalibrationTarget,
+    EquipmentCalibrationTransform
+  >();
+  // The fitting editor may freeze its known test subject on an exact pose.
+  // The flag is retained while another preview visual is open, but only takes
+  // effect while that visual was requested explicitly as the calibration
+  // subject, so a paused editor never freezes the normal character roster.
+  private equipmentCalibrationActive = false;
+  private equipmentCarryPreview: EquipmentCarryPreview | null = null;
+  private equipmentCalibrationAnimationFrozen = false;
+  private presentationAnimationFrozen = false;
+  private presentationPoseSig: string | null = null;
+  private presentationPose: ReturnType<typeof previewPresentationPose> = null;
+  private equipmentManipulator: TransformControls | null = null;
+  private equipmentManipulatorHelper: THREE.Object3D | null = null;
+  private equipmentManipulatorObject: THREE.Object3D | null = null;
+  private equipmentManipulatorChange: ((transform: EquipmentCalibrationTransform) => void) | null =
+    null;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
   private appearanceSig: string | null = null;
@@ -147,6 +188,13 @@ export class CharacterPreview {
   ) {
     this.container = container;
     this.canvas = canvas;
+    // The launcher owns one canvas and moves it between online, creation and
+    // offline hosts. A player can open a panel before its async assets finish;
+    // in that race the preview is constructed for the newly visible host while
+    // the canvas still belongs to the old hidden host. Constructor-time
+    // ownership must therefore match setContainer(), not merely assume the
+    // caller already moved the shared node.
+    if (this.canvas.parentElement !== this.container) this.container.appendChild(this.canvas);
     const policy = resolveCharacterPreviewPolicy(options.constrainedMemory === true);
 
     // 1. Initialize WebGLRenderer
@@ -209,6 +257,7 @@ export class CharacterPreview {
    *  character sheet; omit them to show the class starter equipment in creation. */
   setClass(cls: PlayerClass, weaponItemId?: string | null, offhandItemId?: string | null): void {
     if (this.destroyed) return;
+    this.clearPresentationPose();
     // A class-driven selection (create/offline picker, or a panel switch) supersedes
     // any pending async mech re-apply, so invalidate the tracked appearance.
     this.appearanceSig = null;
@@ -216,6 +265,44 @@ export class CharacterPreview {
     const offhand =
       offhandItemId !== undefined ? offhandItemId : (CLASSES[cls].startOffhand ?? null);
     this.setVisualKey(`player_${cls}`, weapon, null, offhand);
+  }
+
+  /** Legacy shortcut for the Sentinel technical fitting subject. The normal
+   *  studio calls setEquipmentCalibrationVisual with a T1 class key instead. */
+  setEquipmentCalibrationTitan(): void {
+    this.setEquipmentCalibrationVisual(MESHY_SENTINEL_VISUAL_KEY);
+  }
+
+  /** Show a manifest body in the weapon-positioning studio. Player class keys
+   * use their real starter main/offhand loadout; technical subjects retain
+   * their authored test loadout. The saved transform therefore applies to the
+   * same payload the game attaches at runtime. */
+  setEquipmentCalibrationVisual(
+    visualKey: string,
+    loadout?: { mainhandItemId: string; offhandItemId: string | null },
+  ): void {
+    if (this.destroyed) return;
+    this.clearPresentationPose();
+    this.appearanceSig = null;
+    this.pendingLook = null;
+    this.currentSkin = 0;
+    this.currentWeaponSkinId = null;
+    const usesEditorLoadout = visualKey === MESHY_SENTINEL_VISUAL_KEY;
+    const classId = visualKey.startsWith('player_')
+      ? (visualKey.slice('player_'.length) as PlayerClass)
+      : null;
+    const classLoadout = classId && Object.hasOwn(CLASSES, classId) ? CLASSES[classId] : null;
+    this.setVisualKey(
+      visualKey,
+      loadout?.mainhandItemId ??
+        classLoadout?.startWeapon ??
+        (usesEditorLoadout ? 'worn_sword' : null),
+      null,
+      loadout
+        ? loadout.offhandItemId
+        : (classLoadout?.startOffhand ?? (usesEditorLoadout ? 'eastbrook_buckler' : null)),
+      true,
+    );
   }
 
   /** Show a character's real, in-world appearance: the class rig or the Combat Mech
@@ -231,18 +318,57 @@ export class CharacterPreview {
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
-      this.setVisualKey(`player_${a.cls}`, a.mainhandItemId ?? null, null, a.offhandItemId ?? null);
+      // The temporary class body must use the same equipped hands as the
+      // eventual mech body, so the pose never appears without its weapon while
+      // the cosmetic bundle is still arriving.
+      const fallback = previewAppearanceVisual(a);
+      this.setVisualKey(
+        `player_${a.cls}`,
+        fallback.weaponItemId,
+        null,
+        fallback.offhandItemId,
+        false,
+        true,
+      );
       this.currentVisual?.setSkin(a.skin);
+      this.applyPresentationPose({ ...a, skinCatalog: 'class' });
       void preloadMechAssets().then(() => {
         if (!this.destroyed && this.appearanceSig === sig) this.setAppearance(a);
       });
       return;
     }
     const v = previewAppearanceVisual(a);
-    this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId);
+    this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId, false, true);
     // setVisualKey is intentionally idempotent. If only the skin changed, keep
     // the warm rig and update its shared material bindings in place.
     this.currentVisual?.setSkin(a.skin);
+    this.applyPresentationPose(a);
+  }
+
+  private applyPresentationPose(a: PreviewAppearance): void {
+    const pose = previewPresentationPose(a);
+    this.currentVisual?.setWeaponStowed(a.presentation === 'charselect', true);
+    const sig = pose ? JSON.stringify(pose) : null;
+    if (sig === this.presentationPoseSig && this.presentationAnimationFrozen) return;
+    this.presentationPoseSig = sig;
+    this.presentationPose = pose;
+    this.presentationAnimationFrozen = false;
+    if (!pose) {
+      this.currentVisual?.clearPose?.();
+      return;
+    }
+    this.presentationAnimationFrozen =
+      (this.currentVisual?.poseFreeze?.(pose.clips, pose.fraction) ?? null) !== null;
+  }
+
+  /** Shared preview also serves live sheets and the fitting editor. */
+  private clearPresentationPose(): void {
+    if (!this.presentationPose) return;
+    this.presentationPose = null;
+    this.presentationPoseSig = null;
+    this.presentationAnimationFrozen = false;
+    this.currentVisual?.clearPose();
+    this.currentVisual?.setWeaponStowed(false, true);
   }
 
   /** Set the active model by raw visual key (e.g. `player_mech` for the cosmetic
@@ -266,6 +392,7 @@ export class CharacterPreview {
     offhandItemId?: string | null,
   ): void {
     if (this.destroyed) return;
+    this.clearPresentationPose();
     this.appearanceSig = null;
     this.pendingLook = { app, worn };
     const weapon = weaponItemId !== undefined ? weaponItemId : (CLASSES[cls].startWeapon ?? null);
@@ -284,25 +411,37 @@ export class CharacterPreview {
     weaponItemId: string | null = null,
     weaponOverride: WeaponLayoutOverride | null = null,
     offhandItemId: string | null = null,
+    equipmentCalibrationActive = false,
+    appearanceManaged = false,
   ): void {
     if (this.destroyed) return;
+    if (!appearanceManaged) this.clearPresentationPose();
+    this.equipmentCalibrationActive = equipmentCalibrationActive;
+    if (!equipmentCalibrationActive) this.clearEquipmentCalibrationManipulator();
     const look = VISUALS[visualKey]?.modular ? this.pendingLook : null;
     const nextSig = JSON.stringify([
       visualKey,
       weaponItemId,
       weaponOverride,
       offhandItemId,
+      equipmentCalibrationActive,
       look ? modularBuildSignature(look.app, look.worn) : null,
     ]);
     if (this.currentVisual && this.currentVisualSig === nextSig) return;
+    this.presentationPoseSig = null;
+    this.presentationAnimationFrozen = false;
     this.closeupCache.clear();
     if (this.currentVisual) {
+      this.equipmentManipulator?.detach();
+      this.equipmentManipulatorObject = null;
       // CharacterVisual keeps shared geometry/material caches but owns its
       // mixer and cloned skeleton bone textures, so a genuine replacement must
       // release those resources.
       this.characterGroup.remove(this.currentVisual.root);
       this.currentVisual.dispose();
       this.currentVisual = null;
+      this.equipmentCarryPreview = null;
+      this.equipmentDefaultTransforms.clear();
       // three releases a program with the last material holding it, so a
       // signature linked before this rebuild can be cold again afterwards:
       // the gate must not skip the warm on a return to an old look.
@@ -319,9 +458,30 @@ export class CharacterPreview {
         weaponOverride,
         offhandItemId,
         look,
+        undefined,
+        equipmentCalibrationActive
+          ? {
+              helmet: 'equipment_fit',
+              shoulder: 'equipment_fit',
+              chest: 'equipment_fit',
+              waist: 'equipment_fit',
+              legs: 'equipment_fit',
+              gloves: 'equipment_fit',
+              feet: 'equipment_fit',
+            }
+          : {},
+        false,
       );
       this.currentVisualSig = nextSig;
       this.characterGroup.add(this.currentVisual.root);
+      this.equipmentCarryPreview = equipmentCalibrationActive
+        ? new EquipmentCarryPreview(
+            this.currentVisual.root,
+            VISUALS[visualKey]?.carriedAttachmentFit,
+            visualKey,
+          )
+        : null;
+      this.captureEquipmentDefaults();
       // Re-apply the persisted weapon-skin cosmetic to the rebuilt visual (the
       // constructor attaches the equipped item's own model).
       if (this.currentWeaponSkinId) this.currentVisual.setWeaponSkin(this.currentWeaponSkinId);
@@ -340,6 +500,198 @@ export class CharacterPreview {
     if (this.destroyed) return;
     this.currentWeaponSkinId = weaponSkinId;
     this.currentVisual?.setWeaponSkin(weaponSkinId);
+  }
+
+  /** Read the shipped or current final local transform of a held payload. The
+   *  coordinates are relative to the hand bone after every grip adapter and
+   *  rig-specific correction has run. */
+  equipmentCalibrationTransform(
+    slot: EquipmentCalibrationTarget,
+    defaults = false,
+  ): EquipmentCalibrationTransform | null {
+    if (defaults) {
+      const carry = this.equipmentCarryPreview?.defaultTransform(slot);
+      if (carry) return carry;
+      const transform = this.equipmentDefaultTransforms.get(slot);
+      return transform ? this.cloneEquipmentTransform(transform) : null;
+    }
+    const payload = this.equipmentPayload(slot);
+    return payload ? this.equipmentTransformOf(payload) : null;
+  }
+
+  /** Apply an editor fit directly to the held payload root. No character or
+   *  animation rebuild is involved, so slider input remains immediate. */
+  setEquipmentCalibrationTransform(
+    slot: EquipmentCalibrationTarget,
+    transform: EquipmentCalibrationTransform,
+  ): boolean {
+    if (this.destroyed) return false;
+    const payload = this.equipmentPayload(slot);
+    if (!payload) return false;
+    const base = this.equipmentBasePosition(payload);
+    payload.position.set(
+      base[0] + transform.position[0],
+      base[1] + transform.position[1],
+      base[2] + transform.position[2],
+    );
+    payload.rotation.set(
+      THREE.MathUtils.degToRad(transform.rotationDeg[0]),
+      THREE.MathUtils.degToRad(transform.rotationDeg[1]),
+      THREE.MathUtils.degToRad(transform.rotationDeg[2]),
+      'XYZ',
+    );
+    payload.scale.setScalar(transform.scale);
+    payload.updateMatrix();
+    payload.updateMatrixWorld(true);
+    applyEquipmentCalibrationPivotTransform(payload);
+    this.closeupCache.clear();
+    return true;
+  }
+
+  /** Freeze or resume the fitting subject without stopping preview rendering,
+   *  so camera dragging and live equipment transforms keep working. */
+  setEquipmentCalibrationAnimationPaused(paused: boolean): void {
+    this.equipmentCalibrationAnimationFrozen = paused;
+  }
+
+  setEquipmentCalibrationCarryLocation(location: EquipmentCalibrationLocation): void {
+    this.clearEquipmentCalibrationManipulator();
+    this.equipmentCarryPreview?.setLocation(location);
+    if (location === 'hand') this.currentVisual?.stopStudioPreviewClip();
+    else if (this.currentVisual?.availableAnimationClips().includes('Warrior_TravelIdle'))
+      this.currentVisual.playStudioPreviewClip('Warrior_TravelIdle');
+    this.closeupCache.clear();
+  }
+
+  equipmentCalibrationAnimationPaused(): boolean {
+    return this.equipmentCalibrationAnimationFrozen;
+  }
+
+  /** The fitting studio lists only actions actually loaded on its current rig. */
+  equipmentCalibrationAnimationClips(): readonly string[] {
+    return this.currentVisual?.availableAnimationClips() ?? [];
+  }
+
+  playEquipmentCalibrationAnimation(clip: string): boolean {
+    if (this.destroyed || !this.equipmentCalibrationActive) return false;
+    this.equipmentCalibrationAnimationFrozen = false;
+    return this.currentVisual?.playStudioPreviewClip(clip) ?? false;
+  }
+
+  stopEquipmentCalibrationAnimation(): void {
+    this.currentVisual?.stopStudioPreviewClip();
+  }
+
+  /** Attach a standard Three.js transform gizmo to the selected held payload.
+   *  Scale keeps its numeric-only workflow because the editor stores one
+   *  uniform scalar, while TransformControls exposes independent XYZ scale. */
+  setEquipmentCalibrationManipulator(
+    slot: EquipmentCalibrationTarget,
+    mode: Exclude<EquipmentCalibrationMode, 'scale'>,
+    onChange: (transform: EquipmentCalibrationTransform) => void,
+  ): boolean {
+    if (this.destroyed || !this.equipmentCalibrationActive) return false;
+    const payload = this.equipmentPayload(slot);
+    if (!payload) {
+      this.clearEquipmentCalibrationManipulator();
+      return false;
+    }
+    const controls = this.ensureEquipmentCalibrationManipulator();
+    this.equipmentManipulatorObject = payload;
+    this.equipmentManipulatorChange = onChange;
+    controls.setMode(mode === 'position' ? 'translate' : 'rotate');
+    controls.setSpace('local');
+    payload.updateWorldMatrix(true, true);
+    controls.attach(payload);
+    return true;
+  }
+
+  clearEquipmentCalibrationManipulator(): void {
+    this.equipmentManipulator?.detach();
+    this.equipmentManipulatorObject = null;
+    this.equipmentManipulatorChange = null;
+    this.isDragging = false;
+  }
+
+  private ensureEquipmentCalibrationManipulator(): TransformControls {
+    if (this.equipmentManipulator) return this.equipmentManipulator;
+    const controls = new TransformControls(this.camera, this.canvas);
+    controls.setSize(0.78);
+    controls.setSpace('local');
+    controls.addEventListener('dragging-changed', (event) => {
+      if (event.value === true) this.isDragging = false;
+    });
+    controls.addEventListener('objectChange', () => {
+      if (!this.equipmentManipulatorObject || !this.equipmentManipulatorChange) return;
+      this.equipmentManipulatorChange(this.equipmentTransformOf(this.equipmentManipulatorObject));
+    });
+    const helper = controls.getHelper();
+    this.scene.add(helper);
+    this.equipmentManipulator = controls;
+    this.equipmentManipulatorHelper = helper;
+    return controls;
+  }
+
+  private equipmentPayload(slot: EquipmentCalibrationTarget): THREE.Object3D | null {
+    if (slot.startsWith('mainhand_')) slot = 'mainhand';
+    else if (slot.startsWith('offhand_')) slot = 'offhand';
+    if (slot !== 'mainhand' && slot !== 'offhand') {
+      let pivot: THREE.Object3D | null = null;
+      this.currentVisual?.root.traverse((object) => {
+        if (pivot === null && object.userData.equipmentCalibrationTarget === slot) pivot = object;
+      });
+      return pivot;
+    }
+    const heldSlot = slot === 'mainhand' ? 0 : 1;
+    let found: THREE.Object3D | null = null;
+    this.currentVisual?.root.traverse((object) => {
+      if (found === null && object.userData.heldSlot === heldSlot) found = object;
+    });
+    return found;
+  }
+
+  private equipmentTransformOf(payload: THREE.Object3D): EquipmentCalibrationTransform {
+    const euler = new THREE.Euler().setFromQuaternion(payload.quaternion, 'XYZ');
+    const base = this.equipmentBasePosition(payload);
+    return {
+      position: [
+        payload.position.x - base[0],
+        payload.position.y - base[1],
+        payload.position.z - base[2],
+      ],
+      rotationDeg: [
+        THREE.MathUtils.radToDeg(euler.x),
+        THREE.MathUtils.radToDeg(euler.y),
+        THREE.MathUtils.radToDeg(euler.z),
+      ],
+      scale: payload.scale.x,
+    };
+  }
+
+  private equipmentBasePosition(payload: THREE.Object3D): readonly [number, number, number] {
+    const value = payload.userData.equipmentCalibrationBasePosition;
+    return Array.isArray(value) && value.length === 3
+      ? [Number(value[0]), Number(value[1]), Number(value[2])]
+      : [0, 0, 0];
+  }
+
+  private cloneEquipmentTransform(
+    transform: EquipmentCalibrationTransform,
+  ): EquipmentCalibrationTransform {
+    return {
+      position: [...transform.position],
+      rotationDeg: [...transform.rotationDeg],
+      scale: transform.scale,
+    };
+  }
+
+  private captureEquipmentDefaults(): void {
+    this.equipmentDefaultTransforms.clear();
+    for (const slot of EQUIPMENT_CALIBRATION_TARGETS) {
+      if (slot.endsWith('_hip') || slot.endsWith('_back')) continue;
+      const payload = this.equipmentPayload(slot);
+      if (payload) this.equipmentDefaultTransforms.set(slot, this.equipmentTransformOf(payload));
+    }
   }
 
   /** Swap the previewed skin (alternate body texture); persists across setClass. */
@@ -642,12 +994,14 @@ export class CharacterPreview {
 
   private setupDragControls(): void {
     const onMouseDown = (e: MouseEvent) => {
+      const manipulator = this.equipmentManipulator;
+      if (manipulator && (manipulator.dragging || manipulator.axis !== null)) return;
       this.isDragging = true;
       this.previousMouseX = e.clientX;
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!this.isDragging) return;
+      if (!this.isDragging || this.equipmentManipulator?.dragging) return;
       const deltaX = e.clientX - this.previousMouseX;
       this.characterGroup.rotation.y += deltaX * 0.01;
       this.previousMouseX = e.clientX;
@@ -659,6 +1013,8 @@ export class CharacterPreview {
 
     // Touch support
     const onTouchStart = (e: TouchEvent) => {
+      const manipulator = this.equipmentManipulator;
+      if (manipulator && (manipulator.dragging || manipulator.axis !== null)) return;
       if (e.touches.length === 1) {
         this.isDragging = true;
         this.previousMouseX = e.touches[0].clientX;
@@ -666,7 +1022,7 @@ export class CharacterPreview {
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      if (!this.isDragging || e.touches.length !== 1) return;
+      if (!this.isDragging || this.equipmentManipulator?.dragging || e.touches.length !== 1) return;
       const deltaX = e.touches[0].clientX - this.previousMouseX;
       this.characterGroup.rotation.y += deltaX * 0.01;
       this.previousMouseX = e.touches[0].clientX;
@@ -730,8 +1086,21 @@ export class CharacterPreview {
     // character-screen behavior) and only the player's drag spins the turntable.
 
     // Update animations inside visual
-    if (this.currentVisual) {
+    if (
+      this.currentVisual &&
+      !(this.equipmentCalibrationActive && this.equipmentCalibrationAnimationFrozen) &&
+      !this.presentationAnimationFrozen
+    ) {
       this.currentVisual.update(dt, PREVIEW_ANIM_STATE, true);
+    }
+    // A visual may have been mounted before its donor actions finished loading.
+    // Keep trying the selected roster pose until the first valid action exists.
+    if (!this.presentationAnimationFrozen && this.presentationPose) {
+      this.presentationAnimationFrozen =
+        (this.currentVisual?.poseFreeze?.(
+          this.presentationPose.clips,
+          this.presentationPose.fraction,
+        ) ?? null) !== null;
     }
 
     this.renderer.render(this.scene, this.camera);
@@ -888,6 +1257,13 @@ export class CharacterPreview {
     }
     this.cleanupDragControls?.();
     this.cleanupDragControls = null;
+    this.clearEquipmentCalibrationManipulator();
+    if (this.equipmentManipulatorHelper) {
+      this.scene.remove(this.equipmentManipulatorHelper);
+      this.equipmentManipulatorHelper = null;
+    }
+    this.equipmentManipulator?.dispose();
+    this.equipmentManipulator = null;
     this.openGate.cancel();
     this.hideStandIn();
     if (this.currentVisual) {

@@ -1,0 +1,213 @@
+{
+  "facts": [
+    {
+      "key": "mob_ancient_guardian",
+      "low": false,
+      "visible": true,
+      "type": "MeshPhysicalMaterial",
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            0.2,
+            0.38
+          ],
+          "val": [
+            0.08,
+            0.16,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 205,
+          "satMul": 0.8,
+          "satAdd": 0.08,
+          "valMul": 0.96,
+          "valAdd": 0
+        },
+        {
+          "ref": 85,
+          "band": 38,
+          "sat": [
+            0.2,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.12,
+            0.22,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 112,
+          "satMul": 0.85,
+          "satAdd": 0,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    {
+      "key": "mob_ancient_guardian",
+      "low": true,
+      "visible": true,
+      "type": "MeshLambertMaterial",
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            0.2,
+            0.38
+          ],
+          "val": [
+            0.08,
+            0.16,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 205,
+          "satMul": 0.8,
+          "satAdd": 0.08,
+          "valMul": 0.96,
+          "valAdd": 0
+        },
+        {
+          "ref": 85,
+          "band": 38,
+          "sat": [
+            0.2,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.12,
+            0.22,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 112,
+          "satMul": 0.85,
+          "satAdd": 0,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    {
+      "key": "mob_waking_warden",
+      "low": false,
+      "visible": true,
+      "type": "MeshPhysicalMaterial",
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            0.2,
+            0.38
+          ],
+          "val": [
+            0.08,
+            0.16,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 32,
+          "satMul": 0.8,
+          "satAdd": 0.13,
+          "valMul": 0.9,
+          "valAdd": 0
+        },
+        {
+          "ref": 85,
+          "band": 38,
+          "sat": [
+            0.2,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.12,
+            0.22,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 37,
+          "satMul": 1,
+          "satAdd": 0,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    },
+    {
+      "key": "mob_waking_warden",
+      "low": true,
+      "visible": true,
+      "type": "MeshLambertMaterial",
+      "rules": [
+        {
+          "ref": 180,
+          "band": 360,
+          "sat": [
+            -0.02,
+            -0.01,
+            0.2,
+            0.38
+          ],
+          "val": [
+            0.08,
+            0.16,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 32,
+          "satMul": 0.8,
+          "satAdd": 0.13,
+          "valMul": 0.9,
+          "valAdd": 0
+        },
+        {
+          "ref": 85,
+          "band": 38,
+          "sat": [
+            0.2,
+            0.35,
+            1.01,
+            1.02
+          ],
+          "val": [
+            0.12,
+            0.22,
+            1.01,
+            1.02
+          ],
+          "hueMode": "abs",
+          "hue": 37,
+          "satMul": 1,
+          "satAdd": 0,
+          "valMul": 1,
+          "valAdd": 0
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

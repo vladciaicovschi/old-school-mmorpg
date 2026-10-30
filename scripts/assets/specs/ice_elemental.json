@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/elementals/ice_elemental.glb",
+      "out": "models/creatures/ice_elemental_prototype.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepExtras": true,
+      "keepClips": ["Ice_Idle", "Ice_Move", "Cast", "ChannelStart", "Channel", "Death"]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "attacks": [
+    "Bear_SwipeLeft",
+    "Bear_SwipeRight",
+    "Bear_SwipeLeft",
+    "Bear_SwipeRight",
+    "Bear_DoubleSlam",
+    "Bear_SwipeLeft",
+    "Bear_SwipeRight",
+    "Bear_SwipeLeft",
+    "Bear_SwipeRight",
+    "Bear_DoubleSlam"
+  ],
+  "errors": []
+}

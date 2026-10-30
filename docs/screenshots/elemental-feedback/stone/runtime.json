@@ -1,0 +1,18 @@
+{
+  "kind": "stone",
+  "low": false,
+  "runtime": {
+    "particles": 24,
+    "surface": false,
+    "streams": [],
+    "arcTriangles": 0
+  },
+  "contact": {
+    "pieces": 28,
+    "min": -0.00027709186756680326,
+    "maxContact": 0.00011275595268056549,
+    "meshOffset": -0.38023788978544903,
+    "clip": "Death"
+  },
+  "errors": []
+}

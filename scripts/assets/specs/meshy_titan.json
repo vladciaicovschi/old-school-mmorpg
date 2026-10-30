@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/meshy_titan/meshy_titan.glb",
+      "out": "models/chars/players/meshy_titan.glb",
+      "type": "character",
+      "maxTex": 1024
+    }
+  ]
+}

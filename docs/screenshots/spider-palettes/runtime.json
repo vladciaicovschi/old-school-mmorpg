@@ -1,0 +1,101 @@
+{
+  "facts": [
+    {
+      "variant": "original",
+      "low": false,
+      "visible": true,
+      "height": 0.85,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 0
+    },
+    {
+      "variant": "forest",
+      "low": false,
+      "visible": true,
+      "height": 0.765,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "marsh",
+      "low": false,
+      "visible": true,
+      "height": 0.8925,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "sand",
+      "low": false,
+      "visible": true,
+      "height": 0.68,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "frost",
+      "low": false,
+      "visible": true,
+      "height": 0.935,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "broodmother",
+      "low": false,
+      "visible": true,
+      "height": 1.105,
+      "material": "MeshStandardMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "original",
+      "low": true,
+      "visible": true,
+      "height": 0.85,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 0
+    },
+    {
+      "variant": "forest",
+      "low": true,
+      "visible": true,
+      "height": 0.765,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "marsh",
+      "low": true,
+      "visible": true,
+      "height": 0.8925,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "sand",
+      "low": true,
+      "visible": true,
+      "height": 0.68,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "frost",
+      "low": true,
+      "visible": true,
+      "height": 0.935,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 2
+    },
+    {
+      "variant": "broodmother",
+      "low": true,
+      "visible": true,
+      "height": 1.105,
+      "material": "MeshLambertMaterial",
+      "dyeRules": 2
+    }
+  ],
+  "errors": []
+}

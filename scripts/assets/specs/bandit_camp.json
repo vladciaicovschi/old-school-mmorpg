@@ -1,0 +1,110 @@
+{
+  "source": "Approved whole Meshy tents and supplied Fantasy Props derivatives",
+  "items": [
+    {
+      "src": "tmp/asset_src/bandit_camp/emerald.glb",
+      "out": "models/bandit_camp/emerald.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/pavilion.glb",
+      "out": "models/bandit_camp/pavilion.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/fire.glb",
+      "out": "models/bandit_camp/fire.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/rack.glb",
+      "out": "models/bandit_camp/rack.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/chest.glb",
+      "out": "models/bandit_camp/chest.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/stool.glb",
+      "out": "models/bandit_camp/stool.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/chair.glb",
+      "out": "models/bandit_camp/chair.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/tripod.glb",
+      "out": "models/bandit_camp/tripod.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/crate.glb",
+      "out": "models/bandit_camp/crate.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/barrel.glb",
+      "out": "models/bandit_camp/barrel.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/bag.glb",
+      "out": "models/bandit_camp/bag.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/bucket.glb",
+      "out": "models/bandit_camp/bucket.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/table.glb",
+      "out": "models/bandit_camp/table.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/bench.glb",
+      "out": "models/bandit_camp/bench.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/bandit_camp/wood.glb",
+      "out": "models/bandit_camp/wood.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    }
+  ]
+}

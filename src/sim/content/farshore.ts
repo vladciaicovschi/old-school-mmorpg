@@ -1,3 +1,4 @@
+import { applySettlementProps, settlementRoads, settlementService } from '../settlements_layout';
 // The Farshore (levels 3-7). A small island in the starter sea east of
 // Eastbrook Vale, all but surrounded by open ocean and joined to the
 // mainland only by the Ferrywalk: a thin natural sandbar causeway from the
@@ -73,7 +74,7 @@ export const FARSHORE_ZONE: ZoneDef = {
   welcomeQuestId: 'q_fs_bell_at_the_landing',
 };
 
-export const FARSHORE_ROADS: { x: number; z: number }[][] = [
+const FARSHORE_LEGACY_ROADS: { x: number; z: number }[][] = [
   [
     { x: 150, z: -46 },
     { x: 173, z: -30 },
@@ -231,12 +232,15 @@ export const FARSHORE_MOBS: Record<string, MobTemplate> = {
 // the breaks, a quartermaster, a surgeon, the bellkeeper who rings for aid,
 // and a fisher who has seen one too many. Quests arrive with the break
 // mechanic; for now the cast sets the siege and points the newcomer at it.
+const coalfastStanding = settlementService('gullhaven', 'coalfast')!;
+const nellStanding = settlementService('gullhaven', 'nell')!;
+const tamStanding = settlementService('gullhaven', 'tam')!;
 export const FARSHORE_NPCS: Record<string, NpcDef> = {
   warden_coalfast: {
     id: 'warden_coalfast',
     name: 'Warden Coalfast',
     title: 'Redoubt Commander',
-    pos: { x: 305, z: 66 },
+    pos: { x: coalfastStanding.x, z: coalfastStanding.z },
     facing: 0,
     color: 0x8a4b2b,
     questIds: [
@@ -285,7 +289,7 @@ export const FARSHORE_NPCS: Record<string, NpcDef> = {
     id: 'bellkeeper_tam',
     name: 'Bellkeeper Tam',
     title: 'Watchbell Keeper',
-    pos: { x: 252, z: 18 },
+    pos: { x: tamStanding.x, z: tamStanding.z },
     facing: Math.PI / 2,
     color: 0x4a7b6b,
     questIds: ['q_fs_bell_at_the_landing', 'q_fs_the_three_bells'],
@@ -296,7 +300,7 @@ export const FARSHORE_NPCS: Record<string, NpcDef> = {
     id: 'fisher_nell',
     name: 'Frightened Nell',
     title: 'Gullhaven Fisher',
-    pos: { x: 296, z: 80 },
+    pos: { x: nellStanding.x, z: nellStanding.z },
     facing: 0,
     color: 0x5a7a9a,
     questIds: ['q_fs_bram_come_home'],
@@ -625,7 +629,7 @@ export const FARSHORE_ESCORTS: Record<string, EscortDef> = {
   },
 };
 
-export const FARSHORE_PROPS: ZonePropsDef = {
+const FARSHORE_LEGACY_PROPS: ZonePropsDef = {
   ...emptyZoneProps(),
   // Gullhaven, the redoubt: a fishing town turned to holding a line. The
   // homes still stand, but a war camp crowds the market and the fences have
@@ -672,3 +676,10 @@ export const FARSHORE_PROPS: ZonePropsDef = {
   docks: [{ x: 246, z: 12, rot: -1.7, hutLocal: { x: 40, z: 40, hw: 0, hd: 0 } }],
   graveyards: [{ x: 290, z: 86 }],
 };
+
+export const FARSHORE_PROPS: ZonePropsDef = applySettlementProps(
+  FARSHORE_LEGACY_PROPS,
+  'gullhaven',
+);
+
+export const FARSHORE_ROADS = settlementRoads('gullhaven', FARSHORE_LEGACY_ROADS);

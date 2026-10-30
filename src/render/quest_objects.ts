@@ -21,7 +21,7 @@ const TARGET_HEIGHT = 1.35;
 
 const QUEST_OBJECT_URLS: Record<string, string> = {
   crypt_ritual_circle: '/models/quest/crypt_ritual_circle.glb',
-  supply_crate: '/models/quest/supply_crate.glb',
+  supply_crate: '/models/bandit_camp/crate.glb',
   lost_caravan_goods: '/models/quest/lost_caravan_goods.glb',
   gravecaller_sigil: '/models/quest/gravecaller_sigil.glb',
   gravewyrm_sigil: '/models/quest/gravewyrm_sigil.glb',

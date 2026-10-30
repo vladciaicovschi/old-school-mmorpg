@@ -2,6 +2,7 @@
 // full-body one-shot keep ownership of the rig while ordinary melee damage is
 // still allowed to resolve underneath them.
 
+import { isPlayingCommunityMobMechanic } from './cast_gesture_capabilities_core';
 import { playerRangedAttackAlreadyStarted } from './skin_attack';
 
 export interface DamageAttackAnimationContext {
@@ -24,6 +25,7 @@ export function shouldStartDamageAttackAnimation({
 /** A character visual's authored-clip lookup (CharacterVisual, structurally). */
 export interface AttackClipOverrideSource {
   hasAttackClipOverride(abilityId: string): boolean;
+  isPlayingAttackClip?: (abilityId: string) => boolean;
 }
 
 /**
@@ -37,6 +39,7 @@ export function damageEventStartsAttackAnimation(
   sourceVisual: AttackClipOverrideSource | null,
   attackAnimationStarted: boolean | undefined,
 ): boolean {
+  if (source?.kind === 'mob' && isPlayingCommunityMobMechanic(sourceVisual)) return false;
   const authoredCastOwnsBody =
     source?.kind === 'mob' &&
     source.castingAbility !== null &&

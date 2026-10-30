@@ -15,8 +15,15 @@ import {
   dist2d,
   type Entity,
   LEASH_DISTANCE,
+  type MobTemplate,
   steadyAngleTo,
 } from '../types';
+import {
+  cancelTimedMobSpell,
+  isTimedMobSpell,
+  mobSpellLineBlocked,
+  updateTimedMobSpell,
+} from './caster_spell';
 import { chainPullTransitHoldsLeash, clearChainPullInbound } from './chain_pull_transit';
 import { updateDerelictBomber } from './derelict_bomber';
 import { dragonkinEngageShout } from './dragonkin_brood';
@@ -24,6 +31,7 @@ import { NYTHRAXIS_SPIRIT_MENDING_CAST_ID } from './healer_channel';
 import { blockedTowardTarget, chaseStalledUnreachable } from './reachability';
 import { resetRiftMechanicWindups } from './rift_escape_window';
 import { retargetMob, updateMobTarget } from './targeting';
+import { cancelMobWaterJet, updateMobWaterCaster } from './water_caster';
 
 export type MobCombatProfileResult = 'done' | 'runAttackMechanics';
 
@@ -97,13 +105,17 @@ export function updateMobCombatProfile(
   updateMobTarget(ctx, mob);
   const target = mob.aggroTargetId !== null ? ctx.entities.get(mob.aggroTargetId) : null;
   if (!target || target.dead) {
+    cancelTimedMobSpell(ctx, mob);
     mob.autoAttack = false;
     // No target, no pin: a mob that lost its fight never keeps the immune stance.
     releasePin(mob);
     retargetMob(ctx, mob);
     return 'done';
   }
-  if (ctx.maybeFlee(mob, target)) return 'done';
+  if (ctx.maybeFlee(mob, target)) {
+    cancelTimedMobSpell(ctx, mob);
+    return 'done';
+  }
 
   // Inside a claimed instance slot a mob never resets by distance
   // (instances/instance_combat_hold.ts): neither leash sends it home, and a
@@ -118,6 +130,7 @@ export function updateMobCombatProfile(
     // so a chain pull's transit grace is spent on arrival as before.
     const hardLeash = mob.ignoreHardLeash ? undefined : MOBS[mob.templateId]?.hardLeashRadius;
     if (!instanceHold && hardLeash !== undefined && dist2d(mob.pos, mob.spawnPos) > hardLeash) {
+      cancelTimedMobSpell(ctx, mob);
       startEvadeHome(mob);
       return 'done';
     }
@@ -142,6 +155,7 @@ export function updateMobCombatProfile(
       mob.fleeReturnTimer <= 0 &&
       !inTransit
     ) {
+      cancelTimedMobSpell(ctx, mob);
       startEvadeHome(mob);
       return 'done';
     }
@@ -192,9 +206,22 @@ export function updateMobCombatProfile(
   // opts an encounter out entirely (same gate as the leash prelude).
   const spell = MOBS[mob.templateId]?.petSpell;
   const chaseSpeed = mob.moveSpeed * profile.chaseSpeedMult * ctx.moveSpeedMult(mob);
+  if (updateMobWaterCaster(ctx, mob, target, chaseSpeed)) {
+    const reach = ctx.hasLineOfSight(mob, target)
+      ? (MOBS[mob.templateId]?.petRanged?.range ?? 0)
+      : 0;
+    if (profile.canLeash && chaseStalledUnreachable(ctx, mob, target, reach, chaseSpeed)) {
+      cancelMobWaterJet(ctx, mob);
+      onChaseStalled(mob, instanceHold);
+    }
+    return 'done';
+  }
   if (spell) {
     const result = updateCasterCombat(ctx, mob, target, profile, spell);
-    if (profile.canLeash && chaseStalledUnreachable(ctx, mob, target, spell.range, chaseSpeed)) {
+    const reach =
+      isTimedMobSpell(spell) && mobSpellLineBlocked(ctx, mob, target, spell) ? 0 : spell.range;
+    if (profile.canLeash && chaseStalledUnreachable(ctx, mob, target, reach, chaseSpeed)) {
+      cancelTimedMobSpell(ctx, mob);
       onChaseStalled(mob, instanceHold);
       return 'done';
     }
@@ -322,8 +349,18 @@ function updateCasterCombat(
   mob: Entity,
   target: Entity,
   profile: MobCombatProfile,
-  spell: Parameters<SimContext['updateRangedPetAttack']>[2],
+  spell: NonNullable<MobTemplate['petSpell']>,
 ): MobCombatProfileResult {
+  if (isTimedMobSpell(spell)) {
+    updateTimedMobSpell(
+      ctx,
+      mob,
+      target,
+      spell,
+      mob.moveSpeed * profile.chaseSpeedMult * ctx.moveSpeedMult(mob),
+    );
+    return 'done';
+  }
   const d = dist2d(mob.pos, target.pos);
   if (mob.aiState === 'attack') {
     if (d > spell.range) {
