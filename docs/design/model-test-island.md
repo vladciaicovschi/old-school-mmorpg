@@ -7,10 +7,10 @@ to replace previously spawned subjects; reload for regenerated terrain/colliders
 
 ## Replacement gallery
 
-The island also has separate animal, enemy and named-NPC replacement rows.
-Each row shows one body: the new candidate when available, otherwise the
-original awaiting a replacement. Old bodies with ready or installed replacements
-are omitted to reduce clutter, including the repeated base troll in palette rows.
+The island has animal, enemy and named-NPC replacement rows. The live roster
+shows each appearance once across the gallery and combat pads: the installed or
+ready replacement when available, otherwise the original. Distinct palette and
+named modular appearances remain separate.
 `OLD` and `NEW` nameplates identify the remaining body. `READY` means an imported
 candidate exists; `DONE` means that replacement is already used in the
 game; `MISSING` means there is no confirmed replacement. Missing right-hand
@@ -33,9 +33,10 @@ definitions do not add default island subjects.
 The old generic alpaca still has its own missing row beside the separate ram
 comparison, so the goat candidate does not imply that every alpaca is replaced.
 
-Gallery subjects are inert, dynamic NPC mannequins with no copied quests,
-vendors, banks, loot or encounter mechanics. The existing combat pads remain
-available for attacks. `/dev lab` rebuilds the requesting developer's gallery
+Creature subjects are passive until attacked, then gain threat and retaliate.
+Existing combat kits and model animations are retained, and missing originals
+receive a basic test kit. Named NPC previews remain inert and carry no quests,
+vendors or banks. `/dev lab` rebuilds the requesting developer's gallery
 and combat subjects without removing another developer's displays or drawing
 random numbers. The flat pad extends around the gallery; ordinary world
 spawns and model rollout rules are unchanged.

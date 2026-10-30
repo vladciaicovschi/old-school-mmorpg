@@ -1,3 +1,4 @@
+import { devModelLabCombatSource } from './dev_model_lab_identity';
 import { VARKHUL_BOSS_ID } from './ignivar_raid_ids';
 import { MELEE_RANGE } from './types';
 import {
@@ -101,7 +102,8 @@ function buildCombatProfileForMob(templateId: string, scale: number): MobCombatP
   // Lab copies use the same models and combat kit as their dungeon counterparts.
   // Scale reach against actual visible height, not the pre-replacement model's
   // legacy entity scale. This leaves spell ranges and the pursuit grace intact.
-  const wildheartId = templateId.startsWith('dev_') ? templateId.slice(4) : templateId;
+  const source = devModelLabCombatSource(templateId);
+  const wildheartId = source.startsWith('dev_') ? source.slice(4) : source;
   const visualHeight = WILDHEART_VISUAL_HEIGHTS[wildheartId];
   if (Object.hasOwn(WILDHEART_VISUAL_HEIGHTS, wildheartId) && visualHeight !== undefined) {
     const meleeRange = scaledDefaultMobMeleeRange(

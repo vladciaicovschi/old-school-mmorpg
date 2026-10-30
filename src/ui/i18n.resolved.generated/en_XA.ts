@@ -17049,6 +17049,348 @@ export const en_XA: EnTranslations = {
       "wildheart_high_priest": {
         "name": "[Žúļĝáŕ, Ʋóíçé óƒ ţĥé Ɓášíñ]"
       },
+      "dev_compare_animal_new_wolf": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŵóļƒ]"
+      },
+      "dev_compare_animal_new_bear": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓéáŕ]"
+      },
+      "dev_compare_animal_new_deer": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ðééŕ]"
+      },
+      "dev_compare_animal_new_ram": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŕáɱ]"
+      },
+      "dev_compare_animal_new_bull": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓúļļ]"
+      },
+      "dev_compare_animal_new_raptor": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŕáþţóŕ]"
+      },
+      "dev_compare_animal_old_alpaca": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱóóñƒļééçé Ĝŕážéŕ]"
+      },
+      "dev_compare_animal_old_spearjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðééþƒéñ Šþéáŕĵáŵ]"
+      },
+      "dev_compare_animal_old_boar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóáŕ]"
+      },
+      "dev_compare_animal_old_fox": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒóẋ]"
+      },
+      "dev_compare_animal_old_critter": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çŕíţţéŕ]"
+      },
+      "dev_compare_animal_old_horse": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥóŕšé]"
+      },
+      "dev_compare_animal_old_cat": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ýúɱí]"
+      },
+      "dev_compare_animal_old_greyjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Óļð Ĝŕéýĵáŵ]"
+      },
+      "dev_compare_animal_old_veiled_stag": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋéíļéð Šţáĝ]"
+      },
+      "dev_compare_animal_old_veiled_doe": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋéíļéð Ðóé]"
+      },
+      "dev_compare_animal_old_gleamstag": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝļéáɱšţáĝ]"
+      },
+      "dev_compare_animal_old_aurelhorn": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Áúŕéļĥóŕñ]"
+      },
+      "dev_compare_animal_new_spider": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Šþíðéŕ (Ŕéþļáçéð)]"
+      },
+      "dev_compare_animal_new_spider_forest": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒóŕéšţ Šþíðéŕ Ţŕíáļ (90%)]"
+      },
+      "dev_compare_animal_new_spider_sand": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šáñð Šþíðéŕ Ţŕíáļ (80%)]"
+      },
+      "dev_compare_animal_new_spider_marsh": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɱáŕšĥ Šþíðéŕ Ţŕíáļ (105%)]"
+      },
+      "dev_compare_animal_new_spider_frost": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒŕóšţ Šþíðéŕ Ţŕíáļ (110%)]"
+      },
+      "dev_compare_animal_new_spider_broodmother": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓŕóóðɱóţĥéŕ Šþíðéŕ Ţŕíáļ (130%)]"
+      },
+      "dev_compare_animal_new_crab": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Çŕáƀ]"
+      },
+      "dev_compare_animal_new_tidepool_boss": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱíšţéŕ Çŕáƀš]"
+      },
+      "dev_compare_mob_new_bandit": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓáñðíţ]"
+      },
+      "dev_compare_mob_new_assassin": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Áššáššíñ]"
+      },
+      "dev_compare_mob_new_skeleton": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ɱíñíóñ]"
+      },
+      "dev_compare_mob_new_skeleton_warrior": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ŵáŕŕíóŕ]"
+      },
+      "dev_compare_mob_new_cultist": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Çúļţíšţ]"
+      },
+      "dev_compare_mob_new_acolyte": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Áçóļýţé]"
+      },
+      "dev_compare_mob_new_necromancer": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ñéçŕóɱáñçéŕ]"
+      },
+      "dev_compare_mob_new_caster": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Çášţéŕ]"
+      },
+      "dev_compare_mob_new_skeleton_rogue": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šķéļéţóñ Ŕóĝúé]"
+      },
+      "dev_compare_mob_new_golem": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ɓóñé Ĝóļéɱ]"
+      },
+      "dev_compare_mob_new_treant": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕéáñţ]"
+      },
+      "dev_compare_mob_new_kobold": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ķóƀóļð]"
+      },
+      "dev_compare_mob_old_burrower": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓúŕŕóŵéŕ]"
+      },
+      "dev_compare_mob_new_murloc": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱúŕļóç]"
+      },
+      "dev_compare_mob_old_frog": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóĝ Ɓļóáţ]"
+      },
+      "dev_compare_mob_new_troll": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ]"
+      },
+      "dev_compare_mob_new_troll_marsh": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Ɱáŕšĥ Šķíñ]"
+      },
+      "dev_compare_mob_new_troll_sand": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Šáñð Šķíñ]"
+      },
+      "dev_compare_mob_new_troll_rift": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕóļļ: Þáļé Ŕíƒţ Šķíñ]"
+      },
+      "dev_compare_mob_new_ogre": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Óĝŕé]"
+      },
+      "dev_compare_mob_new_imp": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Íɱþ]"
+      },
+      "dev_compare_mob_old_bruiser": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕúíšéŕ]"
+      },
+      "dev_compare_mob_old_skeleton_boss": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱóŕţĥéñ]"
+      },
+      "dev_compare_mob_old_grubjaw": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝŕúƀĵáŵ]"
+      },
+      "dev_compare_mob_old_drogmar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵáŕļóŕð Ðŕóĝɱáŕ]"
+      },
+      "dev_compare_mob_old_yeti": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ýéţí]"
+      },
+      "dev_compare_mob_new_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šţóñé Éļéɱéñţáļ]"
+      },
+      "dev_compare_mob_new_fire_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ƒíŕé Éļéɱéñţáļ]"
+      },
+      "dev_compare_mob_new_ice_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Íçé Éļéɱéñţáļ]"
+      },
+      "dev_compare_mob_new_water_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ŵáţéŕ Éļéɱéñţáļ]"
+      },
+      "dev_compare_mob_new_storm_elemental": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Šţóŕɱ Éļéɱéñţáļ]"
+      },
+      "dev_compare_mob_old_dragonkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáĝóñķíñ]"
+      },
+      "dev_compare_mob_old_demon": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéɱóñ]"
+      },
+      "dev_compare_mob_old_demonalt": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋóíðŵáļķéŕ]"
+      },
+      "dev_compare_mob_new_ghost": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝĥóšţ]"
+      },
+      "dev_compare_mob_old_gravewing": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝŕáʋéŵíñĝ]"
+      },
+      "dev_compare_mob_new_glimmerwisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝļíɱɱéŕŵíšþ]"
+      },
+      "dev_compare_mob_new_duskwisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ðúšķŵíšþ]"
+      },
+      "dev_compare_mob_new_ice_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Íçé Ŵíšþ]"
+      },
+      "dev_compare_mob_new_lily_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ļíļý Ŵíšþ]"
+      },
+      "dev_compare_mob_new_gale_wisp": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ĝáļé Ŵíšþ]"
+      },
+      "dev_compare_mob_new_sporeling": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Šþóŕéļíñĝ Ĝáţĥéŕéŕ]"
+      },
+      "dev_compare_mob_new_corrupted_sporeling": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Çóŕŕúþţéð Šþóŕéļíñĝ]"
+      },
+      "dev_compare_mob_new_treant_warrior": {
+        "name": "[[ÑÉŴ/ŔÉÁÐÝ] Ţŕéáñţ Ŵáŕŕíóŕ]"
+      },
+      "dev_compare_mob_new_wreck_warden": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ţĥé Ŵŕéçķ Ŵáŕðéñ]"
+      },
+      "dev_compare_mob_new_ancient_guardian": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Áñçíéñţ Ĝúáŕðíáñ]"
+      },
+      "dev_compare_mob_new_waking_warden": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ţĥé Ŵáķíñĝ Ŵáŕðéñ]"
+      },
+      "dev_compare_mob_old_pixie": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɱúšĥŕóóɱ Þíẋíé]"
+      },
+      "dev_compare_mob_old_nightkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ñíĝĥţķíñ]"
+      },
+      "dev_compare_mob_old_emberkin": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éɱƀéŕķíñ]"
+      },
+      "dev_compare_mob_old_gloomshade": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĝļóóɱšĥáðé]"
+      },
+      "dev_compare_mob_old_pyre_colossus": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Þýŕé Çóļóššúš]"
+      },
+      "dev_compare_mob_old_mech": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéŕéļíçţ Ɱéçĥ]"
+      },
+      "dev_compare_mob_new_mogger": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ɱóĝĝéŕ]"
+      },
+      "dev_compare_mob_old_mob_training_dummy": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţŕáíñíñĝ Ðúɱɱý]"
+      },
+      "dev_compare_mob_new_mob_wildheart_stalker": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Šţáļķéŕ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_ravager": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ŕáʋáĝéŕ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_hexcaller": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ĥéẋçáļļéŕ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_beastmaster": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ɓéášţɱášţéŕ]"
+      },
+      "dev_compare_mob_new_mob_wildheart_high_priest": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ŵíļðĥéáŕţ Ĥíĝĥ Þŕíéšţ]"
+      },
+      "dev_compare_mob_old_mob_ignivar": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Íĝñíʋáŕ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_heart_of_the_end": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéáŕţ óƒ ţĥé Éñð]"
+      },
+      "dev_compare_mob_old_mob_ignivar_crucible_warden": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çŕúçíƀļé Ŵáŕðéñ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_ember_sentinel": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éɱƀéŕ Šéñţíñéļ]"
+      },
+      "dev_compare_mob_old_mob_ignivar_cinder_artificer": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çíñðéŕ Áŕţíƒíçéŕ]"
+      },
+      "dev_compare_mob_old_mob_varkhul_forgefather": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ʋáŕķĥúļ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodlord": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáķéɱáŵ Ɓŕóóðļóŕð]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_matriarch": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çíñðŕáļéţĥ]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodguard": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓŕóóðĝúáŕð]"
+      },
+      "dev_compare_mob_old_mob_dragonkin_whelp": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŵĥéļþ]"
+      },
+      "dev_compare_mob_old_mob_dragon_egg": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðŕáĝóñ Éĝĝ]"
+      },
+      "dev_compare_mob_old_mob_choir_thrall": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Çĥóíŕ Ţĥŕáļļ]"
+      },
+      "dev_compare_mob_old_mob_tolling_bell": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ţóļļíñĝ Ɓéļļ]"
+      },
+      "dev_compare_mob_new_delve_skel_wraith": {
+        "name": "[[ÑÉŴ/ÐÓÑÉ] Ļéðĝéŕ Ŵŕáíţĥ]"
+      },
+      "dev_compare_mob_old_delve_skel_ringer": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ƒúñéŕáļ Ŕíñĝéŕ]"
+      },
+      "dev_compare_mob_old_delve_skel_effigy": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šáíñţļéšš Éƒƒíĝý]"
+      },
+      "dev_compare_mob_old_delve_skel_varric": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ðéáçóñ Ʋáŕŕíç]"
+      },
+      "dev_compare_mob_old_skel_rickshaw_puller": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíçķšĥáŵ Þúļļéŕ]"
+      },
+      "dev_compare_mob_old_rift_ritualist": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕíţúáļíšţ]"
+      },
+      "dev_compare_mob_old_mob_reedbound_acolyte": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ŕééðƀóúñð Áçóļýţé]"
+      },
+      "dev_compare_mob_old_mob_spider_egg_sac": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíðéŕ Éĝĝ Šáç]"
+      },
+      "dev_compare_mob_old_mob_nythraxis_bone_spike": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ɓóñé Šþíķé]"
+      },
+      "dev_compare_mob_old_npc_edda_reedhand": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éððá Ŕééðĥáñð]"
+      },
+      "dev_compare_mob_old_npc_villager": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Éšçóŕţ Ʋíļļáĝéŕ]"
+      },
+      "dev_compare_mob_old_npc_knight": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Ĥéðĝé Ķñíĝĥţ]"
+      },
+      "dev_compare_mob_old_player_warrior": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Áļðŕéñ]"
+      },
+      "dev_compare_mob_old_player_mage": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Ɱáļŕíç]"
+      },
+      "dev_compare_mob_old_player_rogue": {
+        "name": "[[ÓĻÐ/ⱮÍŠŠÍÑĜ] Šþíŕíţ óƒ Ʋóšš]"
+      },
       "ironvein_foreman": {
         "name": "[Íŕóñʋéíñ Ƒóŕéɱáñ]"
       },

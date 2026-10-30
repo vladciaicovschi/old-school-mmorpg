@@ -92,7 +92,7 @@ export const DEV_MODEL_LAB_APOTHECARY_POS = {
  * templates below so they acquire threat and retaliate when attacked. */
 export const DEV_MODEL_LAB_NPCS: Record<string, NpcDef> = {};
 
-const testMob = (
+export const createDevModelLabMob = (
   id: string,
   name: string,
   family: MobTemplate['family'],
@@ -130,81 +130,126 @@ const testCaster = (
   name: string,
   color: number,
 ): MobTemplate => ({
-  ...testMob(id, name, 'undead', color),
+  ...createDevModelLabMob(id, name, 'undead', color),
   ...DEV_CASTER_KITS[id],
 });
 
 export const DEV_MODEL_LAB_MOBS: Record<string, MobTemplate> = {
   ...DEV_IMPORTED_HUMANOIDS,
   ...DEV_COMMUNITY_ANCIENTS,
-  dev_rogue_minion: testMob('dev_rogue_minion', 'Rogue Minion', 'humanoid', 0x8f4b45),
-  dev_rogue_assassin: testMob('dev_rogue_assassin', 'Rogue Assassin', 'humanoid', 0x593b47),
-  dev_skeleton_minion: testMob('dev_skeleton_minion', 'Skeleton Minion', 'undead', 0xd8cfb8),
-  dev_skeleton_warrior: testMob('dev_skeleton_warrior', 'Skeleton Warrior', 'undead', 0xc9c2b2),
+  dev_rogue_minion: createDevModelLabMob('dev_rogue_minion', 'Rogue Minion', 'humanoid', 0x8f4b45),
+  dev_rogue_assassin: createDevModelLabMob(
+    'dev_rogue_assassin',
+    'Rogue Assassin',
+    'humanoid',
+    0x593b47,
+  ),
+  dev_skeleton_minion: createDevModelLabMob(
+    'dev_skeleton_minion',
+    'Skeleton Minion',
+    'undead',
+    0xd8cfb8,
+  ),
+  dev_skeleton_warrior: createDevModelLabMob(
+    'dev_skeleton_warrior',
+    'Skeleton Warrior',
+    'undead',
+    0xc9c2b2,
+  ),
   dev_skeleton_cultist: testCaster('dev_skeleton_cultist', 'Cultist', 0x7b617e),
   dev_skeleton_acolyte: testCaster('dev_skeleton_acolyte', 'Skeleton Acolyte', 0x655275),
-  dev_kobold: testMob('dev_kobold', 'Kobold (Replaced)', 'humanoid', 0xb87868),
-  dev_troll: testMob('dev_troll', 'Troll', 'humanoid', 0x7f9b8b),
-  dev_bone_golem: testMob('dev_bone_golem', 'Bone Golem', 'undead', 0xd4c8b4),
-  dev_meshy_murlok: testMob(
+  dev_kobold: createDevModelLabMob('dev_kobold', 'Kobold (Replaced)', 'humanoid', 0xb87868),
+  dev_troll: createDevModelLabMob('dev_troll', 'Troll', 'humanoid', 0x7f9b8b),
+  dev_bone_golem: createDevModelLabMob('dev_bone_golem', 'Bone Golem', 'undead', 0xd4c8b4),
+  dev_meshy_murlok: createDevModelLabMob(
     'dev_meshy_murlok',
     'Meshy Native Murlok (Replaced)',
     'humanoid',
     0x668f72,
   ),
-  dev_meshy_ogre: testMob('dev_meshy_ogre', 'Meshy Native Ogre', 'humanoid', 0x8e806d),
+  dev_meshy_ogre: createDevModelLabMob('dev_meshy_ogre', 'Meshy Native Ogre', 'humanoid', 0x8e806d),
   dev_skeleton_necromancer_v2: testCaster(
     'dev_skeleton_necromancer_v2',
     'Skeleton Necromancer V2',
     0x7d5361,
   ),
   dev_skeleton_caster_v3: testCaster('dev_skeleton_caster_v3', 'Skeleton Caster V3', 0x80515e),
-  dev_skeleton_rogue_v3: testMob('dev_skeleton_rogue_v3', 'Skeleton Rogue V3', 'undead', 0x755159),
-  dev_treant_v2: testMob('dev_treant_v2', 'Treant V2', 'elemental', 0x82956a),
+  dev_skeleton_rogue_v3: createDevModelLabMob(
+    'dev_skeleton_rogue_v3',
+    'Skeleton Rogue V3',
+    'undead',
+    0x755159,
+  ),
+  dev_treant_v2: createDevModelLabMob('dev_treant_v2', 'Treant V2', 'elemental', 0x82956a),
   dev_fire_elemental: {
-    ...testMob('dev_fire_elemental', 'Fire Elemental Prototype', 'elemental', 0xffffff),
+    ...createDevModelLabMob(
+      'dev_fire_elemental',
+      'Fire Elemental Prototype',
+      'elemental',
+      0xffffff,
+    ),
     ...DEV_ELEMENTAL_KITS.dev_fire_elemental,
   },
   dev_ice_elemental: {
-    ...testMob('dev_ice_elemental', 'Ice Elemental Prototype', 'elemental', 0xffffff),
+    ...createDevModelLabMob('dev_ice_elemental', 'Ice Elemental Prototype', 'elemental', 0xffffff),
     ...DEV_ELEMENTAL_KITS.dev_ice_elemental,
   },
   dev_water_elemental: {
-    ...testMob('dev_water_elemental', 'Water Elemental Prototype', 'elemental', 0xffffff),
+    ...createDevModelLabMob(
+      'dev_water_elemental',
+      'Water Elemental Prototype',
+      'elemental',
+      0xffffff,
+    ),
     ...DEV_ELEMENTAL_KITS.dev_water_elemental,
   },
   dev_storm_elemental: {
-    ...testMob('dev_storm_elemental', 'Storm Elemental Prototype', 'elemental', 0xffffff),
+    ...createDevModelLabMob(
+      'dev_storm_elemental',
+      'Storm Elemental Prototype',
+      'elemental',
+      0xffffff,
+    ),
     ...DEV_ELEMENTAL_KITS.dev_storm_elemental,
   },
   dev_stone_elemental: {
-    ...testMob('dev_stone_elemental', 'Stone Elemental Prototype', 'elemental', 0xffffff),
+    ...createDevModelLabMob(
+      'dev_stone_elemental',
+      'Stone Elemental Prototype',
+      'elemental',
+      0xffffff,
+    ),
     ...DEV_ELEMENTAL_KITS.dev_stone_elemental,
   },
   dev_smart_bear: {
-    ...testMob('dev_smart_bear', 'Smart Rig Bear', 'beast', 0x8b6246),
+    ...createDevModelLabMob('dev_smart_bear', 'Smart Rig Bear', 'beast', 0x8b6246),
     moveSpeed: 5.4,
   },
-  dev_smart_wolf: testMob('dev_smart_wolf', 'Smart Rig Wolf', 'beast', 0xffffff),
-  dev_smart_wolf_v2: testMob('dev_smart_wolf_v2', 'Smart Rig Wolf V2', 'beast', 0xffffff),
+  dev_smart_wolf: createDevModelLabMob('dev_smart_wolf', 'Smart Rig Wolf', 'beast', 0xffffff),
+  dev_smart_wolf_v2: createDevModelLabMob(
+    'dev_smart_wolf_v2',
+    'Smart Rig Wolf V2',
+    'beast',
+    0xffffff,
+  ),
   dev_smart_goat: {
-    ...testMob('dev_smart_goat', 'Smart Rig Goat', 'beast', 0xffffff),
+    ...createDevModelLabMob('dev_smart_goat', 'Smart Rig Goat', 'beast', 0xffffff),
     moveSpeed: 3.4,
   },
   dev_smart_bufalo: {
-    ...testMob('dev_smart_bufalo', 'Smart Rig Buffalo', 'beast', 0xffffff),
+    ...createDevModelLabMob('dev_smart_bufalo', 'Smart Rig Buffalo', 'beast', 0xffffff),
     moveSpeed: 4.2,
   },
   dev_smart_deer: {
-    ...testMob('dev_smart_deer', 'Smart Rig Deer', 'beast', 0xffffff),
+    ...createDevModelLabMob('dev_smart_deer', 'Smart Rig Deer', 'beast', 0xffffff),
     moveSpeed: 4,
   },
   dev_smart_raptor: {
-    ...testMob('dev_smart_raptor', 'Smart Rig Raptor', 'beast', 0xffffff),
+    ...createDevModelLabMob('dev_smart_raptor', 'Smart Rig Raptor', 'beast', 0xffffff),
     moveSpeed: 4.8,
   },
   dev_smart_imp: {
-    ...testMob('dev_smart_imp', 'Smart Rig Imp', 'demon', 0xffffff),
+    ...createDevModelLabMob('dev_smart_imp', 'Smart Rig Imp', 'demon', 0xffffff),
     moveSpeed: 4.8,
     // Emberkin's Felbolt identity/palette, with the basic Fire Demon's modest
     // NPC damage. Telegraph reaches the native hand thrust at 0.45 seconds.
@@ -220,22 +265,37 @@ export const DEV_MODEL_LAB_MOBS: Record<string, MobTemplate> = {
     },
   },
   dev_smart_spider: {
-    ...testMob('dev_smart_spider', 'Spider (Replaced)', 'spider', 0xffffff),
+    ...createDevModelLabMob('dev_smart_spider', 'Spider (Replaced)', 'spider', 0xffffff),
     ...DEV_SPIDER_KITS.dev_smart_spider,
   },
   // Spawned on their existing comparison positions through combatMobId.
   dev_spider_forest: {
-    ...testMob('dev_spider_forest', 'Forest Spider Trial (90%)', 'spider', 0xffffff),
+    ...createDevModelLabMob('dev_spider_forest', 'Forest Spider Trial (90%)', 'spider', 0xffffff),
     ...DEV_SPIDER_KITS.dev_spider_forest,
   },
   dev_spider_marsh: {
-    ...testMob('dev_spider_marsh', 'Marsh Spider Trial (105%)', 'spider', 0xffffff),
+    ...createDevModelLabMob('dev_spider_marsh', 'Marsh Spider Trial (105%)', 'spider', 0xffffff),
     ...DEV_SPIDER_KITS.dev_spider_marsh,
   },
-  dev_spider_sand: testMob('dev_spider_sand', 'Sand Spider Trial (80%)', 'spider', 0xffffff),
-  dev_spider_frost: testMob('dev_spider_frost', 'Frost Spider Trial (110%)', 'spider', 0xffffff),
+  dev_spider_sand: createDevModelLabMob(
+    'dev_spider_sand',
+    'Sand Spider Trial (80%)',
+    'spider',
+    0xffffff,
+  ),
+  dev_spider_frost: createDevModelLabMob(
+    'dev_spider_frost',
+    'Frost Spider Trial (110%)',
+    'spider',
+    0xffffff,
+  ),
   dev_spider_broodmother: {
-    ...testMob('dev_spider_broodmother', 'Broodmother Spider Trial (130%)', 'spider', 0xffffff),
+    ...createDevModelLabMob(
+      'dev_spider_broodmother',
+      'Broodmother Spider Trial (130%)',
+      'spider',
+      0xffffff,
+    ),
     ...DEV_SPIDER_KITS.dev_spider_broodmother,
   },
 };

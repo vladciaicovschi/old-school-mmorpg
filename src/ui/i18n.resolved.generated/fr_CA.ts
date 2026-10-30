@@ -17049,6 +17049,348 @@ export const fr_CA: EnTranslations = {
       "wildheart_high_priest": {
         "name": "Zulgar, Voix du Bassin"
       },
+      "dev_compare_animal_new_wolf": {
+        "name": "[NEW/READY] Wolf"
+      },
+      "dev_compare_animal_new_bear": {
+        "name": "[NEW/READY] Bear"
+      },
+      "dev_compare_animal_new_deer": {
+        "name": "[NEW/READY] Deer"
+      },
+      "dev_compare_animal_new_ram": {
+        "name": "[NEW/READY] Ram"
+      },
+      "dev_compare_animal_new_bull": {
+        "name": "[NEW/READY] Bull"
+      },
+      "dev_compare_animal_new_raptor": {
+        "name": "[NEW/READY] Raptor"
+      },
+      "dev_compare_animal_old_alpaca": {
+        "name": "[OLD/MISSING] Moonfleece Grazer"
+      },
+      "dev_compare_animal_old_spearjaw": {
+        "name": "[OLD/MISSING] Deepfen Spearjaw"
+      },
+      "dev_compare_animal_old_boar": {
+        "name": "[OLD/MISSING] Boar"
+      },
+      "dev_compare_animal_old_fox": {
+        "name": "[OLD/MISSING] Fox"
+      },
+      "dev_compare_animal_old_critter": {
+        "name": "[OLD/MISSING] Critter"
+      },
+      "dev_compare_animal_old_horse": {
+        "name": "[OLD/MISSING] Horse"
+      },
+      "dev_compare_animal_old_cat": {
+        "name": "[OLD/MISSING] Yumi"
+      },
+      "dev_compare_animal_old_greyjaw": {
+        "name": "[OLD/MISSING] Old Greyjaw"
+      },
+      "dev_compare_animal_old_veiled_stag": {
+        "name": "[OLD/MISSING] Veiled Stag"
+      },
+      "dev_compare_animal_old_veiled_doe": {
+        "name": "[OLD/MISSING] Veiled Doe"
+      },
+      "dev_compare_animal_old_gleamstag": {
+        "name": "[OLD/MISSING] Gleamstag"
+      },
+      "dev_compare_animal_old_aurelhorn": {
+        "name": "[OLD/MISSING] Aurelhorn"
+      },
+      "dev_compare_animal_new_spider": {
+        "name": "[NEW/DONE] Spider (Replaced)"
+      },
+      "dev_compare_animal_new_spider_forest": {
+        "name": "[NEW/READY] Forest Spider Trial (90%)"
+      },
+      "dev_compare_animal_new_spider_sand": {
+        "name": "[NEW/READY] Sand Spider Trial (80%)"
+      },
+      "dev_compare_animal_new_spider_marsh": {
+        "name": "[NEW/READY] Marsh Spider Trial (105%)"
+      },
+      "dev_compare_animal_new_spider_frost": {
+        "name": "[NEW/READY] Frost Spider Trial (110%)"
+      },
+      "dev_compare_animal_new_spider_broodmother": {
+        "name": "[NEW/READY] Broodmother Spider Trial (130%)"
+      },
+      "dev_compare_animal_new_crab": {
+        "name": "[NEW/DONE] Crab"
+      },
+      "dev_compare_animal_new_tidepool_boss": {
+        "name": "[NEW/DONE] Mister Crabs"
+      },
+      "dev_compare_mob_new_bandit": {
+        "name": "[NEW/READY] Bandit"
+      },
+      "dev_compare_mob_new_assassin": {
+        "name": "[NEW/READY] Assassin"
+      },
+      "dev_compare_mob_new_skeleton": {
+        "name": "[NEW/READY] Skeleton Minion"
+      },
+      "dev_compare_mob_new_skeleton_warrior": {
+        "name": "[NEW/READY] Skeleton Warrior"
+      },
+      "dev_compare_mob_new_cultist": {
+        "name": "[NEW/READY] Cultist"
+      },
+      "dev_compare_mob_new_acolyte": {
+        "name": "[NEW/READY] Skeleton Acolyte"
+      },
+      "dev_compare_mob_new_necromancer": {
+        "name": "[NEW/READY] Skeleton Necromancer"
+      },
+      "dev_compare_mob_new_caster": {
+        "name": "[NEW/READY] Skeleton Caster"
+      },
+      "dev_compare_mob_new_skeleton_rogue": {
+        "name": "[NEW/READY] Skeleton Rogue"
+      },
+      "dev_compare_mob_new_golem": {
+        "name": "[NEW/READY] Bone Golem"
+      },
+      "dev_compare_mob_new_treant": {
+        "name": "[NEW/READY] Treant"
+      },
+      "dev_compare_mob_new_kobold": {
+        "name": "[NEW/DONE] Kobold"
+      },
+      "dev_compare_mob_old_burrower": {
+        "name": "[OLD/MISSING] Burrower"
+      },
+      "dev_compare_mob_new_murloc": {
+        "name": "[NEW/DONE] Murloc"
+      },
+      "dev_compare_mob_old_frog": {
+        "name": "[OLD/MISSING] Bog Bloat"
+      },
+      "dev_compare_mob_new_troll": {
+        "name": "[NEW/READY] Troll"
+      },
+      "dev_compare_mob_new_troll_marsh": {
+        "name": "[NEW/READY] Troll: Marsh Skin"
+      },
+      "dev_compare_mob_new_troll_sand": {
+        "name": "[NEW/READY] Troll: Sand Skin"
+      },
+      "dev_compare_mob_new_troll_rift": {
+        "name": "[NEW/READY] Troll: Pale Rift Skin"
+      },
+      "dev_compare_mob_new_ogre": {
+        "name": "[NEW/DONE] Ogre"
+      },
+      "dev_compare_mob_new_imp": {
+        "name": "[NEW/READY] Imp"
+      },
+      "dev_compare_mob_old_bruiser": {
+        "name": "[OLD/MISSING] Bruiser"
+      },
+      "dev_compare_mob_old_skeleton_boss": {
+        "name": "[OLD/MISSING] Morthen"
+      },
+      "dev_compare_mob_old_grubjaw": {
+        "name": "[OLD/MISSING] Grubjaw"
+      },
+      "dev_compare_mob_old_drogmar": {
+        "name": "[OLD/MISSING] Warlord Drogmar"
+      },
+      "dev_compare_mob_old_yeti": {
+        "name": "[OLD/MISSING] Yeti"
+      },
+      "dev_compare_mob_new_elemental": {
+        "name": "[NEW/READY] Stone Elemental"
+      },
+      "dev_compare_mob_new_fire_elemental": {
+        "name": "[NEW/READY] Fire Elemental"
+      },
+      "dev_compare_mob_new_ice_elemental": {
+        "name": "[NEW/READY] Ice Elemental"
+      },
+      "dev_compare_mob_new_water_elemental": {
+        "name": "[NEW/READY] Water Elemental"
+      },
+      "dev_compare_mob_new_storm_elemental": {
+        "name": "[NEW/READY] Storm Elemental"
+      },
+      "dev_compare_mob_old_dragonkin": {
+        "name": "[OLD/MISSING] Dragonkin"
+      },
+      "dev_compare_mob_old_demon": {
+        "name": "[OLD/MISSING] Demon"
+      },
+      "dev_compare_mob_old_demonalt": {
+        "name": "[OLD/MISSING] Voidwalker"
+      },
+      "dev_compare_mob_new_ghost": {
+        "name": "[NEW/DONE] Ghost"
+      },
+      "dev_compare_mob_old_gravewing": {
+        "name": "[OLD/MISSING] Gravewing"
+      },
+      "dev_compare_mob_new_glimmerwisp": {
+        "name": "[NEW/DONE] Glimmerwisp"
+      },
+      "dev_compare_mob_new_duskwisp": {
+        "name": "[NEW/DONE] Duskwisp"
+      },
+      "dev_compare_mob_new_ice_wisp": {
+        "name": "[NEW/DONE] Ice Wisp"
+      },
+      "dev_compare_mob_new_lily_wisp": {
+        "name": "[NEW/DONE] Lily Wisp"
+      },
+      "dev_compare_mob_new_gale_wisp": {
+        "name": "[NEW/DONE] Gale Wisp"
+      },
+      "dev_compare_mob_new_sporeling": {
+        "name": "[NEW/DONE] Sporeling Gatherer"
+      },
+      "dev_compare_mob_new_corrupted_sporeling": {
+        "name": "[NEW/DONE] Corrupted Sporeling"
+      },
+      "dev_compare_mob_new_treant_warrior": {
+        "name": "[NEW/READY] Treant Warrior"
+      },
+      "dev_compare_mob_new_wreck_warden": {
+        "name": "[NEW/DONE] The Wreck Warden"
+      },
+      "dev_compare_mob_new_ancient_guardian": {
+        "name": "[NEW/DONE] Ancient Guardian"
+      },
+      "dev_compare_mob_new_waking_warden": {
+        "name": "[NEW/DONE] The Waking Warden"
+      },
+      "dev_compare_mob_old_pixie": {
+        "name": "[OLD/MISSING] Mushroom Pixie"
+      },
+      "dev_compare_mob_old_nightkin": {
+        "name": "[OLD/MISSING] Nightkin"
+      },
+      "dev_compare_mob_old_emberkin": {
+        "name": "[OLD/MISSING] Emberkin"
+      },
+      "dev_compare_mob_old_gloomshade": {
+        "name": "[OLD/MISSING] Gloomshade"
+      },
+      "dev_compare_mob_old_pyre_colossus": {
+        "name": "[OLD/MISSING] Pyre Colossus"
+      },
+      "dev_compare_mob_old_mech": {
+        "name": "[OLD/MISSING] Derelict Mech"
+      },
+      "dev_compare_mob_new_mogger": {
+        "name": "[NEW/DONE] Mogger"
+      },
+      "dev_compare_mob_old_mob_training_dummy": {
+        "name": "[OLD/MISSING] Training Dummy"
+      },
+      "dev_compare_mob_new_mob_wildheart_stalker": {
+        "name": "[NEW/DONE] Wildheart Stalker"
+      },
+      "dev_compare_mob_new_mob_wildheart_ravager": {
+        "name": "[NEW/DONE] Wildheart Ravager"
+      },
+      "dev_compare_mob_new_mob_wildheart_hexcaller": {
+        "name": "[NEW/DONE] Wildheart Hexcaller"
+      },
+      "dev_compare_mob_new_mob_wildheart_beastmaster": {
+        "name": "[NEW/DONE] Wildheart Beastmaster"
+      },
+      "dev_compare_mob_new_mob_wildheart_high_priest": {
+        "name": "[NEW/DONE] Wildheart High Priest"
+      },
+      "dev_compare_mob_old_mob_ignivar": {
+        "name": "[OLD/MISSING] Ignivar"
+      },
+      "dev_compare_mob_old_mob_ignivar_heart_of_the_end": {
+        "name": "[OLD/MISSING] Heart of the End"
+      },
+      "dev_compare_mob_old_mob_ignivar_crucible_warden": {
+        "name": "[OLD/MISSING] Crucible Warden"
+      },
+      "dev_compare_mob_old_mob_ignivar_ember_sentinel": {
+        "name": "[OLD/MISSING] Ember Sentinel"
+      },
+      "dev_compare_mob_old_mob_ignivar_cinder_artificer": {
+        "name": "[OLD/MISSING] Cinder Artificer"
+      },
+      "dev_compare_mob_old_mob_varkhul_forgefather": {
+        "name": "[OLD/MISSING] Varkhul"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodlord": {
+        "name": "[OLD/MISSING] Drakemaw Broodlord"
+      },
+      "dev_compare_mob_old_mob_dragonkin_matriarch": {
+        "name": "[OLD/MISSING] Cindraleth"
+      },
+      "dev_compare_mob_old_mob_dragonkin_broodguard": {
+        "name": "[OLD/MISSING] Broodguard"
+      },
+      "dev_compare_mob_old_mob_dragonkin_whelp": {
+        "name": "[OLD/MISSING] Whelp"
+      },
+      "dev_compare_mob_old_mob_dragon_egg": {
+        "name": "[OLD/MISSING] Dragon Egg"
+      },
+      "dev_compare_mob_old_mob_choir_thrall": {
+        "name": "[OLD/MISSING] Choir Thrall"
+      },
+      "dev_compare_mob_old_mob_tolling_bell": {
+        "name": "[OLD/MISSING] Tolling Bell"
+      },
+      "dev_compare_mob_new_delve_skel_wraith": {
+        "name": "[NEW/DONE] Ledger Wraith"
+      },
+      "dev_compare_mob_old_delve_skel_ringer": {
+        "name": "[OLD/MISSING] Funeral Ringer"
+      },
+      "dev_compare_mob_old_delve_skel_effigy": {
+        "name": "[OLD/MISSING] Saintless Effigy"
+      },
+      "dev_compare_mob_old_delve_skel_varric": {
+        "name": "[OLD/MISSING] Deacon Varric"
+      },
+      "dev_compare_mob_old_skel_rickshaw_puller": {
+        "name": "[OLD/MISSING] Rickshaw Puller"
+      },
+      "dev_compare_mob_old_rift_ritualist": {
+        "name": "[OLD/MISSING] Ritualist"
+      },
+      "dev_compare_mob_old_mob_reedbound_acolyte": {
+        "name": "[OLD/MISSING] Reedbound Acolyte"
+      },
+      "dev_compare_mob_old_mob_spider_egg_sac": {
+        "name": "[OLD/MISSING] Spider Egg Sac"
+      },
+      "dev_compare_mob_old_mob_nythraxis_bone_spike": {
+        "name": "[OLD/MISSING] Bone Spike"
+      },
+      "dev_compare_mob_old_npc_edda_reedhand": {
+        "name": "[OLD/MISSING] Edda Reedhand"
+      },
+      "dev_compare_mob_old_npc_villager": {
+        "name": "[OLD/MISSING] Escort Villager"
+      },
+      "dev_compare_mob_old_npc_knight": {
+        "name": "[OLD/MISSING] Hedge Knight"
+      },
+      "dev_compare_mob_old_player_warrior": {
+        "name": "[OLD/MISSING] Spirit of Aldren"
+      },
+      "dev_compare_mob_old_player_mage": {
+        "name": "[OLD/MISSING] Spirit of Malric"
+      },
+      "dev_compare_mob_old_player_rogue": {
+        "name": "[OLD/MISSING] Spirit of Voss"
+      },
       "ironvein_foreman": {
         "name": "Contremaître Veinefer"
       },

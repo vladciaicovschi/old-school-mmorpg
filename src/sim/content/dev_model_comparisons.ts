@@ -13,13 +13,14 @@ export interface ModelComparison {
   labMobId?: string;
   /** Explicit local offset inside a reserved combat pad's comparison strip. */
   labOffset?: { x: number; z: number };
-  /** Spawn this passive-until-pulled mob in place of the gallery mannequin. */
+  /** Combat kit copied into the passive-until-pulled gallery specimen. */
   combatMobId?: string;
 }
 
 export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   {
     id: 'wolf',
+    combatMobId: 'dev_smart_wolf_v2',
     name: 'Wolf',
     category: 'animal',
     oldVisual: 'mob_wolf',
@@ -27,6 +28,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'bear',
+    combatMobId: 'dev_smart_bear',
     name: 'Bear',
     category: 'animal',
     oldVisual: 'mob_bear',
@@ -34,6 +36,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'deer',
+    combatMobId: 'dev_smart_deer',
     name: 'Deer',
     category: 'animal',
     oldVisual: 'mob_stag',
@@ -41,6 +44,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'ram',
+    combatMobId: 'dev_smart_goat',
     name: 'Ram',
     category: 'animal',
     oldVisual: 'mob_alpaca',
@@ -48,6 +52,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'bull',
+    combatMobId: 'dev_smart_bufalo',
     name: 'Bull',
     category: 'animal',
     oldVisual: 'mob_bull',
@@ -55,6 +60,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'raptor',
+    combatMobId: 'dev_smart_raptor',
     name: 'Raptor',
     category: 'animal',
     oldVisual: 'mob_raptor',
@@ -74,6 +80,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   { id: 'aurelhorn', name: 'Aurelhorn', category: 'animal', oldVisual: 'mob_aurelhorn' },
   {
     id: 'spider',
+    combatMobId: 'dev_smart_spider',
     name: 'Spider (Replaced)',
     category: 'animal',
     oldVisual: 'dev_legacy_spider',
@@ -102,6 +109,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   ),
   {
     id: 'crab',
+    combatMobId: 'tide_scuttler',
     name: 'Crab',
     category: 'animal',
     oldVisual: 'dev_legacy_crab',
@@ -110,6 +118,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'tidepool_boss',
+    combatMobId: 'mister_crabs',
     name: 'Mister Crabs',
     category: 'animal',
     oldVisual: 'dev_legacy_crab',
@@ -118,6 +127,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'bandit',
+    combatMobId: 'dev_rogue_minion',
     name: 'Bandit',
     category: 'mob',
     oldVisual: 'mob_bandit',
@@ -125,6 +135,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'assassin',
+    combatMobId: 'dev_rogue_assassin',
     name: 'Assassin',
     category: 'mob',
     oldVisual: 'mob_bandit',
@@ -132,6 +143,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'skeleton',
+    combatMobId: 'dev_skeleton_minion',
     name: 'Skeleton Minion',
     category: 'mob',
     oldVisual: 'skel_minion',
@@ -139,6 +151,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'skeleton_warrior',
+    combatMobId: 'dev_skeleton_warrior',
     name: 'Skeleton Warrior',
     category: 'mob',
     oldVisual: 'skel_warrior',
@@ -146,6 +159,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'cultist',
+    combatMobId: 'dev_skeleton_cultist',
     name: 'Cultist',
     category: 'mob',
     oldVisual: 'mob_dark_caster',
@@ -153,6 +167,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'acolyte',
+    combatMobId: 'dev_skeleton_acolyte',
     name: 'Skeleton Acolyte',
     category: 'mob',
     oldVisual: 'delve_mob_acolyte',
@@ -160,6 +175,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'necromancer',
+    combatMobId: 'dev_skeleton_necromancer_v2',
     name: 'Skeleton Necromancer',
     category: 'mob',
     oldVisual: 'skel_necromancer',
@@ -167,6 +183,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'caster',
+    combatMobId: 'dev_skeleton_caster_v3',
     name: 'Skeleton Caster',
     category: 'mob',
     oldVisual: 'skel_mage',
@@ -174,6 +191,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'skeleton_rogue',
+    combatMobId: 'dev_skeleton_rogue_v3',
     name: 'Skeleton Rogue',
     category: 'mob',
     oldVisual: 'skel_rogue',
@@ -181,6 +199,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'golem',
+    combatMobId: 'dev_bone_golem',
     name: 'Bone Golem',
     category: 'mob',
     oldVisual: 'skel_golem',
@@ -188,6 +207,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'treant',
+    combatMobId: 'dev_treant_v2',
     name: 'Treant',
     category: 'mob',
     oldVisual: 'mob_treant',
@@ -195,6 +215,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'kobold',
+    combatMobId: 'dev_kobold',
     name: 'Kobold',
     category: 'mob',
     oldVisual: 'mob_kobold_digger',
@@ -203,6 +224,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'grix',
+    combatMobId: 'dev_kobold',
     name: 'Grix the Tunnelking',
     category: 'mob',
     oldVisual: 'mob_grix',
@@ -211,6 +233,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'deeprock_kobold',
+    combatMobId: 'dev_kobold',
     name: 'Deeprock Kobold',
     category: 'mob',
     oldVisual: 'mob_kobold',
@@ -220,6 +243,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   { id: 'burrower', name: 'Burrower', category: 'mob', oldVisual: 'mob_kobold' },
   {
     id: 'murloc',
+    combatMobId: 'dev_meshy_murlok',
     name: 'Murloc',
     category: 'mob',
     oldVisual: 'mob_murloc',
@@ -229,6 +253,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   { id: 'frog', name: 'Bog Bloat', category: 'mob', oldVisual: 'mob_murloc' },
   {
     id: 'troll',
+    combatMobId: 'dev_troll',
     name: 'Troll',
     category: 'mob',
     oldVisual: 'mob_troll',
@@ -260,6 +285,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'ogre',
+    combatMobId: 'dev_meshy_ogre',
     name: 'Ogre',
     category: 'mob',
     oldVisual: 'dev_legacy_ogre',
@@ -268,6 +294,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'imp',
+    combatMobId: 'dev_smart_imp',
     name: 'Imp',
     category: 'mob',
     oldVisual: 'mob_demon_flying',
@@ -281,6 +308,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   // The old shared elemental body has a distinct candidate for each element.
   {
     id: 'elemental',
+    combatMobId: 'dev_stone_elemental',
     name: 'Stone Elemental',
     category: 'mob',
     oldVisual: 'mob_elemental',
@@ -289,6 +317,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'fire_elemental',
+    combatMobId: 'dev_fire_elemental',
     name: 'Fire Elemental',
     category: 'mob',
     oldVisual: 'mob_elemental',
@@ -297,6 +326,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'ice_elemental',
+    combatMobId: 'dev_ice_elemental',
     name: 'Ice Elemental',
     category: 'mob',
     oldVisual: 'mob_elemental',
@@ -305,6 +335,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'water_elemental',
+    combatMobId: 'dev_water_elemental',
     name: 'Water Elemental',
     category: 'mob',
     oldVisual: 'mob_water_elemental',
@@ -313,6 +344,7 @@ export const DEV_MODEL_COMPARISONS: readonly ModelComparison[] = [
   },
   {
     id: 'storm_elemental',
+    combatMobId: 'dev_storm_elemental',
     name: 'Storm Elemental',
     category: 'mob',
     oldVisual: 'mob_elemental',

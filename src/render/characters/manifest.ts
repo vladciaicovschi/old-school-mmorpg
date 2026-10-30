@@ -5541,8 +5541,7 @@ const NPC_KEYS: Record<string, string> = {
 };
 
 export function visualKeyFor(e: Entity): string {
-  const comparison =
-    e.kind === 'npc' ? DEV_MODEL_COMPARISON_GALLERY.byId.get(e.templateId) : undefined;
+  const comparison = DEV_MODEL_COMPARISON_GALLERY.byId.get(e.templateId);
   if (comparison?.visualKey) return comparison.visualKey;
   if (e.kind === 'player') {
     if (isMechWearer(e)) return 'player_mech';

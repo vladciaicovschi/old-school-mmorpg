@@ -14,7 +14,12 @@ import {
   DEV_MODEL_LAB_PROPS,
   isOnDevModelLab,
 } from '../src/sim/content/dev_model_lab';
-import { DEV_MODEL_COMPARISON_GALLERY as gallery, MOBS, NPCS } from '../src/sim/data';
+import {
+  DEV_MODEL_LAB_SUBJECTS,
+  DEV_MODEL_COMPARISON_GALLERY as gallery,
+  MOBS,
+  NPCS,
+} from '../src/sim/data';
 import type { Entity } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { WORLD_SEED } from '../src/sim/world_seed';
@@ -143,7 +148,7 @@ describe('model replacement comparison gallery', () => {
 
   it('keeps missing-slot flags and resolves every remaining model asset', () => {
     const ids = new Set<string>();
-    for (const old of gallery.subjects.filter((s) => s.side === 'old')) {
+    for (const old of DEV_MODEL_LAB_SUBJECTS.filter((s) => s.side === 'old')) {
       const replacement = gallery.subjects.find((s) => s.pairId === old.pairId && s.side === 'new');
       expect(old.status).toBe('missing');
       expect(replacement).toBeUndefined();

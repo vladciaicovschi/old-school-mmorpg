@@ -306,6 +306,7 @@ import {
   ZONE3_ZONE,
 } from './content/zone3';
 import { buildDevModelComparisonGallery } from './dev_model_comparisons';
+import { buildDevModelLabCombatTemplates, buildDevModelLabRoster } from './dev_model_lab_roster';
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
 import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
@@ -482,10 +483,16 @@ export const NPCS: Record<string, NpcDef> = {
 
 export const DEV_MODEL_COMPARISON_GALLERY = buildDevModelComparisonGallery(NPCS);
 Object.assign(NPCS, DEV_MODEL_COMPARISON_GALLERY.templates);
+export const DEV_MODEL_LAB_SUBJECTS = buildDevModelLabRoster(DEV_MODEL_COMPARISON_GALLERY.subjects);
+Object.assign(MOBS, buildDevModelLabCombatTemplates(DEV_MODEL_LAB_SUBJECTS, MOBS));
+for (const subject of DEV_MODEL_LAB_SUBJECTS) {
+  const mob = MOBS[subject.templateId];
+  if (mob) mob.name = NPCS[subject.templateId].name;
+}
 DEV_MODEL_LAB_PROPS.decorProps?.push(
-  ...DEV_MODEL_COMPARISON_GALLERY.subjects
-    .filter((subject) => subject.side === 'old' && subject.status === 'missing')
-    .map((subject) => ({ key: 'hexFlagRed', x: subject.x - 8, z: subject.z, scale: 6 })),
+  ...DEV_MODEL_LAB_SUBJECTS.filter(
+    (subject) => subject.side === 'old' && subject.status === 'missing',
+  ).map((subject) => ({ key: 'hexFlagRed', x: subject.x - 8, z: subject.z, scale: 6 })),
 );
 for (const [category, label] of [
   ['animal', 'Animal Replacements'],

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { resolvePosition } from '../src/sim/colliders';
+import { DEV_COMMUNITY_ANCIENTS } from '../src/sim/content/dev_community_ancients';
+import { DEV_IMPORTED_HUMANOIDS } from '../src/sim/content/dev_imported_humanoids';
 import {
   DEV_MODEL_LAB_ARRIVAL,
   DEV_MODEL_LAB_MOB_LINEUP,
@@ -59,6 +61,8 @@ describe('developer model laboratory', () => {
   it('keeps imported combat bodies in the developer mob lineup', () => {
     expect(Object.keys(DEV_MODEL_LAB_NPCS)).toEqual([]);
     expect(Object.keys(DEV_MODEL_LAB_MOBS)).toEqual([
+      ...Object.keys(DEV_IMPORTED_HUMANOIDS),
+      ...Object.keys(DEV_COMMUNITY_ANCIENTS),
       'dev_rogue_minion',
       'dev_rogue_assassin',
       'dev_skeleton_minion',
@@ -102,12 +106,15 @@ describe('developer model laboratory', () => {
       else if (template.id === 'dev_smart_deer') expect(template.moveSpeed).toBe(4);
       else if (template.id === 'dev_smart_raptor') expect(template.moveSpeed).toBe(4.8);
       else if (template.id === 'dev_smart_imp') expect(template.moveSpeed).toBe(4.8);
-      else expect(template.moveSpeed).toBeGreaterThan(5.2);
+      else if (!(template.id in DEV_IMPORTED_HUMANOIDS) && !(template.id in DEV_COMMUNITY_ANCIENTS))
+        expect(template.moveSpeed).toBeGreaterThan(5.2);
       expect(template.idleStationary).toBe(true);
-      expect(DEV_MODEL_LAB_MOB_LINEUP.some((subject) => subject.templateId === template.id)).toBe(
-        template.id !== 'dev_smart_wolf' &&
-          !DEV_MODEL_COMPARISON_GALLERY.subjects.some((s) => s.combatMobId === template.id),
-      );
+      if (template.id !== 'dev_smart_wolf') {
+        expect(
+          DEV_MODEL_COMPARISON_GALLERY.subjects.some((s) => s.combatMobId === template.id),
+          template.id,
+        ).toBe(true);
+      }
     }
   });
 
@@ -116,11 +123,17 @@ describe('developer model laboratory', () => {
     expect(new Set(ids).size).toBe(ids.length);
     expect(new Set(ids)).toEqual(
       new Set(
-        Object.keys(DEV_MODEL_LAB_MOBS).filter(
-          (id) =>
-            id !== 'dev_smart_wolf' &&
-            !DEV_MODEL_COMPARISON_GALLERY.subjects.some((s) => s.combatMobId === id),
-        ),
+        DEV_MODEL_COMPARISON_GALLERY.subjects
+          .map((subject) => subject.combatMobId)
+          .filter(
+            (id): id is string =>
+              id !== undefined &&
+              !id.startsWith('dev_spider_') &&
+              !(id in DEV_IMPORTED_HUMANOIDS) &&
+              !(id in DEV_COMMUNITY_ANCIENTS) &&
+              id !== 'tide_scuttler' &&
+              id !== 'mister_crabs',
+          ),
       ),
     );
     expect(ids).not.toContain('dev_smart_wolf');

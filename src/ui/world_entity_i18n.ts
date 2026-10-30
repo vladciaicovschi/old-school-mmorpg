@@ -2,6 +2,7 @@ import { authoredLettersById } from '../sim/content/letters';
 import {
   DELVES,
   DEV_MODEL_COMPARISON_GALLERY,
+  DEV_MODEL_LAB_SUBJECTS,
   DUNGEONS,
   MOBS,
   NPCS,
@@ -725,7 +726,7 @@ type DungeonId = (typeof DUNGEON_IDS)[number];
 type DelveId = (typeof DELVE_IDS)[number];
 type LetterId = (typeof LETTER_IDS)[number];
 
-type MobTranslations = Record<MobId, { name: string }>;
+type MobTranslations = Record<MobId | `dev_compare_${string}`, { name: string }>;
 type NpcTranslations = Record<
   NpcId | `dev_compare_${string}`,
   { name: string; title: string; greeting: string }
@@ -795,7 +796,15 @@ function orderedValues<T>(ids: readonly string[], source: Record<string, T>): T[
 
 function makeEnglishWorldEntities(): WorldEntityTranslations {
   const mobs = {} as MobTranslations;
-  orderedValues(MOB_IDS, MOBS).forEach((mob) => {
+  orderedValues(
+    [
+      ...MOB_IDS,
+      ...DEV_MODEL_LAB_SUBJECTS.filter((subject) => subject.category !== 'npc').map(
+        (subject) => subject.templateId,
+      ),
+    ],
+    MOBS,
+  ).forEach((mob) => {
     mobs[mob.id as MobId] = { name: mob.name };
   });
 

@@ -1,5 +1,7 @@
 // Stable presentation identities for the replacement mobs' existing mechanics.
 // They annotate existing cues only; cadence, damage and event order stay unchanged.
+import { devModelLabCombatSource } from './dev_model_lab_identity';
+
 export type CommunityMobMechanic = 'pulse' | 'stomp' | 'mend' | 'ward' | 'warcry';
 
 const IDS: Readonly<Record<string, Partial<Record<CommunityMobMechanic, string>>>> = {
@@ -27,7 +29,8 @@ export function communityMobAnimationId(
   mechanic: CommunityMobMechanic,
 ): string | undefined {
   // Lab copies keep the production suffix and the same mechanic identity.
-  const id = templateId.startsWith('dev_') ? templateId.slice(4) : templateId;
+  const source = devModelLabCombatSource(templateId);
+  const id = source.startsWith('dev_') ? source.slice(4) : source;
   return IDS[id]?.[mechanic];
 }
 
