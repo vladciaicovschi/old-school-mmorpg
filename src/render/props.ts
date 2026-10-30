@@ -27,6 +27,7 @@ import { terrainHeight, WATER_LEVEL, waterLevel } from '../sim/world';
 import { loadGltf, releaseGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { attachBiomeHaze } from './biome_haze_field';
+import { createCampfireFlame } from './campfire_flame';
 import { buildEastbrookGrandArmouryView } from './eastbrook_grand_armoury';
 import {
   isEastbrookRebuildBuilding,
@@ -973,6 +974,7 @@ export function buildPropMaterialPrewarmGroup(): THREE.Group {
   // instance variant the way the live placed props do; the plain InstancedMesh
   // and Mesh cover the untinted and non-instanced paths.
   const white = new THREE.Color(1, 1, 1);
+  place(createCampfireFlame());
   // Prewarm only the props that actually render at the LIVE tier (this runs after
   // initGfxTier via the Renderer, so GFX is authoritative here, unlike the import-time
   // best-guess): low renders the LOW_TIER_PROP_KEYS subset, medium+ renders the full
@@ -1746,30 +1748,11 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   }
 
   // ---- campfires: hideable bonfire base + live animated flame + light ------
-  const flamePts = [
-    [0, 0],
-    [0.16, 0.1],
-    [0.27, 0.28],
-    [0.3, 0.45],
-    [0.22, 0.66],
-    [0.1, 0.84],
-    [0.001, 0.95],
-  ].map(([r, y]) => new THREE.Vector2(r, y));
-  const flameGeo = new THREE.LatheGeometry(flamePts, 7);
   for (const [x, z] of getActiveWorldContent().props.campfires) {
     const y = ground(x, z);
     const g = new THREE.Group();
     addParts(g, 'bonfire', { y: -0.05, rot: propRand(x, z, 1) * Math.PI * 2, scale: 4.3 });
-    const flame = new THREE.Mesh(
-      flameGeo,
-      new THREE.MeshLambertMaterial({
-        color: 0xffaa33,
-        emissive: 0xff6600,
-        emissiveIntensity: usePbr ? EMISSIVE_LIGHT : 1.4,
-        transparent: true,
-        opacity: 0.92,
-      }),
-    );
+    const flame = createCampfireFlame();
     flame.position.y = 0.16;
     flame.scale.setScalar(1.15);
     g.add(flame);
@@ -2292,16 +2275,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.26, 0.38, 10), bowlMat);
       bowl.position.y = postH + 0.1;
       bg.add(bowl);
-      const flame = new THREE.Mesh(
-        flameGeo,
-        new THREE.MeshLambertMaterial({
-          color: 0xffaa33,
-          emissive: 0xff6a1e,
-          emissiveIntensity: usePbr ? EMISSIVE_LIGHT : 1.4,
-          transparent: true,
-          opacity: 0.92,
-        }),
-      );
+      const flame = createCampfireFlame();
       flame.position.y = postH + 0.28;
       flame.scale.setScalar(0.72);
       bg.add(flame);

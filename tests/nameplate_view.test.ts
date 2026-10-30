@@ -237,6 +237,7 @@ describe('nameplate_view - urgent (content refreshes every pass)', () => {
 
 describe('nameplate_view - anchor lift (projection input)', () => {
   it('lifts by viewHeight*scale + the normal lift, and uses the lower lift for a self emote', () => {
+    expect(NAMEPLATE_ANCHOR_LIFT).toBe(0.2);
     expect(plan(ent({ scale: 1 }), viewer(), 2).anchorYOffset).toBe(2 + NAMEPLATE_ANCHOR_LIFT);
     expect(plan(ent({ scale: 1.5 }), viewer(), 2).anchorYOffset).toBe(3 + NAMEPLATE_ANCHOR_LIFT);
     const meEmote = ent({ id: PLAYER_ID, kind: 'player', overheadEmoteId: 'wave', scale: 1 });

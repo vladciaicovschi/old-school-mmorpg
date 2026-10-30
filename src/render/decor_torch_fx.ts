@@ -15,7 +15,8 @@
 import * as THREE from 'three';
 import { getActiveWorldContent, zoneAt } from '../sim/data';
 import { terrainHeight } from '../sim/world';
-import { EMISSIVE_LIGHT, GFX } from './gfx';
+import { lanternLampWorld } from './battleground_lantern_fx_core';
+import { buildTorchFlameGeometry, createTorchFlame } from './campfire_flame';
 import { buildDrapedGlowGeometry, type GlowPatchSite } from './ground_glow_patch';
 import { hasNightLightField, registerStaticNightLights } from './night_light_field';
 import { radialGlowTexture } from './textures';
@@ -36,12 +37,13 @@ export interface DecorTorchFxView {
 /** decorProps keys this pass treats as burning torch posts. */
 export const LIT_DECOR_KEYS: ReadonlySet<string> = new Set(['kcasTorch', 'kcasTorchMounted']);
 
-/** Where the torch head's flame sits above the seated base at decor scale 1
- *  (the castle's mounted torches put theirs at +2.4 for scale 1.5). */
-export const TORCH_FLAME_HEIGHT = 1.6;
+/** Basket floor in the seated GLB frame used by props.ts. Both torch models
+ *  are about 1.1 units tall; the old 1.6 anchor left the fire in mid-air.
+ *  Start inside the basket so the shader's transparent foot overlaps it. */
+export const TORCH_FLAME_HEIGHT = 0.7;
+const TORCH_BASKET_LOCAL = { x: 0, y: TORCH_FLAME_HEIGHT, z: 0 };
+const MOUNTED_TORCH_BASKET_LOCAL = { x: 0, y: TORCH_FLAME_HEIGHT, z: 0.03 };
 
-const FLAME_COLOR = 0xffaa33;
-const FLAME_EMISSIVE = 0xff6600;
 const POOL_COLOR = 0xff8830;
 const POOL_RADIUS = 6;
 const POOL_OPACITY = 0.3;
@@ -54,24 +56,13 @@ const FIELD_COLOR = [1.0, 0.5, 0.18] as const;
 /** A wind-licked open flame, calmer than a bonfire. */
 const FIELD_FLICKER = 0.16;
 
-/** The campfire flame profile (props.ts), at lantern size. */
-export function buildTorchFlameGeometry(): THREE.BufferGeometry {
-  const points = [
-    [0, 0],
-    [0.16, 0.1],
-    [0.27, 0.28],
-    [0.3, 0.45],
-    [0.22, 0.66],
-    [0.1, 0.84],
-    [0.001, 0.95],
-  ].map(([r, y]) => new THREE.Vector2(r * 0.6, y * 0.6));
-  return new THREE.LatheGeometry(points, 7);
-}
+export { buildTorchFlameGeometry } from './campfire_flame';
 
 interface TorchSite {
   x: number;
   y: number;
   z: number;
+  scale: number;
 }
 
 /** Every authored torch decor entry, seated on the terrain like the
@@ -81,8 +72,18 @@ export function planDecorTorches(seed = 0): TorchSite[] {
   const sites: TorchSite[] = [];
   for (const d of content.props.decorProps ?? []) {
     if (!LIT_DECOR_KEYS.has(d.key)) continue;
-    const s = d.scale ?? 1;
-    sites.push({ x: d.x, y: terrainHeight(d.x, d.z, seed) + TORCH_FLAME_HEIGHT * s, z: d.z });
+    const scale = d.scale ?? 1;
+    const basket = lanternLampWorld(
+      {
+        x: d.x,
+        z: d.z,
+        seatY: terrainHeight(d.x, d.z, seed) - 0.05,
+        scale,
+        rotY: d.rot ?? 0,
+      },
+      d.key === 'kcasTorchMounted' ? MOUNTED_TORCH_BASKET_LOCAL : TORCH_BASKET_LOCAL,
+    );
+    sites.push({ ...basket, scale });
   }
   return sites;
 }
@@ -144,17 +145,9 @@ export function buildDecorTorchFx(seed = 0): DecorTorchFxView {
     patchSites.length = 0;
     for (const site of zoneSites) {
       patchSites.push({ x: site.x, z: site.z, radius: POOL_RADIUS });
-      const flame = new THREE.Mesh(
-        flameGeo,
-        new THREE.MeshLambertMaterial({
-          color: FLAME_COLOR,
-          emissive: FLAME_EMISSIVE,
-          emissiveIntensity: GFX.standardMaterials ? EMISSIVE_LIGHT : 1.4,
-          transparent: true,
-          opacity: 0.92,
-        }),
-      );
+      const flame = createTorchFlame({ geometry: flameGeo });
       flame.position.set(site.x, site.y, site.z);
+      flame.scale.setScalar(site.scale);
       flames.push(flame);
       zoneGroup.add(flame);
     }

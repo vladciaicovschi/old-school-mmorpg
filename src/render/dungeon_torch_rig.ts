@@ -1,4 +1,4 @@
-// Shared torch fire assembly for dungeon interiors: the animated flame cone,
+// Shared torch fire assembly for dungeon interiors: the animated flame tongues,
 // the budgeted PointLight, and the baked floor glow pool, extracted from
 // dungeon.ts (monolith ratchet) so the kit pillar torches and the Ignivar
 // dressing plan's placed torches build the same fire from one place.
@@ -7,6 +7,7 @@
 // on the budgeted tier (budgetFireLights keeps the nearest GFX allowance
 // shining; a light without baseIntensity stays always-on for the low tier).
 import * as THREE from 'three';
+import { buildTorchFlameGeometry, createTorchFlame } from './campfire_flame';
 import type { IgnivarPropPlacement } from './ignivar_dressing_plan_core';
 import type { FireLightSink } from './point_light_budget';
 import { markSharedGeometry } from './shared_resource';
@@ -51,18 +52,12 @@ export function addTorchFire(
     glowScale?: number;
   },
 ): void {
-  flameGeometry ??= markSharedGeometry(new THREE.ConeGeometry(0.22, 0.6, 6));
-  const flame = new THREE.Mesh(
-    flameGeometry,
-    new THREE.MeshLambertMaterial({
-      color: opts.colors.flame,
-      emissive: opts.colors.emissive,
-      emissiveIntensity: opts.tuning.flameEmissive,
-      transparent: true,
-      opacity: 0.92,
-    }),
-  );
+  flameGeometry ??= markSharedGeometry(buildTorchFlameGeometry());
+  const flame = createTorchFlame({ geometry: flameGeometry, color: opts.colors.flame });
   flame.position.set(...opts.flame);
+  // Historical cone anchors describe its centre. Seat the new tongues at
+  // that cone's foot so they still emerge from the authored torch basket.
+  flame.position.y -= 0.3 * (opts.flameScale ?? 1);
   if (opts.flameScale !== undefined) flame.scale.setScalar(opts.flameScale);
   sink.group.add(flame);
   sink.flames.push(flame);
