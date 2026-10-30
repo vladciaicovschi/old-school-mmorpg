@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { isOwnAura } from '../sim/aura_classify';
 import { corpseIndicatorFor } from '../sim/corpse_loot_state';
-import { ABILITIES, MOBS, QUESTS } from '../sim/data';
+import { ABILITIES, DEV_MODEL_COMPARISON_GALLERY, MOBS, QUESTS } from '../sim/data';
 import { specialRoleColor } from '../sim/discord_roles';
 import { isQuestGatedEntityHidden } from '../sim/quest_gated_entity';
 import {
@@ -644,6 +644,17 @@ export class NameplatePainter {
           ? npcDisplayName(entity.templateId)
           : tEntity({ kind: 'mob', id: entity.templateId, field: 'name' });
       state.nameColor = FRIENDLY;
+      const comparison = DEV_MODEL_COMPARISON_GALLERY.byId.get(entity.templateId);
+      if (comparison) {
+        state.nameColor =
+          comparison.side === 'new'
+            ? '#8ee8a0'
+            : comparison.status === 'missing'
+              ? '#ff9a89'
+              : comparison.status === 'installed'
+                ? '#91d9ff'
+                : '#f5d38a';
+      }
       const questMarker = this.questMarker(entity);
       state.marker = questMarker.marker;
       state.markerTone = questMarker.tone;

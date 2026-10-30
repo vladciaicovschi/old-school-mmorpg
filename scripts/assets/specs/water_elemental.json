@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/elementals/water_elemental.glb",
+      "out": "models/creatures/water_elemental_prototype.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepExtras": true,
+      "keepClips": ["Water_Idle", "Water_Move", "Cast", "ChannelStart", "Channel", "Death"]
+    }
+  ]
+}

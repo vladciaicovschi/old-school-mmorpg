@@ -8,7 +8,7 @@ import { toggleSheatheWithCue } from '../src/game/sheathe_toggle';
 function rig(stowed: boolean, accepts: boolean) {
   const calls: string[] = [];
   const world = {
-    player: { weaponStowed: stowed } as { weaponStowed: boolean },
+    player: { weaponStowed: stowed, id: 0, templateId: 'warrior' },
     toggleWeaponStow() {
       calls.push('toggle');
       if (accepts) world.player.weaponStowed = !world.player.weaponStowed;
@@ -22,6 +22,21 @@ function rig(stowed: boolean, accepts: boolean) {
 }
 
 describe('toggleSheatheWithCue', () => {
+  it('follows the visible automatic carry instead of an opposite stored bit', () => {
+    const a = rig(false, true);
+    toggleSheatheWithCue(a.world as never, a.cue, new Map([[0, { weaponStowed: true }]]));
+    expect(a.calls).toEqual(['toggle', 'unsheathe']);
+    const b = rig(true, true);
+    toggleSheatheWithCue(b.world as never, b.cue, new Map([[0, { weaponStowed: false }]]));
+    expect(b.calls).toEqual(['toggle', 'sheathe']);
+    const refused = rig(false, false);
+    toggleSheatheWithCue(
+      refused.world as never,
+      refused.cue,
+      new Map([[0, { weaponStowed: true }]]),
+    );
+    expect(refused.calls).toEqual(['toggle']);
+  });
   it('drawn to stowed plays the sheathe cue', () => {
     const { world, cue, calls } = rig(false, true);
     toggleSheatheWithCue(world as never, cue);

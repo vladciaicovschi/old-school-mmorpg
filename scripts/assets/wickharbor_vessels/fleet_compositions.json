@@ -1,0 +1,53 @@
+{
+  "ships": [
+    {
+      "id": "linen",
+      "key": "wickSailingShip",
+      "file": "sailship",
+      "rig": "brigantine",
+      "style": "linen"
+    },
+    {
+      "id": "blue",
+      "key": "wickSailingShipBlue",
+      "file": "sailship-blue",
+      "rig": "brigantine",
+      "style": "blue"
+    },
+    {
+      "id": "ochre",
+      "key": "wickSailingShipOchre",
+      "file": "sailship-ochre",
+      "rig": "brig",
+      "style": "ochre"
+    },
+    {
+      "id": "russet",
+      "key": "wickSailingShipRusset",
+      "file": "sailship-russet",
+      "rig": "brigantine",
+      "style": "russet"
+    },
+    {
+      "id": "ketch-blue",
+      "key": "wickKetchBlue",
+      "file": "ketch-blue",
+      "rig": "ketch",
+      "style": "blue"
+    },
+    {
+      "id": "ketch-ochre",
+      "key": "wickKetchOchre",
+      "file": "ketch-ochre",
+      "rig": "ketch",
+      "style": "ochre"
+    },
+    {
+      "id": "brig",
+      "key": "wickBrig",
+      "file": "brig",
+      "rig": "brig",
+      "style": "linen"
+    }
+  ]
+}

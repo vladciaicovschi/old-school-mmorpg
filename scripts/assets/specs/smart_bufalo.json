@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_bufalo/smart_bufalo.glb",
+      "out": "models/creatures/smart_bufalo.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Buffalo_Idle",
+        "Buffalo_CombatIdle",
+        "Buffalo_Walk",
+        "Buffalo_Trot",
+        "Buffalo_Run",
+        "Buffalo_HornLeft",
+        "Buffalo_HornRight",
+        "Buffalo_Charge",
+        "Buffalo_Hit",
+        "Buffalo_Death",
+        "Buffalo_Bellow",
+        "Buffalo_AlertLook",
+        "Buffalo_Graze"
+      ]
+    }
+  ]
+}

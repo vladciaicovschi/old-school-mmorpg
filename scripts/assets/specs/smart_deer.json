@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_deer/smart_deer.glb",
+      "out": "models/creatures/smart_deer.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Deer_Idle",
+        "Deer_CombatIdle",
+        "Deer_Walk",
+        "Deer_Trot",
+        "Deer_Run",
+        "Deer_AntlerLeft",
+        "Deer_AntlerRight",
+        "Deer_Charge",
+        "Deer_Hit",
+        "Deer_Death",
+        "Deer_Challenge",
+        "Deer_AlertLook",
+        "Deer_Graze"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "source": "Approved mixed fleet derivatives; pinned rig patches and uniform railings in wickharbor_vessels contracts",
+  "items": [
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/sailship-blue.glb",
+      "out": "models/wickharbor_vessels/sailship-blue.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/sailship-ochre.glb",
+      "out": "models/wickharbor_vessels/sailship-ochre.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/sailship-russet.glb",
+      "out": "models/wickharbor_vessels/sailship-russet.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/ketch-blue.glb",
+      "out": "models/wickharbor_vessels/ketch-blue.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/ketch-ochre.glb",
+      "out": "models/wickharbor_vessels/ketch-ochre.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/wickharbor_vessels/brig.glb",
+      "out": "models/wickharbor_vessels/brig.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 2048
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "animal": "bear",
+    "revised": [
+      "Bear_Walk",
+      "Bear_Run",
+      "Bear_SwipeLeft",
+      "Bear_SwipeRight",
+      "Bear_DoubleSlam"
+    ],
+    "preserved": [
+      "Bear_Idle",
+      "Bear_CombatIdle",
+      "Bear_Hit",
+      "Bear_Roar",
+      "Bear_Death"
+    ],
+    "geometryIdentical": true,
+    "texturesIdentical": true
+  },
+  {
+    "animal": "wolf",
+    "revised": [
+      "Wolf_Idle",
+      "Wolf_CombatIdle",
+      "Wolf_Walk",
+      "Wolf_Trot",
+      "Wolf_Run",
+      "Wolf_BiteLeft",
+      "Wolf_BiteRight",
+      "Wolf_Lunge",
+      "Wolf_Howl"
+    ],
+    "preserved": [
+      "Wolf_Hit",
+      "Wolf_AlertLook",
+      "Wolf_Death"
+    ],
+    "geometryIdentical": true,
+    "texturesIdentical": true
+  }
+]

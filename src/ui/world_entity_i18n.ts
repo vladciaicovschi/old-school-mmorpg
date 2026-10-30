@@ -1,5 +1,13 @@
 import { authoredLettersById } from '../sim/content/letters';
-import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
+import {
+  DELVES,
+  DEV_MODEL_COMPARISON_GALLERY,
+  DUNGEONS,
+  MOBS,
+  NPCS,
+  QUESTS,
+  ZONES,
+} from '../sim/data';
 
 // English world-entity names + narratives (mobs, NPCs, quests, zones, dungeons).
 //
@@ -18,6 +26,21 @@ import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 // consumed, so this object carries only `en`.
 
 const MOB_IDS = [
+  'dev_kobold',
+  'dev_meshy_murlok',
+  'dev_smart_bear',
+  'dev_smart_wolf',
+  'dev_smart_wolf_v2',
+  'dev_smart_goat',
+  'dev_smart_bufalo',
+  'dev_smart_deer',
+  'dev_smart_raptor',
+  'dev_smart_imp',
+  'dev_fire_elemental',
+  'dev_ice_elemental',
+  'dev_water_elemental',
+  'dev_stone_elemental',
+  'dev_storm_elemental',
   'yumi_cat',
   'forest_wolf',
   'old_greyjaw',
@@ -617,6 +640,7 @@ const ZONE_IDS = [
   'galecrest',
   'farshore_isle',
   'proving_shore',
+  'dev_model_lab',
 ] as const;
 const DUNGEON_IDS = [
   'hollow_crypt',
@@ -698,7 +722,10 @@ type DelveId = (typeof DELVE_IDS)[number];
 type LetterId = (typeof LETTER_IDS)[number];
 
 type MobTranslations = Record<MobId, { name: string }>;
-type NpcTranslations = Record<NpcId, { name: string; title: string; greeting: string }>;
+type NpcTranslations = Record<
+  NpcId | `dev_compare_${string}`,
+  { name: string; title: string; greeting: string }
+>;
 type QuestTranslation = {
   title: string;
   text: string;
@@ -769,7 +796,10 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
   });
 
   const npcs = {} as NpcTranslations;
-  orderedValues(NPC_IDS, NPCS).forEach((npc) => {
+  orderedValues(
+    [...NPC_IDS, ...DEV_MODEL_COMPARISON_GALLERY.subjects.map((subject) => subject.templateId)],
+    NPCS,
+  ).forEach((npc) => {
     npcs[npc.id as NpcId] = {
       name: npc.name,
       title: npc.title,

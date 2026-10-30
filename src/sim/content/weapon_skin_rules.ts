@@ -16,6 +16,8 @@ import { WEAPON_SKINS } from './weapon_skins';
 export type ItemWeaponType = WeaponSkinType | 'polearm';
 
 export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
+  dev_hunter_practice_bow: 'bow',
+  dev_hunter_practice_crossbow: 'crossbow',
   // Swords
   thornpeak_wardblade: 'sword', // EPIC: Nythraxis gap-fill tank one-hander
   worn_sword: 'sword',

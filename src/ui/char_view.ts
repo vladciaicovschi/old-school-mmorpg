@@ -82,7 +82,11 @@ export function buildPaperdollView(
       // The worn-identity projection (see PaperdollSlot): the eqi cosmetic
       // set plus the self-only perfected, never a gameplay field.
       const instance = item ? wornTooltipInstance(instances?.[slot]) : undefined;
-      return { slot, item, instance: instance ?? null };
+      return {
+        slot,
+        item,
+        instance: instance ?? null,
+      };
     });
   return { left: column(PAPERDOLL_LEFT_SLOTS), right: column(PAPERDOLL_RIGHT_SLOTS) };
 }

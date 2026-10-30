@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/elementals/storm_elemental.glb",
+      "out": "models/creatures/storm_elemental_prototype.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepExtras": true,
+      "keepClips": ["Storm_Idle", "Storm_Move", "Cast", "ChannelStart", "Channel", "Death"]
+    },
+    {
+      "src": "tmp/asset_src/elementals/stone_elemental.glb",
+      "out": "models/creatures/stone_elemental_prototype.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepExtras": true,
+      "keepClips": ["Stone_Idle", "Stone_Move", "Cast", "ChannelStart", "Channel", "Death"]
+    }
+  ]
+}

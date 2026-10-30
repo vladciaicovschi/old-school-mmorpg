@@ -36,7 +36,14 @@ const state = vi.hoisted(() => ({
 
 vi.mock('../src/render/characters', async () => {
   const MockThree = await import('three');
+  const modelKeyFor = (entity: Pick<Entity, 'templateId'>) =>
+    state.modelKeys[entity.templateId] ?? `model:${entity.templateId}`;
   return {
+    characterBaseVisualKeyFor: modelKeyFor,
+    characterVisualPoolKeyFor: (entity: Pick<Entity, 'kind' | 'templateId' | 'skin'>) =>
+      entity.kind === 'player'
+        ? null
+        : `${entity.kind}:${entity.templateId}:${entity.kind === 'npc' ? entity.skin : ''}:visual:${modelKeyFor(entity)}`,
     createCharacterVisual: (entity: Pick<Entity, 'templateId'>, form?: string) => {
       state.createCalls.push(entity.templateId);
       state.createForms.push(form);
@@ -132,7 +139,7 @@ describe('buildNpcPrewarmGroup warmed/planned/trimmed semantics', () => {
     expect(built.planned).toBe(2);
     expect(state.createCalls).toEqual(['npc_knight']);
     expect(built.pooled).toHaveLength(1);
-    expect(built.pooled[0].key).toBe('npc:npc_knight:0');
+    expect(built.pooled[0].key).toBe('npc:npc_knight:0:visual:model:shared');
     expect(built.group.children).toHaveLength(1);
   });
 
@@ -308,8 +315,8 @@ describe('the untyped host seam stays welded to the renderer', () => {
     }
   });
 
-  it('the bypassed visualPoolKeyFor wrapper stays a pure delegation', () => {
-    // The extracted builders call characterVisualPoolKey DIRECTLY; the
+  it('the shared visualPoolKeyFor wrapper stays a pure delegation', () => {
+    // The extracted builders call characterVisualPoolKeyFor too; the
     // renderer keeps this wrapper for its remaining call site. If logic ever
     // grows inside it, the builders silently diverge, so pin the body to the
     // bare delegation (comments stripped by slicing to the return statement).
@@ -328,7 +335,7 @@ describe('the untyped host seam stays welded to the renderer', () => {
     expect(
       statements,
       'logic grew inside the wrapper: mirror it in zone_prewarm_groups.ts',
-    ).toEqual(['return characterVisualPoolKey(e);']);
+    ).toEqual(['return characterVisualPoolKeyFor(e);']);
   });
 
   it('every builder call goes through the typed adapter, never the bare untyped host', () => {

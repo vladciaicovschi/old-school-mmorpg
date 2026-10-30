@@ -1,11 +1,13 @@
 import { applyCourserDaze } from './combat/hunter_shared';
 import { DEV_KIT_ROLES, devKitRole } from './content/dev_kit_roles';
+import { DEV_MODEL_LAB_ARRIVAL } from './content/dev_model_lab';
 import { MOUNT_SKIN_IDS } from './content/mount_skins';
 import { MOUNT_KEYS } from './content/mounts';
 import { GATHERING_PROFESSIONS } from './content/professions';
 import { DUNGEONS, ITEMS, MOBS, NPCS } from './data';
 import { equipBestInSlotForDev } from './dev/bis_gear';
 import { applyDevKit } from './dev_kit';
+import { spawnDevModelLabSubjects } from './dev_model_lab_spawn';
 import { createGroundObject, createMob } from './entity';
 import {
   ignivarDevRaidTravelRoster,
@@ -141,11 +143,36 @@ function emitDevLog(ctx: SimContext, pid: number, text: string): void {
   ctx.emit({ type: 'log', text, pid });
 }
 
+/** Enter the isolated model laboratory and rebuild this developer's subjects. */
+export function enterModelLabForDev(ctx: SimContext, pid: number): number[] {
+  const player = ctx.entities.get(pid);
+  if (!player) return [];
+
+  despawnMobsForDev(ctx, pid, 'spawned');
+  cancelProfessionSessionOnDisplacement(ctx, player);
+  const arrival = ctx.groundPos(DEV_MODEL_LAB_ARRIVAL.x, DEV_MODEL_LAB_ARRIVAL.z);
+  player.pos = arrival;
+  player.prevPos = { ...arrival };
+  player.facing = DEV_MODEL_LAB_ARRIVAL.facing;
+  player.prevFacing = DEV_MODEL_LAB_ARRIVAL.facing;
+  ctx.rebucket(player);
+
+  return spawnDevModelLabSubjects(ctx, player);
+}
+
 export function handleDevChat(
   ctx: SimContext,
   raw: string,
   pid: number,
 ): SentChat | null | undefined {
+  if (/^\/(?:dev\s+lab|devlab)\s*$/i.test(raw)) {
+    const ids = enterModelLabForDev(ctx, pid);
+    if (ids.length === 0) ctx.error(pid, '[dev] Model lab is unavailable.');
+    else
+      emitDevLog(ctx, pid, `[dev] Entered Model Test Island. ${ids.length} test models are ready.`);
+    return null;
+  }
+
   const levelMatch = /^\/(?:dev\s+level|devlevel)\s+(\d+)\s*$/i.exec(raw);
   if (levelMatch) {
     const level = Number(levelMatch[1]);

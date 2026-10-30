@@ -1,0 +1,196 @@
+{
+  "schema": 1,
+  "date": "2026-10-13",
+  "mode": "built-in image_gen; reference-guided repaint; opaque background",
+  "styleGuide": "docs/design/nhance-inspired-asset-style-guide.md",
+  "provenance": "World of ClaudeCraft project-generated artwork, based on project-owned scene layouts and concept art. Replaces the previous loading-screen visuals without changing URLs or rotation behavior.",
+  "referencesNote": "Paths are relative to the repository; ../bible is the maintainer's project-owned concept library. Target references mean the pre-refresh originals, backed up locally in tmp/loading-art-refresh/originals; generated set-style reference is kept in the local masters folder. Do not feed the repainted shipping targets back as the historical original reference.",
+  "export": {
+    "active": {
+      "width": 1600,
+      "height": 900,
+      "format": "webp",
+      "maxBytes": 300000
+    },
+    "legacy": {
+      "width": 1538,
+      "height": 1023,
+      "format": "jpeg",
+      "maxBytes": 600000
+    },
+    "settings": "Sharp: centered cover resize, opaque flatten, sRGB, quality 86 decreasing by 2 only if over budget; WebP effort 6, JPEG mozjpeg. No runtime code changes.",
+    "localMasters": "tmp/loading-art-refresh/masters",
+    "localOriginals": "tmp/loading-art-refresh/originals",
+    "localReport": "tmp/loading-art-refresh/export-report.json"
+  },
+  "handednessCorrection": {
+    "date": "2026-10-13",
+    "mode": "built-in image_gen, precise-object-edit; opaque",
+    "rule": "Anatomical right hand holds sword; anatomical left forearm carries shield. Directions are relative to each character, not the viewer.",
+    "reviewed": [
+      "hollow-crypt-party (foreground warrior and three skeleton warriors)",
+      "eastbrook-mine-duel",
+      "eastbrook-square",
+      "fenbridge-march",
+      "drakemaw-caldera",
+      "loading-screen (legacy portraits)"
+    ],
+    "unchanged": "All other shipping images retain the initial refresh bytes.",
+    "edits": [
+      {
+        "key": "hollow-crypt-party",
+        "input": "tmp/loading-art-refresh/before-hand-correction/hollow-crypt-party.webp",
+        "prompt": "Use case: precise-object-edit. Image 1 is the only edit target: our finished 16:9 fantasy loading illustration. Change ONLY the foreground human warrior's shield placement and the necessary left arm/hand to carry it correctly. The warrior is seen from behind: his anatomical RIGHT hand is the clearly visible hand at the viewer-right of his torso already holding the sword. KEEP that sword in that same RIGHT hand exactly. The shield is currently incorrectly beside that sword arm: remove that misplaced shield completely and put the same wooden shield onto his anatomical LEFT forearm, at the viewer-left of his torso, with a believable grip/straps and left elbow bend. Exactly two arms and two hands, one sword in right hand, one shield on left forearm; clear separated arm silhouettes, no duplicated or floating equipment. Keep the warrior's body stance, head, face, cream gambeson, leather gear and identity otherwise unchanged. Keep all three background skeleton warriors exactly unchanged: they already hold sword in anatomical right hand and shield on left arm. Keep mage, architecture, lighting, floor, colors, brushwork, framing and everything else unchanged. No mirror or horizontal flip of scene or character, no new subjects, no text. Return the full finished opaque landscape illustration, not a crop.",
+        "output": "public/textures/loading/hollow-crypt-party.webp"
+      },
+      {
+        "key": "eastbrook-mine-duel",
+        "input": "tmp/loading-art-refresh/before-hand-correction/eastbrook-mine-duel.webp",
+        "prompt": "Use case: precise-object-edit. Correct the human warrior's reversed sword-and-shield hands in Image 1. This is a localized equipment swap, not a repaint. The warrior is viewed FROM BEHIND. Put the wooden SHIELD ON THE IMAGE-LEFT side of his body, attached to the far LEFT forearm, replacing the sword currently in that image-left hand. Put the steel SWORD IN THE IMAGE-RIGHT hand, the near hand beneath his image-right shoulder, replacing the shield currently on that near arm. The sword should extend diagonally forward and down toward the lower image-right. The image-left arm bends to hold the wooden shield along the image-left edge of his torso. The image-right arm bends naturally forward holding only the sword. Exactly two coherent arms and two hands. IMPORTANT: do not leave the sword in the image-left hand or the shield on the image-right arm; both items must change sides compared to Image 1. Do not mirror the warrior or the entire image. Keep head, hair, torso, outfit, feet, pose width, mine, kobold, pickaxe, debris, cart, rails, framing, lighting and rendering unchanged. Only adjust his forearms enough for the correct grip. Single finished full 16:9 opaque illustration; no text, new objects, extra weapons or panels.",
+        "output": "public/textures/loading/eastbrook-mine-duel.webp"
+      }
+    ]
+  },
+  "koboldGuardCorrection": {
+    "date": "2026-10-13",
+    "mode": "built-in image_gen, precise-object-edit; opaque",
+    "input": "tmp/loading-art-refresh/before-kobold-guard/eastbrook-mine-duel.webp",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, our finished fantasy loading illustration. Change ONLY the HUMAN WARRIOR'S orientation and combat pose so he actively blocks the kobold with his LEFT-hand shield. Preserve the entire rest of the image. Rotate the warrior's torso to show a THREE-QUARTER FRONT / SIDE view of his cream quilted chest, facing the kobold to image-right, rather than showing his back. His anatomical LEFT shoulder and LEFT forearm are now the near side toward the camera. Extend this LEFT forearm forward toward the kobold, elbow bent in a strong blocking guard; raise the SAME WOODEN SHIELD between the kobold's raised pickaxe and the warrior's chest/head. Show the shield OUTER FACE turned toward the kobold, its rim and thickness in convincing perspective, firmly attached to his left forearm with a real grip/straps. His anatomical RIGHT hand stays on the far/rear side holding the SAME STEEL SWORD pulled back toward image-left, ready for a counterattack, safely clear of the shield and legs. Right-handed swordsmanship, exactly two natural arms and two hands, left shield in front and right sword behind; no reversed hands, no floating or duplicated gear. Turn the hips and plant the left foot forward toward the kobold with the right foot back so the guard is grounded and anatomically coherent. Keep the warrior in the same foreground-left area, same scale, identity, brown hair, cream gambeson, brown leather bracers, belt, pants and boots. Keep the kobold, its pickaxe, position, mine entrance, ore cart, rails, debris, background houses and pines, camera, lighting, colors and painterly material style unchanged. Do not mirror the whole scene. No added subjects or text. Full finished 16:9 opaque illustration, not a crop.",
+    "output": "public/textures/loading/eastbrook-mine-duel.webp",
+    "change": "Rotate the warrior to a three-quarter front view and raise his left-hand shield toward the attacking kobold; sword stays in anatomical right hand."
+  },
+  "assets": [
+    {
+      "key": "hollow-crypt-empty",
+      "prompt": "Use case: style-transfer. Asset: finished original fantasy RPG loading background, full-bleed wide landscape 16:9. Image 1 is the edit target: keep its story, camera and major layout, completely repaint its visual treatment. Image 2 is a style reference from the same refreshed loading-screen set, not a request to copy its characters or crypt into this scene. Image 3 is a project-owned material/style concept, not an extra person to insert. Shared style: stylized realism with slightly heroic game proportions where relevant, broad readable shapes, hand-painted PBR hybrid, authored painterly surfaces, clean strong silhouettes, warm wood/leather, steel gray and slate masonry, restrained jewel-color magical accents. Neither photorealism nor chibi, neither low-poly facets nor toy rendering. Preserve the empty vaulted crypt's composition: heavy stone arches and wall skeleton niches, cold blue braziers, a single closed skull-marked wooden door in the far middle, and the fallen dark bronze crown on the foreground left. No living or undead characters roaming the room. Replace the overly faceted low-poly masonry with broad hand-painted chiseled stone, refined original tomb architecture, believable restrained roughness and material separation. Eerie blue light, a tiny warm lamp beside the distant door, deep shadow and atmospheric perspective. Maintain quiet dark value areas in the top and bottom fifth for loading UI and a clear central visual route. Do not bake any UI. No text, no captions, no lettering, no logo, no watermark, no borders, no collage, no comic panels.",
+      "references": [
+        "public/textures/loading/hollow-crypt-empty.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "output": "public/textures/loading/hollow-crypt-empty.webp"
+    },
+    {
+      "key": "crystal-delve",
+      "prompt": "Use case: style-transfer. Asset: finished original fantasy RPG loading background, full-bleed wide landscape 16:9. Image 1 is the edit target: keep its story, camera and major layout, completely repaint its visual treatment. Image 2 is a style reference from the same refreshed loading-screen set, not a request to copy its characters or crypt into this scene. Image 3 is a project-owned material/style concept, not an extra person to insert. Shared style: stylized realism with slightly heroic game proportions where relevant, broad readable shapes, hand-painted PBR hybrid, authored painterly surfaces, clean strong silhouettes, warm wood/leather, steel gray and slate masonry, restrained jewel-color magical accents. Neither photorealism nor chibi, neither low-poly facets nor toy rendering. Preserve the immense underground mining cavern: wooden mine cart on curved metal rails in the lower left, timber catwalks and scaffold on the left wall, deep central turquoise underground river, a hanging wooden bridge high across the ravine, distant waterfall and large turquoise and amethyst crystal formations. The environment must feel physically coherent and traversable. Replace polygonal placeholder rock with broad hand-painted sculpted rock masses and clean natural crystal shapes. Dim slate-blue atmosphere, restrained crystal emission and warm isolated work lanterns; no new heroes or monsters. Maintain quiet dark value areas in the top and bottom fifth for loading UI and a clear central visual route. Do not bake any UI. No text, no captions, no lettering, no logo, no watermark, no borders, no collage, no comic panels.",
+      "references": [
+        "public/textures/loading/crystal-delve.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "output": "public/textures/loading/crystal-delve.webp"
+    },
+    {
+      "key": "duskmoor-eclipse",
+      "prompt": "Use case: style-transfer. Asset: original fantasy RPG loading-screen background, wide full-bleed landscape 16:9. Image 1 is the EDIT TARGET: preserve its story, viewpoint and major arrangement; completely repaint its treatment. Image 2 is a style-reference from our refreshed loading set, not a scene to copy or characters to insert. Image 3 is our project-owned material/form concept, not a person to insert. Style: premium stylized realism, broad readable forms, hand-painted PBR hybrid, deliberate brushwork, clean material distinction, atmospheric cinematic depth. Match the project's natural cloth, leather, warm wood and steel-gray visual language. Avoid chibi/toy design, low-poly facets, photographic micro-noise or hyperrealism. Preserve the original environment and framing: looking outward through a broken gothic stone arch between two weathered hooded statues, over a shallow flooded path and reeds toward a ruined church and leafless trees under an eclipsed moon. Small lavender wisps hover low over the marsh and reflect on the water. Repaint blocky low-poly stones as broad sculpted hand-painted masonry and readable worn cloth/stone forms, with atmospheric layers and subtle brushwork. Muted violet-gray moonlight, dark olive reeds, soft lavender magic; haunting and quiet, not oversaturated neon. Do not add characters, a party or monsters. Keep top and bottom fifth relatively quiet for UI. No text, lettering, captions, logo, watermark, frame, panel divisions or collage; one finished illustration.",
+      "references": [
+        "public/textures/loading/duskmoor-eclipse.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "output": "public/textures/loading/duskmoor-eclipse.webp"
+    },
+    {
+      "key": "thornpeak-storm",
+      "prompt": "Use case: style-transfer. Asset: original fantasy RPG loading-screen background, wide full-bleed landscape 16:9. Image 1 is the EDIT TARGET: preserve its story, viewpoint and major arrangement; completely repaint its treatment. Image 2 is a style-reference from our refreshed loading set, not a scene to copy or characters to insert. Image 3 is our project-owned material/form concept, not a person to insert. Style: premium stylized realism, broad readable forms, hand-painted PBR hybrid, deliberate brushwork, clean material distinction, atmospheric cinematic depth. Match the project's natural cloth, leather, warm wood and steel-gray visual language. Avoid chibi/toy design, low-poly facets, photographic micro-noise or hyperrealism. Preserve the high mountain storm composition: wooden watchtower in the left foreground with simple blue hanging cloth, wet ascending stone path, a rope bridge crossing the central gorge, distant stone fortress on the right amid steep snowy peaks, a small original dragon silhouette flying near branching lightning above. Refine trees into stylized natural evergreen masses and rock into broad sculpted painted shapes, not polygonal placeholders. Slate gray storm clouds, muted blue cloth, steel rock, restrained warm amber work lanterns, atmospheric rain. Dragon has coherent body, tail and two wings, remains distant; no inserted heroes. Keep top and bottom fifth relatively quiet for UI. No text, lettering, captions, logo, watermark, frame, panel divisions or collage; one finished illustration.",
+      "references": [
+        "public/textures/loading/thornpeak-storm.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "output": "public/textures/loading/thornpeak-storm.webp"
+    },
+    {
+      "key": "eastbrook-mine-duel",
+      "prompt": "Use case: style-transfer. Production loading illustration for our original fantasy RPG, landscape 16:9. Image 1 is EDIT TARGET for scene and viewpoint only; fully repaint it. Image 2 is the refreshed set's rendering/style reference, not characters or architecture to duplicate. Images 3 onward are project-owned character identity/costume references, incorporate them in the roles specified. Stylized realism, natural adult proportions around seven heads tall, broad readable shapes and authored hand-painted PBR materials, coherent steel/wood/leather/cloth, premium game key art. Neither chibi nor plastic toys, neither faceted low-poly nor photorealistic noise. Keep the mine encounter: on the left one human Warrior T1 in a cream quilted gambeson, brown leather bracers/boots and belt braces behind a practical wooden shield while holding a plain steel one-handed sword; on the right one kobold bursts out of a timber-framed mine entrance beside a tipped ore cart, raising a battered pickaxe. Warrior body/clothes/face follow reference 3, kobold design follows reference 4 (rust-brown scaly skin, large ears, long muzzle, yellow eyes, ragged cloth wraps), replacing the old tiny gray toy goblin entirely. Keep warm amber mine lantern against cool blue dusk, dark pines and distant timber house, rough mine rails and a small spray of falling stones. Dynamic grounded confrontation, adult natural humanoid proportions, slightly heroic silhouettes, believable hands and weapon grips. No winged toy helmet or oversized heads. Keep headroom and the lower fifth quiet for runtime UI; no embedded UI, text, lettering, captions, branding, watermark, borders or panel grid. One polished full-bleed illustration.",
+      "references": [
+        "public/textures/loading/eastbrook-mine-duel.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/mob/cobold.png"
+      ],
+      "output": "public/textures/loading/eastbrook-mine-duel.webp"
+    },
+    {
+      "key": "veiled-hollow-stag",
+      "references": [
+        "public/textures/loading/veiled-hollow-stag.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "prompt": "Use case: style-transfer. Asset: original fantasy RPG loading-screen background, wide full-bleed landscape 16:9. Image 1 is the EDIT TARGET: preserve its story, viewpoint and major arrangement; completely repaint its treatment. Image 2 is a style-reference from our refreshed loading set, not a scene to copy or characters to insert. Image 3 is our project-owned material/form concept, not a person to insert. Style: premium stylized realism, broad readable forms, hand-painted PBR hybrid, deliberate brushwork, clean material distinction, atmospheric cinematic depth. Match the project's natural cloth, leather, warm wood and steel-gray visual language. Avoid chibi/toy design, low-poly facets, photographic micro-noise or hyperrealism. Preserve the quiet twilight forest-lake scene: in the left foreground a mature naturally proportioned stag bends to drink at the shallow lake, restrained violet light glows along his branching antlers, two natural female deer stand farther back at the right bank. Half-timbered cottage with small warm windows on the left bank, tall stylized pines, broad sculpted gray rock, a distant valley in purple mist and a few faint fireflies. Clear calm reflective water with reeds and stones. Adult deer anatomy, slender natural legs and believable antler branching, no giant toy heads, no low-poly angular animal bodies. Peaceful magical wilderness, not a horror scene. Muted olive forest, lavender dusk and isolated amber light, generous atmospheric depth and painterly material treatment, no people. Keep top and bottom fifth relatively quiet for loading UI. No text, lettering, captions, logo, watermark, frame, panel grid or collage; one full-bleed finished illustration.",
+      "output": "public/textures/loading/veiled-hollow-stag.webp"
+    },
+    {
+      "key": "hollow-crypt-party",
+      "references": [
+        "public/textures/loading/hollow-crypt-party.webp",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/character/mage/t1.png",
+        "../bible/conceptart/skeleton/skeleton_warior.png"
+      ],
+      "prompt": "Use case: style-transfer. Asset: production loading-screen background for our original fantasy RPG, wide landscape 16:9. Image 1 is the EDIT TARGET and scene/composition reference only. Images 2, 3, 4 are project-owned character/style references: Warrior T1, Mage T1, armored skeleton warrior. Completely repaint Image 1 in the visual language of these concept references, replacing every old chibi/toy character. Preserve the story and recognizable composition: two adventurers seen three-quarter from behind in the foreground, facing three skeleton warriors beyond open stone sarcophagi in a deep vaulted crypt. Warrior on left wears reference 2's cream quilted gambeson, brown leather bracers and boots, carries a plain steel one-handed sword and practical wooden shield. Mage on right wears reference 3's brown hooded robes, ivory sleeves and leather belts, carrying a wooden staff with restrained warm amber light. Skeletons use reference 4's adult skeletal proportions, readable steel armor and small ochre accents, not comical bobble heads. All people have slightly heroic natural adult proportions, about seven heads tall. Style: premium stylized fantasy game key art, clean broad and medium forms, hand-painted PBR hybrid, authored brushwork and soft material variation, readable steel/wood/leather/cloth; neither photorealistic nor chibi nor faceted low-poly. Preserve cool blue torchlight against small warm staff light, dark teal/slate masonry, atmospheric depth and grounded threatening mood. Keep the center corridor and bottom fifth visually quiet and somewhat dark for UI overlays. Full-bleed single finished illustration, no panel grid, no borders, no lettering, no text, no logo, no watermark. Keep every character's anatomy and weapon grip convincing, with distinct separated silhouettes.",
+      "output": "public/textures/loading/hollow-crypt-party.webp"
+    },
+    {
+      "key": "eastbrook-square",
+      "prompt": "Use case: style-transfer. Production loading illustration for our original fantasy RPG, landscape 16:9. Image 1 is EDIT TARGET for scene and viewpoint only; fully repaint it. Image 2 is the refreshed set's rendering/style reference, not characters or architecture to duplicate. Images 3 onward are project-owned character identity/costume references, incorporate them in the roles specified. Stylized realism, natural adult proportions around seven heads tall, broad readable shapes and authored hand-painted PBR materials, coherent steel/wood/leather/cloth, premium game key art. Neither chibi nor plastic toys, neither faceted low-poly nor photorealistic noise. Keep the friendly town-square scene and open center: large half-timbered stone guildhall with muted blue shingle roofs on the left, practical market awnings on the right, a small stone well with a few restrained blue crystal accents in the middle distance, watchtower, pines and distant hills under late golden daylight. Replace all toy inhabitants with natural-proportioned adult characters belonging to our concept art: reference 3 Warrior T1 in cream gambeson/leather stands left foreground with sword and wooden shield; reference 4 brown-hooded Mage T1 stands right foreground holding a simple staff; a few distant townsfolk use reference 5's natural cloth/leather/material language. Friendly anticipation of adventure, not a staged fight; broad hand-painted game architecture instead of low-poly blocks. Keep the plaza's central path empty and readable; sun warmth, olive foliage, warm brown wood, steel gray stone and restrained blue cloth. Keep headroom and the lower fifth quiet for runtime UI; no embedded UI, text, lettering, captions, branding, watermark, borders or panel grid. One polished full-bleed illustration.",
+      "references": [
+        "public/textures/loading/eastbrook-square.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/character/mage/t1.png",
+        "../bible/conceptart/npc/trader-wilkes.png"
+      ],
+      "output": "public/textures/loading/eastbrook-square.webp"
+    },
+    {
+      "key": "drakemaw-caldera",
+      "references": [
+        "public/textures/loading/drakemaw-caldera.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/character/paladin/t1.png",
+        "../bible/conceptart/character/warlok/t1.png"
+      ],
+      "prompt": "Use case: style-transfer. Production loading illustration for our original fantasy RPG, landscape 16:9. Image 1 is EDIT TARGET for scene and viewpoint only; fully repaint it. Image 2 is the refreshed set's rendering/style reference, not characters or architecture to duplicate. Images 3 onward are project-owned character identity/costume references, incorporate them in the roles specified. Stylized realism, natural adult proportions around seven heads tall, broad readable shapes and authored hand-painted PBR materials, coherent steel/wood/leather/cloth, premium game key art. Neither chibi nor plastic toys, neither faceted low-poly nor photorealistic noise. Preserve the volcanic panorama and its composition: three adventurers with backs three-quarter to the viewer on the foreground basalt ledge, surveying an enormous orange lava lake, broken bridges and a distant dark fortress on the right rocky promontory, small original dragon silhouettes far overhead. Warrior on the left uses image 3's cream quilted gambeson and brown leather with plain sword and wooden shield; paladin in the middle uses image 4's ivory tabard, muted blue cowl, mail sleeves and small blue star/sun emblem; warlock on the right uses image 5's charcoal and violet robes, leather bracers and cross-chest straps with simple wooden staff. Natural adult proportions, grounded alert poses and separated silhouettes, no huge winged toy helmet or oversized heads. Broad hand-painted basalt forms, small red mineral formations and cracked eggs on foreground rocks, orange ember light against charcoal slate stone and smoky blue distant peaks. Open central vista and dramatic depth, not crowded; dragons remain distant and anatomically coherent. Keep top and bottom fifth relatively quiet for loading UI. No text, lettering, captions, logo, watermark, frame, panel grid or collage; one full-bleed finished illustration.",
+      "output": "public/textures/loading/drakemaw-caldera.webp"
+    },
+    {
+      "key": "fenbridge-march",
+      "references": [
+        "public/textures/loading/fenbridge-march.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "docs/design/fenbridge-rebuild/references/fenbridge-master-concept.png",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/character/priest/t1.png"
+      ],
+      "prompt": "Use case: style-transfer. Production loading illustration for our original fantasy RPG, full-bleed landscape 16:9. Image 1 is the edit target for story, viewpoint and layout; completely repaint its treatment. Image 2 is the refreshed set's rendering reference, not a crypt to insert. Image 3 is project Fenbridge architecture/style reference, not its overhead viewpoint to copy. Images 4 and 5 are project-owned character concepts. Premium stylized game realism, natural adult proportions around seven heads tall, broad readable shapes, authored painterly PBR materials and coherent cloth/leather/steel/wood. No toy heads, no chibi, no low-poly facets, no photographic noise. Preserve the original marsh-town arrival: four adventurers seen three-quarter from behind walking away along a rain-dark wooden boardwalk toward the palisade gate, timber houses with muted teal roofs and warm amber lantern windows on stilts, reeds and pooled water, distant pines in rainy mist. One brown-hooded mage in brown robes with ivory sleeves and staff; one brown-hooded hunter in tan cloth and natural leather with bow and quiver; one warrior (image 4) in cream gambeson and leather with sword and wooden shield; one priest (image 5) in ivory robes and muted ochre trim. Four distinct adult silhouettes and natural relaxed walking poses, not a crowd, not comical toy adventurers. Rough wood, rope, warm lamps and teal roofs take architecture cues from image 3 but keep the original ground-level camera and boardwalk arrangement. Cool wet overcast ambience, olive reeds, brown wood, subtle amber lights; no ornate high-level armor. Leave top and bottom fifth relatively quiet for UI overlays, no embedded UI, text, logo, watermark, panel grid or frame. Single polished finished illustration.",
+      "output": "public/textures/loading/fenbridge-march.webp"
+    },
+    {
+      "key": "fenbridge-rain-skiff",
+      "references": [
+        "public/textures/loading/fenbridge-rain-skiff.webp",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "docs/design/fenbridge-rebuild/references/fenbridge-master-concept.png",
+        "../bible/conceptart/character/warlok/t1.png",
+        "../bible/conceptart/mob/murlok.png"
+      ],
+      "prompt": "Use case: style-transfer. Production loading illustration for our original fantasy RPG, full-bleed landscape 16:9. Image 1 is the edit target for story, viewpoint and layout; completely repaint its treatment. Image 2 is the refreshed set's rendering reference, not a crypt to insert. Image 3 is project Fenbridge architecture/style reference, not its overhead viewpoint to copy. Images 4 and 5 are project-owned character concepts. Premium stylized game realism, natural adult proportions around seven heads tall, broad readable shapes, authored painterly PBR materials and coherent cloth/leather/steel/wood. No toy heads, no chibi, no low-poly facets, no photographic noise. Preserve the rainy marsh encounter: one adult human caster in a small practical wooden skiff at the lower left, with one glowing hand held low over the water; one amphibian creature rises from the water on the right under the old elevated timber boardwalk. Caster identity and costume from image 4: young brown-haired adult, charcoal and muted violet layered robes, brown leather bracers and crossed chest straps, restrained violet trim. Restrained violet spell glow near the palm and soft reflection in water, not whole-body neon. Creature design from image 5: teal-green scales, yellow eyes, orange coral head fin, webbed hands and natural amphibian anatomy, leather and bone shoulder gear. Buildings and boardwalk use image 3's weathered timber, rope, teal roof and warm lantern language, keep the original ground-level composition. Rain ripples, dark olive reeds, cool gray mist, mossy wooden stilts, isolated warm windows. One caster and one creature, credible anatomy and a physically plausible skiff. Leave top and bottom fifth relatively quiet for UI overlays, no embedded UI, text, logo, watermark, panel grid or frame. Single polished finished illustration.",
+      "output": "public/textures/loading/fenbridge-rain-skiff.webp"
+    },
+    {
+      "key": "loading-screen",
+      "references": [
+        "public/loading-screen.jpg",
+        "tmp/loading-art-refresh/masters/hollow-crypt-party.png",
+        "../bible/conceptart/character/warior/t1.png",
+        "../bible/conceptart/character/mage/t1.png",
+        "../bible/conceptart/character/paladin/t1.png"
+      ],
+      "prompt": "Use case: style-transfer. Asset: standalone original fantasy RPG legacy loading/guide backdrop, full image approximately 3:2 landscape. Image 1 is the EDIT TARGET: preserve its parchment center, thin warm-brown frame and five-character edge framing, but completely repaint away the old chibi low-poly treatment. Image 2 supplies the cohesive refreshed-set rendering style. Images 3, 4, 5 are project-owned Warrior T1, Mage T1 and Paladin T1 costume/material references; use them to make the equipment match our actual game. Five adult fantasy character busts around edges, naturally proportioned heads and convincing anatomy, not toys: upper left an olive-green adult orc with long dark hair and modest leather shoulder armor; lower left an adult silver-haired elf spellcaster in practical brown hooded robes with ivory sleeves and subtle ochre trim, one hand shaping a soft amber magical arc; upper right a bearded adult human warrior with dark tied hair, practical steel-gray and brown-leather armor; mid-right an adult human paladin with auburn braid in ivory-and-muted-blue tabard, mail sleeves and leather, a small golden spell glow; lower right an adult red-haired human female swordswoman in cream quilted gambeson and brown leather, holding a plain readable steel sword. Keep central parchment broadly open, calm and dark ochre with only delicate handmade paper variation, not dense map markings or letters. Original stylized fantasy game concept art, slightly heroic adult anatomy, broad readable shapes, hand-painted PBR hybrid, natural cloth/leather/steel/wood, deliberate painterly surfaces and warm amber light; neither chibi nor low-poly facets nor photorealistic noise, no oversized pauldrons or revealing armor. No logos, text, lettering, captions or watermark, no panel grid. One finished coherent framed illustration, no UI baked in.",
+      "output": "public/loading-screen.jpg"
+    }
+  ]
+}

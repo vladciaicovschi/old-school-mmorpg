@@ -15,7 +15,7 @@
 import * as THREE from 'three';
 import { getActiveWorldContent, zoneAt } from '../sim/data';
 import { terrainHeight } from '../sim/world';
-import { EMISSIVE_LIGHT, GFX } from './gfx';
+import { buildTorchFlameGeometry, createTorchFlame } from './campfire_flame';
 import { buildDrapedGlowGeometry, type GlowPatchSite } from './ground_glow_patch';
 import { hasNightLightField, registerStaticNightLights } from './night_light_field';
 import { radialGlowTexture } from './textures';
@@ -40,8 +40,6 @@ export const LIT_DECOR_KEYS: ReadonlySet<string> = new Set(['kcasTorch', 'kcasTo
  *  (the castle's mounted torches put theirs at +2.4 for scale 1.5). */
 export const TORCH_FLAME_HEIGHT = 1.6;
 
-const FLAME_COLOR = 0xffaa33;
-const FLAME_EMISSIVE = 0xff6600;
 const POOL_COLOR = 0xff8830;
 const POOL_RADIUS = 6;
 const POOL_OPACITY = 0.3;
@@ -54,19 +52,7 @@ const FIELD_COLOR = [1.0, 0.5, 0.18] as const;
 /** A wind-licked open flame, calmer than a bonfire. */
 const FIELD_FLICKER = 0.16;
 
-/** The campfire flame profile (props.ts), at lantern size. */
-export function buildTorchFlameGeometry(): THREE.BufferGeometry {
-  const points = [
-    [0, 0],
-    [0.16, 0.1],
-    [0.27, 0.28],
-    [0.3, 0.45],
-    [0.22, 0.66],
-    [0.1, 0.84],
-    [0.001, 0.95],
-  ].map(([r, y]) => new THREE.Vector2(r * 0.6, y * 0.6));
-  return new THREE.LatheGeometry(points, 7);
-}
+export { buildTorchFlameGeometry } from './campfire_flame';
 
 interface TorchSite {
   x: number;
@@ -144,16 +130,7 @@ export function buildDecorTorchFx(seed = 0): DecorTorchFxView {
     patchSites.length = 0;
     for (const site of zoneSites) {
       patchSites.push({ x: site.x, z: site.z, radius: POOL_RADIUS });
-      const flame = new THREE.Mesh(
-        flameGeo,
-        new THREE.MeshLambertMaterial({
-          color: FLAME_COLOR,
-          emissive: FLAME_EMISSIVE,
-          emissiveIntensity: GFX.standardMaterials ? EMISSIVE_LIGHT : 1.4,
-          transparent: true,
-          opacity: 0.92,
-        }),
-      );
+      const flame = createTorchFlame({ geometry: flameGeo });
       flame.position.set(site.x, site.y, site.z);
       flames.push(flame);
       zoneGroup.add(flame);

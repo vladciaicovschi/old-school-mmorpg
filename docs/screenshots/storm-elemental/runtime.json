@@ -1,0 +1,50 @@
+{
+  "low": false,
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "type": "MeshStandardMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "elemental_storm_arcs",
+      "type": "ShaderMaterial",
+      "triangles": 392,
+      "uv": false
+    },
+    {
+      "name": "elemental_storm_core",
+      "type": "ShaderMaterial",
+      "triangles": 2,
+      "uv": true
+    },
+    {
+      "name": "character_far_mesh",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "character_shadow_proxy",
+      "type": "MeshBasicMaterial",
+      "triangles": 9712,
+      "uv": true
+    },
+    {
+      "name": "",
+      "type": "MeshBasicMaterial",
+      "triangles": 32,
+      "uv": true
+    }
+  ],
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Storm_Idle",
+    "Storm_Move"
+  ],
+  "arcClock": 2.8166666666666615,
+  "fxVisible": true,
+  "errors": []
+}

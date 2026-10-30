@@ -1,0 +1,18 @@
+{
+  "kind": "water",
+  "low": true,
+  "runtime": {
+    "particles": 24,
+    "surface": false,
+    "streams": [],
+    "arcTriangles": 0
+  },
+  "contact": {
+    "pieces": 28,
+    "min": -0.00021711216590653004,
+    "maxContact": 0.0001767493708861867,
+    "meshOffset": -0.3522028942816151,
+    "clip": "Death"
+  },
+  "errors": []
+}

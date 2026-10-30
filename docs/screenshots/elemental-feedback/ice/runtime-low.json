@@ -1,0 +1,18 @@
+{
+  "kind": "ice",
+  "low": true,
+  "runtime": {
+    "particles": 112,
+    "surface": false,
+    "streams": [],
+    "arcTriangles": 0
+  },
+  "contact": {
+    "pieces": 28,
+    "min": -0.0003596827741820796,
+    "maxContact": 0.00023819369161637294,
+    "meshOffset": -0.35986800283265713,
+    "clip": "Death"
+  },
+  "errors": []
+}

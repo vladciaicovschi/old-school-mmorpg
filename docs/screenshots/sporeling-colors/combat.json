@@ -1,0 +1,31 @@
+{
+  "facts": [
+    {
+      "id": "sporeling_gatherer",
+      "key": "mob_glub",
+      "clips": [
+        "Sporeling_Run",
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Sporeling_Death"
+    },
+    {
+      "id": "corrupted_sporeling",
+      "key": "mob_corrupted_sporeling",
+      "clips": [
+        "Infected_Run",
+        "Infected_Attack",
+        "Infected_CombatIdle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Infected_Death"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_raptor/smart_raptor.glb",
+      "out": "models/creatures/smart_raptor.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Raptor_Idle",
+        "Raptor_CombatIdle",
+        "Raptor_Walk",
+        "Raptor_Run",
+        "Raptor_SlashLeft",
+        "Raptor_SlashRight",
+        "Raptor_Pounce",
+        "Raptor_TailWhip",
+        "Raptor_Hit",
+        "Raptor_Death",
+        "Raptor_AlertLook",
+        "Raptor_Threat"
+      ]
+    }
+  ]
+}

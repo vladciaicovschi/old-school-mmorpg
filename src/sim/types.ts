@@ -1276,6 +1276,11 @@ export interface ArmorItemDef extends BaseItemDef {
   // The marker restricts it to the Warrior offhand and carries its flat block.
   shield?: true;
   blockValue?: number;
+  /** Full-body appearance tier selected by chest armor only; absent uses T1.
+   *  Cosmetic metadata: every other worn slot still contributes its own stats. */
+  appearanceTier?: number;
+  /** Legacy trial metadata. Does not merge or disable equipment slots. */
+  wholeBodySuit?: 'recruit' | 'militia' | 'knight';
 }
 
 // Jewelry: neck and ring pieces. kind 'armor' so the equip/budget/tooltip paths
@@ -1952,6 +1957,9 @@ export interface MobTemplate {
   armorPerLevel: number;
   moveSpeed: number;
   aggroRadius: number; // base, at equal level
+  /** Opt-in display/test encounters ignore proximity and social/flee-rally
+   * pulls. Direct hostile actions, including damage and taunts, still engage. */
+  aggroOnDamageOnly?: boolean;
   // Hard tether (yards from spawnPos): past it the mob evades home to a full
   // reset, whatever its refreshing leashAnchor says. The soft leash measures
   // from an anchor every hostile action re-seeds, so a patient player can walk
@@ -2804,6 +2812,11 @@ export interface MobTemplate {
      *  release is committed once the windup starts. Omitted = release at the
      *  timer with no telegraph, the original behavior (warlock demon bolts). */
     windup?: number;
+    /** Opt-in interruptible hardcast, using an existing ability id for cast
+     * bars, school lockouts and joined animation/VFX. Legacy instant/throw
+     * petSpell attacks stay unchanged when these fields are omitted. */
+    castTime?: number;
+    ability?: string;
   };
   // On-hit mechanic: chance to silence the victim, locking out spell (non-physical) casts for a duration.
   silence?: { chance: number; duration: number; name: string; school?: string };
@@ -4950,6 +4963,9 @@ export interface Entity extends ClientMirroredEntityFields {
   /** petSpell windup in flight: sim tick the committed release fires on
    *  (transient combat state like swingTimer; never persisted or wired). */
   rangedWindupReleaseTick?: number | null;
+  /** Unowned water caster's active jet victim. Retained through interrupts
+   * for aura/beam cleanup; transient, never persisted or wired. */
+  mobWaterJetTargetId?: number;
   inCombat: boolean;
   combatTimer: number; // time since last combat event
   auras: Aura[];

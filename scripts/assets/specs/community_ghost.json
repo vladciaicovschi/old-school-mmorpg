@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/community_ghost/community_ghost.glb",
+      "out": "models/creatures/community_ghost.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Ghost_Idle",
+        "Ghost_CombatIdle",
+        "Ghost_Move",
+        "Ghost_FastMove",
+        "Ghost_Attack",
+        "Ghost_HeavyAttack",
+        "Ghost_Cast",
+        "Ghost_Hit",
+        "Ghost_Death"
+      ]
+    }
+  ]
+}

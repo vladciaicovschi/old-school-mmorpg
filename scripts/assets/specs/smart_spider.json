@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_spider/smart_spider.glb",
+      "out": "models/creatures/smart_spider.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Spider_Idle",
+        "Spider_CombatIdle",
+        "Spider_Walk",
+        "Spider_Run",
+        "Spider_Bite",
+        "Spider_Lunge",
+        "Spider_Hit",
+        "Spider_Death"
+      ]
+    }
+  ]
+}

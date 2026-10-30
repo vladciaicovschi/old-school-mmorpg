@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { svelteTesting } from '@testing-library/svelte/vite';
 import { browserslistToTargets } from 'lightningcss';
-import { defineConfig } from 'vite';
+import { defineConfig, type HmrContext } from 'vite';
 import { loadBrowserslistFloors } from './scripts/browserslist_targets.mjs';
 import { BalancedSequencer } from './scripts/ci_balanced_sequencer.mjs';
 // Untyped zero-dep build helper (same convention as the other scripts/*.mjs tools).
@@ -15,6 +15,12 @@ import {
   diagnosticsCaptureAllowed,
   diagnosticsReadAllowed,
 } from './scripts/lib/diagnostics_capture_guard.mjs';
+import {
+  HELD_EQUIPMENT_FIT_VISUALS,
+  mergeHeldEquipmentFit,
+  validEquipmentFitTransforms,
+  validItemEquipmentFitKey,
+} from './scripts/lib/equipment_fit_payload.mjs';
 import { shouldDisableVitestFsModuleCache } from './scripts/lib/vitest_fs_module_cache.mjs';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
@@ -304,6 +310,173 @@ function musicEditorSavePlugin() {
   };
 }
 
+// Dev-only save endpoint for the Meshy Titan equipment fitter. Like the music
+// editor endpoint above, it accepts a bounded, fully validated payload and can
+// write only one fixed generated module inside the repository.
+function equipmentCalibrationSavePlugin() {
+  const generatedPath = path.resolve(
+    root,
+    'src/render/characters/meshy_titan_equipment_fit.generated.ts',
+  );
+  const heldGeneratedPath = path.resolve(
+    root,
+    'src/render/characters/held_attachment_fit.generated.json',
+  );
+  // Titan also has a runtime hand/carry profile, but its armor save must keep
+  // using the dedicated generated-module branch below.
+  const HELD_FIT_VISUALS = new Set(HELD_EQUIPMENT_FIT_VISUALS.filter((key) => key !== 'player_meshy_titan'));
+  const TARGETS = [
+    'mainhand',
+    'offhand',
+    'Armor_valor_Head',
+    'Armor_valor_Chest',
+    'Armor_valor_Waist',
+    'Armor_valor_ShoulderL',
+    'Armor_valor_ShoulderR',
+    'Armor_valor_BracerL',
+    'Armor_valor_BracerR',
+    'Armor_valor_GloveL',
+    'Armor_valor_GloveR',
+    'Armor_valor_LegL',
+    'Armor_valor_LegR',
+    'Armor_valor_FootL',
+    'Armor_valor_FootR',
+  ] as const;
+  type RawTransform = { position?: unknown; rotationDeg?: unknown; scale?: unknown };
+  const number = (value: number): string => {
+    const rounded = Math.round(value * 1_000_000) / 1_000_000;
+    return String(Object.is(rounded, -0) ? 0 : rounded);
+  };
+  const vector = (value: unknown): string =>
+    `[${(value as number[]).map((entry) => number(entry)).join(', ')}]`;
+
+  const writeHeldFit = (
+    visualKey: string,
+    transforms: Record<string, unknown>,
+    includeHands = true,
+  ): void => {
+    const current = JSON.parse(readFileSync(heldGeneratedPath, 'utf8')) as Record<
+      string,
+      Record<string, unknown>
+    >;
+    current[visualKey] = mergeHeldEquipmentFit(current[visualKey], transforms, includeHands);
+    writeFileSync(heldGeneratedPath, `${JSON.stringify(current, null, 2)}\n`);
+  };
+
+  return {
+    name: 'woc-equipment-calibration-save',
+    apply: 'serve' as const,
+    // Saving must not throw the user out of the weapon-fit studio. Invalidate the
+    // server-side transform cache so the next page load reads the new values,
+    // but suppress the normal full-page HMR reload; the already-open preview
+    // is already displaying the exact live state that was saved.
+    handleHotUpdate(context: HmrContext) {
+      const changedPath = path.resolve(context.file);
+      if (changedPath !== generatedPath && changedPath !== heldGeneratedPath) return;
+      for (const module of context.server.moduleGraph.getModulesByFile(context.file) ?? []) {
+        context.server.moduleGraph.invalidateModule(module);
+      }
+      return [];
+    },
+    configureServer(server: {
+      middlewares: {
+        use: (
+          route: string,
+          fn: (
+            req: {
+              method?: string;
+              on: (event: string, callback: (chunk?: unknown) => void) => void;
+            },
+            res: {
+              statusCode: number;
+              setHeader: (name: string, value: string) => void;
+              end: (body?: string) => void;
+            },
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use('/__equipment_calibration/save', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end('POST only');
+          return;
+        }
+        let body = '';
+        let rejected = false;
+        req.on('data', (chunk) => {
+          if (rejected) return;
+          body += String(chunk);
+          if (body.length > 64_000) {
+            rejected = true;
+            res.statusCode = 413;
+            res.end('too large');
+          }
+        });
+        req.on('end', () => {
+          if (rejected) return;
+          try {
+            const payload = JSON.parse(body) as {
+              version?: unknown;
+              visualKey?: unknown;
+              transforms?: Record<string, unknown>;
+            };
+            const transforms = payload.transforms;
+            const validCompletePayload =
+              payload.version !== 2 ||
+              !transforms ||
+              !validEquipmentFitTransforms(transforms, TARGETS);
+            const visualKey = typeof payload.visualKey === 'string' ? payload.visualKey : '';
+            if (
+              validCompletePayload ||
+              (visualKey !== 'player_meshy_titan' &&
+                !HELD_FIT_VISUALS.has(visualKey) &&
+                !validItemEquipmentFitKey(visualKey))
+            ) {
+              res.statusCode = 400;
+              res.end('invalid payload');
+              return;
+            }
+            if (HELD_FIT_VISUALS.has(visualKey) || validItemEquipmentFitKey(visualKey)) {
+              writeHeldFit(visualKey, transforms);
+              res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+              res.statusCode = 200;
+              res.end('ok');
+              return;
+            }
+            const lines = [
+              '// Generated by the in-game Equipment Fit developer panel. This checked-in',
+              '// baseline is loaded by both preview and world render paths. Do not hand-edit;',
+              '// run `npm run dev`, open /?weaponfit=1, fit the weapons, and press Save.',
+              '',
+              'export const MESHY_TITAN_EQUIPMENT_FIT = {',
+            ];
+            for (const target of TARGETS) {
+              const transform = transforms[target] as RawTransform;
+              lines.push(
+                `  ${target}: {`,
+                `    position: ${vector(transform.position)},`,
+                `    rotationDeg: ${vector(transform.rotationDeg)},`,
+                `    scale: ${number(transform.scale as number)},`,
+                '  },',
+              );
+            }
+            lines.push('} as const;', '');
+            writeFileSync(generatedPath, lines.join('\n'));
+            writeHeldFit(visualKey, transforms, false);
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+            res.statusCode = 200;
+            res.end('ok');
+          } catch (error) {
+            res.statusCode = 400;
+            res.end(String(error));
+          }
+        });
+      });
+    },
+  };
+}
+
 // Dev-only in-memory collector for an unattended local diagnostics run. Reports never
 // touch disk and the endpoints do not exist in preview or production builds.
 function diagnosticsCapturePlugin() {
@@ -406,6 +579,7 @@ export default defineConfig({
     staticPageAliasPlugin(),
     i18nModulepreloadPlugin(),
     musicEditorSavePlugin(),
+    equipmentCalibrationSavePlugin(),
     ...(process.env.WOC_DIAGNOSTICS_CAPTURE === '1' ? [diagnosticsCapturePlugin()] : []),
   ],
   resolve: { alias: { '#bot-detector': botDetectorImpl } },

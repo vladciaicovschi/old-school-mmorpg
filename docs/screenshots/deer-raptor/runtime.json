@@ -1,0 +1,95 @@
+{
+  "deer": {
+    "walk": {
+      "clip": "Deer_Walk",
+      "time": 0.8383984851330994,
+      "globalRunning": false,
+      "speed": 0.799999999998497
+    },
+    "run": {
+      "clip": "Deer_Run",
+      "time": 0.10793099158127095,
+      "globalRunning": false,
+      "speed": 3.999999999993988
+    },
+    "attacks": [
+      "Deer_Charge",
+      "Deer_AntlerLeft",
+      "Deer_AntlerLeft",
+      "Deer_Charge",
+      "Deer_AntlerRight",
+      "Deer_AntlerRight",
+      "Deer_AntlerLeft",
+      "Deer_AntlerRight",
+      "Deer_AntlerLeft",
+      "Deer_AntlerLeft",
+      "Deer_AntlerLeft",
+      "Deer_AntlerLeft",
+      "Deer_Charge",
+      "Deer_AntlerRight",
+      "Deer_Charge"
+    ],
+    "recovery": {
+      "clip": "Deer_Idle",
+      "time": 1.4333333333333331,
+      "oneShot": false
+    },
+    "death": {
+      "clip": "Deer_Death",
+      "time": 1.399999976158142,
+      "oneShot": false
+    },
+    "held": {
+      "clip": "Deer_Death",
+      "time": 1.399999976158142,
+      "oneShot": false
+    }
+  },
+  "raptor": {
+    "walk": {
+      "clip": "Raptor_Walk",
+      "time": 0.3981602022709625,
+      "globalRunning": false,
+      "speed": 0.799999999998497
+    },
+    "run": {
+      "clip": "Raptor_Run",
+      "time": 0.4448711815509341,
+      "globalRunning": false,
+      "speed": 4.799999999992484
+    },
+    "attacks": [
+      "Raptor_SlashRight",
+      "Raptor_SlashLeft",
+      "Raptor_SlashRight",
+      "Raptor_SlashRight",
+      "Raptor_SlashLeft",
+      "Raptor_SlashRight",
+      "Raptor_SlashLeft",
+      "Raptor_SlashRight",
+      "Raptor_SlashRight",
+      "Raptor_SlashLeft",
+      "Raptor_SlashLeft",
+      "Raptor_SlashRight",
+      "Raptor_SlashRight",
+      "Raptor_SlashLeft",
+      "Raptor_SlashRight"
+    ],
+    "recovery": {
+      "clip": "Raptor_Idle",
+      "time": 1.6166666666666658,
+      "oneShot": false
+    },
+    "death": {
+      "clip": "Raptor_Death",
+      "time": 1.4500000476837158,
+      "oneShot": false
+    },
+    "held": {
+      "clip": "Raptor_Death",
+      "time": 1.4500000476837158,
+      "oneShot": false
+    }
+  },
+  "errors": []
+}

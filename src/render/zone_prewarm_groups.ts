@@ -8,9 +8,13 @@
 import * as THREE from 'three';
 import { CLASSES, MOBS, NPCS } from '../sim/data';
 import { ALL_CLASSES, type Entity, type ZoneDef } from '../sim/types';
-import { type CharacterVisual, createCharacterVisual } from './characters';
-import { skinCount, visualKeyFor } from './characters/manifest';
-import { characterVisualPoolKey } from './characters/visual_pool';
+import {
+  type CharacterVisual,
+  characterBaseVisualKeyFor,
+  characterVisualPoolKeyFor,
+  createCharacterVisual,
+} from './characters';
+import { skinCount } from './characters/manifest';
 import type { PooledObjectView } from './ground_object_pool';
 import { buildGroundQuestObject } from './quest_objects';
 import { setRenderCategory } from './renderer_diagnostics';
@@ -105,7 +109,7 @@ export function buildEntityPrewarmGroup(
       const visual = createCharacterVisual(entity);
       // Assets unavailable: skip the seed so a later zone preparation can retry it.
       if (!visual) continue;
-      const poolKey = characterVisualPoolKey(entity);
+      const poolKey = characterVisualPoolKeyFor(entity);
       if (poolKey) pooled.push({ key: poolKey, visual });
       visual.root.visible = true;
       place(visual.root);
@@ -124,7 +128,7 @@ export function buildEntityPrewarmGroup(
 
 // Every NPC visual MODEL once (NPCs were not prewarmed at all, entering a zone hub
 // compiled their shaders live). Most NPCs share a handful of models (npc_knight,
-// npc_mage, ...), so dedup by model key (visualKeyFor) builds each only once.
+// npc_mage, ...), so dedup by the resolved base-model key builds each only once.
 export function buildNpcPrewarmGroup(
   host: object,
   zone: ZoneDef,
@@ -162,7 +166,7 @@ export function buildNpcPrewarmGroup(
       continue;
     }
     const entity = h.prewarmEntity('npc', npc.id, npc.color, 1);
-    const modelKey = visualKeyFor(entity);
+    const modelKey = characterBaseVisualKeyFor(entity);
     // Shared model already warm: this id's planned work exists already.
     if (h.prewarmedNpcModels.has(modelKey)) {
       warmed++;
@@ -174,7 +178,7 @@ export function buildNpcPrewarmGroup(
     if (!visual) continue;
     h.prewarmedNpcModels.add(modelKey);
     warmed++;
-    const poolKey = characterVisualPoolKey(entity);
+    const poolKey = characterVisualPoolKeyFor(entity);
     if (poolKey) pooled.push({ key: poolKey, visual });
     visual.root.visible = true;
     visual.root.position.set(((idx % 8) - 3.5) * 2.8, 0, Math.floor(idx / 8) * 2.8);

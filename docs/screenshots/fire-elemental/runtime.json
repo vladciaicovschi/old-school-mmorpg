@@ -1,0 +1,92 @@
+{
+  "key": "npc_dev_fire_elemental",
+  "entry": {
+    "templateId": "dev_fire_elemental",
+    "x": 812,
+    "z": 0,
+    "facing": 1.5707963267948966
+  },
+  "name": "Fire Elemental Prototype",
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Fire_Idle",
+    "Fire_Move"
+  ],
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "materials": [
+        "FireElemental_Basalt"
+      ],
+      "triangles": 9712,
+      "skinned": true
+    },
+    {
+      "name": "elemental_flame_head",
+      "materials": [
+        ""
+      ],
+      "triangles": 2,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_hand.l",
+      "materials": [
+        ""
+      ],
+      "triangles": 2,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_vfx_hand.r",
+      "materials": [
+        ""
+      ],
+      "triangles": 2,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_vfx_core",
+      "materials": [
+        ""
+      ],
+      "triangles": 2,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_hips",
+      "materials": [
+        ""
+      ],
+      "triangles": 2,
+      "skinned": false
+    },
+    {
+      "name": "character_far_mesh",
+      "materials": [
+        "FireElemental_Basalt"
+      ],
+      "triangles": 9712,
+      "skinned": false
+    },
+    {
+      "name": "character_shadow_proxy",
+      "materials": [
+        ""
+      ],
+      "triangles": 9712,
+      "skinned": false
+    },
+    {
+      "name": "",
+      "materials": [
+        ""
+      ],
+      "triangles": 32,
+      "skinned": false
+    }
+  ],
+  "errors": []
+}

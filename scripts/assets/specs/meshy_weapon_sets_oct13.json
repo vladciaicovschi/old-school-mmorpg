@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/claymore_sword_1.glb",
+      "out": "models/weapons/meshy/claymore_sword_1.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/claymore_sword_2.glb",
+      "out": "models/weapons/meshy/claymore_sword_2.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/claymore_sword_3.glb",
+      "out": "models/weapons/meshy/claymore_sword_3.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/claymore_sword_4.glb",
+      "out": "models/weapons/meshy/claymore_sword_4.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/claymore_sword_5.glb",
+      "out": "models/weapons/meshy/claymore_sword_5.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/lion_warhammer_1h_1.glb",
+      "out": "models/weapons/meshy/lion_warhammer_1h_1.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/lion_warhammer_1h_2.glb",
+      "out": "models/weapons/meshy/lion_warhammer_1h_2.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/lion_warhammer_1h_3.glb",
+      "out": "models/weapons/meshy/lion_warhammer_1h_3.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/lion_warhammer_1h_4.glb",
+      "out": "models/weapons/meshy/lion_warhammer_1h_4.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/lion_warhammer_1h_5.glb",
+      "out": "models/weapons/meshy/lion_warhammer_1h_5.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/dwarven_warhammer_2h_1.glb",
+      "out": "models/weapons/meshy/dwarven_warhammer_2h_1.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/dwarven_warhammer_2h_2.glb",
+      "out": "models/weapons/meshy/dwarven_warhammer_2h_2.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/dwarven_warhammer_2h_3.glb",
+      "out": "models/weapons/meshy/dwarven_warhammer_2h_3.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/dwarven_warhammer_2h_4.glb",
+      "out": "models/weapons/meshy/dwarven_warhammer_2h_4.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/dwarven_warhammer_2h_5.glb",
+      "out": "models/weapons/meshy/dwarven_warhammer_2h_5.glb",
+      "type": "static",
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/meshy_weapon_sets/raw/test_crossbow_1.glb",
+      "out": "models/weapons/meshy/test_crossbow_1.glb",
+      "type": "static",
+      "maxTex": 512
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "result": {
+    "templateId": "dev_water_elemental",
+    "key": "npc_dev_water_elemental",
+    "clip": "Water_Idle",
+    "pos": {
+      "x": 812,
+      "y": 1.7000000000000002,
+      "z": -48
+    },
+    "opacity": 0.72,
+    "sharedSkeleton": true,
+    "sharedGeometry": true,
+    "surfaceVisible": true,
+    "surfaceClock": 13.935099999999984
+  },
+  "errors": []
+}

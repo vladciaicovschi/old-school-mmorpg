@@ -1,0 +1,31 @@
+{
+  "clipsIdentical": [
+    "Wolf_Hit",
+    "Wolf_AlertLook",
+    "Wolf_Death",
+    "Wolf_Idle",
+    "Wolf_CombatIdle",
+    "Wolf_Walk",
+    "Wolf_Trot",
+    "Wolf_Run",
+    "Wolf_Howl",
+    "Wolf_BiteLeft",
+    "Wolf_BiteRight",
+    "Wolf_Lunge"
+  ],
+  "meshAttributesIdentical": [
+    "NORMAL",
+    "TANGENT",
+    "POSITION",
+    "TEXCOORD_0"
+  ],
+  "indicesIdentical": true,
+  "texturesIdentical": true,
+  "inverseBindIdentical": true,
+  "weightsNormalized": true,
+  "idempotent": true,
+  "changed": {
+    "changed": 2852,
+    "vertices": 101835
+  }
+}

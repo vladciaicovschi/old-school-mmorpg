@@ -13,6 +13,13 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'entities.mobs.dev_kobold.name': 'Кобольд (заменен)',
+  'entities.mobs.dev_meshy_murlok.name': 'Морлок (заменен)',
+  'hudChrome.warriorSuit.label': 'Комплект брони',
+  'hudChrome.warriorSuit.hint': 'Наденьте цельный комплект брони из сумки.',
+  'hudChrome.warriorSuit.recruit': 'Новобранец',
+  'hudChrome.warriorSuit.militia': 'Ополченец',
+  'hudChrome.warriorSuit.knight': 'Рыцарь',
   'guide.professions.endgameBodyRaidCollections':
     'Ковка мастера объединяет вещи с меткой «Уникальный (экипируется): Ковка мастера». Прежняя вершина ремесла по-прежнему использует найденные схемы, промежуточные изделия с суточным ограничением и общие материалы финального этапа. Комплекты Горнила представляют отдельный путь с рейдовыми материалами, а не дополнительные расходы поверх прежней цепочки. Обе группы делят один предел ношения в две вещи, поэтому конкурируют за одни и те же два места в вашей сборке. Готовые вещи свободно продаются, пока доведение до совершенства или заказное изготовление не привяжет конкретный экземпляр.',
   'guide.professions.endgamePatternsBodyCollections':
@@ -6078,6 +6085,32 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'auth.realm': 'Мир',
   'auth.newCharacter': 'Новый персонаж',
   'auth.appearance': 'Внешность',
+  'auth.equipmentCalibration': 'Настройка экипировки',
+  'auth.equipmentCalibrationHint':
+    'Выберите часть, затем перетаскивайте 3D-гизмо или используйте числовые поля.',
+  'auth.equipmentCalibrationItem': 'Предмет экипировки',
+  'auth.equipmentCalibrationMode': 'Режим трансформации',
+  'auth.equipmentCalibrationValues': 'Сохранённые значения',
+  'auth.equipmentCalibrationAxis': '{field}: {axis}',
+  'auth.equipmentSword': 'Меч',
+  'auth.equipmentShield': 'Щит',
+  'auth.equipmentBracer': 'Наруч',
+  'auth.equipmentLeft': 'Слева',
+  'auth.equipmentRight': 'Справа',
+  'auth.equipmentPosition': 'Положение',
+  'auth.equipmentRotation': 'Поворот',
+  'auth.equipmentScale': 'Масштаб',
+  'auth.equipmentPauseAnimation': 'Приостановить анимацию',
+  'auth.equipmentResumeAnimation': 'Продолжить анимацию',
+  'auth.equipmentResetItem': 'Сбросить предмет',
+  'auth.equipmentCopyValues': 'Копировать значения',
+  'auth.equipmentSaveProject': 'Сохранить настройку в проект',
+  'auth.equipmentSavedProject': 'Настройка сохранена в проекте.',
+  'auth.equipmentSaveFailed':
+    'Не удалось сохранить. Запустите локальный сервер разработки и повторите попытку.',
+  'auth.equipmentValuesCopied': 'Значения скопированы.',
+  'auth.equipmentCopyManual':
+    'Автоматическое копирование недоступно. Значения выделены.',
   'auth.class': 'Класс',
   'auth.name': 'Имя',
   'auth.chromaOption': 'Расцветка {n}',
@@ -12134,6 +12167,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'devCommand.actions.spawn.label': 'Создать существо',
   'devCommand.actions.teleport.description': 'Переместиться в точные координаты мира.',
   'devCommand.actions.teleport.label': 'Телепортироваться',
+  'devCommand.actions.modelLab.description':
+    'Переместиться в отдельную локацию для тестирования NPC и моделей персонажей.',
+  'devCommand.actions.modelLab.label': 'Остров тестирования моделей',
   'devCommand.categories.inventory': 'Инвентарь',
   'devCommand.categories.player': 'Игрок',
   'devCommand.categories.progress': 'Прогресс',
@@ -16183,6 +16219,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.zones.proving_shore.pois.1.label': 'Старый причал',
   'entities.zones.proving_shore.pois.2.label': 'Тренировочная площадка',
   'entities.zones.proving_shore.pois.3.label': 'Полоса кораблекрушений',
+  'entities.zones.dev_model_lab.name': 'Остров тестирования моделей',
+  'entities.zones.dev_model_lab.welcome':
+    'Тестовая локация разработчика. Используйте команды разработчика для создания и удаления тестовых персонажей.',
+  'entities.zones.dev_model_lab.pois.0.label': 'Линейка персонажей',
+  'entities.zones.dev_model_lab.pois.1.label': 'Галерея NPC',
+  'entities.zones.dev_model_lab.pois.2.label': 'Площадка существ',
   'guide.home.world.provingName': 'Берег Испытаний',
   'guide.home.world.provingBlurb':
     'Тихий учебный остров за проливом, где новые искатели приключений встают на ноги, прежде чем долина что-то с них спросит.',

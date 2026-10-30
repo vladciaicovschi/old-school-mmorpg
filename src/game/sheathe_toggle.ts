@@ -19,10 +19,15 @@ export interface SheatheCue {
 export function toggleSheatheWithCue(
   world: Pick<IWorld, 'player' | 'toggleWeaponStow'>,
   cue: SheatheCue,
+  views?: ReadonlyMap<number, { weaponStowed: boolean }>,
 ): void {
+  const shownStowed =
+    world.player.templateId === 'warrior' ? views?.get(world.player.id)?.weaponStowed : undefined;
   const wasStowed = world.player.weaponStowed;
   world.toggleWeaponStow();
   if (world.player.weaponStowed === wasStowed) return;
-  if (world.player.weaponStowed) cue.weaponSheathe();
+  // Automatic carry can differ from the stored cosmetic bit. Its Z-key edge
+  // toggles the visible pose, so the matching cue follows that same edge.
+  if (shownStowed === undefined ? world.player.weaponStowed : !shownStowed) cue.weaponSheathe();
   else cue.weaponUnsheathe();
 }

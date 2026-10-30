@@ -266,6 +266,10 @@ function modelKeyFor(visualKey) {
     const spec = { url: def.url, idle: def.clips?.idle ?? null, height: def.height };
     if (def.yaw) spec.yaw = def.yaw;
     if (def.hover) spec.hover = def.hover;
+    if (def.spirit) {
+      spec.spirit = def.spirit;
+    }
+    if (def.atlasDye) spec.atlasDye = def.atlasDye;
     if (def.show) spec.show = def.show;
     if (def.attach) {
       // swapOnly entries are pure swap-slot bases the game never renders (an
@@ -1418,6 +1422,8 @@ export interface GuideModelSpec {
   height: number;
   yaw?: number;
   hover?: number;
+  spirit?: import('../render/characters/spirit_appearance').SpiritKind;
+  atlasDye?: import('../render/characters/armor_dye').ArmorDyeSpec;
   show?: string[];
   attach?: GuideModelAttach[];
   weaponFix?: GuideModelWeaponFix[];

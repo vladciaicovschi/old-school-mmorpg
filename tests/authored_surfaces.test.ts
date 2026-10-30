@@ -15,6 +15,7 @@ import {
   VISUALS,
 } from '../src/render/characters/manifest';
 import { ITEM_WEAPON_VARIANTS } from '../src/ui/weapon_variants';
+import { IMPORTED_NPC_BODY_KEYS } from './helpers/imported_body_visuals';
 
 const MODELS = path.resolve(__dirname, '..', 'public', 'models');
 
@@ -125,6 +126,23 @@ const AUTHORED_ATLAS_DEFS = [
   'mob_drogmar',
   'mob_kobold_digger',
   'mob_grix',
+  'mob_crab',
+  'mob_proving_shore_scuttler',
+  'mob_proving_shore_tidepool_boss',
+  'npc_dev_smart_bear',
+  'npc_dev_fire_elemental',
+  'npc_dev_ice_elemental',
+  'npc_dev_water_elemental',
+  'npc_dev_stone_elemental',
+  'npc_dev_storm_elemental',
+  'npc_dev_smart_bufalo',
+  'npc_dev_smart_deer',
+  'npc_dev_smart_goat',
+  'npc_dev_smart_imp',
+  'npc_dev_smart_raptor',
+  'npc_dev_smart_wolf',
+  'npc_dev_smart_wolf_v2',
+  'dev_legacy_ogre',
   'mob_ignivar',
   'mob_ignivar_heart_of_the_end',
   'mob_ignivar_crucible_warden',
@@ -141,41 +159,83 @@ const AUTHORED_ATLAS_DEFS = [
   'mount_rallycart_rxt',
 ];
 
+const AUTHORED_PLAYER_DEFS = [
+  'player_meshy_sentinel_v1',
+  'player_warrior_recruit',
+  'player_warrior_militia',
+  'player_warrior_knight',
+];
+
 describe('authored surfaces', () => {
   it('routes both Varkhul drops through the authored held-model arm', () => {
     expect(isAuthoredHeldModelUrl(itemWeaponModelUrl('varkhul_forgebreaker') ?? '')).toBe(true);
     expect(isAuthoredHeldModelUrl(itemOffhandModelUrl('varkhul_emberward') ?? '')).toBe(true);
   });
 
-  it('leaves every other held model on the polish', () => {
-    // the class defaults, the shields, an adv-set piece, and an authored PBR
-    // craft weapon that was never reported: none of them are opted out
-    for (const itemId of ['eastbrook_buckler', 'highwatch_wallshield']) {
-      expect(isAuthoredHeldModelUrl(itemOffhandModelUrl(itemId) ?? ''), itemId).toBe(false);
+  it('keeps the Quaternius weapon pack on its authored flat-color response', () => {
+    for (const key of ['axe_small', 'dagger', 'hammer_small', 'shield_round', 'spear', 'sword']) {
+      expect(isAuthoredHeldModelUrl(`models/weapons/quaternius/${key}.glb`), key).toBe(true);
     }
+  });
+
+  it("keeps the Meshy Knight's Valor set on its authored PBR response", () => {
+    for (const key of ['knights_valor_shield', 'knights_valor_sword']) {
+      expect(isAuthoredHeldModelUrl(`models/weapons/meshy/${key}.glb`), key).toBe(true);
+    }
+  });
+
+  it('keeps all imported Meshy tier weapons on their authored PBR response', () => {
+    for (const family of [
+      'arcane_dagger',
+      'arcane_staff',
+      'ascendance_sword',
+      'evolution_axe',
+      'fallen_king_shield',
+      'claymore_sword',
+      'lion_warhammer_1h',
+      'dwarven_warhammer_2h',
+      'arcane_longbow',
+    ]) {
+      for (let tier = 1; tier <= 5; tier += 1) {
+        const key = `${family}_${tier}`;
+        expect(isAuthoredHeldModelUrl(`models/weapons/meshy/${key}.glb`), key).toBe(true);
+      }
+    }
+  });
+
+  it('keeps the standalone test crossbow on its authored PBR response', () => {
+    expect(isAuthoredHeldModelUrl('models/weapons/meshy/test_crossbow_1.glb')).toBe(true);
+  });
+
+  it('leaves every other held model on the polish', () => {
+    // The class defaults, an adv-set piece, and an authored PBR craft weapon
+    // that was never reported remain on the legacy polish.
     expect(isAuthoredHeldModelUrl('models/weapons/sword_1handed.glb')).toBe(false);
     expect(isAuthoredHeldModelUrl('models/weapons/adv_sword_2handed.glb')).toBe(false);
     expect(isAuthoredHeldModelUrl('models/weapons/emberfang_sword.glb')).toBe(false);
     // a creature or player GLB can never match the held-model set
     expect(isAuthoredHeldModelUrl('models/creatures/ogre.glb')).toBe(false);
     expect(isAuthoredHeldModelUrl('')).toBe(false);
-    expect(AUTHORED_HELD_MODELS.size).toBe(2);
+    expect(AUTHORED_HELD_MODELS.size).toBe(60);
   });
 
-  it('flags exactly the replaced creature and mount rigs, never a player body', () => {
-    for (const key of AUTHORED_ATLAS_DEFS) {
+  it('flags exactly the authored creature, mount and imported whole-body atlases', () => {
+    const expected = [...AUTHORED_ATLAS_DEFS, ...AUTHORED_PLAYER_DEFS, ...IMPORTED_NPC_BODY_KEYS];
+    for (const key of expected) {
       expect(VISUALS[key]?.authoredAtlas, key).toBe(true);
     }
     const flagged = Object.entries(VISUALS)
       .filter(([, def]) => def.authoredAtlas)
       .map(([key]) => key)
       .sort();
-    expect(flagged).toEqual([...AUTHORED_ATLAS_DEFS].sort());
+    expect(flagged).toEqual(expected.sort());
     for (const key of flagged) {
-      expect(key.startsWith('player_'), key).toBe(false);
-      // and never a GLB a player body is composed from or a class rig NPCs share
+      expect(key.startsWith('player_'), key).toBe(AUTHORED_PLAYER_DEFS.includes(key));
+      // Whole imported NPC bodies have painted atlases; shared class/modular
+      // kit rigs still keep their existing floor.
       expect(VISUALS[key].url.startsWith('models/chars/'), `${key}: ${VISUALS[key].url}`).toBe(
-        false,
+        AUTHORED_PLAYER_DEFS.includes(key) ||
+          (IMPORTED_NPC_BODY_KEYS as readonly string[]).includes(key),
       );
     }
   });
@@ -187,9 +247,9 @@ describe('authored surfaces', () => {
     const undeclared: string[] = [];
     let scanned = 0;
     for (const [key, def] of Object.entries(VISUALS)) {
-      // player bodies (composed from the modular part library, or a class rig)
-      // are never candidates: the flag is for creature and prop atlases only
-      if (def.modular || key.startsWith('player_')) continue;
+      // Character bodies (player, class, or NPC) stay on the shared character
+      // material path. The flag is reserved for creature and prop atlases.
+      if (def.modular || def.url.startsWith('models/chars/')) continue;
       const file = path.join(MODELS, def.url.replace(/^models\//, ''));
       if (!fs.existsSync(file)) continue;
       scanned += 1;

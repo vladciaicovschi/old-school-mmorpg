@@ -3017,6 +3017,8 @@ const ITEM_ENTITY_IDS = [
   'thornpeak_moonhide_cowl',
   'stormhymn_chain_grips',
   'stormhymn_chain_treads',
+  'dev_hunter_practice_bow',
+  'dev_hunter_practice_crossbow',
 ] as const;
 
 type ItemEntityId = (typeof ITEM_ENTITY_IDS)[number];
@@ -3685,6 +3687,8 @@ const APPENDED_ITEM_NAMES: Partial<Record<ItemEntityId, string>> = {
   thornpeak_moonhide_cowl: 'Thornpeak Moonhide Cowl',
   stormhymn_chain_grips: 'Stormhymn Chain Grips',
   stormhymn_chain_treads: 'Stormhymn Chain Treads',
+  dev_hunter_practice_bow: 'Practice Bow',
+  dev_hunter_practice_crossbow: 'Practice Crossbow',
 };
 
 function itemTranslations(names: readonly string[]): ItemEntityTranslations {

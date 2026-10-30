@@ -17,8 +17,11 @@ import type * as THREE from 'three';
 
 const shadowOnlyMaterialCache = new WeakMap<THREE.Material, THREE.Material>();
 
-export function makeShadowOnlyMaterial(src: THREE.Material): THREE.Material {
-  const cached = shadowOnlyMaterialCache.get(src);
+export function makeShadowOnlyMaterial(
+  src: THREE.Material,
+  cache: WeakMap<THREE.Material, THREE.Material> = shadowOnlyMaterialCache,
+): THREE.Material {
+  const cached = cache.get(src);
   if (cached) return cached;
   const mat = src.clone();
   if (Object.hasOwn(src, 'onBeforeCompile')) mat.onBeforeCompile = src.onBeforeCompile;
@@ -27,6 +30,6 @@ export function makeShadowOnlyMaterial(src: THREE.Material): THREE.Material {
   }
   mat.colorWrite = false;
   mat.depthWrite = false;
-  shadowOnlyMaterialCache.set(src, mat);
+  cache.set(src, mat);
   return mat;
 }

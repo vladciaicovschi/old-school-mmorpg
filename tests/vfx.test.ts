@@ -196,6 +196,67 @@ describe('pooled VFX cloud', () => {
     expect(impact).toHaveBeenCalledOnce();
   });
 
+  it('copies a wand palm origin without changing the target, speed or default body anchor', () => {
+    installCanvasStub();
+    const anchor = vi.fn(() => new THREE.Vector3(0, 1, 0));
+    const vfx = new Vfx(new THREE.Scene(), anchor);
+    const projectileFrom = vi.spyOn(
+      vfx as unknown as { projectileFrom: (...args: unknown[]) => void },
+      'projectileFrom',
+    );
+    const palm = new THREE.Vector3(4, 5, 6);
+    const cue = { sourceId: 1, targetId: 2, school: 'arcane' };
+    vfx.projectileForEvent(cue, palm);
+    expect(anchor).not.toHaveBeenCalled();
+    expect(projectileFrom.mock.calls[0].slice(0, 5)).toEqual([
+      new THREE.Vector3(4, 5, 6),
+      2,
+      'arcane',
+      1,
+      26,
+    ]);
+    palm.set(99, 99, 99);
+    const projectiles = (vfx as unknown as { projectiles: { pos: THREE.Vector3 }[] }).projectiles;
+    expect(projectiles[0].pos).toEqual(new THREE.Vector3(4, 5, 6));
+    vfx.projectileForEvent(cue);
+    expect(anchor).toHaveBeenCalledWith(1, 0.62);
+    vfx.dispose();
+  });
+  it.each([0, 1])(
+    'draws a narrow straight ranged trace without a comet at quality %s',
+    (quality) => {
+      installCanvasStub();
+      const vfx = new Vfx(new THREE.Scene(), (id, _frac, out = new THREE.Vector3()) =>
+        out.set(id === 1 ? 0 : 20, 1, 0),
+      );
+      vfx.setQuality(quality);
+      const probe = vfx as unknown as VfxProbe;
+      const spawn = vi.spyOn(probe, 'spawn');
+      vfx.projectileForEvent({
+        sourceId: 1,
+        targetId: 2,
+        school: 'physical',
+        attackAnimation: 'ranged-shot',
+      });
+      vfx.update(1 / 60);
+      expect(spawn).toHaveBeenCalledTimes(12);
+      const calls = spawn.mock.calls;
+      for (const call of calls) {
+        expect(call[1]).toBe(1);
+        expect(call[2]).toBe(0);
+        expect(call[7]).toBeLessThanOrEqual(0.18);
+        expect(call[8]).toBe(0.11);
+      }
+      expect(Math.abs(calls[0][0] - calls[11][0])).toBeCloseTo(0.88, 4);
+      vfx.clear();
+      spawn.mockClear();
+      vfx.projectileForEvent({ sourceId: 1, targetId: 2, school: 'fire' });
+      vfx.update(1 / 60);
+      expect(spawn.mock.calls[0][7], 'magic projectiles retain their round core').toBe(1);
+      vfx.dispose();
+    },
+  );
+
   it('renders deterministic pooled flame, fire, spark and smoke sprites for Judgment', () => {
     installCanvasStub();
     const build = () => {

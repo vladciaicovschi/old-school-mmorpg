@@ -1,0 +1,10 @@
+{
+  "items": [{
+    "src": "tmp/asset_src/community_sporeling_infected/community_sporeling_infected.glb",
+    "out": "models/creatures/community_sporeling_infected.glb",
+    "type": "character",
+    "maxTex": 2048,
+    "keepExtras": true,
+    "keepClips": ["Infected_Idle", "Infected_CombatIdle", "Infected_Walk", "Infected_Run", "Infected_Attack", "Infected_Combo", "Infected_Hit", "Infected_Death"]
+  }]
+}

@@ -67,7 +67,9 @@ export function updateSceneryFlame(
   state.active = true;
   const projectedPixels = projectedPixelSize(state.referenceHeight, viewDepth, projectionPixels);
   const cadence = cadenceIntervalForProjectedPixels(projectedPixels);
-  if (cadenceRefreshDue(time, state.lastFlickerAt, cadence)) {
+  // Shader flames animate individual tongues on the shared GPU clock.
+  // Preserve their authored scale; legacy flame meshes still pulse here.
+  if (!flame.userData.shaderSceneryFlame && cadenceRefreshDue(time, state.lastFlickerAt, cadence)) {
     const scale =
       0.85 + Math.sin(time * 9 + index * 2.4) * 0.12 + Math.sin(time * 23 + index) * 0.06;
     flame.scale.set(scale, scale * (1 + Math.sin(time * 13 + index) * 0.12), scale);

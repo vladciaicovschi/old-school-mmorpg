@@ -1,0 +1,47 @@
+{
+  "walk": {
+    "clip": "Imp_Fly",
+    "time": 0.12856109976525687,
+    "globalRunning": false,
+    "speed": 0.799999999998497
+  },
+  "run": {
+    "clip": "Imp_FlyFast",
+    "time": 0.9582222222223156,
+    "globalRunning": false,
+    "speed": 4.799999999992484
+  },
+  "attacks": [
+    "Imp_ClawRight",
+    "Imp_Dive",
+    "Imp_ClawLeft",
+    "Imp_ClawLeft",
+    "Imp_ClawRight",
+    "Imp_Dive",
+    "Imp_Dive",
+    "Imp_ClawLeft",
+    "Imp_ClawLeft",
+    "Imp_ClawLeft",
+    "Imp_ClawRight",
+    "Imp_ClawLeft",
+    "Imp_ClawRight",
+    "Imp_ClawLeft",
+    "Imp_ClawRight"
+  ],
+  "recovery": {
+    "clip": "Imp_Hover",
+    "time": 1.5166666666666662,
+    "oneShot": false
+  },
+  "death": {
+    "clip": "Imp_Death",
+    "time": 1.7999999523162842,
+    "oneShot": false
+  },
+  "held": {
+    "clip": "Imp_Death",
+    "time": 1.7999999523162842,
+    "oneShot": false
+  },
+  "errors": []
+}

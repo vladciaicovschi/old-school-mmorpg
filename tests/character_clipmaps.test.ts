@@ -9,6 +9,11 @@ import {
   type VisualDef,
   visualAssetUrlForGraphics,
 } from '../src/render/characters/manifest';
+import {
+  WARRIOR_HIP_CARRY_CLIPS,
+  WARRIOR_TRAVEL_CLIPS,
+} from '../src/render/characters/warrior_travel_names';
+import { weaponMotionClipNames } from '../src/render/characters/weapon_motion_core';
 
 // A clip name the shipped GLB does not carry fails SILENTLY at every layer:
 // baseAction() falls back, fadeTo()/playOneShot() return early, and the
@@ -22,7 +27,7 @@ const CHUNK_JSON = 0x4e4f534a; // 'JSON'
 
 interface GlbJson {
   animations?: { name?: string; channels?: { target?: { node?: number } }[] }[];
-  nodes?: { name?: string }[];
+  nodes?: { name?: string; mesh?: number; skin?: number }[];
 }
 
 /** Minimal glTF-binary reader: 12-byte header, then chunks; the JSON chunk
@@ -141,6 +146,13 @@ function loadedClipNames(def: VisualDef, standardMaterials: boolean, key?: strin
       if (names.has(source)) names.add(synthesized);
     }
   }
+  if (
+    def.clips.travel &&
+    [def.clips.idle, def.clips.walk, def.clips.run].every((name) => names.has(name))
+  ) {
+    for (const name of Object.values(WARRIOR_TRAVEL_CLIPS)) names.add(name);
+    for (const name of Object.values(WARRIOR_HIP_CARRY_CLIPS)) names.add(name);
+  }
   return names;
 }
 
@@ -149,6 +161,7 @@ function requiredClipNames(clips: ClipMap): string[] {
   return [
     clips.idle,
     clips.combatIdle,
+    clips.drawnIdle,
     clips.walk,
     clips.run,
     clips.death,
@@ -164,13 +177,21 @@ function requiredClipNames(clips: ClipMap): string[] {
     clips.walkBack,
     clips.flourish,
     clips.stow,
+    clips.draw,
+    ...Object.values(clips.travel ?? {}),
+    ...Object.values(clips.hipCarry ?? {}),
     ...clips.attack,
+    ...(clips.locomotionShotClips ?? []),
     ...(clips.idleVariants ?? []),
     clips.idleBeat?.clip,
     ...(clips.hit ?? []),
     ...Object.values(clips.attackByAbility ?? {}),
     ...Object.values(clips.castByAbility ?? {}),
+    ...Object.values(clips.castByTarget ?? {}),
+    ...Object.values(clips.castReleaseByTarget ?? {}),
     ...Object.values(clips.attackByHand ?? {}),
+    ...weaponMotionClipNames(clips.weaponMotions),
+    ...(clips.presentationPoses ?? []),
     // cast-exit play-out entries name clips: a typo would silently disable
     // the recovery and bring the snap-to-idle back
     ...(clips.castPlayOut ?? []),
@@ -188,6 +209,9 @@ function emoteChains(clips: ClipMap): [string, readonly string[]][] {
 const COVERED_CLIP_FIELDS = new Set<keyof ClipMap>([
   'idle',
   'combatIdle',
+  'drawnIdle',
+  'weaponMotions',
+  'presentationPoses',
   'walk',
   'run',
   'death',
@@ -204,14 +228,24 @@ const COVERED_CLIP_FIELDS = new Set<keyof ClipMap>([
   'walkBack',
   'flourish',
   'stow',
+  'draw',
+  'travel',
+  'carrySwapFraction',
+  'hipCarry',
   'attack',
   'hit',
   'attackByAbility',
   'attackTimeScaleByAbility',
   'castByAbility',
+  'castByTarget',
+  'castReleaseByTarget',
   'castTimeScaleByAbility',
   'castHoldPointSeconds',
+  'castHoldPointByAbility',
+  'castDurationFit',
   'castPlayOut',
+  'jumpTimeScale',
+  'jumpClampAtEnd',
   'attackByHand',
   'emote',
   'idleVariants',
@@ -234,8 +268,8 @@ const CLIPLESS_RIGS = new Set([
   // mount_visuals.ts), so its GLB carries no clips to lose.
   'mount_goblin_rocket_sled',
   'mount_rickshaw_mount',
-  'mob_glimmerwisp',
-  'mob_duskwisp',
+  'dev_legacy_glimmerwisp',
+  'dev_legacy_duskwisp',
   'mob_spider_egg_sac',
   // the dragonkin clutch shell: a two-state prop whose GLB ships no clips
   // (alive/dead is a mesh-visibility swap, VisualDef.corpseMeshSwap)
@@ -255,6 +289,22 @@ const tiers: [string, boolean][] = [
 ];
 
 describe('character ClipMaps match the shipped GLBs', () => {
+  it('binds the drawn Warlock staff idle to its actual body on both graphics tiers', () => {
+    const def = VISUALS.player_warlock;
+    expect(def.clips.drawnIdle).toBe('WarlockT1_StaffIdle');
+    expect(requiredClipNames(def.clips)).toContain(def.clips.drawnIdle);
+    for (const standard of [true, false]) {
+      expect(loadedClipNames(def, standard, 'player_warlock')).toContain(def.clips.drawnIdle);
+      const body = nodeNamesOf(visualAssetUrlForGraphics(def.url, standard));
+      const targets = (def.animUrls ?? [])
+        .map((url) =>
+          clipTargetsOf(visualAssetUrlForGraphics(url, standard)).get('WarlockT1_StaffIdle'),
+        )
+        .find(Boolean);
+      expect(targets?.size).toBeGreaterThan(20);
+      for (const name of targets ?? []) expect(body.has(name), name).toBe(true);
+    }
+  });
   it('covers every visual key in the manifest', () => {
     expect(rigs.length).toBeGreaterThan(50);
     expect(rigs.length).toBe(Object.keys(VISUALS).length - CLIPLESS_RIGS.size);
@@ -365,6 +415,23 @@ describe('character ClipMaps match the shipped GLBs', () => {
     expect(VISUALS.mount_rallycart_rxt.cutToIdle).toBe(true);
     // Opt-in only: a creature's legs blending down to a stand needs the fade.
     expect(VISUALS.mount_valorsteed.cutToIdle).toBeUndefined();
+  });
+
+  it('preserves the separately skinned Quaternius body parts', () => {
+    const quaterniusBodies = Object.entries(VISUALS).filter(
+      ([key]) => key.startsWith('player_quaternius_') || key.startsWith('npc_quaternius_'),
+    );
+    expect(quaterniusBodies).toHaveLength(10);
+    for (const [key, def] of quaterniusBodies) {
+      const skinnedMeshNodes = (glbJsonChunk(publicPath(def.url)).nodes ?? []).filter(
+        (node) => node.mesh !== undefined && node.skin !== undefined,
+      );
+      expect(skinnedMeshNodes.length, `${key} must remain a multipart rig`).toBeGreaterThan(1);
+      expect(
+        def.preserveSkinnedParts,
+        `${key} loses its shared-material outfit when the KayKit merge runs`,
+      ).toBe(true);
+    }
   });
 
   it('bakes the far-LOD proxy from a real idle pose, never bind pose', () => {

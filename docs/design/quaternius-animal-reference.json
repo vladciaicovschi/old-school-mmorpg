@@ -1,0 +1,705 @@
+{
+  "source": "bible/models/mobs/quanternius_animal_pack/FBX-20261018T182644Z-1-001.zip",
+  "archive_sha256": "59a176ec9457f84d6e43cb3c54ca6e4161480a1a5c73e12fe47af55ec6314731",
+  "author": "Quaternius",
+  "license": "CC0",
+  "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+  "animals": [
+    {
+      "model": "Alpaca",
+      "fbx_sha256": "0292f5199a6c3586263b2a7481e16a4766de7b86ba2e900ad645d5bda2725c10",
+      "bones": 61,
+      "fps": 24,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.0
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 1.0
+        },
+        {
+          "name": "Death",
+          "seconds": 1.04167
+        },
+        {
+          "name": "Eating",
+          "seconds": 7.5
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.75
+        },
+        {
+          "name": "Idle",
+          "seconds": 4.16667
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 4.16667
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 4.16667
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.58333
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.91667
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.45833
+        }
+      ]
+    },
+    {
+      "model": "Bull",
+      "fbx_sha256": "9c34d1156fbb376c7624ddc268186affdb064ea26b889fafad6e047df01bfb0a",
+      "bones": 56,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.03333
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 1.0
+        },
+        {
+          "name": "Death",
+          "seconds": 1.0
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.6
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.46667
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.73333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Cow",
+      "fbx_sha256": "097ba8d23692d901a9f821d569de579032aeb43b9e52d89e73d0999387337d74",
+      "bones": 56,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.03333
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 1.0
+        },
+        {
+          "name": "Death",
+          "seconds": 1.0
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.6
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.46667
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.73333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Deer",
+      "fbx_sha256": "b79f07ac3fd702ab98f5d1b606168618a318f10f57028aaaefd420c468be2618",
+      "bones": 61,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 0.8
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 0.8
+        },
+        {
+          "name": "Death",
+          "seconds": 0.83333
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.4
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.46667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.53333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Donkey",
+      "fbx_sha256": "bb507c0eaf5ba401b210da3e6329d559e89156e23389315dd15b184281fd4734",
+      "bones": 65,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.6
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 0.8
+        },
+        {
+          "name": "Death",
+          "seconds": 1.0
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.4
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.46667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.53333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Fox",
+      "fbx_sha256": "24da24dbd2800be0b268ade50429fb7d815423a92a9a39178a4fc460d7b832de",
+      "bones": 67,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Death",
+          "seconds": 1.06667
+        },
+        {
+          "name": "Eating",
+          "seconds": 2.53333
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.56667
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 0.93333
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2_HeadLow",
+          "seconds": 4.0
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_ToIdle",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.06667
+        }
+      ]
+    },
+    {
+      "model": "Horse",
+      "fbx_sha256": "babb40391b8c3e217be2bb9c1f7c4d21910e943c28840363509dde7e88b54cba",
+      "bones": 65,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.03333
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 1.0
+        },
+        {
+          "name": "Death",
+          "seconds": 1.0
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.6
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.46667
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.73333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Horse_White",
+      "fbx_sha256": "86ffa68f845c6b3744c7b7c3d3f9af630a90e1fd7b7e506b60ebc837552bbec9",
+      "bones": 65,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 1.03333
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 1.0
+        },
+        {
+          "name": "Death",
+          "seconds": 1.0
+        },
+        {
+          "name": "Eating",
+          "seconds": 6.0
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.6
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.46667
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.73333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Husky",
+      "fbx_sha256": "2fd68780ebd69e138303fd38a430f6b8a87f6aafd29770339c95ce15f52d7321",
+      "bones": 65,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack",
+          "seconds": 1.2
+        },
+        {
+          "name": "Death",
+          "seconds": 1.06667
+        },
+        {
+          "name": "Eating",
+          "seconds": 2.66667
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.56667
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 0.93333
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2_HeadLow",
+          "seconds": 4.0
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_ToIdle",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.06667
+        }
+      ]
+    },
+    {
+      "model": "ShibaInu",
+      "fbx_sha256": "293200761fb96194ebc1e5bc816e344c244a6ae95e2757761fddac85be763a22",
+      "bones": 62,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack",
+          "seconds": 1.2
+        },
+        {
+          "name": "Death",
+          "seconds": 1.06667
+        },
+        {
+          "name": "Eating",
+          "seconds": 2.66667
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.56667
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 0.93333
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2_HeadLow",
+          "seconds": 4.0
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_ToIdle",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.06667
+        }
+      ]
+    },
+    {
+      "model": "Stag",
+      "fbx_sha256": "76c4d6ed1fbefae722631c3b324c9152a0ad3f0fda4063212aa599fe2af84889",
+      "bones": 52,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack_Headbutt",
+          "seconds": 0.8
+        },
+        {
+          "name": "Attack_Kick",
+          "seconds": 0.8
+        },
+        {
+          "name": "Death",
+          "seconds": 1.1
+        },
+        {
+          "name": "Eating",
+          "seconds": 12.1
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 1.4
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_Headlow",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.46667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.53333
+        },
+        {
+          "name": "Jump_toIdle",
+          "seconds": 1.53333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.16667
+        }
+      ]
+    },
+    {
+      "model": "Wolf",
+      "fbx_sha256": "91d5c31678fa291571f82abb029fde5c14fdd5932a1569c3afaa5e9602bebf94",
+      "bones": 67,
+      "fps": 30,
+      "clips": [
+        {
+          "name": "Attack",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Death",
+          "seconds": 1.06667
+        },
+        {
+          "name": "Eating",
+          "seconds": 2.53333
+        },
+        {
+          "name": "Gallop",
+          "seconds": 0.56667
+        },
+        {
+          "name": "Gallop_Jump",
+          "seconds": 0.93333
+        },
+        {
+          "name": "Idle",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2",
+          "seconds": 3.33333
+        },
+        {
+          "name": "Idle_2_HeadLow",
+          "seconds": 4.0
+        },
+        {
+          "name": "Idle_HitReact_Left",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Idle_HitReact_Right",
+          "seconds": 0.66667
+        },
+        {
+          "name": "Jump_ToIdle",
+          "seconds": 1.33333
+        },
+        {
+          "name": "Walk",
+          "seconds": 1.06667
+        }
+      ]
+    }
+  ]
+}

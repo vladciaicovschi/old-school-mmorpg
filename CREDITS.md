@@ -98,6 +98,13 @@ than free, so ask before you rely on it.
 | Dungeon modular kit (walls, floors, pillars, torches, banners, chests, furniture; also the Drakelands castle structure set) | Kay Lousberg (KayKit) | https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0 | CC0 1.0 | Yes |
 | Graveyard/crypt props, dead trees, lanterns | Kay Lousberg (KayKit) | https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0 | CC0 1.0 | Yes |
 | Extra character animation library (Rig_Medium) | Kay Lousberg (KayKit) | https://kaylousberg.itch.io/kaykit-character-animations | CC0 1.0 | Yes |
+| Quaternius player and Proving Shore NPC outfit slice (`quaternius_male_ranger.glb`, `quaternius_female_ranger.glb`, `quaternius_*.glb`, `quaternius_ual_standard.glb`): Modular Character Outfits - Fantasy, with Universal Base Characters heads/hair and Universal Animation Library clips | Quaternius | https://quaternius.com/packs/modularcharacteroutfitsfantasy.html · https://quaternius.com/packs/universalbasecharacters.html · https://quaternius.itch.io/universal-animation-library | CC0 1.0 (asset-specific Standard pack licence files, downloaded 2026-09-14) | Yes |
+| Proving Shore weapon slice (`models/weapons/quaternius/*.glb`): Medieval Weapons Pack | Quaternius | https://quaternius.com/packs/medievalweapons.html | CC0 1.0 (official archive retained, downloaded 2026-09-16) | Yes |
+| Proving Shore tide-pool boss (`proving_shore_tidepool_boss.glb`): Ultimate Platformer Pack | Quaternius | https://quaternius.itch.io/ultimate-platformer-pack | CC0 1.0 (archive retained, downloaded 2026-09-14) | Yes |
+| Meshy Iron Titan tutorial-island player (`meshy_titan.glb`) | User-provided Meshy AI generation; auto-rig and animation clips prepared with Adobe Mixamo, finalized locally in Blender | https://www.meshy.ai/ · https://www.mixamo.com/ | Project asset and Adobe Mixamo terms; raw source files are not redistributed | With the project only |
+| Meshy Knight's Valor tutorial-island sword and shield (`models/weapons/meshy/knights_valor_*.glb`) | User-provided Meshy AI generation, separated and finalized locally in Blender | https://www.meshy.ai/ | Project asset terms; raw source files are not redistributed | With the project only |
+| Meshy Emberclaw Proving Shore crab (`proving_shore_scuttler.glb`) | User-provided Meshy AI generation and smart rig; game clips, skin cleanup, decimation and finalization authored locally in Blender | https://www.meshy.ai/ | Project asset terms; raw source files are not redistributed | With the project only |
+| Meshy named NPCs (`apothecary_lin.glb`, `fisherman_brandt.glb`, `trader_wilkes.glb`, `smith_haldren.glb`, `marshal_redbrook.glb`, `brother_aldric.glb`, `foreman_odell.glb`) | User-provided Meshy AI generations; auto-rigs and idle clips prepared with Adobe Mixamo, original PBR maps restored and finalized locally in Blender | https://www.meshy.ai/ · https://www.mixamo.com/ | Project asset and Adobe Mixamo terms; raw source files are not redistributed | With the project only |
 | Animated creatures (wolf, bull, fox, stag, alpaca, spider, frog, goblin, orc, yeti, giant, demon, ghost, goleling, glub, tribal, velociraptor, dragon) | Quaternius | https://poly.pizza/u/Quaternius · https://quaternius.com | CC0 1.0 | Yes |
 | Stylized Nature MegaKit (trees, rocks, bushes, mushrooms, grass) | Quaternius | https://quaternius.itch.io/stylized-nature-megakit | CC0 1.0 | Yes |
 | Medieval Village Pack (houses, inn, blacksmith, well, market, cart) | Quaternius | https://quaternius.com/packs/medievalvillage.html | CC0 1.0 | Yes |
@@ -106,7 +113,7 @@ than free, so ask before you rely on it.
 | Pirate Kit (palm trees, docks, ship, chests, cannon, anchor, beach rocks, beach house) | Quaternius | https://quaternius.com/packs/piratekit.html | CC0 1.0 | Yes |
 | LowPoly Animated Fish (dolphin, shark, manta ray, whale, clownfish, blue tang, puffer, swordfish, anglerfish, koi) | Quaternius | https://poly.pizza/u/Quaternius | CC0 1.0 | Yes |
 | Modular Dungeons Pack (stone walls, arches, pillar, floor tile, wall banner, trap door, horse statue, cobweb, coin piles) | Quaternius | https://poly.pizza/u/Quaternius | CC0 1.0 | Yes |
-| Medieval Village MegaKit (wagon, crate, fences, vines, arch, exterior stairs, castle bases, castle stairs) | Quaternius | https://quaternius.com/packs/medievalvillagemegakit.html | CC0 1.0 | Yes |
+| Medieval Village MegaKit, Standard and Pro (modular architecture, Wickharbor buildings and lighthouse materials, wagon, crate, fences, vines, arch, exterior stairs, castle bases, castle stairs) | Quaternius | https://quaternius.com/packs/medievalvillagemegakit.html | CC0 1.0 | Yes |
 | Survival Kit (tents, bedrolls, campfires, signpost, sand rocks) | Kenney | https://kenney.nl/assets/survival-kit | CC0 1.0 | Yes |
 | Watercraft Kit (sail boats, fishing boat, rowboat, buoys) | Kenney | https://kenney.nl/assets/watercraft-kit | CC0 1.0 | Yes |
 | Modular Dungeon Kit (corridor and room tiles, stairs, gates) | Kenney | https://kenney.nl/assets/modular-dungeon-kit | CC0 1.0 | Yes |
@@ -131,7 +138,7 @@ than free, so ask before you rely on it.
 | Basis Universal KTX2 transcoder (`public/basis/basis_transcoder.js`/`.wasm`, copied from three r165 `examples/jsm/libs/basis/`) | Binomial LLC | https://github.com/BinomialLLC/basis_universal | Apache-2.0 | Yes, attribution required |
 | Biome backdrop panoramas (vale_backdrop.webp, marsh_backdrop.webp, peaks_backdrop.webp and 4K variants) | World of ClaudeCraft | Project-generated procedural painterly sky panorama art | Project asset | With the project only |
 | Fel meteor POWERFUL VFX sprite (`public/vfx/fel_meteor_impact.png`) | World of ClaudeCraft | Original project art generated with OpenAI image generation from a text-only prompt, converted to a grayscale additive 512px runtime texture and tinted in-engine | Project asset | With the project only |
-| Loading-screen artwork (`public/textures/loading/*.webp`) | World of ClaudeCraft | Project-generated with OpenAI image generation from World of ClaudeCraft gameplay captures and project-owned character and creature references, maintainer-selected and optimized locally | Project asset | With the project only |
+| Loading-screen artwork (`public/textures/loading/*.webp`, `public/loading-screen.jpg`) | World of ClaudeCraft | Project-generated with OpenAI image generation; repainted from existing scene layouts using project-owned T1 character, creature and Fenbridge concepts and the project's hand-painted PBR style guide. Prompt set: `docs/design/loading-art-refresh.json` | Project asset | With the project only |
 | Elite dragon rank emblem (`public/ui/ranks/elite-dragon-frame.webp`) | World of ClaudeCraft | Project-generated with OpenAI image generation and optimized locally | Project asset, rights reserved | **No, permission required** |
 | Eastbrook Vale rebuild master concept, nine turnaround sheets, full-color surface-atlas source, and comparison evidence (`docs/screenshots/eastbrook-vale-rebuild/concepts/`, `turnarounds/`, and `materials/`) | World of ClaudeCraft | Original project art generated with OpenAI image generation using only World of ClaudeCraft captures and project-generated style/scale anchors; the full-color atlas source and any comparison containing it are provenance evidence, not the redistributable shipping texture; prompts and provenance are committed under `docs/design/eastbrook-vale-rebuild/` | Project asset, rights reserved | **No, permission required** |
 | Eastbrook finishing-pass master concept and Ravenpost mailbox / noticeboard turnaround sheets (`docs/screenshots/eastbrook-vale-rebuild/polish/concepts/` and `polish/turnarounds/`) | World of ClaudeCraft | Original project art generated with OpenAI image generation using only accepted World of ClaudeCraft concepts, turnarounds, and in-game captures; no proprietary-game screenshots or third-party art entered the lineage; exact prompts, hashes, and provenance are committed under `docs/design/eastbrook-vale-rebuild/` | Project asset, rights reserved | **No, permission required** |
@@ -353,6 +360,9 @@ non-commercial. For commercial use, arrange your own licence with the author.
 | Generated prop model (streetlamp_farshore_coral) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
 | Generated creature model + animations (bear_form, the druid Bear Form quadruped) | World of ClaudeCraft | Project-generated Tripo AI 3D sculpt, owned under the Tripo paid-plan license; rigged and animated locally rather than auto-rigged (29 bone deform rig fitted to the sculpt by measurement, distance-solver skinning, and nine IK-authored clips), then KTX2-compressed via glTF-Transform | Project asset | With the project only |
 | Ignivar Ashcaller creature model + animations (`public/models/creatures/ignivar_ashcaller.glb`) | World of ClaudeCraft contributor handoff | Contributor-provided `Ignivar_Ashcaller.zip` (SHA-256 `aa7aac6ddd2eedefdaec7e0c645558701236e60081f74f45a1e4cf088711eda9`), optimized locally with meshopt and KTX2 for shipping | Project asset | With the project only |
+| Fire elemental prototype (`public/models/creatures/fire_elemental_prototype.glb`) | World of ClaudeCraft | Derivative of the contributor-provided Ignivar Ashcaller above: staff removed, basalt/emissive atlas derived from the original, relaxed arm clips authored locally; meshopt and KTX2. Rebuild: `scripts/anim/build_fire_elemental.mjs`, `scripts/assets/specs/fire_elemental.json` | Project asset | With the project only |
+| Ice elemental prototype (`public/models/creatures/ice_elemental_prototype.glb`) | World of ClaudeCraft | Derivative of the contributor-provided Ignivar Ashcaller and staff-free fire elemental above: frosted-ice atlas, authored open-hand clips, three local crystal clusters, meshopt and KTX2. Rebuild: `scripts/anim/build_ice_elemental.mjs`, `scripts/assets/specs/ice_elemental.json` | Project asset | With the project only |
+| Water elemental prototype (`public/models/creatures/water_elemental_prototype.glb`) | World of ClaudeCraft | Derivative of the contributor-provided Ignivar Ashcaller and staff-free fire elemental above: softened surface, translucent water atlas, inherited open-hand clips, meshopt and KTX2. Rebuild: `scripts/anim/build_water_elemental.mjs`, `scripts/assets/specs/water_elemental.json`; procedural caustics and droplets authored locally | Project asset | With the project only |
 | Generated prop model (varkhul_grand_forge) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
 | Generated prop model (nythraxis_bone_spike) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
 | Generated prop model (nythraxis_binding_cage) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset | With the project only |
@@ -378,3 +388,226 @@ MIT License covering the source code.
 
 If you are unsure whether you may use an asset, or you want permission for
 something this file marks as restricted, ask first: tony@levystreet.com.
+
+### Meshy Sentinel V1 local character trial
+
+The project owner supplied the Meshy AI Ambersteel Sentinel and Iron Sentinel GLBs for local fitting and evaluation. The local trial fits Ambersteel onto the Iron skeleton and joins the complete suit into one skinned body, preserving the supplied textures. Combat clips are retargeted from the existing Titan animation bake. Source redistribution terms have not been independently verified; this import is prepared for local review.
+
+### Whole-body warrior appearance trial
+
+Recruit (Iron Vanguard), Militia (Ironbound Sentinel), and Knight (Ambersteel Sentinel) are owner-supplied Meshy models. The owner supplied Mixamo auto-rigs and the Sword and Shield animation pack for each body. The import retains 51 clips per suit on one skeleton, with Meshopt geometry and KTX2 textures. Sources stay outside the shipping tree; these assets are for local project evaluation.
+
+### Skeleton and treant refresh trial
+
+The project owner supplied the Crimson Bone Reaper, Crimson Bone Oracle, Crimson Bone Reaper Smart Rig, and Elderbark Guardian v2 source archives. The game imports retain their owner-supplied rigs and animation sources, rebuild opaque PBR materials from the original base-color, normal, metallic, and roughness maps, and use KTX2 texture compression for local project evaluation.
+
+### Rustbound mob weapon set
+
+The project owner supplied `mobs_rusted_weapons.zip` (Meshy AI Rustbound Warband Arsenal). The six separate weapons retain the original base-color, normal, metallic, and roughness maps, are optimized with Meshopt and KTX2, and are used for local project evaluation.
+
+### Starting Point NPC replacement trial
+
+The project owner supplied eight original Meshy NPC archives and Mixamo-rigged
+FBXs for Bursar Wick, Drillmaster Rook, Ferryman Odo, Instructor Maren,
+Overseer Pell, Quartermaster Finch, Tidewarden Nel, and Warden Tam. The game
+keeps the Mixamo skeletons and supplied loops, restores the original base-color,
+normal, metallic, and roughness maps from the archives, and ships Meshopt plus
+KTX2-compressed GLBs for local project evaluation.
+
+### T1 Meshy warlock trial
+
+The project owner supplied the Meshy Arcane Sentinel source archive, Mixamo
+magic pack, and Mixamo pro melee axe pack. The imported warlock restores the
+original base-color, normal, metallic, and roughness maps, retains magic clips,
+and uses selected axe-pack body motion as staff-strike animation on the common
+Mixamo skeleton. The KTX2-compressed asset is for local project evaluation.
+
+### T1 Meshy class body imports
+
+The T1 Hunter ranged follow-up uses the owner's Hunter Pro Longbow and Druid
+Pro Rifle / Locomotion packs, plus the Magic pack's upward buff gesture, baked
+locally onto the existing Hunter hierarchy.
+The two practice-weapon inventory paintings were generated separately with
+OpenAI's built-in image generation, using the supplied Meshy model previews as
+identity references and existing project paintings as style references.
+Prompts, references and accepted hashes: `docs/design/hunter-ranged-art.json`.
+
+The local caster-mob animation follow-up adds the owner's Skeleton Acolyte
+from `skeletons/mixamo_rigged/acolite.zip`, restoring its original PBR maps.
+Cultist, Acolyte, Caster V3 and Necromancer V2 animation-only companions use
+the owner's Pro Magic Pack and approved Warlock calm-idle motion, retargeted
+offline onto each original rig. Raw FBX packs are not redistributed; existing
+Meshy project-asset and Adobe Mixamo terms remain applicable.
+
+The T1 Warrior motion follow-up (`warrior_t1_motion_anims.glb`) uses the owner's
+Mixamo Locomotion, Pro Sword and Shield, Pro Melee Axe and Great Sword packs,
+retargeted locally to the existing body. Its calm idle reuses the approved
+Warlock/Druid-source idle through offline retargeting. Raw FBX packs are not
+redistributed; the original project-asset and Adobe Mixamo terms remain.
+
+The project owner supplied eight Meshy T1 source archives and their Mixamo
+animation packs for warrior, paladin, hunter, rogue, priest, mage, shaman, and
+druid. Each game GLB restores the original base-color, normal, metallic, and
+roughness maps and ships the supplied rig's idle, locomotion, attack and death
+baseline with Meshopt and KTX2 compression. The rogue uses the supplied
+sword-and-shield locomotion plus a downloaded stabbing animation as its attack.
+Original source archives and every Mixamo rig package remain in the Bible.
+
+### Meshy weapon expansion for local testing
+
+The project owner supplied the Claymores, Warhammers 1H, Warhammers 2H,
+Longbows and standalone Crossbow archives. Imported weapons retain the supplied
+PBR maps, are separated and grip-aligned in Blender, and finalized with Meshopt
+geometry and KTX2 textures. Original source archives are not redistributed.
+These assets are prepared for local project evaluation under the owner's
+Meshy project asset terms; no new external generation was purchased.
+
+### Meshy Smart Rig bear for local testing
+
+The project owner supplied `bible/models/mobs/animals/bear.glb`, including its
+Meshy Smart Rig and original PBR maps. The test-island bear preserves that
+geometry and skinning. Idle, locomotion, paw swipes, hit, death and head-raise
+motions were authored locally on the supplied skeleton with offline limb IK.
+The later motion-flow revision uses Quaternius animal motions as timing and
+weight-transfer references, with native curves and offline IK authored here.
+The original source remains in the Bible under the owner's Meshy project asset terms.
+
+### Meshy Smart Rig wolf for local testing
+
+The project owner supplied `bible/models/mobs/animals/wolf.glb` with its
+43-joint Smart Rig, original skin weights and PBR maps. The test-island wolf
+preserves the mesh and native rig, with a local correction to upper muzzle
+weights that followed the jaw and ears. Its canine locomotion, bites, lunge, hit,
+death, howl and alert motions were authored locally with offline digitigrade
+limb IK. The original source remains in the Bible under the owner's Meshy project asset terms.
+
+### Meshy Smart Rig buffalo for local testing
+
+The owner supplied `bible/models/mobs/animals/bufalo.glb`, with its native
+52-joint rig, original geometry, skin weights and PBR maps. Buffalo locomotion,
+horn strikes, charge, hit, death, bellow and browsing were authored locally with
+offline hoof IK. The supplied Quaternius Bull is a timing and weight-transfer
+reference. The Bible source remains under the owner's Meshy project asset terms.
+
+### Supplied community spider
+
+The owner supplied `bible/models/mobs/comunity/spider.glb`. The original author
+and asset license were not embedded in that file; importing it makes no new
+ownership or license claim. The original source is retained. Native animations
+were authored locally on its Smart Rig, using the already credited CC0
+Quaternius spider as a timing and pose reference. Import provenance and rebuild
+instructions are in `docs/design/smart-rig-spider.md`.
+
+### Quaternius animal motion references
+
+The owner supplied the FBX archive in `bible/models/mobs/quanternius_animal_pack`.
+The [Ultimate Animated Animal Pack](https://quaternius.com/packs/ultimateanimatedanimals.html)
+by Quaternius is CC0. Its wolf walk, gallop and attack are motion references for
+the native Smart Rig authors; donor geometry and skin weights are not installed
+on the test animals. Archive and individual FBX hashes, clip inventories and
+durations are recorded in `docs/design/quaternius-animal-reference.json`.
+
+### Meshy Smart Rig goat for local testing
+
+The owner supplied `bible/models/mobs/animals/goat.glb`, including its native
+44-joint rig, skin weights and PBR maps. The test-island body retains the original
+mesh and skinning. Its hoofed locomotion, horn strikes, ram, idle, hit, death,
+bleat and browsing motions were authored locally with offline hoof targets.
+The cataloged CC0 Quaternius ungulates supplied timing and weight-transfer
+references; donor geometry and skin weights are not installed. The original
+source remains in the Bible under the owner's Meshy project asset terms.
+
+### Owner-supplied deer and raptor for local testing
+
+The owner supplied the native deer (44 joints) and raptor (64 joints) in
+`bible/models/mobs/animals`. Original topology, PBR maps and skin groups are
+retained, with a normalized bind stance and locally authored baked motion.
+The owner's Quaternius Deer, Stag and Velociraptor FBX files are timing,
+support and silhouette references only. Donor bodies and skin weights are
+not redistributed. Archive hashes and sampled support traces are recorded
+in `docs/design/deer-raptor-references.json`. Original model files remain
+unchanged under the owner's project asset terms.
+
+### Owner-supplied Smart Rig imp for local testing
+
+The owner supplied `bible/models/mobs/meshy_smart_rig/imp.glb`. Its 56-joint
+rig, complete native topology, skin weights and PBR maps are retained.
+Wing beats, airborne leg poses, claw strikes, gestures and grounded death
+were authored locally on that skeleton. The original remains unchanged
+under the owner's project asset terms. No donor mesh or skin is installed.
+
+### Approved modular village assemblies
+
+Eastbrook, Icemantle, Gullhaven and Gibbetmere use owner-approved assemblies
+from Medieval Village MegaKit Pro and Fantasy Props MegaKit Pro by Quaternius,
+under their supplied CC0 terms. Existing Wickharbor kit assets are reused where
+identical. Supplied archives remain unchanged outside the public game tree.
+The owner supplied the Sanctuary Sentinels hammer paladin and Runestones of
+the Forest grave markers, plus Hobbit Garden wood supplies, under the owner's
+project asset terms. Only isolated, optimized derivatives ship in game.
+Source hashes and derivative paths are recorded in
+`scripts/assets/settlements/provenance.json`.
+
+- Storm and Stone Elemental Prototype: project-local derivatives of Ignivar Ashcaller / Heart of the End; original rig and atlas provenance retained. Staff removed, open hand, recolored rock atlases and runtime storm arcs.
+
+### Owner-supplied community ghost and wisp
+
+The owner supplied `bible/models/mobs/comunity/ghost.glb` and `wisp.zip`.
+The author and distribution license were not included in these files; no CC0
+claim is made. Original files and textures remain in the Bible. The shipping
+ghost preserves the supplied Smart Rig, topology and weights with locally
+authored floating motion. The unrigged wisp has a reduced static mesh, rigid
+motion clips, material palettes and owned mist effects. Source fingerprints
+and derivative paths are recorded in `docs/design/community-spirits.md`.
+
+### Owner-supplied animated community sporeling
+
+The owner supplied `bible/models/mobs/comunity/sporling.zip`, including the
+Meshy mushroom's character, merged animation FBX and original PBR maps. The
+shipping derivative preserves the animated source's geometry and skin;
+provided motion was adapted locally, with an added hit reaction. The source
+author and redistribution license were not included, and no CC0 claim is
+made. The unchanged source archive and derivative fingerprint are documented
+in `docs/design/community-sporeling.md`.
+
+### Owner-supplied infected community sporeling
+
+The owner supplied `bible/models/mobs/comunity/sporling_infected.zip`, including
+its native 66-joint rig, triple-combo animation and original PBR maps. The
+shipping derivative preserves topology and skin weights, retains the native
+attack, and adapts ordinary sporeling motion to the infected rig. Both supplied
+sporelings receive reversible material color corrections toward the owner's
+concept. The source author and distribution license were not included; no CC0
+claim is made. The source archive remains unchanged. Fingerprints and rebuild
+paths are recorded in `docs/design/community-sporeling.md`.
+
+### Wickharbor owner-approved vessels
+
+The modular sailship uses owner-approved geometry assembled from Quaternius
+Medieval Village MegaKit and Fantasy Props MegaKit under their supplied CC0
+terms, with ship-specific hull, sails and fittings authored for this project.
+Its anchor and the ordinary wooden rowboat are owner-supplied Meshy models
+from the project boat library, retained under the owner's project asset terms.
+The rowboat source is the archive named
+`Meshy_AI_Create_a_wooden_raft_which_is_textured_20260105_texture_fbx.zip`;
+the name is misleading, the owner confirmed the contents as the desired dinghy.
+Only optimized derivatives ship. Source hashes, the accepted sailship revision
+and matte rowboat material settings are recorded in
+`scripts/assets/wickharbor_vessels/upstream.json`.
+
+Cosmetic sailship derivatives keep this accepted hull and rig, with muted
+linen color factors and alternate native `Balcony_Simple_Straight` panels,
+barrels, crates, sacks and produce props from the same supplied CC0 kits.
+Their patch and editable-scene provenance is pinned in
+`scripts/assets/wickharbor_vessels/variant_sources.json`.
+
+The v21 brigantine refinement retains the accepted vessel body and the same
+source atlases, with project-authored corrected spars, sail cuts and rigging.
+Its immutable-base and role-patch provenance is pinned in
+`scripts/assets/wickharbor_vessels/rig_refinement.json`.
+
+
+Wickharbor mixed-rig derivatives retain the same accepted modular ship and kit
+licenses as the original fleet. Ketch/brig source studies and uniform railing
+patches are locally authored derivatives; provenance is pinned in
+`scripts/assets/wickharbor_vessels/fleet_rigs.json` and `variant_sources.json`.

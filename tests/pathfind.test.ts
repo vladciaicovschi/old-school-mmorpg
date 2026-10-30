@@ -14,6 +14,7 @@ import {
   resolvePlayerDestination,
 } from '../src/sim/pathfind';
 import { Sim } from '../src/sim/sim';
+import { localPoint } from '../src/sim/wickharbor_layout';
 import { groundHeight, WATER_LEVEL } from '../src/sim/world';
 
 // Highwatch paddock west run: an isolated, open-field fence with room to detour
@@ -66,18 +67,31 @@ describe('player pathfinding', () => {
   });
 
   it('routes around static blockers instead of walking straight through them', () => {
-    // Re-staged 2026-08-18 for the Eastbrook harbor move (d19aa33f76): the old
-    // blocker at (0,2) was a town building on the now-open vacated ground. The
-    // chapel at (2,-78) blocks the straight line across the chapel green, with
-    // walkable ground on both sides to detour over.
+    // The chapel is now an accessible interior. Use the solid Wolf Run
+    // barracks for this generic obstacle proof and derive the route from its
+    // authored collision dimensions rather than the retired chapel facade.
     const seed = 20061;
-    const from = { x: -2, z: -78 };
-    const to = { x: 6, z: -78 };
+    const blocker = PROPS.decorProps?.find(
+      (prop) => prop.key === 'hexBarracks' && prop.x > 0 && prop.z > -30,
+    );
+    if (!blocker?.hw || !blocker.hd) throw new Error('missing authored Wolf Run barracks box');
+    const halfDepth = blocker.hd;
+    const pose = { ...blocker, rot: blocker.rot ?? 0 };
+    const from = localPoint(pose, -blocker.hw - 1, 0);
+    const to = localPoint(pose, blocker.hw + 1, 0);
     const path = findPlayerPath(seed, from, to);
 
-    expect(isBlocked(seed, 2, -78)).toBe(true);
+    expect(isBlocked(seed, blocker.x, blocker.z)).toBe(true);
+    expect(isBlocked(seed, from.x, from.z)).toBe(false);
+    expect(isBlocked(seed, to.x, to.z)).toBe(false);
     expect(path.length).toBeGreaterThan(1);
-    expect(path.some((p) => Math.abs(p.z + 78) > 0.5)).toBe(true);
+    expect(
+      path.some(
+        (p) =>
+          Math.abs((p.x - pose.x) * Math.sin(pose.rot) + (p.z - pose.z) * Math.cos(pose.rot)) >
+          halfDepth + 0.49,
+      ),
+    ).toBe(true);
     expect(path[path.length - 1]).toEqual(to);
   });
 

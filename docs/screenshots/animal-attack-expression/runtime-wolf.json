@@ -1,0 +1,24 @@
+{
+  "errors": [],
+  "runtime": [
+    {
+      "animal": "wolf_v2",
+      "attacks": [
+        "Wolf_BiteLeft",
+        "Wolf_BiteLeft",
+        "Wolf_BiteRight",
+        "Wolf_Lunge",
+        "Wolf_BiteLeft",
+        "Wolf_Lunge"
+      ],
+      "recovery": {
+        "clip": "Wolf_Idle",
+        "time": 1.2500000000000004
+      },
+      "death": {
+        "clip": "Wolf_Death",
+        "time": 1.350000023841858
+      }
+    }
+  ]
+}

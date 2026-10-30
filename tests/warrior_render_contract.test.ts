@@ -22,34 +22,25 @@ describe('winning Warrior attack animation routing', () => {
     expect(weaponAttackStyle('missing_item', 'rusty_dagger')).toBeNull();
   });
 
-  it('pins winning Warrior hand and ability clips', () => {
-    expect(VISUALS.player_warrior.clips.attackByHand).toEqual({
-      twohand: '2H_Melee_Attack_Chop',
-      dualwield: 'Dualwield_Melee_Attack_Chop',
+  it('pins native equipment-specific Warrior attacks without foreign KayKit clips', () => {
+    const profiles = VISUALS.player_warrior.clips.weaponMotions!;
+    expect(VISUALS.player_warrior.clips.attackByHand).toBeUndefined();
+    expect(profiles.shield!.attackByAbility).toMatchObject({
+      shield_slam: 'WarriorT1_Shield_Block',
+      heroic_strike: 'WarriorT1_Shield_AttackB',
     });
-    expect(VISUALS.player_warrior.clips.attackByAbility).toMatchObject({
-      mortal_strike: '2H_Melee_Attack_Chop',
-      execute: '2H_Melee_Attack_Chop',
-      slam: '2H_Melee_Attack_Chop',
-      red_harvest: '2H_Melee_Attack_Chop',
-      breachmaker: '2H_Melee_Attack_Chop',
-      // Shieldcrack drives the offhand SHIELD arm (synthesized clip,
-      // scripts/_add_shield_bash_anim.mjs), never a sword chop.
-      shield_slam: 'Shield_Bash',
-      raging_gale: 'Dualwield_Melee_Attack_Chop',
-      bloodthirst: 'Dualwield_Melee_Attack_Chop',
-      // The two frontal-arc AoE strikes reap sideways (synthesized clip,
-      // scripts/_add_sweep_slice_anim.mjs), never the top-to-bottom chop.
-      cleave: '1H_Melee_Attack_Slice_Horizontal',
-      revenge: '1H_Melee_Attack_Slice_Horizontal',
-      thunder_clap: '1H_Melee_Attack_Chop',
-      faultline: '1H_Melee_Attack_Chop',
-      heroic_strike: '1H_Melee_Attack_Slice_Diagonal',
-      overpower: '1H_Melee_Attack_Slice_Diagonal',
-      hamstring: '1H_Melee_Attack_Slice_Diagonal',
-      sanguine_aura: 'Spellcast_Raise',
-      raised_guard: 'Block',
+    expect(profiles.twohand!.attackByAbility).toMatchObject({
+      mortal_strike: 'WarriorT1_TwoHand_AttackA',
+      heroic_strike: 'WarriorT1_TwoHand_AttackB',
+      raised_guard: 'WarriorT1_TwoHand_Block',
     });
+    expect(VISUALS.player_warrior.animUrls).toContain(
+      'models/chars/players/warrior_t1_motion_anims.glb',
+    );
+    expect(VISUALS.player_warrior_modular.clips.weaponMotions).toBeUndefined();
+    expect(VISUALS.player_warrior_modular.animUrls).not.toContain(
+      'models/chars/players/warrior_t1_motion_anims.glb',
+    );
   });
 
   it('routes Final Edict to its dedicated one-handed Templar verdict clip at authored speed', () => {

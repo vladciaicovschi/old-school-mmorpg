@@ -54,6 +54,11 @@
 //                     the translucent surface every build before this shipped).
 //                     The world canvas is opaque by default now; this is the A/B
 //                     arm for measuring the compositor difference on one build.
+//   ?charbody=kaykit - restore the previous Proving Shore character bodies.
+//   ?charbody=quaternius - compare against the Quaternius player-body slice.
+//                  Meshy is the default player body; Quaternius NPCs remain in
+//                  both experimental lanes.
+//                     Forms and Combat Mech still win in either mode.
 //   ?terraindetail=<0..1> - pins the live terrain-detail shed level
 //                  (render_budget.ts's `detail` bucket, terrain_detail_shed_core.ts)
 //                  for the whole session, ignoring live governor pressure, so an
@@ -126,6 +131,26 @@ const canvasAlpha = ((): boolean => {
 /** True under `?canvasalpha=on`: keep the legacy TRANSLUCENT world context. */
 export function worldCanvasAlphaRequested(): boolean {
   return canvasAlpha;
+}
+
+export type CharacterBodyMode = 'meshy' | 'quaternius' | 'kaykit';
+
+const characterBody = ((): CharacterBodyMode => {
+  if (typeof location === 'undefined') return 'meshy';
+  const requested = new URLSearchParams(location.search).get('charbody')?.toLowerCase();
+  if (requested === 'kaykit') return 'kaykit';
+  if (requested === 'quaternius') return 'quaternius';
+  return 'meshy';
+})();
+
+/** Selected tutorial-island character-body lane for this session. */
+export function characterBodyMode(): CharacterBodyMode {
+  return characterBody;
+}
+
+/** True when the Proving Shore body experiment (including its NPCs) is active. */
+export function quaterniusCharacterBodyEnabled(): boolean {
+  return characterBody !== 'kaykit';
 }
 
 const terrainDetailPin = ((): number | null => {

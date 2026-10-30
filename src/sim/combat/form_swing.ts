@@ -12,7 +12,17 @@
 // content tables, so it stays deterministic and host-agnostic.
 
 import { CLASSES, ITEMS } from '../data';
-import type { Entity, PlayerClass, WeaponInfo } from '../types';
+import { dist2d, type Entity, MELEE_RANGE, type PlayerClass, type WeaponInfo } from '../types';
+import { effectivePlayerAttackRange } from './player_attack_reach';
+
+/** Warlock's equipped weapon wins in reach; its existing class sidearm remains
+ * ranged. No mana threshold and no change to other caster/form profiles. */
+export function usesWarlockMeleeAuto(e: Entity, cls: PlayerClass, target: Entity): boolean {
+  return (
+    cls === 'warlock' &&
+    dist2d(e.pos, target.pos) <= effectivePlayerAttackRange(target, MELEE_RANGE)
+  );
+}
 
 // The rogue's baseline weapon speed (its starting dagger). Sourcing it from the
 // content tables keeps it honest even if the rogue's base weapon is ever

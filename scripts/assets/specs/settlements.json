@@ -1,0 +1,348 @@
+{
+  "source": "Approved settlement derivatives; supplied packs kept immutable",
+  "items": [
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_inn.glb",
+      "out": "models/settlements/eastbrook_inn.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_smithy.glb",
+      "out": "models/settlements/eastbrook_smithy.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_hall.glb",
+      "out": "models/settlements/eastbrook_hall.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_office.glb",
+      "out": "models/settlements/eastbrook_office.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_chapel.glb",
+      "out": "models/settlements/eastbrook_chapel.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_warehouse.glb",
+      "out": "models/settlements/eastbrook_warehouse.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_workshop.glb",
+      "out": "models/settlements/eastbrook_workshop.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_home.glb",
+      "out": "models/settlements/eastbrook_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_compact.glb",
+      "out": "models/settlements/eastbrook_compact.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_shuttered.glb",
+      "out": "models/settlements/eastbrook_shuttered.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_salter.glb",
+      "out": "models/settlements/eastbrook_salter.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_smokehouse.glb",
+      "out": "models/settlements/eastbrook_smokehouse.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_well.glb",
+      "out": "models/settlements/eastbrook_well.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_barrel.glb",
+      "out": "models/settlements/eastbrook_barrel.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_crate.glb",
+      "out": "models/settlements/eastbrook_crate.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_bench.glb",
+      "out": "models/settlements/eastbrook_bench.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_stall.glb",
+      "out": "models/settlements/eastbrook_stall.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_firepit.glb",
+      "out": "models/settlements/eastbrook_firepit.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_monument.glb",
+      "out": "models/settlements/eastbrook_monument.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_gravestone_4.glb",
+      "out": "models/settlements/eastbrook_gravestone_4.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_gravestone_2.glb",
+      "out": "models/settlements/eastbrook_gravestone_2.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_gravestone_8.glb",
+      "out": "models/settlements/eastbrook_gravestone_8.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_woodpile.glb",
+      "out": "models/settlements/eastbrook_woodpile.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/eastbrook_woodpile_small.glb",
+      "out": "models/settlements/eastbrook_woodpile_small.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_hearth_lodge.glb",
+      "out": "models/settlements/icemantle_hearth_lodge.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_trade_hall.glb",
+      "out": "models/settlements/icemantle_trade_hall.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_stone_sanctuary.glb",
+      "out": "models/settlements/icemantle_stone_sanctuary.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_family_home.glb",
+      "out": "models/settlements/icemantle_family_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_trapper_home.glb",
+      "out": "models/settlements/icemantle_trapper_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_fisher_home.glb",
+      "out": "models/settlements/icemantle_fisher_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_artisan_home.glb",
+      "out": "models/settlements/icemantle_artisan_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_wood_shelter.glb",
+      "out": "models/settlements/icemantle_wood_shelter.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/icemantle_kindling.glb",
+      "out": "models/settlements/icemantle_kindling.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gullhaven_smokehouse.glb",
+      "out": "models/settlements/gullhaven_smokehouse.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gullhaven_tower.glb",
+      "out": "models/settlements/gullhaven_tower.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gullhaven_gate.glb",
+      "out": "models/settlements/gullhaven_gate.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gullhaven_fence.glb",
+      "out": "models/settlements/gullhaven_fence.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_forest_inn.glb",
+      "out": "models/settlements/gibbetmere_forest_inn.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_candle_home.glb",
+      "out": "models/settlements/gibbetmere_candle_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_shuttered_home.glb",
+      "out": "models/settlements/gibbetmere_shuttered_home.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_vigil_house.glb",
+      "out": "models/settlements/gibbetmere_vigil_house.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_barrel.glb",
+      "out": "models/settlements/gibbetmere_barrel.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_crate.glb",
+      "out": "models/settlements/gibbetmere_crate.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_bench.glb",
+      "out": "models/settlements/gibbetmere_bench.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_stall.glb",
+      "out": "models/settlements/gibbetmere_stall.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/gibbetmere_firepit.glb",
+      "out": "models/settlements/gibbetmere_firepit.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 512
+    },
+    {
+      "src": "tmp/asset_src/settlements/wickharbor_gravestone_3.glb",
+      "out": "models/settlements/wickharbor_gravestone_3.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/wickharbor_gravestone_6.glb",
+      "out": "models/settlements/wickharbor_gravestone_6.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/settlements/wickharbor_gravestone_7.glb",
+      "out": "models/settlements/wickharbor_gravestone_7.glb",
+      "type": "static",
+      "keepExtras": true,
+      "maxTex": 1024
+    }
+  ]
+}

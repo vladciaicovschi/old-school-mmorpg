@@ -1,3 +1,4 @@
+import { settlementService } from '../settlements_layout';
 // Interactable town noticeboards. The active WorldContent supplies this list,
 // keeping entity spawn, static collision, and interaction under one authority.
 
@@ -132,8 +133,21 @@ function hubBoard(
   return townBoard(id, entityId, x, z, 0, { x, z: z + 1.5 });
 }
 
+function settlementBoard(id: string, fallback: NoticeboardDef): NoticeboardDef {
+  const p = settlementService(id, 'noticeboard');
+  if (!p) return fallback;
+  const rotation = p.rot ?? 0;
+  return {
+    ...fallback,
+    x: p.x,
+    z: p.z,
+    rotation,
+    frontStandingPoint: { x: p.x + Math.sin(rotation) * 1.5, z: p.z + Math.cos(rotation) * 1.5 },
+  };
+}
+
 export const NOTICEBOARDS: readonly NoticeboardDef[] = Object.freeze([
-  EASTBROOK_NOTICEBOARD,
+  settlementBoard('eastbrook', EASTBROOK_NOTICEBOARD),
   PROVING_SHORE_NOTICEBOARD,
   // Fenbridge: beside the civic muster board at the square's edge, facing
   // the civic centre like its neighbour (FENBRIDGE_LAYOUT civic).
@@ -143,15 +157,21 @@ export const NOTICEBOARDS: readonly NoticeboardDef[] = Object.freeze([
   hubBoard('eldergleam_noticeboard', 2_000_000_005, REALM_ZONE, -12),
   hubBoard('wyrmwatch_noticeboard', 2_000_000_006, DRAKELANDS_ZONE, 5),
   // Nudged off the pass-side square furniture (the placements probe).
-  hubBoard('icemantle_noticeboard', 2_000_000_007, FROSTVEIL_ZONE, -8, -10),
+  settlementBoard(
+    'icemantle',
+    hubBoard('icemantle_noticeboard', 2_000_000_007, FROSTVEIL_ZONE, -8, -10),
+  ),
   hubBoard('lanternmere_noticeboard', 2_000_000_008, AMBERFALL_ZONE, -5),
   hubBoard('bridgemere_noticeboard', 2_000_000_009, WILLOWFEN_ZONE, -5),
   hubBoard('moonrest_noticeboard', 2_000_000_010, NIGHTBLOOM_ZONE, -5),
-  hubBoard('gallowmere_noticeboard', 2_000_000_011, WRAITHWOOD_ZONE, 5),
+  settlementBoard(
+    'gibbetmere',
+    hubBoard('gallowmere_noticeboard', 2_000_000_011, WRAITHWOOD_ZONE, 5),
+  ),
   hubBoard('drifthaven_noticeboard', 2_000_000_012, PALMREACH_ZONE, -5),
   hubBoard('hedgewick_noticeboard', 2_000_000_013, EVERGARDEN_ZONE, 5),
   hubBoard('wickharbor_noticeboard', 2_000_000_014, GALECREST_ZONE, -5),
-  hubBoard('gullhaven_noticeboard', 2_000_000_015, FARSHORE_ZONE, 5),
+  settlementBoard('gullhaven', hubBoard('gullhaven_noticeboard', 2_000_000_015, FARSHORE_ZONE, 5)),
 ]);
 
 const fenbridgeMusterBoard = FENBRIDGE_LAYOUT.civic.musterBoard;

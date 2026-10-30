@@ -1,0 +1,45 @@
+[
+  {
+    "animal": "wolf",
+    "revised": [
+      "Wolf_BiteLeft",
+      "Wolf_BiteRight",
+      "Wolf_Lunge"
+    ],
+    "preserved": [
+      "Wolf_Hit",
+      "Wolf_AlertLook",
+      "Wolf_Death",
+      "Wolf_Idle",
+      "Wolf_CombatIdle",
+      "Wolf_Walk",
+      "Wolf_Trot",
+      "Wolf_Run",
+      "Wolf_Howl"
+    ],
+    "geometryIdentical": true,
+    "texturesIdentical": true
+  },
+  {
+    "animal": "goat",
+    "revised": [
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_Ram"
+    ],
+    "preserved": [
+      "Goat_Idle",
+      "Goat_CombatIdle",
+      "Goat_Walk",
+      "Goat_Trot",
+      "Goat_Run",
+      "Goat_Hit",
+      "Goat_Death",
+      "Goat_Bleat",
+      "Goat_AlertLook",
+      "Goat_Graze"
+    ],
+    "geometryIdentical": true,
+    "texturesIdentical": true
+  }
+]

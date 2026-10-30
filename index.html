@@ -196,10 +196,38 @@
      src/main.ts barrel; this entry's per-entry layer (the #rotate-device
      orientation gate) loads from index.extra.css linked above. Layer
      names are flat (hud-mobile, not hud.mobile): a dot is a sublayer separator. This
-     inline block is intentionally empty. */
+     The boot preloader below is the one intentional critical rule: it must
+     paint before the module CSS arrives, otherwise it cannot cover that load. */
+  #boot-preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    background: #05070c;
+    opacity: 1;
+    transition: opacity 220ms ease;
+  }
+  #boot-preloader[data-ready] { opacity: 0; pointer-events: none; }
+  .boot-preloader-spinner {
+    width: 52px;
+    height: 52px;
+    border: 3px solid rgba(214, 181, 112, 0.2);
+    border-top-color: #d6b570;
+    border-radius: 50%;
+    animation: boot-preloader-spin 0.8s linear infinite;
+  }
+  @keyframes boot-preloader-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    #boot-preloader { transition: none; }
+    .boot-preloader-spinner { animation-duration: 1.6s; }
+  }
 </style>
 </head>
 <body class="steam-wishlist-pending" data-start-panel="mode-select">
+  <div id="boot-preloader" role="status" aria-label="Loading">
+    <div class="boot-preloader-spinner" aria-hidden="true"></div>
+  </div>
   <!-- Skip links: the first focusable elements, visually hidden until focused (a11y
        infra). Targets live inside #game-ui-template, cloned into the page in-game. -->
   <a class="hud-skip" href="#ui" data-i18n="hudChrome.skipLinks.mainHud">Skip to Main HUD</a>

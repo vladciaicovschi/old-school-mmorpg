@@ -2,10 +2,12 @@
 // NPC id, druid/polymorph form) onto a rigged glTF asset + clip names + kit.
 // Pure data + dispatch — no three.js imports, no loading.
 
+import { isOnProvingShore } from '../../sim/content/proving_shore';
+import { SPORELING_PALETTES } from './sporeling_palettes';
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
-import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
+import { offhandMirrorsWeaponSkin, weaponTypeForItem } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
-import { ITEMS, MOBS } from '../../sim/data';
+import { DEV_MODEL_COMPARISON_GALLERY, ITEMS, MOBS } from '../../sim/data';
 import {
   VARKHUL_ANVILS_DECREE_CAST_ID,
   VARKHUL_BOSS_ID,
@@ -35,7 +37,28 @@ import {
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
 import { VARKHUL_FORGING_STRIKE_TIMESCALE } from '../varkhul_forge_hammer';
+import type { ArmorDyeSpec } from './armor_dye';
+import { playerArmorVisualKey } from './armor_tier_core';
+import { type CarriedAttachmentFit, carriedAttachmentFitFor } from './carried_attachment_fit';
+import type { CastDurationFit } from './cast_duration_core';
+import { casterMobMotion } from './caster_mob_motion';
+import { HELD_ATTACHMENT_FITS, type HeldAttachmentFit } from './held_attachment_fit';
+import { HUNTER_T1_MOTION_CLIPS } from './hunter_t1_motion';
+import { type EquipmentPartMap, MESHY_TITAN_ARMOR_PARTS } from './meshy_titan_armor_core';
+import { MESHY_TITAN_WEAPON_MODEL_URLS } from './meshy_titan_weapon_models_core';
+import type { ModelGait } from './model_gait_core';
 import { NPC_PROP_SET_IDS, type NpcPropSet } from './npc_looks';
+import { PALADIN_TRAVEL_CLIPS, PALADIN_TWOHAND_MOTION } from './paladin_twohand_motion';
+import { crossbowModelFallback, HUNTER_CROSSBOW_MODEL } from './ranged_weapon_core';
+import { REMAINING_T1_CLASSES, remainingPlayerMotion } from './remaining_player_motion';
+import { SENTINEL_V1_CLIPS } from './sentinel_v1';
+import { SPIDER_VARIANTS } from './spider_palettes';
+import { type SpiritKind, spiritDye } from './spirit_appearance';
+import { TROLL_PALETTES } from './troll_palettes';
+import { WARRIOR_SUIT_CLIPS, WARRIOR_SUITS, warriorSuitVisualKey } from './warrior_suits';
+import { WARRIOR_T1_MOTION_CLIPS } from './warrior_t1_motion';
+import { WARRIOR_HIP_CARRY_CLIPS, WARRIOR_TRAVEL_CLIPS } from './warrior_travel_names';
+import type { WeaponMotionProfiles } from './weapon_motion_core';
 
 export interface EmoteClipSpec {
   clips: readonly string[];
@@ -45,6 +68,9 @@ export interface EmoteClipSpec {
 
 export interface ClipMap {
   idle: string;
+  /** Clips loaded solely for a frozen presentation portrait. They never enter
+   * the in-world animation state machine. */
+  presentationPoses?: string[];
   /** Extra standing-still clips, played one at a time in place of `idle` and
    *  then handed back to it over the standard one-shot crossfade. Purely
    *  cosmetic idle-breakers ("fidgets"): author each to END on the idle pose,
@@ -68,10 +94,20 @@ export interface ClipMap {
    *  Its pose should match what the rig's attack and hit one-shots open and
    *  close on, so those blend into and out of it without a snap. */
   combatIdle?: string;
+  /** Native held-weapon stance; stowed/free-hand idle remains unchanged. */
+  drawnIdle?: string;
   walk: string;
   run: string;
-  /** one-shot swing clips, rotated per attack */
+  /** Relaxed locomotion while carried equipment is attached to the back. */
+  travel?: { idle: string; walk: string; run: string; jump?: string };
+  /** Optional native motion families selected by actual equipped hands. */
+  weaponMotions?: WeaponMotionProfiles;
+  /** One-shot swing clips, cycled unless visual-only attack weights are set. */
   attack: string[];
+  /** Relative random-selection weights aligned with attack. */
+  attackWeights?: readonly number[];
+  /** Native ranged one-shots that can share legs with locomotion. */
+  locomotionShotClips?: readonly string[];
   /** Optional per-ability swing or cast-gesture override. */
   attackByAbility?: Record<string, string>;
   /** Playback rate for authored per-ability clips that must keep exact timing. */
@@ -83,6 +119,8 @@ export interface ClipMap {
   hit?: string[];
   /** looping cast channel */
   cast?: string;
+  /** Fit an end-aligned preparation window to the authoritative cast. */
+  castDurationFit?: CastDurationFit;
   /** Hold instead of replaying: the generic `cast` clip plays ONCE up to this
    *  many seconds in (the held gesture at the top of the raise: arm up,
    *  pointing) and FREEZES on that frame while the cast channels; the
@@ -99,11 +137,27 @@ export interface ClipMap {
    *  cast differing from the rig's generic channel; the one-shot route in
    *  attackByAbility cannot cover held cast states). */
   castByAbility?: Record<string, string>;
+  /** A relationship-specific cast gesture, used when an ability has no more
+   * specific override. Self/ally gestures can therefore differ from a hostile
+   * projectile release without duplicating an ability list. */
+  castByTarget?: Partial<Record<'self' | 'ally' | 'hostile', string>>;
+  /** One-shot spell release paired with a relationship-specific cast loop. */
+  castReleaseByTarget?: Partial<Record<'self' | 'ally' | 'hostile', string>>;
   /** Playback rate for per-ability cast clips whose authored length must land
    *  its key pose inside the cast window. Also re-applied every frame, since
    *  actions are cached per clip and a clip shared with attackByAbility would
    *  otherwise carry that route's one-shot timescale into the cast loop. */
   castTimeScaleByAbility?: Record<string, number>;
+  /** Per-ability freeze frame for an authored cast. The animation reaches its
+   * release pose, waits there for the simulation's cast to resolve, and then
+   * plays its recovery from that exact pose. */
+  castHoldPointByAbility?: Record<string, number>;
+  /** A full takeoff-to-landing clip fitted to the simulation's airborne time. */
+  jumpTimeScale?: number;
+  /** Stop a compressed takeoff-to-landing clip on its final pose while the
+   * physics body is still airborne. This prevents a late snapshot frame from
+   * restarting the crouch at the end of an otherwise complete hop. */
+  jumpClampAtEnd?: boolean;
   sitDown?: string;
   sitIdle?: string;
   /** swim base. On the authored player lane this is the SUBMERGED stroke and
@@ -135,6 +189,11 @@ export interface ClipMap {
   /** arm gesture for the Z-key sheathe toggle; the held-prop swap lands at its
    *  midpoint (see visual.ts setWeaponStowed). Absent = snap with no gesture. */
   stow?: string;
+  /** Separate full-length draw gesture; absent retains the legacy stow gesture. */
+  draw?: string;
+  /** Authored carry gestures play completely and swap props at this fraction. */
+  carrySwapFraction?: number;
+  hipCarry?: { draw: string; stow: string; dualDraw: string; dualStow: string };
   /** player-facing overhead emote one-shots; clips are sourced from the GLB. */
   emote?: Partial<Record<OverheadEmoteId, EmoteClipSpec>>;
 }
@@ -154,6 +213,18 @@ export interface AttachDef {
    *  this on an attach that should showcase in the guide (the shield classes'
    *  offhand bases deliberately stay unflagged). */
   swapOnly?: boolean;
+  /** Hand whose final local transform is authored by the equipment fitting
+   *  studio. This is deliberately independent from weaponSlots/offhandSlot:
+   *  a fixed shield or the second copy of a mirrored weapon still needs its
+   *  own saved fit without becoming a gameplay equipment swap slot. */
+  calibrationSlot?: 'mainhand' | 'offhand';
+  /** Final visual scale multiplier for this authored attachment. Applied after
+   *  the model-family grip and rig adapter, before an editor-authored fit. */
+  scaleMultiplier?: number;
+  /** Keep this prop on the back even while the character is not manually
+   * sheathed. Used by free-hand casters whose combat silhouette is built
+   * around gestures rather than holding their staff in every state. */
+  stowByDefault?: boolean;
 }
 
 export interface VisualDef {
@@ -172,6 +243,10 @@ export interface VisualDef {
   yaw?: number;
   /** Optional texture-aware ambient lift for exceptionally dark authored bodies. */
   selfIllumination?: number;
+  /** Owned body particles, attached before the visual's GPU compile gate. */
+  bodyVfx?: 'fire' | 'ice' | 'water' | 'storm' | 'stone';
+  /** Permanent spectral surface and owned mist, independent of player ghost effects. */
+  spirit?: SpiritKind;
   /** Optional per-visual multiplier for scene environment reflections. */
   envMapIntensity?: number;
   /** Force a fully diffuse surface response on the body materials: zero
@@ -191,6 +266,8 @@ export interface VisualDef {
    *  Opt-in per def on purpose: player bodies and every other kit rig keep
    *  the uniform floor they always had. */
   authoredAtlas?: boolean;
+  /** Selective atlas recolouring, preserving the rig and original texture. */
+  atlasDye?: ArmorDyeSpec;
   /** KayKit chars ship every accessory visible: non-skinned mesh nodes to KEEP.
    *  undefined = keep everything (creature GLBs have no accessories). */
   show?: string[];
@@ -212,6 +289,8 @@ export interface VisualDef {
   /** u/s at which the walk/run cycles look right (timeScale matching) */
   walkRef?: number;
   runRef?: number;
+  /** Optional presentation thresholds for a native body with a shorter stride. */
+  gait?: ModelGait;
   attackTimeScale?: number;
   deathTimeScale?: number;
   /** Cut out of locomotion into idle instead of crossfading.
@@ -236,6 +315,29 @@ export interface VisualDef {
    *  instead — e.g. the cosmetic-only Combat Mech, loaded via preloadMechAssets()
    *  when the skin-select preview opens, so it never bloats every client's boot. */
   lazyPreload?: boolean;
+  /** Keep the source SkinnedMeshes separate instead of running the KayKit
+   *  body-part merge. Use for third-party rigs whose per-part bind transforms
+   *  do not satisfy that pipeline's runtime rendering assumptions. */
+  preserveSkinnedParts?: boolean;
+  /** Named skinned nodes that form independently visible equipment slots on a
+   *  fixed body. Unlike `modular`, this keeps one shared rig and toggles its
+   *  authored armor nodes in place as gameplay equipment changes. */
+  equipmentParts?: EquipmentPartMap;
+  /** Attachment-bone adapter for bodies that use anatomical humanoid hand
+   *  bones instead of the KayKit handslot markers expected by class and NPC
+   *  prop layouts. */
+  attachmentRig?: 'quaternius_humanoid' | 'mixamo_humanoid' | 'mixamo_standard' | 'mixamo_sentinel';
+  /** Per-body final local transforms authored in the developer weapon editor. */
+  heldAttachmentFit?: HeldAttachmentFit;
+  carriedAttachmentFit?: CarriedAttachmentFit;
+  /** Body identity used to resolve optional per-item calibration overlays. */
+  equipmentFitKey?: string;
+  /** T1 warrior trial: one-handed weapons use the pelvis, two-handers the back. */
+  weaponCarryByHand?: boolean;
+  /** The model's magic-cast clips use free hands and are not authored around a
+   * held staff or tome. Temporarily stow held props on the back for the cast and its release gesture;
+   * normal and combat idle still display the equipped weapon. */
+  stowHeldPropsWhileCasting?: boolean;
   /** Post-load orientation fixups for weapon/prop nodes baked INTO a creature
    *  GLB at the wrong angle (some KayKit handslot weapons ship without the grip
    *  flip the standalone weapon files carry). Node name as authored in the GLB;
@@ -698,6 +800,19 @@ const OGRE: ClipMap = {
   death: 'Death',
 };
 
+// Native Meshy Ogre rig. Its source pack does not include a hit-reaction, but
+// does include a balanced in-place Idle (baked into dev_meshy_ogre.glb), so
+// gameplay never falls back to the old Tripo idle that holds one foot aloft.
+const MESHY_OGRE: ClipMap = {
+  idle: 'MeshyOgreNative_Idle',
+  combatIdle: 'MeshyOgreNative_Idle',
+  walk: 'MeshyOgreNative_WalkInPlace',
+  run: 'MeshyOgreNative_Run',
+  attack: ['MeshyOgreNative_Attack', 'MeshyOgreNative_DoubleCombo', 'MeshyOgreNative_TripleCombo'],
+  hit: [],
+  death: 'MeshyOgreNative_Death',
+};
+
 // Warlord Drogmar's own drop (tmp/drogmar_v02_build.mjs): a rigged Tripo donor
 // carrying a bone-parented Skull Cleaver, with the full slate authored, so it
 // gets its own ClipMap rather than reading OGRE.
@@ -852,16 +967,14 @@ const ENEMY_BITE: ClipMap = {
   death: 'Death',
 };
 
-// The crab's own attack (scripts/build_crab_anims.mjs, issue #2889 round 2):
-// crabenemy.glb ships several unused bonus donor clips (Bite_InPlace, Dance,
-// No, Yes, Jump) alongside the shared Bite_Front every ENEMY_BITE family
-// plays; this blends Dance's side-to-side wiggle into Bite_InPlace's
-// in-place snap for a pincer-click flourish before the bite lands, distinct
-// from the plain forward-lunging Bite_Front every other ENEMY_BITE family
-// (mob_treant) still plays.
-const CRAB_ENEMY_BITE: ClipMap = {
-  ...ENEMY_BITE,
-  attack: ['Crab_Attack'],
+// Emberclaw uses its own Smart Rig and embedded clips, never the old crab donors.
+const EMBERCLAW_CRAB: ClipMap = {
+  idle: 'Idle',
+  walk: 'Locomotion',
+  run: 'Locomotion',
+  attack: ['Attack'],
+  hit: ['Hit'],
+  death: 'Death',
 };
 
 // The treant's own attack (scripts/build_treant_anims.mjs, issue #2889
@@ -869,7 +982,7 @@ const CRAB_ENEMY_BITE: ClipMap = {
 // ENEMY_BITE attack as a slam/root-grab off yeti.glb's own donor poses (a
 // rooted Idle hold into Bite_Front's downward lean, repurposed as a
 // branch-slam, settled by Dance's sway), instead of the plain Bite_Front
-// every other ENEMY_BITE family (mob_crab) still plays. A low-node-count
+// the original ENEMY_BITE vocabulary provides. A low-node-count
 // rig (2-3 animated nodes throughout), so the motion reads simple and
 // blocky by nature.
 const TREANT_ENEMY_BITE: ClipMap = {
@@ -1022,6 +1135,69 @@ const SPIDER: ClipMap = {
   death: 'Spider_Death', // no hit-react in asset
 };
 
+// Native 62-bone Smart Rig. Legacy Quaternius clips cannot bind to this rig.
+const SMART_SPIDER: ClipMap = {
+  idle: 'Spider_Idle',
+  combatIdle: 'Spider_CombatIdle',
+  walk: 'Spider_Walk',
+  run: 'Spider_Run',
+  attack: ['Spider_Bite', 'Spider_Lunge'],
+  hit: ['Spider_Hit'],
+  death: 'Spider_Death',
+};
+
+const COMMUNITY_GHOST: ClipMap = {
+  idle: 'Ghost_Idle',
+  combatIdle: 'Ghost_CombatIdle',
+  walk: 'Ghost_Move',
+  run: 'Ghost_Move',
+  attack: ['Ghost_Attack'],
+  hit: ['Ghost_Hit'],
+  death: 'Ghost_Death',
+};
+
+const COMMUNITY_WISP: ClipMap = {
+  idle: 'Wisp_Idle',
+  walk: 'Wisp_Move',
+  run: 'Wisp_Move',
+  attack: ['Wisp_Attack'],
+  hit: ['Wisp_Hit'],
+  death: 'Wisp_Death',
+};
+
+const COMMUNITY_SPORELING: ClipMap = {
+  idle: 'Sporeling_Idle',
+  combatIdle: 'Sporeling_CombatIdle',
+  walk: 'Sporeling_Walk',
+  run: 'Sporeling_Run',
+  attack: ['Sporeling_Attack'],
+  hit: ['Sporeling_Hit'],
+  death: 'Sporeling_Death',
+};
+
+const COMMUNITY_INFECTED_SPORELING: ClipMap = {
+  idle: 'Infected_Idle',
+  combatIdle: 'Infected_CombatIdle',
+  walk: 'Infected_Walk',
+  run: 'Infected_Run',
+  attack: ['Infected_Attack'],
+  hit: ['Infected_Hit'],
+  death: 'Infected_Death',
+};
+
+function communityWisp(kind: Exclude<SpiritKind, 'ghost'>): VisualDef {
+  return {
+    url: 'models/creatures/community_wisp.glb',
+    height: 1.15,
+    hover: 0.28,
+    clips: COMMUNITY_WISP,
+    spirit: kind,
+    atlasDye: spiritDye(kind),
+    authoredAtlas: true,
+    matte: true,
+  };
+}
+
 // Velociraptor rig (velociraptor.glb): like the spider, no hit-react clips
 const RAPTOR: ClipMap = {
   idle: 'Velociraptor_Idle',
@@ -1073,6 +1249,7 @@ const TOLLING_BELL: ClipMap = {
 // ---------------------------------------------------------------------------
 
 const PLAYERS = 'models/chars/players';
+const NPCS = 'models/chars/npcs';
 /** Modular part library (one GLB, every part), see modular.ts. */
 const MODULAR = 'models/chars/modular';
 const ENEMIES = 'models/chars/enemies';
@@ -1086,11 +1263,11 @@ const MOUNTS_DIR = 'models/mounts';
  *  which sweeps every shipped held model; render code resolves through
  *  itemOffhandModelUrl, never this table directly. */
 export const ITEM_OFFHAND_MODELS: Readonly<Record<string, string>> = {
-  eastbrook_buckler: 'shield_round',
-  highwatch_wallshield: 'shield_square',
-  bonewrought_bulwark: 'shield_square',
-  duskforged_bulwark: 'shield_square', // crafted apex tower shield (masterwrought); bulwarks share shield_square
-  pearlward_aegis: 'shield_round', // the first caster (int/spi) shield
+  eastbrook_buckler: 'meshy/battleworn_oak_shield',
+  highwatch_wallshield: 'meshy/fallen_king_shield_2',
+  bonewrought_bulwark: 'meshy/fallen_king_shield_3',
+  duskforged_bulwark: 'meshy/fallen_king_shield_4',
+  pearlward_aegis: 'meshy/fallen_king_shield_5', // the first caster (int/spi) shield
   // The inscription tomes: the first held_offhand item models, procedural GLBs
   // from scripts/assets/inscription_tomes (VAR_BOOK grips). The phase 09 apex
   // grimoire joined the family at phase 18, and with it left the conscious
@@ -1100,9 +1277,9 @@ export const ITEM_OFFHAND_MODELS: Readonly<Record<string, string>> = {
   sunpetal_grimoire: 'tome_sunpetal',
   voidbound_grimoire: 'tome_voidbound',
   // Crucible raid shields (content/ignivar_loot.ts): tank wall + healer barrier.
-  bulwark_of_the_inner_crucible: 'shield_square',
-  ember_wardens_barrier: 'shield_round',
-  votive_ward_of_the_deathless_court: 'shield_round', // Nythraxis gap-fill healer shield
+  bulwark_of_the_inner_crucible: 'meshy/fallen_king_shield_4',
+  ember_wardens_barrier: 'meshy/fallen_king_shield_5',
+  votive_ward_of_the_deathless_court: 'meshy/fallen_king_shield_5', // Nythraxis gap-fill healer shield
   varkhul_emberward: 'varkhul_emberward', // Ignivar raid legendary (Varkhul drop)
 };
 
@@ -1117,15 +1294,73 @@ export const ITEM_OFFHAND_MODELS: Readonly<Record<string, string>> = {
  *  low-tier readability floor by the atlas, as VisualDef.authoredAtlas does
  *  for bodies. Opt-in per model on purpose: every other held model keeps the
  *  polish it always had. Keyed by held-model key (ITEM_WEAPON_VARIANTS /
- *  ITEM_OFFHAND_MODELS values). */
+ *  ITEM_OFFHAND_MODELS values), or a scoped subpath for a rig-only slice. */
 export const AUTHORED_HELD_MODELS: ReadonlySet<string> = new Set([
+  'rusted_sword_1',
+  'rusted_sword_2',
+  'rusted_sword_3',
   'hammer_varkhul', // Varkhul Forgebreaker (Ignivar raid legendary)
   'varkhul_emberward', // Varkhul Emberward (Ignivar raid legendary)
+  'quaternius/axe_small',
+  'quaternius/dagger',
+  'quaternius/hammer_small',
+  'quaternius/shield_round',
+  'quaternius/spear',
+  'quaternius/sword',
+  'meshy/knights_valor_shield',
+  'meshy/knights_valor_sword',
+  'meshy/arcane_dagger_1',
+  'meshy/arcane_dagger_2',
+  'meshy/arcane_dagger_3',
+  'meshy/arcane_dagger_4',
+  'meshy/arcane_dagger_5',
+  'meshy/arcane_staff_1',
+  'meshy/arcane_staff_2',
+  'meshy/arcane_staff_3',
+  'meshy/arcane_staff_4',
+  'meshy/arcane_staff_5',
+  'meshy/ascendance_sword_1',
+  'meshy/battleworn_oak_shield',
+  'meshy/ascendance_sword_2',
+  'meshy/ascendance_sword_3',
+  'meshy/ascendance_sword_4',
+  'meshy/ascendance_sword_5',
+  'meshy/fallen_king_shield_1',
+  'meshy/fallen_king_shield_2',
+  'meshy/fallen_king_shield_3',
+  'meshy/fallen_king_shield_4',
+  'meshy/fallen_king_shield_5',
+  'meshy/evolution_axe_1',
+  'meshy/evolution_axe_2',
+  'meshy/evolution_axe_3',
+  'meshy/evolution_axe_4',
+  'meshy/evolution_axe_5',
+  'meshy/claymore_sword_1',
+  'meshy/claymore_sword_2',
+  'meshy/claymore_sword_3',
+  'meshy/claymore_sword_4',
+  'meshy/claymore_sword_5',
+  'meshy/lion_warhammer_1h_1',
+  'meshy/lion_warhammer_1h_2',
+  'meshy/lion_warhammer_1h_3',
+  'meshy/lion_warhammer_1h_4',
+  'meshy/lion_warhammer_1h_5',
+  'meshy/dwarven_warhammer_2h_1',
+  'meshy/dwarven_warhammer_2h_2',
+  'meshy/dwarven_warhammer_2h_3',
+  'meshy/dwarven_warhammer_2h_4',
+  'meshy/dwarven_warhammer_2h_5',
+  'meshy/arcane_longbow_1',
+  'meshy/arcane_longbow_2',
+  'meshy/arcane_longbow_3',
+  'meshy/arcane_longbow_4',
+  'meshy/arcane_longbow_5',
+  'meshy/test_crossbow_1',
 ]);
 
 /** True when a held-prop GLB url resolves to one of AUTHORED_HELD_MODELS. */
 export function isAuthoredHeldModelUrl(url: string): boolean {
-  const m = /^models\/weapons\/([^/]+)\.glb$/.exec(url);
+  const m = /^models\/weapons\/(.+)\.glb$/.exec(url);
   return m !== null && AUTHORED_HELD_MODELS.has(m[1]);
 }
 
@@ -1155,6 +1390,9 @@ function itemModelKey(
  *  icon via the shared ITEM_WEAPON_VARIANTS map, so held weapon == inventory icon. */
 export function itemWeaponModelUrl(itemId: string | null | undefined): string | null {
   const key = itemModelKey(itemId);
+  if (weaponTypeForItem(itemId) === 'crossbow') {
+    return `${WEAPONS}/${crossbowModelFallback(key ?? 'crossbow_1handed')}.glb`;
+  }
   return key ? `${WEAPONS}/${key}.glb` : null;
 }
 
@@ -1198,13 +1436,15 @@ function itemOffhandModelUrls(): string[] {
 export function weaponSkinModelUrl(skinId: string | null | undefined): string | null {
   if (!skinId) return null;
   const def = WEAPON_SKINS[skinId];
-  return def ? `${WEAPONS}/${def.model}.glb` : null;
+  return def
+    ? `${WEAPONS}/${def.weaponType === 'crossbow' ? crossbowModelFallback(def.model) : def.model}.glb`
+    : null;
 }
 
 /** Distinct weapon-skin GLB urls, preloaded like item weapon models: any nearby
  *  player can have a skin applied, and the attach path is synchronous. */
 export function weaponSkinModelUrls(): string[] {
-  return [...new Set(Object.values(WEAPON_SKINS).map((def) => `${WEAPONS}/${def.model}.glb`))];
+  return [...new Set(Object.keys(WEAPON_SKINS).map((id) => weaponSkinModelUrl(id)!))];
 }
 
 const LOW_URL_ALIAS: Record<string, string> = {
@@ -1394,93 +1634,335 @@ const VELOCIRAPTOR: ClipMap = {
   jump: 'Velociraptor_Jump',
 };
 
+// Game-bible vertical slice: Quaternius Modular Character Outfits - Fantasy on
+// the Universal Animation Library rig. Universal Base Characters supplies the
+// cropped head and hair that the outfit exports omit. This is intentionally a
+// compact common contract rather than a class-specific move set: it proves
+// idle / locomotion / melee / cast / hit / death / swim / sit / jump before
+// the project commits to migrating every armour and weapon lane.
+const QUATERNIUS_PLAYER: ClipMap = {
+  idle: 'Idle_Loop',
+  idleVariants: ['Idle_Talking_Loop'],
+  combatIdle: 'Sword_Idle',
+  walk: 'Walk_Loop',
+  run: 'Sprint_Loop',
+  attack: ['Sword_Attack'],
+  hit: ['Hit_Chest', 'Hit_Head'],
+  death: 'Death01',
+  cast: 'Spell_Simple_Idle_Loop',
+  sitDown: 'Sitting_Enter',
+  sitIdle: 'Sitting_Idle_Loop',
+  swim: 'Swim_Fwd_Loop',
+  swimIdle: 'Swim_Idle_Loop',
+  jump: 'Jump_Loop',
+  land: 'Jump_Land',
+  emote: {
+    dance: { clips: ['Dance_Loop'] },
+    wave: { clips: ['Idle_Talking_Loop'] },
+    point: { clips: ['Spell_Simple_Shoot'] },
+  },
+};
+
+// Meshy Titan auto-rigged through Mixamo. Locomotion and sword-and-shield
+// actions live in the same finalized GLB, so clip resolution never depends on
+// a second donor skeleton or a network-order race.
+const MESHY_TITAN: ClipMap = {
+  idle: 'Titan_Idle',
+  combatIdle: 'Titan_CombatIdle',
+  walk: 'Titan_Walk',
+  run: 'Titan_Run',
+  attack: ['Titan_Attack', 'Titan_Slash'],
+  hit: ['Titan_Hit'],
+  death: 'Titan_Death',
+  cast: 'Titan_Cast',
+  jump: 'Titan_Jump',
+};
+
+export const MESHY_TITAN_VISUAL_KEY = 'player_meshy_titan';
+export const MESHY_SENTINEL_VISUAL_KEY = 'player_meshy_sentinel_v1';
+
+export type QuaterniusPlayerGender = 'male' | 'female';
+
+/** Fixed-body key used by the default Quaternius player-body stack. */
+export function quaterniusPlayerVisualKey(gender: QuaterniusPlayerGender): string {
+  return `player_quaternius_${gender}_ranger`;
+}
+
+function quaterniusHumanoidBody(url: string): VisualDef {
+  return {
+    url,
+    animUrls: [`${PLAYERS}/quaternius_ual_standard.glb`],
+    height: HUMANOID_H,
+    clips: QUATERNIUS_PLAYER,
+    // The boot coordinator loads the complete experiment set before renderer
+    // creation. Keep these out of the broad production preload sweep.
+    lazyPreload: true,
+    preserveSkinnedParts: true,
+    attachmentRig: 'quaternius_humanoid',
+  };
+}
+
+function t1ClassClips(prefix: string): ClipMap {
+  return {
+    idle: `T1${prefix}_Idle`,
+    combatIdle: `T1${prefix}_Idle`,
+    walk: `T1${prefix}_Walk`,
+    run: `T1${prefix}_Run`,
+    attack: [`T1${prefix}_Attack`],
+    death: `T1${prefix}_Death`,
+  };
+}
+
+// Imported skin/fur/cloth uses the existing diffuse body path. Keep albedo,
+// normal detail and emission, without Meshy's metallic/roughness-map sheen.
+// On low graphics the readability floor follows the atlas instead of greying it.
+const IMPORTED_BODY_SURFACE = { matte: true, authoredAtlas: true } as const;
+
+/** Mixamo-rigged tutorial-island NPC with its original Meshy atlas. */
+function startingPointNpcBody(url: string, idle: string): VisualDef {
+  return {
+    ...IMPORTED_BODY_SURFACE,
+    url,
+    height: HUMANOID_H,
+    clips: {
+      idle,
+      walk: idle,
+      run: idle,
+      attack: [idle],
+      hit: [idle],
+      death: idle,
+      cast: idle,
+    },
+    lazyPreload: true,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+  };
+}
+
+function quaterniusPlayerBody(url: string): VisualDef {
+  return {
+    ...quaterniusHumanoidBody(url),
+    // Safe fallback when the app-level class override has not been installed.
+    // createCharacterVisual replaces this with the actual class layout.
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // The manifest
 // ---------------------------------------------------------------------------
 
+// Preserve the previous composed/KayKit warrior contract separately from T1.
+const LEGACY_WARRIOR_VISUAL: VisualDef = swims({
+  url: `${PLAYERS}/t1_warrior.glb`,
+  // Every clip knight.glb ships is already wired somewhere in this block
+  // (idle/walk/attack/hit/emotes account for the full shipped library, no
+  // spare donor pose), so Vaulting Charge (issue #2889 batch, verified against
+  // the warrior's real kit in src/sim/content/classes.ts, not assumed) is
+  // authored by pose-sample-and-blend (scripts/build_warrior_ability_anims.mjs)
+  // instead of pointed at an unused clip.
+  animUrls: [
+    `${PLAYERS}/knight_hit_variety_anims.glb`,
+    `${PLAYERS}/warrior_ability_anims.glb`,
+    // Character selection freezes this one-hand-and-shield idle as the
+    // warrior's resting portrait; the warrior source idle is two-hand-only.
+    `${PLAYERS}/t1_paladin.glb`,
+  ],
+  height: HUMANOID_H,
+  preserveSkinnedParts: true,
+  attachmentRig: 'mixamo_standard',
+  heldAttachmentFit: HELD_ATTACHMENT_FITS.player_warrior,
+  weaponCarryByHand: true,
+  clips: {
+    ...t1ClassClips('Warrior'),
+    travel: WARRIOR_TRAVEL_CLIPS,
+    draw: WARRIOR_TRAVEL_CLIPS.draw,
+    stow: WARRIOR_TRAVEL_CLIPS.stow,
+    carrySwapFraction: 0.5,
+    hipCarry: WARRIOR_HIP_CARRY_CLIPS,
+    presentationPoses: ['T1Paladin_Idle', 'T1Paladin_Attack'],
+    attackByHand: {
+      twohand: '2H_Melee_Attack_Chop',
+      dualwield: 'Dualwield_Melee_Attack_Chop',
+    },
+    attackByAbility: {
+      mortal_strike: '2H_Melee_Attack_Chop',
+      execute: '2H_Melee_Attack_Chop',
+      slam: '2H_Melee_Attack_Chop',
+      red_harvest: '2H_Melee_Attack_Chop',
+      breachmaker: '2H_Melee_Attack_Chop',
+      // Shieldcrack slams the SHIELD (offhand arm), not the sword: the
+      // synthesized bash (scripts/_add_shield_bash_anim.mjs) drives the
+      // left arm carrying the handslot.l shield; the weapon hand stays back.
+      shield_slam: 'Shield_Bash',
+      raging_gale: 'Dualwield_Melee_Attack_Chop',
+      bloodthirst: 'Dualwield_Melee_Attack_Chop',
+      // Reaping Arc and Revenge hit everything in the frontal arc: the
+      // synthesized flat reap (scripts/_add_sweep_slice_anim.mjs), not the
+      // top-to-bottom chop (owner: "sideways sword sweep").
+      cleave: '1H_Melee_Attack_Slice_Horizontal',
+      revenge: '1H_Melee_Attack_Slice_Horizontal',
+      thunder_clap: '1H_Melee_Attack_Chop',
+      faultline: '1H_Melee_Attack_Chop',
+      heroic_strike: '1H_Melee_Attack_Slice_Diagonal',
+      overpower: '1H_Melee_Attack_Slice_Diagonal',
+      hamstring: '1H_Melee_Attack_Slice_Diagonal',
+      sanguine_aura: 'Spellcast_Raise',
+      raised_guard: 'Block',
+      // Jawcrack is a bare-fist interrupt: the synthesized punch
+      // (scripts/_add_pummel_punch_anim.mjs), not a weapon swing.
+      pummel: 'Punch_A',
+      // Vaulting Charge is a position-targeted jump, not a swing: the bespoke
+      // pose-sample-and-blend clip (coil, airborne, driven two-hand slam on
+      // landing). It carries no castFx and resolves no target entity, so it
+      // completes through the renderer's generic 'selfCast' cue, which only
+      // draws a body gesture via this exact attackByAbility entry
+      // (CharacterVisual.hasAttackClipOverride, src/render/ability_vfx/
+      // painter.ts's non-contact 'selfCast' branch); with no entry it plays
+      // nothing at all on the body.
+      heroic_leap: 'Warrior_Heroic_Leap',
+      // Victor's Surge is a real weapon strike (weaponStrike effect, not a
+      // pure buff), so it lands through the ordinary damage-event attack
+      // trigger like every entry above it: a confident decisive swing, the
+      // same clip heroic_strike/overpower/hamstring already use.
+      victory_rush: '1H_Melee_Attack_Slice_Diagonal',
+      // Seething Fury and Recklessness are both a defiant roar of rage: no
+      // castFx, no target, so (like Vaulting Charge above) the existing Cheer
+      // gesture only shows up once an attackByAbility entry exists for it.
+      berserker_rage: 'Cheer',
+      recklessness: 'Cheer',
+      // Die by the Sword braces behind the blade: the existing raised_guard
+      // donor (Block) reads the same defensive beat, reached the same way.
+      die_by_sword: 'Block',
+      // Avatar's colossus transformation gets the raised-arm flourish
+      // (the longest clip on the rig, fits a dramatic moment), same path.
+      avatar: 'Spellcast_Raise',
+      // Piercing Howl's own description calls it "a piercing shout" even
+      // though it carries no castFx (unlike the six castFx:'shout'
+      // abilities below, which the painter's 'shout' case always plays as
+      // the Cheer EMOTE and never reaches attackByAbility at all - adding
+      // an entry for any of those would be dead code, so this batch leaves
+      // them alone). Piercing Howl's own selfCast cue DOES reach the same
+      // gesture path Vaulting Charge/berserker_rage/etc use above, and the
+      // painter's shout-emote call right after it is guarded on
+      // isMidOneShot, so it does not stomp this gesture.
+      piercing_howl: 'Spellcast_Raise',
+    },
+  },
+  show: ['Knight_Helmet', 'Knight_Cape'], // v2 knight dropped the built-in Badge_Shield mesh
+  attach: [
+    { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+    { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+  ],
+  weaponSlots: [0],
+  offhandSlot: 1,
+});
+
 export const VISUALS: Record<string, VisualDef> = {
+  ...Object.fromEntries(
+    WARRIOR_SUITS.map((suit): [string, VisualDef] => [
+      warriorSuitVisualKey(suit),
+      {
+        url: `${PLAYERS}/warrior_${suit}.glb`,
+        height: HUMANOID_H,
+        clips: WARRIOR_SUIT_CLIPS,
+        authoredAtlas: true,
+        preserveSkinnedParts: true,
+        lazyPreload: true,
+        attachmentRig: 'mixamo_sentinel',
+        attach: [
+          { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+          { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+        ],
+        weaponSlots: [0],
+        offhandSlot: 1,
+      },
+    ]),
+  ),
+  [MESHY_SENTINEL_VISUAL_KEY]: {
+    url: `${PLAYERS}/meshy_sentinel_v1.glb`,
+    height: HUMANOID_H,
+    clips: SENTINEL_V1_CLIPS,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_sentinel',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS[MESHY_SENTINEL_VISUAL_KEY],
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  // -- game-bible character bodies -----------------------------------------
+  [MESHY_TITAN_VISUAL_KEY]: {
+    url: `${PLAYERS}/meshy_titan.glb`,
+    height: HUMANOID_H,
+    clips: MESHY_TITAN,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_humanoid',
+    equipmentParts: MESHY_TITAN_ARMOR_PARTS,
+    // Safe fallback before the app-level class layout is available. The live
+    // player inherits its class equipment through createCharacterVisual.
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  player_quaternius_male_ranger: quaterniusPlayerBody(`${PLAYERS}/quaternius_male_ranger.glb`),
+  player_quaternius_female_ranger: quaterniusPlayerBody(`${PLAYERS}/quaternius_female_ranger.glb`),
+
+  // -- game-bible Proving Shore NPC bodies --------------------------------
+  npc_quaternius_instructor_maren: startingPointNpcBody(
+    `${NPCS}/starting_point_instructor_maren.glb`,
+    'StartingPoint_InstructorMaren_Idle',
+  ),
+  npc_quaternius_quartermaster_finch: startingPointNpcBody(
+    `${NPCS}/starting_point_quartermaster_finch.glb`,
+    'StartingPoint_QuartermasterFinch_Idle',
+  ),
+  npc_quaternius_bursar_wick: startingPointNpcBody(
+    `${NPCS}/starting_point_bursar_wick.glb`,
+    'StartingPoint_BursarWick_Idle',
+  ),
+  npc_quaternius_ferryman_odo: startingPointNpcBody(
+    `${NPCS}/starting_point_ferryman_odo.glb`,
+    'StartingPoint_FerrymanOdo_Idle',
+  ),
+  npc_quaternius_warden_tam: startingPointNpcBody(
+    `${NPCS}/starting_point_warden_tam.glb`,
+    'StartingPoint_WardenTam_Idle',
+  ),
+  npc_quaternius_overseer_pell: startingPointNpcBody(
+    `${NPCS}/starting_point_overseer_pell.glb`,
+    'StartingPoint_OverseerPell_Idle',
+  ),
+  npc_quaternius_drillmaster_rook: startingPointNpcBody(
+    `${NPCS}/starting_point_drillmaster_rook.glb`,
+    'StartingPoint_DrillmasterRook_Idle',
+  ),
+  npc_quaternius_tidewarden_nel: startingPointNpcBody(
+    `${NPCS}/starting_point_tidewarden_nel.glb`,
+    'StartingPoint_TidewardenNel_Idle',
+  ),
+
   // -- player classes ------------------------------------------------------
   player_warrior: swims({
-    url: `${PLAYERS}/knight.glb`,
-    // Every clip knight.glb ships is already wired somewhere in this block
-    // (idle/walk/attack/hit/emotes account for the full shipped library, no
-    // spare donor pose), so Vaulting Charge (issue #2889 batch, verified against
-    // the warrior's real kit in src/sim/content/classes.ts, not assumed) is
-    // authored by pose-sample-and-blend (scripts/build_warrior_ability_anims.mjs)
-    // instead of pointed at an unused clip.
-    animUrls: [`${PLAYERS}/knight_hit_variety_anims.glb`, `${PLAYERS}/warrior_ability_anims.glb`],
+    url: `${PLAYERS}/t1_warrior.glb`,
+    animUrls: [`${PLAYERS}/warrior_t1_motion_anims.glb`],
     height: HUMANOID_H,
-    clips: {
-      ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-      attackByHand: {
-        twohand: '2H_Melee_Attack_Chop',
-        dualwield: 'Dualwield_Melee_Attack_Chop',
-      },
-      attackByAbility: {
-        mortal_strike: '2H_Melee_Attack_Chop',
-        execute: '2H_Melee_Attack_Chop',
-        slam: '2H_Melee_Attack_Chop',
-        red_harvest: '2H_Melee_Attack_Chop',
-        breachmaker: '2H_Melee_Attack_Chop',
-        // Shieldcrack slams the SHIELD (offhand arm), not the sword: the
-        // synthesized bash (scripts/_add_shield_bash_anim.mjs) drives the
-        // left arm carrying the handslot.l shield; the weapon hand stays back.
-        shield_slam: 'Shield_Bash',
-        raging_gale: 'Dualwield_Melee_Attack_Chop',
-        bloodthirst: 'Dualwield_Melee_Attack_Chop',
-        // Reaping Arc and Revenge hit everything in the frontal arc: the
-        // synthesized flat reap (scripts/_add_sweep_slice_anim.mjs), not the
-        // top-to-bottom chop (owner: "sideways sword sweep").
-        cleave: '1H_Melee_Attack_Slice_Horizontal',
-        revenge: '1H_Melee_Attack_Slice_Horizontal',
-        thunder_clap: '1H_Melee_Attack_Chop',
-        faultline: '1H_Melee_Attack_Chop',
-        heroic_strike: '1H_Melee_Attack_Slice_Diagonal',
-        overpower: '1H_Melee_Attack_Slice_Diagonal',
-        hamstring: '1H_Melee_Attack_Slice_Diagonal',
-        sanguine_aura: 'Spellcast_Raise',
-        raised_guard: 'Block',
-        // Jawcrack is a bare-fist interrupt: the synthesized punch
-        // (scripts/_add_pummel_punch_anim.mjs), not a weapon swing.
-        pummel: 'Punch_A',
-        // Vaulting Charge is a position-targeted jump, not a swing: the bespoke
-        // pose-sample-and-blend clip (coil, airborne, driven two-hand slam on
-        // landing). It carries no castFx and resolves no target entity, so it
-        // completes through the renderer's generic 'selfCast' cue, which only
-        // draws a body gesture via this exact attackByAbility entry
-        // (CharacterVisual.hasAttackClipOverride, src/render/ability_vfx/
-        // painter.ts's non-contact 'selfCast' branch); with no entry it plays
-        // nothing at all on the body.
-        heroic_leap: 'Warrior_Heroic_Leap',
-        // Victor's Surge is a real weapon strike (weaponStrike effect, not a
-        // pure buff), so it lands through the ordinary damage-event attack
-        // trigger like every entry above it: a confident decisive swing, the
-        // same clip heroic_strike/overpower/hamstring already use.
-        victory_rush: '1H_Melee_Attack_Slice_Diagonal',
-        // Seething Fury and Recklessness are both a defiant roar of rage: no
-        // castFx, no target, so (like Vaulting Charge above) the existing Cheer
-        // gesture only shows up once an attackByAbility entry exists for it.
-        berserker_rage: 'Cheer',
-        recklessness: 'Cheer',
-        // Die by the Sword braces behind the blade: the existing raised_guard
-        // donor (Block) reads the same defensive beat, reached the same way.
-        die_by_sword: 'Block',
-        // Avatar's colossus transformation gets the raised-arm flourish
-        // (the longest clip on the rig, fits a dramatic moment), same path.
-        avatar: 'Spellcast_Raise',
-        // Piercing Howl's own description calls it "a piercing shout" even
-        // though it carries no castFx (unlike the six castFx:'shout'
-        // abilities below, which the painter's 'shout' case always plays as
-        // the Cheer EMOTE and never reaches attackByAbility at all - adding
-        // an entry for any of those would be dead code, so this batch leaves
-        // them alone). Piercing Howl's own selfCast cue DOES reach the same
-        // gesture path Vaulting Charge/berserker_rage/etc use above, and the
-        // painter's shout-emote call right after it is guarded on
-        // isMidOneShot, so it does not stomp this gesture.
-        piercing_howl: 'Spellcast_Raise',
-      },
-    },
-    show: ['Knight_Helmet', 'Knight_Cape'], // v2 knight dropped the built-in Badge_Shield mesh
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_warrior,
+    weaponCarryByHand: true,
+    clips: WARRIOR_T1_MOTION_CLIPS,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1489,11 +1971,16 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   }),
   player_paladin: swims({
-    url: `${PLAYERS}/paladin.glb`,
+    url: `${PLAYERS}/t1_paladin.glb`,
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_paladin,
     clips: {
-      ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-      attackByHand: { twohand: '2H_Melee_Attack_Chop' },
+      ...t1ClassClips('Paladin'),
+      weaponMotions: { twohand: PALADIN_TWOHAND_MOTION },
+      travel: PALADIN_TRAVEL_CLIPS,
+      jumpClampAtEnd: true,
       // Ability-specific clips: the composed union of the overhaul's
       // Dawnreaver entries (final_edict/sunward_disc/bastion_sweep) and the
       // #2889 follow-up batch mapped by the ability's EFFECT TYPE (groundAoE,
@@ -1521,7 +2008,11 @@ export const VISUALS: Record<string, VisualDef> = {
     },
     // Ability-specific clips (scripts/build_paladin_ability_anims.mjs): a
     // mesh-free clip donor GLB baked off this rig's own poses.
-    animUrls: [`${PLAYERS}/paladin_hit_variety_anims.glb`, `${PLAYERS}/paladin_ability_anims.glb`],
+    animUrls: [
+      `${PLAYERS}/paladin_hit_variety_anims.glb`,
+      `${PLAYERS}/paladin_ability_anims.glb`,
+      `${PLAYERS}/paladin_twohand_motion_anims.glb`,
+    ],
     // dedicated paladin model (helmeted variant) — ships its own Cape + Helmet
     // meshes and texture, so no show-list/tint. Shield + paladin hammer arrive
     // in the weapons pass; the gripped axe holds the slot until then.
@@ -1533,61 +2024,26 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   }),
   player_hunter: swims({
-    url: `${PLAYERS}/ranger.glb`,
+    url: `${PLAYERS}/t1_hunter.glb`,
     height: HUMANOID_H,
-    clips: {
-      ...kaykit(['2H_Ranged_Shoot']),
-      // Ability-specific attacks (scripts/build_hunter_ability_anims.mjs,
-      // issue #2889): the hunter had zero attackByAbility overrides across
-      // its kit, so every ability played the same crossbow-shoulder shot.
-      // The three melee abilities (range 0) get a bespoke swing each; the
-      // ranged shots split into a quick snap (every instant no-cast-time
-      // shot) versus the slow full draw Long Draw's own 3.0s cast time
-      // names; Volley gets its own rapid-pulse barrage. The three aspect
-      // toggles plus Fevered Draw are self-buffs with no swing to author, so
-      // they point straight at ranger.glb's own already-baked
-      // 'Spellcast_Raise' clip, the same no-bake pattern player_warrior's
-      // sanguine_aura already uses. Not every ability in the kit is listed:
-      // this batch's representative slice (tame_beast/dismiss_pet/revive_pet
-      // are pet-command channels with no combat swing to author, matching
-      // batch 1's own utility/summon exclusions for the mage).
-      attackByAbility: {
-        raptor_strike: 'Hunter_Melee_Gut',
-        mongoose_bite: 'Hunter_Melee_Counter',
-        wing_clip: 'Hunter_Melee_Clip',
-        serpent_sting: 'Hunter_Shot_Snap',
-        arcane_shot: 'Hunter_Shot_Snap',
-        concussive_shot: 'Hunter_Shot_Snap',
-        counter_shot: 'Hunter_Shot_Snap',
-        aimed_shot: 'Hunter_Shot_LongDraw',
-        volley: 'Hunter_Shot_Volley',
-        aspect_of_the_hawk: 'Spellcast_Raise',
-        aspect_of_the_monkey: 'Spellcast_Raise',
-        aspect_of_the_cheetah: 'Spellcast_Raise',
-        rapid_fire: 'Spellcast_Raise',
-      },
-    },
-    // Bow-draw clips for the Season 1 bow skins (scripts/build_bow_anims.mjs):
-    // with a bow displayed the shot plays a draw instead of the crossbow
-    // shoulder-aim (visual.ts weaponSkinAttackClips). The cast-time hold pose
-    // (bow_hold_anim.glb) and the ability-specific attack clips
-    // (scripts/build_hunter_ability_anims.mjs) ride the same mesh-free donor
-    // GLB mechanism, appended alongside: all GLBs' clips load together.
-    animUrls: [
-      `${PLAYERS}/bow_anims.glb`,
-      `${PLAYERS}/bow_hold_anim.glb`,
-      `${PLAYERS}/hunter_ability_anims.glb`,
-      `${PLAYERS}/ranger_hit_variety_anims.glb`,
-    ],
-    // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
-    // a separate chest attachment
-    attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_hunter,
+    clips: HUNTER_T1_MOTION_CLIPS,
+    animUrls: [`${PLAYERS}/hunter_t1_motion_anims.glb`],
+    attackTimeScale: 1,
+    // Legacy melee-equipped hunters keep this ranged fallback. Only actual
+    // bow/crossbow items (or a ranged cosmetic) replace it.
+    attach: [{ url: HUNTER_CROSSBOW_MODEL, bone: 'handslot.r' }],
   }),
   player_rogue: swims({
-    url: `${PLAYERS}/rogue.glb`,
+    url: `${PLAYERS}/t1_rogue.glb`,
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_rogue,
     clips: {
-      ...kaykit(['Dualwield_Melee_Attack_Chop']),
+      ...t1ClassClips('Rogue'),
       attackByAbility: {
         // Throat Wire is a wire strangle, not a dagger swing: the synthesized
         // two-handed choke (scripts/_add_garrote_choke_anim.mjs) reaches to
@@ -1648,11 +2104,15 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   }),
   player_priest: swims({
-    url: `${PLAYERS}/mage.glb`,
+    url: `${PLAYERS}/t1_priest.glb`,
     animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_priest,
+    stowHeldPropsWhileCasting: true,
     clips: {
-      ...kaykit(['2H_Melee_Attack_Chop']),
+      ...t1ClassClips('Priest'),
       attackByAbility: {
         // Lingering Grace is a blessing, not a staff swing: the one-hand
         // raise (a stock mage.glb clip) reads as the priest offering the HoT.
@@ -1698,10 +2158,13 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.12,
   }),
   player_shaman: swims({
-    url: `${PLAYERS}/barbarian.glb`,
+    url: `${PLAYERS}/t1_shaman.glb`,
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_shaman,
     clips: {
-      ...kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+      ...t1ClassClips('Shaman'),
       attackByHand: { twohand: '2H_Melee_Attack_Chop' },
       // Ability-specific spellcasts (scripts/build_shaman_ability_anims.mjs,
       // issue #2889): the shaman had zero attackByAbility overrides across
@@ -1764,10 +2227,14 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.12,
   }),
   player_mage: swims({
-    url: `${PLAYERS}/mage.glb`,
+    url: `${PLAYERS}/t1_mage.glb`,
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_mage,
+    stowHeldPropsWhileCasting: true,
     clips: {
-      ...kaykit(['2H_Melee_Attack_Chop']),
+      ...t1ClassClips('Mage'),
       // Ability-specific spellcasts (scripts/build_mage_ability_anims.mjs,
       // issue #2889): the mage had zero attackByAbility overrides across its
       // kit, so every spell played the same melee chop. Mapped by school
@@ -1824,69 +2291,83 @@ export const VISUALS: Record<string, VisualDef> = {
     offhandSlot: 1,
   }),
   player_warlock: swims({
-    url: `${PLAYERS}/mage.glb`,
+    url: `${PLAYERS}/warlock_t1.glb`,
+    animUrls: [`${PLAYERS}/warlock_ability_anims.glb`],
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_warlock,
     clips: {
-      ...kaykit(['Spellcast_Shoot']), // wand zap reads better than a staff bonk
-      // Ability-specific spellcasts (scripts/build_warlock_ability_anims.mjs,
-      // issue #2889): the warlock had zero attackByAbility overrides across
-      // its kit, so every spell played the same wand zap. Mapped by school
-      // (src/sim/content/classes.ts): shadow curses get the decisive clawed
-      // point (Warlock_Cast_Shadow), fire gets the scrappier ignite flick
-      // (Warlock_Cast_Fire), the life-drain channel gets its own sustained
-      // pull (Warlock_Cast_Drain), and every instant-cast (castTime 0)
-      // ability, regardless of mechanic, shares one fast decisive gesture
-      // (Warlock_Cast_Burst), the same call the mage batch made folding
-      // three different AoE mechanics into one Cast_Nova. This maps the
-      // whole non-pet kit: the seven summon_* pet abilities are channels
-      // with no combat swing to author, excluded the same way the hunter
-      // batch excluded tame_beast/dismiss_pet/revive_pet.
+      idle: 'WarlockT1_TravelIdle',
+      combatIdle: 'WarlockT1_ReadyIdle',
+      drawnIdle: 'WarlockT1_StaffIdle',
+      locomotionShotClips: ['WarlockT1_CastShadow_Release'],
+      walk: 'WarlockT1_TravelWalk',
+      run: 'WarlockT1_TravelRun',
+      // The native cinematic jump is 2.367 s. Use the proven, physics-length
+      // militia jump on the matching Mixamo rig instead.
+      jump: 'WarlockT1_JumpClassic',
+      jumpClampAtEnd: true,
+      death: 'WarlockT1_Death',
+      // An end-aligned preparation window plays once at a capped speed.
+      // Its anticipation ends on the exact first pose of the release below.
+      cast: 'WarlockT1_CastShadow_Loop',
+      castDurationFit: { tailSeconds: 0.76, tailPlaybackSeconds: 0.3, maxPreparationSpeed: 1.35 },
+      castByTarget: {
+        self: 'WarlockT1_CastSelf_Loop',
+        ally: 'WarlockT1_CastAlly_Loop',
+        hostile: 'WarlockT1_CastShadow_Loop',
+      },
+      castReleaseByTarget: {
+        self: 'WarlockT1_CastSelf_Release',
+        ally: 'WarlockT1_CastAlly_Release',
+        hostile: 'WarlockT1_CastShadow_Release',
+      },
+      castByAbility: {
+        shadow_bolt: 'WarlockT1_CastShadow_Loop',
+        corruption: 'WarlockT1_CastShadow_Loop',
+        curse_of_agony: 'WarlockT1_CastShadow_Loop',
+        immolate: 'WarlockT1_CastFire_Loop',
+        searing_pain: 'WarlockT1_CastFire_Loop',
+        rain_of_fire: 'WarlockT1_CastFire_Loop',
+        drain_life: 'WarlockT1_CastDrain_Loop',
+        fear: 'WarlockT1_CastShadow_Loop',
+      },
+      attack: [
+        'WarlockT1_StaffStrikeHorizontal',
+        'WarlockT1_StaffStrikeDownward',
+        'WarlockT1_StaffStrikeBackhand',
+      ],
       attackByAbility: {
-        shadow_bolt: 'Warlock_Cast_Shadow',
-        corruption: 'Warlock_Cast_Shadow',
-        curse_of_agony: 'Warlock_Cast_Shadow',
-        immolate: 'Warlock_Cast_Fire',
-        searing_pain: 'Warlock_Cast_Fire',
-        rain_of_fire: 'Warlock_Cast_Fire',
-        drain_life: 'Warlock_Cast_Drain',
-        shadowburn: 'Warlock_Cast_Burst',
-        fear: 'Warlock_Cast_Burst',
-        life_tap: 'Warlock_Cast_Burst',
-        demon_skin: 'Warlock_Cast_Burst',
-        spell_lock: 'Warlock_Cast_Burst',
+        shadow_bolt: 'WarlockT1_CastShadow_Release',
+        corruption: 'WarlockT1_CastShadow_Release',
+        curse_of_agony: 'WarlockT1_CastShadow_Release',
+        immolate: 'WarlockT1_CastFire_Release',
+        searing_pain: 'WarlockT1_CastFire_Release',
+        rain_of_fire: 'WarlockT1_CastFire_Release',
+        drain_life: 'WarlockT1_CastDrain_Release',
+        shadowburn: 'WarlockT1_CastShadow_Release',
+        fear: 'WarlockT1_CastShadow_Release',
+        life_tap: 'WarlockT1_CastSelf_Release',
+        demon_skin: 'WarlockT1_CastSelf_Release',
+        spell_lock: 'WarlockT1_CastShadow_Release',
       },
     },
-    // Ability-specific spellcast clips (scripts/build_warlock_ability_anims.mjs):
-    // a mesh-free clip donor GLB baked off this same mage.glb rig's own
-    // poses, but its OWN clip names and timing, not a reuse of the mage's
-    // mage_ability_anims.glb (the two GLBs are wired onto different
-    // VisualDefs and never load together).
-    animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`, `${PLAYERS}/warlock_ability_anims.glb`],
-    show: [],
-    attach: [
-      { url: `${WEAPONS}/wand.glb`, bone: 'handslot.r' },
-      {
-        url: `${WEAPONS}/spellbook_open.glb`,
-        bone: 'handslot.l',
-        gripRef: 'Spellbook_open',
-      },
-    ],
-    weaponSlots: [0], // mainhand (wand) swaps; spellbook offhand stays
-    // Faint violet lift only, to tell this apart from the mage/priest models
-    // it shares mage.glb with (same one-material-per-rig caveat as those two:
-    // this multiplies skin and hair along with the robe). 0.45 read as a
-    // saturated full-body purple wash on character create (issue #2678);
-    // dropped further to 0.12, the same faint-wash strength the manifest
-    // already uses elsewhere (mob_troll) to differentiate a shared model
-    // without hiding its base texture.
-    tint: 0x8d5fd3,
-    tintStrength: 0.12,
+    // The sim stows accepted magic casts until Z or a real melee swing.
+    // Keep the free-hand overlay through the release/recovery as well.
+    stowHeldPropsWhileCasting: true,
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
+    weaponSlots: [0],
   }),
   player_druid: swims({
-    url: `${PLAYERS}/druid.glb`,
+    url: `${PLAYERS}/t1_druid.glb`,
     height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.player_druid,
+    stowHeldPropsWhileCasting: true,
     clips: {
-      ...kaykit(['2H_Melee_Attack_Chop']),
+      ...t1ClassClips('Druid'),
       // Ability-specific spellcasts (scripts/build_druid_ability_anims.mjs,
       // issue #2889): the druid's caster kit had zero attackByAbility
       // overrides, so every nature/arcane spell played the same staff chop.
@@ -2458,11 +2939,15 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.55,
   },
   mob_spider: {
-    url: `${CREATURES}/spider.glb`,
-    height: 1.4,
-    clips: SPIDER,
+    url: `${CREATURES}/smart_spider.glb`,
+    authoredAtlas: true,
+    height: 0.85,
+    clips: SMART_SPIDER,
+    walkRef: 1.071,
+    runRef: 5.455,
+    gait: { runEnter: 1.8, runExit: 1.6 },
     tint: 'entity',
-    tintStrength: 0.35,
+    tintStrength: 0.12,
   },
   mob_murloc: {
     url: `${CREATURES}/frog.glb`,
@@ -2472,6 +2957,14 @@ export const VISUALS: Record<string, VisualDef> = {
     // baked off this same rig's own poses. Loads alongside the hit-variety
     // donor GLB below; both are mesh-free so their clips just merge in.
     animUrls: [`${CREATURES}/frog_hit_variety_anims.glb`, `${CREATURES}/murloc_ability_anims.glb`],
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.mob_murloc,
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_murloc_pitchfork.glb`,
+        bone: 'LowerArm.R',
+        calibrationSlot: 'mainhand',
+      },
+    ],
     tint: 'entity',
     tintStrength: 0.45,
   },
@@ -2483,6 +2976,7 @@ export const VISUALS: Record<string, VisualDef> = {
       `${CREATURES}/kobold_ability_anims.glb`,
     ],
     clips: KOBOLD_ENEMY7,
+    attach: [{ url: `${WEAPONS}/rusted_kobold_pickaxe.glb`, bone: 'Arm.R_end' }],
     tint: 'entity',
     tintStrength: 0.2, // keep the green readable
   },
@@ -2536,6 +3030,7 @@ export const VISUALS: Record<string, VisualDef> = {
     authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
     height: 2.1,
     clips: KOBOLD_DIGGER,
+    attach: [{ url: `${WEAPONS}/rusted_kobold_pickaxe.glb`, bone: 'mixamorig:RightHand' }],
     // The mid-idle pose drops the tail 0.23 units (at scale 1) below the foot
     // plane, and the ground anchor is the lowest skinned vertex, so the body
     // floated by exactly that much (measured live: foot bones 0.227 above
@@ -2601,25 +3096,24 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.12,
   },
-  // The authored ogre body (the _Mob_Updates artist drop, combined by
-  // tmp/ogre_build.mjs), replacing the 2023-pack giant.glb stick rig the
-  // whole family rendered as. Gait refs measured (tmp/ogre_gait_measure.mjs)
-  // at the dominant template scale 1.3 (thornpeak_ogre / ogre_crusher /
-  // rift_stone_ogre; the kobold_digger dominant-population precedent): Walk
-  // natural 2.79 yd/s, and the authored Run cycle measured 4.83, a 1.45x
-  // ask against the family's 7.0 chase, so the build retimes it 1.21x in
-  // place (a 0.60s heavy sprint cadence), natural 5.84, and the chase runs
-  // at ~1.2x with clamp headroom instead of at the 1.6 edge.
+  // Native Meshy Ogre: its actual held-club idle is a stable planted pose.
+  // The previous Tripo pack's idle held a lifted walk foot after reaching its
+  // destination, which read as an animation stall.
   mob_ogre: {
-    url: `${CREATURES}/ogre.glb`,
-    authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/ogre_meshy_native.glb`,
     height: 2.8,
-    clips: OGRE,
-    walkRef: 2.79,
-    runRef: 5.84,
-    // Light wash, the kobold_digger reason: the drop ships an authored brown
-    // hide, and the old 0.2 (sized to keep the giant's flat atlas readable)
-    // would only muddy it. Entity tint still separates the family's mobs.
+    clips: MESHY_OGRE,
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.mob_ogre,
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_ogre_club.glb`,
+        bone: 'mixamorig:RightHand',
+        calibrationSlot: 'mainhand',
+      },
+    ],
+    walkRef: 2.5,
+    runRef: 5.5,
     tint: 'entity',
     tintStrength: 0.12,
   },
@@ -3104,40 +3598,63 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.3,
   },
-  // the Veiled Hollow's spirits: the ghost rig, entity-tinted (teal hollow
-  // remnants and the ice wisp still wear it)
+  // Floating native Smart Rig; the wisps have independent visual keys below.
   mob_ghost: {
+    url: `${CREATURES}/community_ghost.glb`,
+    height: 1.9,
+    hover: 0.28,
+    clips: COMMUNITY_GHOST,
+    spirit: 'ghost',
+    authoredAtlas: true,
+    matte: true,
+    attackTimeScale: 1,
+  },
+  dev_legacy_ghost: {
     url: `${CREATURES}/ghost.glb`,
     height: 1.6,
     hover: 0.4,
     clips: GHOST_FLOATING,
-    // Ghost_Attack clip donor (scripts/build_ghost_anims.mjs): mesh-free,
-    // baked off this same rig's own poses.
     animUrls: [`${CREATURES}/ghost_ability_anims.glb`],
     tint: 'entity',
     tintStrength: 0.55,
+    lazyPreload: true,
   },
-  // the Hollow wisps: bespoke static meshes from the approved concepts
-  // (user-generated via Tripo). No rig on purpose: they drift and hover,
-  // and every clip lookup null-guards, so FLOATING names simply no-op.
-  // Baked palettes, so no entity tint. Front faces +x off the generator;
-  // yaw turns it to the +z game convention.
-  mob_glimmerwisp: {
+  // One unrigged source with rigid float/attack/death clips, distinct palettes.
+  mob_glimmerwisp: communityWisp('glimmer'),
+  mob_duskwisp: communityWisp('dusk'),
+  mob_ice_wisp: communityWisp('ice'),
+  mob_lily_wisp: communityWisp('lily'),
+  mob_gale_wisp: communityWisp('gale'),
+  dev_legacy_glimmerwisp: {
     url: `${CREATURES}/glimmerwisp.glb`,
     height: 1.6,
     hover: 0.4,
     clips: FLOATING,
     yaw: -Math.PI / 2,
+    lazyPreload: true,
   },
-  mob_duskwisp: {
+  dev_legacy_duskwisp: {
     url: `${CREATURES}/duskwisp.glb`,
     height: 1.6,
     hover: 0.4,
     clips: FLOATING,
     yaw: -Math.PI / 2,
+    lazyPreload: true,
   },
-  // spore-borne mushroom folk: the glub blob drifting just above the glade
+  // Supplied biped mushroom with native locomotion and unarmed melee motion.
   mob_glub: {
+    url: `${CREATURES}/community_sporeling.glb`,
+    height: 1.45,
+    clips: COMMUNITY_SPORELING,
+    atlasDye: SPORELING_PALETTES.ordinary,
+    authoredAtlas: true,
+    matte: true,
+    attackTimeScale: 1,
+    walkRef: 1.27,
+    runRef: 4.6,
+    gait: { runEnter: 1.8, runExit: 1.6 },
+  },
+  dev_legacy_sporeling: {
     url: `${CREATURES}/glubevolved.glb`,
     height: 1.4,
     hover: 0.15,
@@ -3147,21 +3664,43 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${CREATURES}/glub_ability_anims.glb`],
     tint: 'entity',
     tintStrength: 0.45,
+    lazyPreload: true,
   },
-  // the Hollow's wandering bosses: two more rigs no other zone uses
+  mob_corrupted_sporeling: {
+    url: `${CREATURES}/community_sporeling_infected.glb`,
+    height: 1.45,
+    clips: COMMUNITY_INFECTED_SPORELING,
+    atlasDye: SPORELING_PALETTES.infected,
+    authoredAtlas: true,
+    matte: true,
+    attackTimeScale: 1,
+    walkRef: 1.2553874329,
+    runRef: 4.7310805843,
+    gait: { runEnter: 1.8, runExit: 1.6 },
+  },
+  // All crab populations share the validated Emberclaw body and Smart Rig.
+  // Entity scale and color retain the ordinary, regional, and boss variants.
   mob_crab: {
-    url: `${CREATURES}/crabenemy.glb`,
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/proving_shore_scuttler.glb`,
     height: 1.7,
-    clips: CRAB_ENEMY_BITE,
-    // Crab_Attack clip donor (scripts/build_crab_anims.mjs): mesh-free,
-    // baked off this same rig's own poses. Loads alongside the hit-variety
-    // donor GLB below; both are mesh-free so their clips just merge in.
-    animUrls: [
-      `${CREATURES}/crabenemy_hit_variety_anims.glb`,
-      `${CREATURES}/crab_ability_anims.glb`,
-    ],
+    clips: EMBERCLAW_CRAB,
     tint: 'entity',
     tintStrength: 0.35,
+  },
+  mob_proving_shore_scuttler: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/proving_shore_scuttler.glb`,
+    height: 1.7,
+    clips: EMBERCLAW_CRAB,
+  },
+  mob_proving_shore_tidepool_boss: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/proving_shore_scuttler.glb`,
+    height: 1.7,
+    clips: EMBERCLAW_CRAB,
+    tint: 'entity',
+    tintStrength: 0.25,
   },
   mob_bull: {
     url: `${CREATURES}/bull.glb`,
@@ -3206,13 +3745,24 @@ export const VISUALS: Record<string, VisualDef> = {
 
   // -- delve-specific variants (same rigs, colour-differentiated via mob.color) -
   delve_skel_wraith: {
-    // Ledger Wraith: pale skeleton, no weapon, stronger wash reads as near-transparent
+    // Keep the stable delve visual key; replace its former unarmed skeleton.
+    url: `${CREATURES}/community_ghost.glb`,
+    height: 1.9,
+    hover: 0.28,
+    clips: COMMUNITY_GHOST,
+    spirit: 'ghost',
+    authoredAtlas: true,
+    matte: true,
+    attackTimeScale: 1,
+  },
+  dev_legacy_ledger_wraith: {
     url: `${ENEMIES}/skeleton_minion.glb`,
     animUrls: [`${ENEMIES}/skeleton_minion_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity',
     tintStrength: 0.55,
+    lazyPreload: true,
   },
   delve_skel_ringer: {
     // Funeral Ringer: skeleton rogue rig, cloth-brown tint at mid strength
@@ -3220,7 +3770,14 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    attach: [{ url: `${WEAPONS}/skeleton_axe.glb`, bone: 'handslot.r' }],
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.delve_skel_ringer,
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/evolution_axe_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+    ],
     tint: 'entity',
     tintStrength: 0.45,
   },
@@ -3241,9 +3798,18 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.delve_skel_effigy,
     attach: [
-      { url: `${WEAPONS}/skeleton_blade.glb`, bone: 'handslot.r' },
-      { url: `${WEAPONS}/skeleton_shield_large_a.glb`, bone: 'handslot.l' },
+      {
+        url: `${WEAPONS}/meshy/ascendance_sword_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+      {
+        url: `${WEAPONS}/meshy/battleworn_oak_shield.glb`,
+        bone: 'handslot.l',
+        calibrationSlot: 'offhand',
+      },
     ],
     tint: 'entity',
     tintStrength: 0.65,
@@ -3254,7 +3820,14 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_mage_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'),
-    attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.delve_skel_varric,
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/arcane_staff_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+    ],
     tint: 'entity',
     tintStrength: 0.35,
   },
@@ -3265,6 +3838,10 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_minion_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.skel_minion,
+    attach: [
+      { url: `${WEAPONS}/rusted_sword_1.glb`, bone: 'handslot.r', calibrationSlot: 'mainhand' },
+    ],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3301,6 +3878,10 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.skel_warrior,
+    attach: [
+      { url: `${WEAPONS}/rusted_sword_2.glb`, bone: 'handslot.r', calibrationSlot: 'mainhand' },
+    ],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3309,6 +3890,10 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.skel_rogue,
+    attach: [
+      { url: `${WEAPONS}/rusted_sword_3.glb`, bone: 'handslot.r', calibrationSlot: 'mainhand' },
+    ],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3317,7 +3902,14 @@ export const VISUALS: Record<string, VisualDef> = {
     animUrls: [`${ENEMIES}/skeleton_mage_hit_variety_anims.glb`],
     height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
-    attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.skel_mage,
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/arcane_staff_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+    ],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3335,7 +3927,14 @@ export const VISUALS: Record<string, VisualDef> = {
       `${ENEMIES}/skeleton_mage_hit_variety_anims.glb`,
       `${ENEMIES}/skelboss_ability_anims.glb`,
     ],
-    attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.skel_boss,
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/arcane_staff_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+    ],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3361,22 +3960,14 @@ export const VISUALS: Record<string, VisualDef> = {
   skel_golem: {
     url: `${ENEMIES}/skeleton_golem.glb`,
     height: 3.4,
-    // Bespoke attack (scripts/build_skeleton_golem_anims.mjs, issue #2889
-    // follow-up batch): this rig backs four named boss/rare VisualDef
-    // assignments (nythraxis_scourge_of_thornpeak, a dungeon final boss; plus
-    // ancient_guardian, waking_warden, idol_guardian below), but still played
-    // the exact same generic swing every plain humanoid mob uses. Spreads the
-    // original skeletonLargeClips result and overrides just the attack
-    // field, the same pattern ELEMENTAL_FLOATING uses over the shared
-    // FLOATING constant: idle/walk/run/hit/death stay the shared set.
+    // The current golem body has no held axe. Its own Dualwield clip drives
+    // both free arms into a heavy symmetrical strike, unlike the retired
+    // Golem_Slam donor whose overhead chop was authored for the old weapon.
+    // Keep the large-rig locomotion, hit and death vocabulary unchanged.
     clips: {
-      ...skeletonLargeClips(['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop']),
-      attack: ['Golem_Slam'],
+      ...skeletonLargeClips(['Dualwield_Melee_Attack_Chop']),
+      attack: ['Dualwield_Melee_Attack_Chop'],
     },
-    animUrls: [`${ENEMIES}/skeleton_golem_anims.glb`],
-    // the baked golem axe ships without the 180° grip flip the rig expects, so
-    // the blade faces backwards; spin it about its handle (local Y) to face out.
-    weaponFix: [{ node: 'Skeleton_Golem_Axe', rotY: Math.PI }],
     tint: 'entity',
     tintStrength: 0.25,
   },
@@ -3438,17 +4029,20 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 0xc9b98a,
     tintStrength: 0.3, // brown-robed brothers of the chapel
   },
-  // Brother Aldric keeps his pre-v0.7 model (the old chars/mage.glb, restored as
-  // mage_classic.glb with the staff built into the mesh). Aldric-only — every
-  // other npc_mage uses the new KayKit full-pack model from #396.
+  // Brother Aldric's named Meshy replacement is shared by all of his hub ids.
+  // Keep the stable visual key so raid and town presentation use the same body.
   npc_aldric: {
-    url: `${PLAYERS}/mage_classic.glb`,
-    animUrls: [`${PLAYERS}/mage_classic_hit_variety_anims.glb`],
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/brother_aldric.glb`,
     height: HUMANOID_H,
-    clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Staff'],
-    tint: 0xc9b98a,
-    tintStrength: 0.3,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Aldric_Idle',
+      walk: 'Aldric_Idle',
+      run: 'Aldric_Idle',
+      attack: ['Aldric_Idle'],
+      death: 'Aldric_Idle',
+    },
   },
   npc_smith: {
     url: `${PLAYERS}/barbarian.glb`,
@@ -3464,7 +4058,7 @@ export const VISUALS: Record<string, VisualDef> = {
     height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
     show: ['Rogue_Cape'],
-    attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
+    attach: [{ url: HUNTER_CROSSBOW_MODEL, bone: 'handslot.r' }],
   },
   npc_villager: {
     url: `${PLAYERS}/rogue.glb`,
@@ -3537,6 +4131,787 @@ export const VISUALS: Record<string, VisualDef> = {
     ],
     tint: 'entity',
     tintStrength: 0.55,
+  },
+  // Apothecary Lin: bespoke Meshy body, rigged in Mixamo. Keep one calm idle;
+  // switching between two independently-authored Mixamo takes produced a
+  // visible pose snap at the cross-fade boundary.
+  npc_apothecary_lin: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/apothecary_lin.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Apothecary_Idle_A',
+      walk: 'Apothecary_Idle_A',
+      run: 'Apothecary_Idle_A',
+      attack: ['Apothecary_Idle_A'],
+      death: 'Apothecary_Idle_A',
+    },
+  },
+  // Bespoke Meshy NPC bodies, auto-rigged in Mixamo. Their source PBR maps
+  // are restored after rigging; the single authored idle supplies the neutral
+  // fallback for states that these non-combat town NPCs never normally enter.
+  npc_fisherman_brandt: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/fisherman_brandt.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Fisherman_Idle',
+      walk: 'Fisherman_Idle',
+      run: 'Fisherman_Idle',
+      attack: ['Fisherman_Idle'],
+      death: 'Fisherman_Idle',
+    },
+  },
+  npc_trader_wilkes: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/trader_wilkes.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Trader_Idle',
+      walk: 'Trader_Idle',
+      run: 'Trader_Idle',
+      attack: ['Trader_Idle'],
+      death: 'Trader_Idle',
+    },
+  },
+  npc_smith_haldren: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/smith_haldren.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Smith_Idle',
+      walk: 'Smith_Idle',
+      run: 'Smith_Idle',
+      attack: ['Smith_Idle'],
+      death: 'Smith_Idle',
+    },
+  },
+  npc_marshal_redbrook: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/marshal_redbrook.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Marshal_Idle',
+      walk: 'Marshal_Idle',
+      run: 'Marshal_Idle',
+      attack: ['Marshal_Idle'],
+      death: 'Marshal_Idle',
+    },
+  },
+  npc_foreman_odell: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/foreman_odell.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Foreman_Idle',
+      walk: 'Foreman_Idle',
+      run: 'Foreman_Idle',
+      attack: ['Foreman_Idle'],
+      death: 'Foreman_Idle',
+    },
+  },
+  // Developer-island combat models. They remain developer-only mob templates
+  // while their scale, animation and held-prop fits are evaluated.
+  npc_dev_rogue_minion: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_rogue_minion.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_rogue_minion,
+    clips: {
+      idle: 'RogueMinion_Standing_Idle',
+      combatIdle: 'RogueMinion_Standing_Block_Idle',
+      walk: 'RogueMinion_Standing_Walk_Forward',
+      run: 'RogueMinion_Standing_Run_Forward',
+      attack: [
+        'RogueMinion_Standing_Melee_Attack_Backhand',
+        'RogueMinion_Standing_Melee_Attack_Downward',
+        'RogueMinion_Standing_Melee_Attack_Horizontal',
+        'RogueMinion_Standing_Melee_Attack_360_High',
+        'RogueMinion_Standing_Melee_Combo_Attack_Ver_1',
+      ],
+      death: 'RogueMinion_Standing_React_Death_Backward',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/evolution_axe_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+    ],
+    weaponSlots: [0],
+  },
+  npc_dev_skeleton_minion: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_minion.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_skeleton_minion,
+    clips: {
+      idle: 'SkeletonMinion_Idle',
+      combatIdle: 'SkeletonMinion_Block_Idle',
+      walk: 'SkeletonMinion_Walk',
+      run: 'SkeletonMinion_Run',
+      attack: [
+        'SkeletonMinion_Attack',
+        'SkeletonMinion_Attack_2',
+        'SkeletonMinion_Attack_3',
+        'SkeletonMinion_Attack_4',
+      ],
+      death: 'SkeletonMinion_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_sword_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+      {
+        url: `${WEAPONS}/meshy/battleworn_oak_shield.glb`,
+        bone: 'handslot.l',
+        calibrationSlot: 'offhand',
+      },
+    ],
+    weaponSlots: [0],
+  },
+  npc_dev_rogue_assassin: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_rogue_assassin.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_rogue_assassin,
+    clips: {
+      idle: 'RogueAssassin_Idle',
+      combatIdle: 'RogueAssassin_Block_Idle',
+      walk: 'RogueAssassin_Walk',
+      run: 'RogueAssassin_Run',
+      attack: [
+        'RogueAssassin_Attack',
+        'RogueAssassin_Attack_2',
+        'RogueAssassin_Attack_3',
+        'RogueAssassin_Attack_4',
+      ],
+      death: 'RogueAssassin_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/arcane_dagger_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+        scaleMultiplier: 0.55,
+      },
+      {
+        url: `${WEAPONS}/meshy/arcane_dagger_1.glb`,
+        bone: 'handslot.l',
+        calibrationSlot: 'offhand',
+        scaleMultiplier: 0.55,
+      },
+    ],
+    weaponSlots: [0, 1],
+  },
+  npc_dev_skeleton_warrior: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_warrior.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_skeleton_warrior,
+    clips: {
+      idle: 'SkeletonWarrior_Idle',
+      combatIdle: 'SkeletonWarrior_Block_Idle',
+      walk: 'SkeletonWarrior_Walk',
+      run: 'SkeletonWarrior_Run',
+      attack: [
+        'SkeletonWarrior_Attack',
+        'SkeletonWarrior_Attack_2',
+        'SkeletonWarrior_Attack_3',
+        'SkeletonWarrior_Attack_4',
+      ],
+      death: 'SkeletonWarrior_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_sword_2.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+      },
+      {
+        url: `${WEAPONS}/meshy/battleworn_oak_shield.glb`,
+        bone: 'handslot.l',
+        calibrationSlot: 'offhand',
+      },
+    ],
+    weaponSlots: [0],
+  },
+  npc_dev_skeleton_cultist: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_cultist.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    ...casterMobMotion('npc_dev_skeleton_cultist', {
+      idle: 'Cultist_Standing_Idle',
+      combatIdle: 'Cultist_Standing_Idle_02',
+      walk: 'Cultist_Standing_Walk_Forward',
+      run: 'Cultist_Standing_Run_Forward',
+      attack: ['Cultist_Standing_1H_Magic_Attack_01', 'Cultist_Standing_2H_Magic_Area_Attack_02'],
+      death: 'Cultist_Standing_React_Death_Backward',
+    }),
+  },
+  npc_dev_skeleton_acolyte: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_acolyte.glb`,
+    height: 2.4,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    ...casterMobMotion('npc_dev_skeleton_acolyte', {
+      idle: 'Acolyte_Standing_Idle',
+      walk: 'Acolyte_Standing_Walk_Forward',
+      run: 'Acolyte_Standing_Run_Forward',
+      attack: ['Acolyte_Standing_1H_Magic_Attack_01'],
+      hit: ['Acolyte_Standing_React_Small_From_Front', 'Acolyte_Standing_React_Large_From_Front'],
+      death: 'Acolyte_Standing_React_Death_Backward',
+    }),
+  },
+  npc_dev_kobold: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_kobold.glb`,
+    height: 1.8,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'Kobold_Standing_Idle',
+      combatIdle: 'Kobold_Standing_Block_Idle',
+      walk: 'Kobold_Standing_Walk_Forward',
+      run: 'Kobold_Standing_Run_Forward',
+      attack: [
+        'Kobold_Standing_Melee_Attack_Backhand',
+        'Kobold_Standing_Melee_Attack_Downward',
+        'Kobold_Standing_Melee_Attack_Horizontal',
+        'Kobold_Standing_Melee_Attack_360_Low',
+      ],
+      hit: ['Kobold_Standing_React_Large_From_Left', 'Kobold_Standing_React_Large_From_Right'],
+      death: 'Kobold_Standing_React_Death_Backward',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_kobold_pickaxe.glb`,
+        bone: 'mixamorig:RightHand',
+        calibrationSlot: 'mainhand',
+      },
+    ],
+  },
+  npc_dev_troll: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_troll.glb`,
+    height: 2.4,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    // Meter-scale source rig: use a visible baseline rather than the legacy
+    // centimeter adapter's tiny default. Editor drafts override it normally.
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_troll ?? {
+      mainhand: { position: [0.25, 0.08, 0], rotationDeg: [0, 0, -90], scale: 0.65 },
+    },
+    clips: {
+      idle: 'Troll_Standing_Idle',
+      combatIdle: 'Troll_Standing_Block_Idle',
+      walk: 'Troll_Standing_Walk_Forward',
+      run: 'Troll_Standing_Run_Forward',
+      attack: [
+        'Troll_Standing_Melee_Attack_Backhand',
+        'Troll_Standing_Melee_Attack_Downward',
+        'Troll_Standing_Melee_Attack_Horizontal',
+        'Troll_Standing_Melee_Combo_Attack_Ver_1',
+      ],
+      death: 'Troll_Standing_React_Death_Backward',
+    },
+    attach: [
+      { url: `${WEAPONS}/rusted_sword_3.glb`, bone: 'handslot.r', calibrationSlot: 'mainhand' },
+    ],
+  },
+  npc_dev_bone_golem: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_bone_golem.glb`,
+    height: 3.5,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'BoneGolem_Mutant_Idle',
+      combatIdle: 'BoneGolem_Mutant_Breathing_Idle',
+      walk: 'BoneGolem_Mutant_Walking',
+      run: 'BoneGolem_Mutant_Run',
+      attack: ['BoneGolem_Mutant_Swiping', 'BoneGolem_Mutant_Punch', 'BoneGolem_Jump_Attack'],
+      death: 'BoneGolem_Mutant_Dying',
+    },
+  },
+  npc_dev_meshy_murlok: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_meshy_murlok.glb`,
+    height: 2.2,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'MeshyMurlokNative_Idle',
+      combatIdle: 'MeshyMurlokNative_Idle',
+      walk: 'MeshyMurlokNative_Walk',
+      run: 'MeshyMurlokNative_Run',
+      attack: [
+        'MeshyMurlokNative_AxeSpinAttack',
+        'MeshyMurlokNative_DoubleCombo',
+        'MeshyMurlokNative_TripleCombo',
+      ],
+      death: 'MeshyMurlokNative_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_murloc_pitchfork.glb`,
+        bone: 'mixamorig:RightHand',
+        calibrationSlot: 'mainhand',
+      },
+    ],
+  },
+  npc_dev_meshy_treant: {
+    ...IMPORTED_BODY_SURFACE,
+    // Retired lab candidate. Keep its source available without boot preloading.
+    lazyPreload: true,
+    url: `${NPCS}/dev_meshy_treant.glb`,
+    height: 3.2,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'MeshyTreant_Mutant_Idle',
+      combatIdle: 'MeshyTreant_Mutant_Breathing_Idle',
+      walk: 'MeshyTreant_Mutant_Walking',
+      run: 'MeshyTreant_Mutant_Run',
+      attack: ['MeshyTreant_Mutant_Swiping', 'MeshyTreant_Mutant_Punch', 'MeshyTreant_Jump_Attack'],
+      death: 'MeshyTreant_Mutant_Dying',
+    },
+  },
+  npc_dev_meshy_ogre: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_meshy_ogre.glb`,
+    height: 3.6,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'MeshyOgreNative_Idle',
+      combatIdle: 'MeshyOgreNative_Idle',
+      walk: 'MeshyOgreNative_WalkInPlace',
+      run: 'MeshyOgreNative_Run',
+      attack: [
+        'MeshyOgreNative_Attack',
+        'MeshyOgreNative_AxeSpinAttack',
+        'MeshyOgreNative_DoubleCombo',
+        'MeshyOgreNative_TripleCombo',
+      ],
+      death: 'MeshyOgreNative_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/rusted_ogre_club.glb`,
+        bone: 'mixamorig:RightHand',
+        calibrationSlot: 'mainhand',
+      },
+    ],
+  },
+  npc_dev_skeleton_rogue: {
+    ...IMPORTED_BODY_SURFACE,
+    // Retired lab candidate; Rogue V3 is the active test subject.
+    lazyPreload: true,
+    url: `${NPCS}/dev_skeleton_rogue.glb`,
+    height: HUMANOID_H,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    heldAttachmentFit: HELD_ATTACHMENT_FITS.npc_dev_rogue_assassin,
+    clips: {
+      idle: 'SkeletonRogue_Idle',
+      combatIdle: 'SkeletonRogue_Block_Idle',
+      walk: 'SkeletonRogue_Walk',
+      run: 'SkeletonRogue_Run',
+      attack: [
+        'SkeletonRogue_Attack',
+        'SkeletonRogue_Attack_2',
+        'SkeletonRogue_Attack_3',
+        'SkeletonRogue_Attack_4',
+      ],
+      death: 'SkeletonRogue_Death',
+    },
+    attach: [
+      {
+        url: `${WEAPONS}/meshy/arcane_dagger_1.glb`,
+        bone: 'handslot.r',
+        calibrationSlot: 'mainhand',
+        scaleMultiplier: 0.55,
+      },
+      {
+        url: `${WEAPONS}/meshy/arcane_dagger_1.glb`,
+        bone: 'handslot.l',
+        calibrationSlot: 'offhand',
+        scaleMultiplier: 0.55,
+      },
+    ],
+    weaponSlots: [0, 1],
+  },
+  npc_dev_skeleton_necromancer_v2: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_necromancer_v2.glb`,
+    height: 2.4,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    ...casterMobMotion('npc_dev_skeleton_necromancer_v2', {
+      idle: 'Necromancer_Standing_Idle',
+      combatIdle: 'Necromancer_Standing_Idle_02',
+      walk: 'Necromancer_Standing_Walk_Forward',
+      run: 'Necromancer_Standing_Run_Forward',
+      attack: [
+        'Necromancer_Standing_1H_Magic_Attack_01',
+        'Necromancer_Standing_2H_Magic_Area_Attack_02',
+      ],
+      death: 'Necromancer_Standing_React_Death_Backward',
+    }),
+  },
+  npc_dev_skeleton_caster_v3: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_caster_v3.glb`,
+    height: 2.4,
+    preserveSkinnedParts: true,
+    ...casterMobMotion('npc_dev_skeleton_caster_v3', {
+      idle: 'CasterV3_Idle',
+      combatIdle: 'CasterV3_Idle',
+      walk: 'CasterV3_WalkInPlace',
+      run: 'CasterV3_Run',
+      attack: ['CasterV3_Cast', 'CasterV3_Cast_1', 'CasterV3_Cast_2'],
+      death: 'CasterV3_Death',
+    }),
+  },
+  npc_dev_skeleton_rogue_v3: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_skeleton_rogue_v3.glb`,
+    height: 2.4,
+    preserveSkinnedParts: true,
+    clips: {
+      idle: 'RogueV3_Idle',
+      combatIdle: 'RogueV3_Idle',
+      walk: 'RogueV3_WalkInPlace',
+      run: 'RogueV3_Run',
+      attack: ['RogueV3_DoubleComboAttack', 'RogueV3_TripleComboAttack', 'RogueV3_AxeSpinAttack'],
+      death: 'RogueV3_Death',
+    },
+  },
+  npc_dev_treant_v2: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${NPCS}/dev_treant_v2.glb`,
+    height: 4.0,
+    preserveSkinnedParts: true,
+    attachmentRig: 'mixamo_standard',
+    clips: {
+      idle: 'TreantV2_Mutant_Idle',
+      combatIdle: 'TreantV2_Mutant_Breathing_Idle',
+      walk: 'TreantV2_Mutant_Walking',
+      run: 'TreantV2_Mutant_Run',
+      attack: ['TreantV2_Mutant_Swiping', 'TreantV2_Mutant_Punch', 'TreantV2_Jump_Attack'],
+      death: 'TreantV2_Mutant_Dying',
+    },
+  },
+  npc_dev_smart_bear: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_bear.glb`,
+    height: 2.7,
+    preserveSkinnedParts: true,
+    // Backward paw speed during support, scaled to the target height.
+    walkRef: 1.0121107266,
+    runRef: 7.4448529412,
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Bear_Idle',
+      combatIdle: 'Bear_CombatIdle',
+      walk: 'Bear_Walk',
+      run: 'Bear_Run',
+      // The existing per-instance rotation makes every fifth swing a rear-up slam.
+      attack: [
+        'Bear_SwipeLeft',
+        'Bear_SwipeRight',
+        'Bear_SwipeLeft',
+        'Bear_SwipeRight',
+        'Bear_DoubleSlam',
+      ],
+      hit: ['Bear_Hit'],
+      death: 'Bear_Death',
+      emote: { roar: { clips: ['Bear_Roar'] } },
+    },
+  },
+  npc_dev_smart_wolf: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_wolf.glb`,
+    height: 2.05,
+    preserveSkinnedParts: true,
+    // Measured backward paw velocity during support at this target height.
+    walkRef: 1.2534491409,
+    runRef: 5.0413141845,
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Wolf_Idle',
+      combatIdle: 'Wolf_CombatIdle',
+      idleVariants: ['Wolf_AlertLook'],
+      walk: 'Wolf_Walk',
+      run: 'Wolf_Run',
+      presentationPoses: ['Wolf_Trot'],
+      attack: ['Wolf_BiteLeft', 'Wolf_BiteRight', 'Wolf_Lunge'],
+      attackWeights: [2, 2, 1],
+      hit: ['Wolf_Hit'],
+      death: 'Wolf_Death',
+      emote: { roar: { clips: ['Wolf_Howl'], timeScale: 1 } },
+    },
+  },
+  npc_dev_smart_wolf_v2: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_wolf_v2.glb`,
+    height: 2.05,
+    preserveSkinnedParts: true,
+    walkRef: 1.0903637007,
+    runRef: 4.0760085201,
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Wolf_Idle',
+      combatIdle: 'Wolf_CombatIdle',
+      idleVariants: ['Wolf_AlertLook'],
+      walk: 'Wolf_Walk',
+      run: 'Wolf_Run',
+      presentationPoses: ['Wolf_Trot'],
+      attack: ['Wolf_BiteLeft', 'Wolf_BiteRight', 'Wolf_Lunge'],
+      attackWeights: [2, 2, 1],
+      hit: ['Wolf_Hit'],
+      death: 'Wolf_Death',
+      emote: { roar: { clips: ['Wolf_Howl'], timeScale: 1 } },
+    },
+  },
+  npc_dev_smart_goat: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_goat.glb`,
+    preserveSkinnedParts: true,
+    height: 1.85,
+    walkRef: 0.7223495459,
+    runRef: 2.8206767657,
+    gait: { runEnter: 1.55, runExit: 1.3 },
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Goat_Idle',
+      combatIdle: 'Goat_CombatIdle',
+      idleVariants: ['Goat_AlertLook'],
+      walk: 'Goat_Walk',
+      run: 'Goat_Run',
+      presentationPoses: ['Goat_Trot', 'Goat_Graze'],
+      attack: [
+        'Goat_HeadbuttLeft',
+        'Goat_HeadbuttRight',
+        'Goat_HeadbuttLeft',
+        'Goat_HeadbuttRight',
+        'Goat_Ram',
+      ],
+      hit: ['Goat_Hit'],
+      death: 'Goat_Death',
+      emote: { roar: { clips: ['Goat_Bleat'], timeScale: 1 } },
+    },
+  },
+  npc_dev_smart_bufalo: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_bufalo.glb`,
+    preserveSkinnedParts: true,
+    height: 2.4,
+    walkRef: 0.8132285172,
+    runRef: 3.2789373814,
+    gait: { runEnter: 1.75, runExit: 1.45 },
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Buffalo_Idle',
+      combatIdle: 'Buffalo_CombatIdle',
+      idleVariants: ['Buffalo_AlertLook'],
+      walk: 'Buffalo_Walk',
+      run: 'Buffalo_Run',
+      presentationPoses: ['Buffalo_Trot', 'Buffalo_Graze'],
+      attack: [
+        'Buffalo_HornLeft',
+        'Buffalo_HornRight',
+        'Buffalo_HornLeft',
+        'Buffalo_HornRight',
+        'Buffalo_Charge',
+      ],
+      hit: ['Buffalo_Hit'],
+      death: 'Buffalo_Death',
+      emote: { roar: { clips: ['Buffalo_Bellow'], timeScale: 1 } },
+    },
+  },
+  npc_dev_smart_deer: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_deer.glb`,
+    preserveSkinnedParts: true,
+    height: 2.25,
+    walkRef: 0.7697808186,
+    runRef: 2.7395109235,
+    gait: { runEnter: 1.8, runExit: 1.5 },
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Deer_Idle',
+      combatIdle: 'Deer_CombatIdle',
+      idleVariants: ['Deer_AlertLook'],
+      walk: 'Deer_Walk',
+      run: 'Deer_Run',
+      presentationPoses: ['Deer_Trot', 'Deer_Graze'],
+      attack: ['Deer_AntlerLeft', 'Deer_AntlerRight', 'Deer_Charge'],
+      attackWeights: [2, 2, 1],
+      hit: ['Deer_Hit'],
+      death: 'Deer_Death',
+      emote: { roar: { clips: ['Deer_Challenge'], timeScale: 1 } },
+    },
+  },
+  npc_dev_smart_raptor: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_raptor.glb`,
+    preserveSkinnedParts: true,
+    height: 2.1,
+    walkRef: 0.8277836673,
+    runRef: 3.5490070605,
+    gait: { runEnter: 2.0, runExit: 1.7 },
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Raptor_Idle',
+      combatIdle: 'Raptor_CombatIdle',
+      idleVariants: ['Raptor_AlertLook'],
+      walk: 'Raptor_Walk',
+      run: 'Raptor_Run',
+      attack: ['Raptor_SlashLeft', 'Raptor_SlashRight', 'Raptor_Pounce', 'Raptor_TailWhip'],
+      attackWeights: [2, 2, 1, 1],
+      hit: ['Raptor_Hit'],
+      death: 'Raptor_Death',
+      emote: { roar: { clips: ['Raptor_Threat'], timeScale: 1 } },
+    },
+  },
+  npc_dev_fire_elemental: {
+    url: `${CREATURES}/fire_elemental_prototype.glb`,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    height: 2.5,
+    hover: 0.15,
+    deathGroundOffset: 0.15,
+    matte: true,
+    bodyVfx: 'fire',
+    attackTimeScale: 1,
+    deathTimeScale: 1,
+    clips: {
+      idle: 'Fire_Idle',
+      walk: 'Fire_Move',
+      run: 'Fire_Move',
+      attack: ['Cast'],
+      cast: 'Channel',
+      death: 'Death',
+    },
+  },
+  npc_dev_ice_elemental: {
+    url: `${CREATURES}/ice_elemental_prototype.glb`,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    height: 2.65,
+    hover: 0.15,
+    deathGroundOffset: 0.15,
+    bodyVfx: 'ice',
+    attackTimeScale: 1,
+    deathTimeScale: 1,
+    clips: {
+      idle: 'Ice_Idle',
+      walk: 'Ice_Move',
+      run: 'Ice_Move',
+      attack: ['Cast'],
+      cast: 'Channel',
+      death: 'Death',
+    },
+  },
+  npc_dev_water_elemental: {
+    url: `${CREATURES}/water_elemental_prototype.glb`,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    height: 2.5,
+    hover: 0.15,
+    deathGroundOffset: 0.15,
+    bodyVfx: 'water',
+    attackTimeScale: 1,
+    deathTimeScale: 1,
+    clips: {
+      idle: 'Water_Idle',
+      walk: 'Water_Move',
+      run: 'Water_Move',
+      attack: ['Cast'],
+      cast: 'Channel',
+      death: 'Death',
+    },
+  },
+  npc_dev_storm_elemental: {
+    url: `${CREATURES}/storm_elemental_prototype.glb`,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    height: 2.5,
+    hover: 0.15,
+    deathGroundOffset: 0.15,
+    matte: true,
+    bodyVfx: 'storm',
+    attackTimeScale: 1,
+    deathTimeScale: 1,
+    clips: {
+      idle: 'Storm_Idle',
+      walk: 'Storm_Move',
+      run: 'Storm_Move',
+      attack: ['Cast'],
+      cast: 'Channel',
+      death: 'Death',
+    },
+  },
+  npc_dev_stone_elemental: {
+    url: `${CREATURES}/stone_elemental_prototype.glb`,
+    authoredAtlas: true,
+    preserveSkinnedParts: true,
+    height: 2.8,
+    hover: 0.05,
+    deathGroundOffset: 0.05,
+    matte: true,
+    bodyVfx: 'stone',
+    attackTimeScale: 1,
+    deathTimeScale: 1,
+    clips: {
+      idle: 'Stone_Idle',
+      walk: 'Stone_Move',
+      run: 'Stone_Move',
+      attack: ['Cast'],
+      cast: 'Channel',
+      death: 'Death',
+    },
+  },
+  npc_dev_smart_imp: {
+    ...IMPORTED_BODY_SURFACE,
+    url: `${CREATURES}/smart_imp.glb`,
+    preserveSkinnedParts: true,
+    height: 1.65,
+    hover: 0.6,
+    walkRef: 1.2,
+    runRef: 4.8,
+    gait: { runEnter: 2.2, runExit: 1.8 },
+    attackTimeScale: 1,
+    clips: {
+      idle: 'Imp_Hover',
+      combatIdle: 'Imp_CombatHover',
+      idleVariants: ['Imp_AlertLook'],
+      walk: 'Imp_Fly',
+      run: 'Imp_FlyFast',
+      attack: ['Imp_ClawLeft', 'Imp_ClawRight', 'Imp_Dive'],
+      attackWeights: [2, 2, 1],
+      attackByAbility: { emberkin_felbolt: 'Imp_CastRelease' },
+      cast: 'Imp_Cast',
+      castReleaseByTarget: { hostile: 'Imp_CastRelease' },
+      hit: ['Imp_Hit'],
+      death: 'Imp_Death',
+      emote: { roar: { clips: ['Imp_Threat'], timeScale: 1 } },
+    },
   },
   // Reedbound Acolyte (The Drowned Litany trash mob): Stone Cantor model from
   // the Raid 02 asset batch. The earlier Meshy mesh (reedbound_acolyte.glb) was
@@ -3615,17 +4990,114 @@ export const VISUALS: Record<string, VisualDef> = {
 // Driven by ALL_CLASSES rather than a local copy: a tenth class would otherwise
 // get no modular def at all and fall back to the warrior's clips through
 // modularKeyFor, silently, with no test able to see it.
+// Keep original definitions for the separate legacy composed-rig route. Native
+// Mixamo donors must never be copied onto KayKit merely by sharing a class ID.
+// Archive stable keys whose production bodies have already been replaced.
+// Explicit gallery dispatch keeps the comparison valid after rollout.
+VISUALS.dev_legacy_ogre = {
+  url: `${CREATURES}/ogre.glb`,
+  authoredAtlas: true,
+  height: 2.8,
+  clips: OGRE,
+  walkRef: 2.79,
+  runRef: 5.84,
+  tint: 'entity',
+  tintStrength: 0.12,
+  lazyPreload: true,
+};
+VISUALS.dev_legacy_crab = {
+  url: `${CREATURES}/crabenemy.glb`,
+  height: 1.7,
+  clips: { ...ENEMY_BITE, attack: ['Crab_Attack'] },
+  animUrls: [`${CREATURES}/crabenemy_hit_variety_anims.glb`, `${CREATURES}/crab_ability_anims.glb`],
+  tint: 'entity',
+  tintStrength: 0.35,
+  lazyPreload: true,
+};
+VISUALS.dev_legacy_spider = {
+  url: `${CREATURES}/spider.glb`,
+  height: 1.4,
+  clips: SPIDER,
+  tint: 'entity',
+  tintStrength: 0.35,
+  lazyPreload: true,
+};
+VISUALS.dev_legacy_aldric = {
+  url: `${PLAYERS}/mage_classic.glb`,
+  height: HUMANOID_H,
+  animUrls: [`${PLAYERS}/mage_classic_hit_variety_anims.glb`],
+  clips: kaykit(['2H_Melee_Attack_Chop']),
+  show: ['2H_Staff'],
+  tint: 0xc9b98a,
+  tintStrength: 0.3,
+  lazyPreload: true,
+};
+// Same imported troll, texture and rig. Only the atlas palette differs.
+for (const [palette, atlasDye] of Object.entries(TROLL_PALETTES)) {
+  VISUALS[`npc_dev_troll_${palette}`] = {
+    ...VISUALS.npc_dev_troll,
+    atlasDye,
+  };
+}
+// Palette and uniform-size trials share the installed spider's rig and maps.
+// Only explicit gallery keys use these; world spiders keep the base appearance.
+for (const [name, variant] of Object.entries(SPIDER_VARIANTS)) {
+  const base = VISUALS.mob_spider;
+  VISUALS[`npc_dev_spider_${name}`] = {
+    ...base,
+    height: base.height * variant.scale,
+    walkRef: (base.walkRef ?? 1) * variant.scale,
+    runRef: (base.runRef ?? 1) * variant.scale,
+    atlasDye: variant.dye,
+    tint: undefined,
+    tintStrength: undefined,
+    lazyPreload: true,
+  };
+}
+const legacyRemainingPlayers = new Map<string, VisualDef>();
+for (const cls of REMAINING_T1_CLASSES) {
+  const key = `player_${cls}`;
+  legacyRemainingPlayers.set(cls, VISUALS[key]);
+  VISUALS[key] = remainingPlayerMotion(cls, VISUALS[key]);
+}
+for (const [key, def] of Object.entries(VISUALS)) {
+  def.equipmentFitKey = key;
+  if (def.heldAttachmentFit || key === 'player_meshy_titan')
+    def.carriedAttachmentFit = carriedAttachmentFitFor(key);
+}
 for (const cls of ALL_CLASSES) {
   const {
     show: _show,
     tint: _tint,
     tintStrength: _tintStrength,
     ...base
-  } = VISUALS[`player_${cls}`];
+  } = cls === 'warrior'
+    ? LEGACY_WARRIOR_VISUAL
+    : (legacyRemainingPlayers.get(cls) ?? VISUALS[`player_${cls}`]);
   VISUALS[`player_${cls}_modular`] = {
     ...base,
+    // Native Mixamo shot masks do not belong to the separate KayKit body.
+    ...(base.clips.locomotionShotClips
+      ? { clips: { ...base.clips, locomotionShotClips: undefined } }
+      : {}),
+    // The legacy composed rig is KayKit, not the Mixamo warrior trial body.
+    ...(cls === 'warrior'
+      ? {
+          weaponCarryByHand: false,
+          clips: {
+            ...base.clips,
+            travel: undefined,
+            draw: undefined,
+            stow: undefined,
+            carrySwapFraction: undefined,
+            hipCarry: undefined,
+          },
+        }
+      : {}),
     url: `${MODULAR}/warrior_modular.glb`,
     modular: true,
+    equipmentFitKey: undefined,
+    carriedAttachmentFit: undefined,
     animUrls: [base.url, ...(base.animUrls ?? [])],
   };
 }
@@ -3655,7 +5127,7 @@ const NPC_MODULAR_PROP_ATTACH: Record<NpcPropSet, AttachDef[]> = {
     { url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' },
     { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
   ],
-  crossbow: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
+  crossbow: [{ url: HUNTER_CROSSBOW_MODEL, bone: 'handslot.r' }],
   hammer: [{ url: `${WEAPONS}/hammer_a.glb`, bone: 'handslot.r' }],
   woodaxe: [{ url: `${WEAPONS}/notched_woodaxe.glb`, bone: 'handslot.r' }],
   sword_shield: [
@@ -3685,6 +5157,54 @@ for (const propSet of NPC_PROP_SET_IDS) {
 // ---------------------------------------------------------------------------
 
 const MOB_KEYS: Record<string, string> = {
+  // Fishfolk only: Bogtoad, Drowsy Croaker and Bog Bloat keep the old frog body.
+  mudfin_murloc: 'npc_dev_meshy_murlok',
+  deepfen_murloc: 'npc_dev_meshy_murlok',
+  mirejaw_the_ravenous: 'npc_dev_meshy_murlok',
+  mirejaw_frenzy: 'npc_dev_meshy_murlok',
+  sloomtooth_the_drowned: 'npc_dev_meshy_murlok',
+  glimmermere_wader: 'npc_dev_meshy_murlok',
+  moonspawn: 'npc_dev_meshy_murlok',
+  rift_tide_thrall: 'npc_dev_meshy_murlok',
+  rift_boss_tide: 'npc_dev_meshy_murlok',
+  mere_lurker: 'npc_dev_meshy_murlok',
+  the_meredark: 'npc_dev_meshy_murlok',
+
+  dev_smart_bear: 'npc_dev_smart_bear',
+  dev_smart_wolf: 'npc_dev_smart_wolf',
+  dev_smart_wolf_v2: 'npc_dev_smart_wolf_v2',
+  dev_smart_goat: 'npc_dev_smart_goat',
+  dev_smart_bufalo: 'npc_dev_smart_bufalo',
+  dev_smart_deer: 'npc_dev_smart_deer',
+  dev_smart_raptor: 'npc_dev_smart_raptor',
+  dev_smart_imp: 'npc_dev_smart_imp',
+  dev_spider_forest: 'npc_dev_spider_forest',
+  dev_spider_marsh: 'npc_dev_spider_marsh',
+  dev_spider_sand: 'npc_dev_spider_sand',
+  dev_spider_frost: 'npc_dev_spider_frost',
+  dev_spider_broodmother: 'npc_dev_spider_broodmother',
+  dev_fire_elemental: 'npc_dev_fire_elemental',
+  dev_ice_elemental: 'npc_dev_ice_elemental',
+  dev_water_elemental: 'npc_dev_water_elemental',
+  dev_stone_elemental: 'npc_dev_stone_elemental',
+  dev_storm_elemental: 'npc_dev_storm_elemental',
+  dev_rogue_minion: 'npc_dev_rogue_minion',
+  dev_rogue_assassin: 'npc_dev_rogue_assassin',
+  dev_skeleton_minion: 'npc_dev_skeleton_minion',
+  dev_skeleton_warrior: 'npc_dev_skeleton_warrior',
+  dev_skeleton_cultist: 'npc_dev_skeleton_cultist',
+  dev_skeleton_acolyte: 'npc_dev_skeleton_acolyte',
+  dev_kobold: 'npc_dev_kobold',
+  dev_troll: 'npc_dev_troll',
+  dev_bone_golem: 'npc_dev_bone_golem',
+  dev_meshy_murlok: 'npc_dev_meshy_murlok',
+  dev_meshy_treant: 'npc_dev_meshy_treant',
+  dev_meshy_ogre: 'npc_dev_meshy_ogre',
+  dev_skeleton_rogue: 'npc_dev_skeleton_rogue',
+  dev_skeleton_necromancer_v2: 'npc_dev_skeleton_necromancer_v2',
+  dev_skeleton_caster_v3: 'npc_dev_skeleton_caster_v3',
+  dev_skeleton_rogue_v3: 'npc_dev_skeleton_rogue_v3',
+  dev_treant_v2: 'npc_dev_treant_v2',
   // WIP forge mech enemy (crawl/standup/die placeholder rig).
   derelict_mech: 'mob_mech',
   [IGNIVAR_BOSS_ID]: 'mob_ignivar',
@@ -3710,15 +5230,14 @@ const MOB_KEYS: Record<string, string> = {
   dragonkin_egg: 'mob_dragon_egg',
   // Grubjaw the Glutton: his own body now, not the shared troll stand-in.
   grubjaw: 'mob_grubjaw',
-  // Eastbrook Vale's kobolds: the authored rat body, not the goblin stand-in
-  // the `burrower` family still falls back to. Scoped to the two zone-1
-  // templates on purpose (see mob_kobold_digger): the family also carries the
-  // hedge gnome and the willow/fen/harvest sprites, and repointing the family
-  // would turn all of them into rats. Zone 3's deeprock_kobold and the Ironvein
-  // pair are the natural next adopters, but they are a separate call.
-  tunnel_rat: 'mob_kobold_digger',
-  // Grix has his own body now (mob_grix), so he no longer shares the Diggers'.
-  grix_the_tunnelking: 'mob_grix',
+  // Explicit kobold templates: the burrower fallback also serves sprites and gnomes.
+  // Promoted lab bodies share the exact weapon-fit key edited on the island.
+  tunnel_rat: 'npc_dev_kobold',
+  deeprock_kobold: 'npc_dev_kobold',
+  ironvein_foreman: 'npc_dev_kobold',
+  ironvein_sapper: 'npc_dev_kobold',
+  // Grix shares the new body until a separate boss variant is authored.
+  grix_the_tunnelking: 'npc_dev_kobold',
   // Ambient Highwatch stable horse: the Valorsteed mount model (mob_stable_horse
   // above) so it renders as an animated horse, not a humanoid.
   stable_horse: 'mob_stable_horse',
@@ -3843,18 +5362,19 @@ const MOB_KEYS: Record<string, string> = {
   gilded_stag: 'mob_stag',
   gloam_fox: 'mob_fox',
   orchard_treant: 'mob_treant',
-  lily_wisp: 'mob_ghost',
+  lily_wisp: 'mob_lily_wisp',
   ancient_guardian: 'skel_golem',
   waking_warden: 'skel_golem',
   glimmerwisp: 'mob_glimmerwisp',
   duskwisp: 'mob_duskwisp',
-  ice_wisp: 'mob_ghost',
+  ice_wisp: 'mob_ice_wisp',
+  gale_wisp: 'mob_gale_wisp',
   frostmane_yeti: 'mob_yeti',
   // Frostveil quest pass: Wren renders as a tinted villager (escort NPC, mob-kind
   // so the escort driver can walk her); the howlers ride the beast/wolf fallback.
   apprentice_wren: 'npc_villager',
   sporeling_gatherer: 'mob_glub',
-  corrupted_sporeling: 'mob_glub',
+  corrupted_sporeling: 'mob_corrupted_sporeling',
   mushroom_pixie: 'mob_mushroom_pixie',
   treant_elder: 'mob_treant',
   old_marrowshell: 'mob_crab',
@@ -3879,11 +5399,9 @@ const MOB_KEYS: Record<string, string> = {
   // the Palmreach: coral crabs, jungle boars, and the carved-stone guardian
   // (the canopy weavers take the spider family default)
   tide_scuttler: 'mob_crab',
-  // the Proving Shore (tutorial island): the strand crab and the straw
-  // practice target reuse the shipped crab and training-dummy rigs, and the
-  // tide-pool king is the same crab rig grown into his template scale
-  shore_scuttler: 'mob_crab',
-  mister_crabs: 'mob_crab',
+  // Island variants retain their tint policy on the shared Emberclaw body.
+  shore_scuttler: 'mob_proving_shore_scuttler',
+  mister_crabs: 'mob_proving_shore_tidepool_boss',
   training_effigy: 'mob_training_dummy',
   thicket_boar: 'mob_boar',
   idol_guardian: 'skel_golem',
@@ -3928,7 +5446,7 @@ const FAMILY_KEYS: Record<string, string> = {
 const NPC_KEYS: Record<string, string> = {
   bursar_fernando: 'npc_fernando',
   card_master: 'npc_villager_robed',
-  marshal_redbrook: 'npc_knight',
+  marshal_redbrook: 'npc_marshal_redbrook',
   warden_fenwick: 'npc_knight',
   captain_thessaly: 'npc_knight',
   // The two WARFARE quartermasters (one stock, two placements). Both sell the
@@ -3939,15 +5457,15 @@ const NPC_KEYS: Record<string, string> = {
   warmarshal_draven_kole: 'npc_knight',
   fury: 'npc_knight',
   loremaster_caddis: 'npc_mage',
-  smith_haldren: 'npc_smith',
+  smith_haldren: 'npc_smith_haldren',
   armorer_hode: 'npc_smith',
-  foreman_odell: 'npc_smith',
+  foreman_odell: 'npc_foreman_odell',
   scout_maren: 'npc_scout',
   scout_maren_highwatch: 'npc_scout',
-  apothecary_lin: 'npc_villager_robed',
+  apothecary_lin: 'npc_apothecary_lin',
   herbalist_yara: 'npc_villager_robed',
-  trader_wilkes: 'npc_villager',
-  fisherman_brandt: 'npc_villager',
+  trader_wilkes: 'npc_trader_wilkes',
+  fisherman_brandt: 'npc_fisherman_brandt',
   provisioner_hale: 'npc_villager',
   quartermaster_bree: 'npc_villager',
   brother_halven: 'npc_reliquary_keeper',
@@ -3979,19 +5497,30 @@ const NPC_KEYS: Record<string, string> = {
 };
 
 export function visualKeyFor(e: Entity): string {
+  const comparison =
+    e.kind === 'npc' ? DEV_MODEL_COMPARISON_GALLERY.byId.get(e.templateId) : undefined;
+  if (comparison?.visualKey) return comparison.visualKey;
   if (e.kind === 'player') {
     if (isMechWearer(e)) return 'player_mech';
-    return VISUALS[`player_${e.templateId}`] ? `player_${e.templateId}` : 'player_warrior';
+    return playerArmorVisualKey(e.templateId, e.equippedItems, ITEMS, VISUALS);
   }
   if (e.kind === 'mob') {
+    if (
+      (e.templateId === 'shore_scuttler' || e.templateId === 'mister_crabs') &&
+      e.pos !== undefined &&
+      !isOnProvingShore(e.pos.x, e.pos.z)
+    ) {
+      return 'mob_crab';
+    }
     const override = MOB_KEYS[e.templateId];
     if (override) return override;
     const family = MOBS[e.templateId]?.family;
     return (family && FAMILY_KEYS[family]) || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
-  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
-  return NPC_KEYS[e.templateId] ?? 'npc_villager';
+  const npcId = comparison?.sourceNpcId ?? e.templateId;
+  if (npcId.startsWith('brother_aldric')) return 'npc_aldric';
+  return NPC_KEYS[npcId] ?? 'npc_villager';
 }
 
 /** Held-weapon layout override for the class-agnostic Combat Mech body. The mech
@@ -4011,6 +5540,20 @@ export function mechHeldWeaponOverride(cls: PlayerClass): WeaponLayoutOverride |
   };
 }
 
+/** Copy the complete held-item layout from an existing visual. Unlike the mech
+ *  helper, this includes fixed layouts such as the hunter crossbow and NPC
+ *  props. A replacement body can then keep its own mesh, clips and attachment
+ *  rig while retaining the entity's gameplay-readable equipment. */
+export function heldItemLayoutOverrideForVisual(visualKey: string): WeaponLayoutOverride | null {
+  const source = VISUALS[visualKey];
+  if (!source?.attach?.length) return null;
+  return {
+    attach: source.attach,
+    weaponSlots: source.weaponSlots,
+    offhandSlot: source.offhandSlot,
+  };
+}
+
 /** Every glb the manifest can reference (for preloading). */
 export function manifestUrls(): string[] {
   const urls = new Set<string>();
@@ -4024,6 +5567,10 @@ export function manifestUrls(): string[] {
   // gear), so they are resolved-and-ready when setWeapon attaches them.
   for (const url of itemWeaponModelUrls()) urls.add(url);
   for (const url of itemOffhandModelUrls()) urls.add(url);
+  // The character creator's current technical fitting subject replaces its
+  // starter pair at attach time, so the replacement GLBs must share the same
+  // eager launcher gate as the body rather than arriving after its first draw.
+  for (const url of MESHY_TITAN_WEAPON_MODEL_URLS) urls.add(url);
   // Season 1 Armory weapon-skin models: also attachable on any nearby player at
   // any moment (account-wide cosmetics), so they preload with the same sweep.
   for (const url of weaponSkinModelUrls()) urls.add(url);

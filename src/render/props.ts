@@ -22,18 +22,15 @@ import {
   propPlacementRoll,
 } from '../sim/prop_layout';
 import { hash2 } from '../sim/rng';
+import { isSettlementBuilding } from '../sim/settlements_layout';
 import type { BuildingDef } from '../sim/types';
+import { isWickharborBuilding } from '../sim/wickharbor_layout';
 import { terrainHeight, WATER_LEVEL, waterLevel } from '../sim/world';
 import { loadGltf, releaseGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { attachBiomeHaze } from './biome_haze_field';
+import { createCampfireFlame } from './campfire_flame';
 import { buildEastbrookGrandArmouryView } from './eastbrook_grand_armoury';
-import {
-  isEastbrookRebuildBuilding,
-  isEastbrookRebuildFence,
-  isEastbrookRebuildStall,
-  isEastbrookRebuildWell,
-} from './eastbrook_town';
 import {
   isFenbridgeRebuildBuilding,
   isFenbridgeRebuildStall,
@@ -266,6 +263,46 @@ export const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   hexShipRed: { url: '/models/biome/hex_ship_red.glb', kit: 'khex' },
   hexShipGreen: { url: '/models/biome/hex_ship_green.glb', kit: 'khex' },
   hexBoat: { url: '/models/biome/hex_boat.glb', kit: 'khex' },
+  wickSailingShip: {
+    url: '/models/wickharbor_vessels/sailship.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickSailingShipBlue: {
+    url: '/models/wickharbor_vessels/sailship-blue.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickSailingShipOchre: {
+    url: '/models/wickharbor_vessels/sailship-ochre.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickSailingShipRusset: {
+    url: '/models/wickharbor_vessels/sailship-russet.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickKetchBlue: {
+    url: '/models/wickharbor_vessels/ketch-blue.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickKetchOchre: {
+    url: '/models/wickharbor_vessels/ketch-ochre.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickBrig: {
+    url: '/models/wickharbor_vessels/brig.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
+  wickRowboat: {
+    url: '/models/wickharbor_vessels/rowboat.glb',
+    kit: 'wickboats',
+    yaw: Math.PI / 2,
+  },
   hexBoatrack: { url: '/models/biome/hex_boatrack.glb', kit: 'khex' },
   hexAnchor: { url: '/models/biome/hex_anchor.glb', kit: 'khex' },
   hexSack: { url: '/models/biome/hex_sack.glb', kit: 'khex' },
@@ -433,6 +470,14 @@ const ALL_PROP_KEYS = Object.keys(PROP_ASSET_DEFS) as PropKey[];
 // ONLY the per-tier work (material prewarm); it is deliberately NOT the preload
 // set (see preloadPropKeys below).
 const LOW_TIER_PROP_KEYS: readonly PropKey[] = [
+  'wickSailingShip',
+  'wickSailingShipBlue',
+  'wickSailingShipOchre',
+  'wickSailingShipRusset',
+  'wickKetchBlue',
+  'wickKetchOchre',
+  'wickBrig',
+  'wickRowboat',
   'house1',
   'house2',
   'house3',
@@ -570,6 +615,7 @@ export const propPreloadInternalsForTest = {
   allPropKeys: ALL_PROP_KEYS,
   lowTierPropKeys: LOW_TIER_PROP_KEYS,
   preloadPropKeys,
+  propAssetYaw: (key: PropKey) => PROP_ASSET_DEFS[key].yaw ?? 0,
   propAssetUrl: Object.fromEntries(
     Object.entries(PROP_ASSET_DEFS).map(([key, def]) => [key, def.url]),
   ) as Record<string, string>,
@@ -680,6 +726,8 @@ function convertMaterial(
   // cutout one (the placeable oak's leaf cards) renders as opaque quads without
   // them, and would otherwise share a cached material with an opaque namesake.
   const alphaTest = s.alphaTest ?? 0;
+  const sourceEmission = kit === 'wickboats' ? s.emissive : undefined;
+  const sourceEmissionIntensity = kit === 'wickboats' ? (s.emissiveIntensity ?? 1) : 1;
   // The surface-detail family must key the cache too. One kit atlas serves
   // hulls, sails and masonry alike, so the SAME (kit, material name) pair
   // now resolves to different families per triangle group; without this the
@@ -688,7 +736,7 @@ function convertMaterial(
     familyOverride === undefined
       ? ''
       : `${familyOverride?.family ?? 'none'}${familyOverride?.strength ?? ''}`;
-  const key = `${kit}|${s.name}|${s.color?.getHexString() ?? ''}|${s.map ? 'm' : ''}|${hasVertexColors ? 'v' : ''}|${GFX.standardMaterials ? 's' : 'l'}|a${alphaTest}|d${s.side}|f${famKey}`;
+  const key = `${kit}|${s.name}|${s.color?.getHexString() ?? ''}|${s.map ? 'm' : ''}|${hasVertexColors ? 'v' : ''}|${GFX.standardMaterials ? 's' : 'l'}|a${alphaTest}|d${s.side}|f${famKey}|n${s.normalScale?.x ?? 1},${s.normalScale?.y ?? 1}|e${sourceEmission?.r ?? 0},${sourceEmission?.g ?? 0},${sourceEmission?.b ?? 0},${sourceEmissionIntensity}`;
   const cached = matConvCache.get(key);
   if (cached) return cached;
   const color =
@@ -703,6 +751,9 @@ function convertMaterial(
   // lanterns, and crystals actually shine under the permanent dusk.
   const hollow = kit === 'hollow';
   const hollowEmissive = hollow && map;
+  const emission = new THREE.Color(hollowEmissive ? 0xffffff : (ov?.emissive ?? 0x000000));
+  if (!hollowEmissive && ov?.emissive === undefined && sourceEmission)
+    emission.copy(sourceEmission);
   let mat: THREE.Material;
   if (GFX.standardMaterials) {
     mat = new THREE.MeshStandardMaterial({
@@ -713,6 +764,7 @@ function convertMaterial(
       vertexColors: hasVertexColors,
       flatShading: hollow,
       normalMap: s.normalMap ?? null,
+      normalScale: s.normalScale?.clone() ?? new THREE.Vector2(1, 1),
       roughnessMap: s.roughnessMap ?? null,
       metalnessMap: s.metalnessMap ?? null,
       aoMap: s.aoMap ?? null,
@@ -725,9 +777,9 @@ function convertMaterial(
       metalness:
         ov?.metalness ??
         (s.isMeshStandardMaterial && METAL_MAT_NAME.test(s.name) ? Math.min(s.metalness, 0.85) : 0),
-      emissive: new THREE.Color(hollowEmissive ? 0xffffff : (ov?.emissive ?? 0x000000)),
+      emissive: emission,
       emissiveMap: hollowEmissive ? map : null,
-      emissiveIntensity: hollowEmissive ? 0.3 : (ov?.emissiveIntensity ?? 1),
+      emissiveIntensity: hollowEmissive ? 0.3 : (ov?.emissiveIntensity ?? sourceEmissionIntensity),
       // Metal-named kit materials (MI_Trim_Metal, WornIron, ...) get a mild
       // per-material env boost so anvils/fittings catch the sky IBL; the name
       // is already part of the cache key above. Everything else keeps the
@@ -743,9 +795,11 @@ function convertMaterial(
       side: s.side,
       vertexColors: hasVertexColors,
       flatShading: hollow,
-      emissive: new THREE.Color(hollowEmissive ? 0xffffff : (ov?.emissive ?? 0x000000)),
+      emissive: emission,
       emissiveMap: hollowEmissive ? map : null,
-      emissiveIntensity: hollowEmissive ? 0.2 : (ov?.emissiveIntensity ?? 1) * 0.6,
+      emissiveIntensity: hollowEmissive
+        ? 0.2
+        : (ov?.emissiveIntensity ?? sourceEmissionIntensity) * 0.6,
     });
   }
   // Distant-zone air (biome_haze_field.ts): every converted kit material
@@ -767,7 +821,7 @@ function convertMaterial(
     familyOverride !== undefined
       ? familyOverride
       : wornFamilyFor(kit, s.name, {
-          emissive: !!hollowEmissive || (ov?.emissive ?? 0) !== 0,
+          emissive: emission.r !== 0 || emission.g !== 0 || emission.b !== 0,
           transparent: s.transparent === true,
           hasOwnMaps: !!(s.normalMap || s.roughnessMap),
         });
@@ -973,6 +1027,7 @@ export function buildPropMaterialPrewarmGroup(): THREE.Group {
   // instance variant the way the live placed props do; the plain InstancedMesh
   // and Mesh cover the untinted and non-instanced paths.
   const white = new THREE.Color(1, 1, 1);
+  place(createCampfireFlame());
   // Prewarm only the props that actually render at the LIVE tier (this runs after
   // initGfxTier via the Renderer, so GFX is authoritative here, unlike the import-time
   // best-guess): low renders the LOW_TIER_PROP_KEYS subset, medium+ renders the full
@@ -1482,7 +1537,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       );
       continue;
     }
-    if (builtInWorld && isEastbrookRebuildBuilding(b)) continue;
+    if (builtInWorld && (isSettlementBuilding(b) || isWickharborBuilding(b))) continue;
     if (builtInWorld && isFenbridgeRebuildBuilding(b)) continue;
     // roof Y mirrors the camera collider height in colliders.ts, through the
     // same shared helper, so an authored per-building height override cannot
@@ -1609,7 +1664,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
 
   // ---- market stalls (smith/armorer stalls get anvil + weapon stand) ------
   activeContent.props.stalls.forEach((s, i) => {
-    if (builtInWorld && isEastbrookRebuildStall(s)) return;
     if (builtInWorld && isFenbridgeRebuildStall(s)) return;
     const key = s.x * 7.7 + s.z * 2.3;
     const g = new THREE.Group();
@@ -1641,7 +1695,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
 
   // ---- wells ---------------------------------------------------------------
   for (const w of activeContent.props.wells) {
-    if (builtInWorld && isEastbrookRebuildWell(w)) continue;
     if (builtInWorld && isFenbridgeRebuildWell(w)) continue;
     const g = new THREE.Group();
     const a = propAsset('well');
@@ -1689,7 +1742,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   const PALISADE_MODULE_LEN = 2.0; // authored length before scaling
   const PALISADE_SEG = 6.4; // target module length in the world
   for (const f of activeContent.props.fences) {
-    if (builtInWorld && isEastbrookRebuildFence(f)) continue;
     const len = Math.hypot(f.x2 - f.x1, f.z2 - f.z1);
     const stone = f.kind === 'stone';
     const palisade = f.kind === 'palisade';
@@ -1746,30 +1798,11 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   }
 
   // ---- campfires: hideable bonfire base + live animated flame + light ------
-  const flamePts = [
-    [0, 0],
-    [0.16, 0.1],
-    [0.27, 0.28],
-    [0.3, 0.45],
-    [0.22, 0.66],
-    [0.1, 0.84],
-    [0.001, 0.95],
-  ].map(([r, y]) => new THREE.Vector2(r, y));
-  const flameGeo = new THREE.LatheGeometry(flamePts, 7);
   for (const [x, z] of getActiveWorldContent().props.campfires) {
     const y = ground(x, z);
     const g = new THREE.Group();
     addParts(g, 'bonfire', { y: -0.05, rot: propRand(x, z, 1) * Math.PI * 2, scale: 4.3 });
-    const flame = new THREE.Mesh(
-      flameGeo,
-      new THREE.MeshLambertMaterial({
-        color: 0xffaa33,
-        emissive: 0xff6600,
-        emissiveIntensity: usePbr ? EMISSIVE_LIGHT : 1.4,
-        transparent: true,
-        opacity: 0.92,
-      }),
-    );
+    const flame = createCampfireFlame();
     flame.position.y = 0.16;
     flame.scale.setScalar(1.15);
     g.add(flame);
@@ -2292,16 +2325,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.26, 0.38, 10), bowlMat);
       bowl.position.y = postH + 0.1;
       bg.add(bowl);
-      const flame = new THREE.Mesh(
-        flameGeo,
-        new THREE.MeshLambertMaterial({
-          color: 0xffaa33,
-          emissive: 0xff6a1e,
-          emissiveIntensity: usePbr ? EMISSIVE_LIGHT : 1.4,
-          transparent: true,
-          opacity: 0.92,
-        }),
-      );
+      const flame = createCampfireFlame();
       flame.position.y = postH + 0.28;
       flame.scale.setScalar(0.72);
       bg.add(flame);
@@ -2994,7 +3018,7 @@ export function collectBuildingImpostors(seed: number): {
   };
   for (const b of activeContent.props.buildings) {
     if (b.landmark) continue;
-    if (builtInWorld && isEastbrookRebuildBuilding(b)) continue;
+    if (builtInWorld && (isSettlementBuilding(b) || isWickharborBuilding(b))) continue;
     const y = terrainHeight(b.x, b.z, seed);
     if (b.kind === 'chapel') {
       const tower = use('bellTower');

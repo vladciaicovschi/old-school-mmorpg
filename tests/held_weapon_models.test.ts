@@ -9,6 +9,8 @@ import {
   KAYKIT_SHIELD_GRIPS,
 } from '../src/render/characters/held_item_grips';
 import {
+  heldItemLayoutOverrideForVisual,
+  ITEM_OFFHAND_MODELS,
   itemOffhandModelUrl,
   itemWeaponModelUrl,
   manifestUrls,
@@ -18,6 +20,7 @@ import {
   weaponSkinModelUrl,
   weaponSkinModelUrls,
 } from '../src/render/characters/manifest';
+import { weaponTypeForItem } from '../src/sim/content/weapon_skin_rules';
 import { WEAPON_SKIN_LIST } from '../src/sim/content/weapon_skins';
 import { ITEMS } from '../src/sim/data';
 import { weaponHand } from '../src/sim/equipment_rules';
@@ -49,6 +52,17 @@ function withTemporaryOwnProperty(
 // ITEM_WEAPON_VARIANTS selects the in-world GLB and retains its legacy preview
 // JPG, while weaponIconUrl selects bespoke per-item WebP artwork.
 describe('held weapon models', () => {
+  it('lets a replacement body retain fixed and swappable held-item layouts', () => {
+    expect(heldItemLayoutOverrideForVisual('player_warrior')).toMatchObject({
+      weaponSlots: [0],
+      offhandSlot: 1,
+    });
+    expect(heldItemLayoutOverrideForVisual('player_hunter')).toMatchObject({
+      attach: [{ url: 'models/weapons/meshy/test_crossbow_1.glb', bone: 'handslot.r' }],
+    });
+    expect(heldItemLayoutOverrideForVisual('mob_crab')).toBeNull();
+  });
+
   it('every weapon variant has a model GLB and legacy preview JPG on disk', () => {
     const keys = [...new Set(Object.values(ITEM_WEAPON_VARIANTS))];
     expect(keys.length).toBeGreaterThan(0);
@@ -163,19 +177,89 @@ describe('held weapon models', () => {
   });
 
   it('itemWeaponModelUrl resolves mapped items and ignores everything else', () => {
-    expect(itemWeaponModelUrl('worn_sword')).toBe('models/weapons/sword_a.glb');
+    expect(itemWeaponModelUrl('worn_sword')).toBe('models/weapons/meshy/ascendance_sword_1.glb');
     expect(itemWeaponModelUrl('fen_reaver_glaive')).toBe('models/weapons/scythe.glb');
-    expect(itemWeaponModelUrl('eastbrook_greatsword')).toBe('models/weapons/adv_sword_2handed.glb');
-    expect(itemWeaponModelUrl('highwatch_greatsword')).toBe('models/weapons/adv_sword_2handed.glb');
+    expect(itemWeaponModelUrl('eastbrook_greatsword')).toBe(
+      'models/weapons/meshy/claymore_sword_1.glb',
+    );
+    expect(itemWeaponModelUrl('highwatch_greatsword')).toBe(
+      'models/weapons/meshy/claymore_sword_2.glb',
+    );
     expect(itemWeaponModelUrl('deathless_greatblade')).toBe(
-      'models/weapons/adv_sword_2handed_color.glb',
+      'models/weapons/meshy/claymore_sword_5.glb',
     );
     expect(itemWeaponModelUrl('heroic_wyrmfang_greatblade')).toBe(
-      'models/weapons/adv_sword_2handed_color.glb',
+      'models/weapons/meshy/claymore_sword_3.glb',
     );
     expect(itemWeaponModelUrl('chest_armor_not_a_weapon')).toBeNull();
     expect(itemWeaponModelUrl(null)).toBeNull();
     expect(itemWeaponModelUrl(undefined)).toBeNull();
+  });
+
+  it('uses imported Meshy families as the fallback for every covered weapon class', () => {
+    const cases = [
+      ['thorium_warblade', 'meshy/ascendance_sword_3'],
+      ['kingsbane_last_oath', 'meshy/ascendance_sword_5'],
+      ['boneglass_shiv', 'meshy/arcane_dagger_3'],
+      ['duskwhisper', 'meshy/arcane_dagger_5'],
+      ['briarroot_staff', 'meshy/arcane_staff_1'],
+      ['staff_of_the_gravewyrm', 'meshy/arcane_staff_5'],
+      ['pitlords_cleaver', 'meshy/evolution_axe_5'],
+      ['slagrender_cleaver', 'meshy/evolution_axe_5'],
+      ['eastbrook_greatsword', 'meshy/claymore_sword_1'],
+      ['highwatch_greatsword', 'meshy/claymore_sword_2'],
+      ['wyrmfang_greatblade', 'meshy/claymore_sword_3'],
+      ['bonewrought_greatsword', 'meshy/claymore_sword_4'],
+      ['heart_of_the_end_greatblade', 'meshy/claymore_sword_5'],
+      ['training_mace', 'meshy/lion_warhammer_1h_1'],
+      ['bristleback_maul', 'meshy/lion_warhammer_1h_2'],
+      ['crag_warden_cudgel', 'meshy/lion_warhammer_1h_3'],
+      ['brutoks_maul', 'meshy/lion_warhammer_1h_4'],
+      ['forgefathers_warhammer', 'meshy/lion_warhammer_1h_5'],
+      ['ironshod_maul', 'meshy/dwarven_warhammer_2h_1'],
+      ['fenshadow_maul', 'meshy/dwarven_warhammer_2h_2'],
+      ['gravewyrm_thornmaul', 'meshy/dwarven_warhammer_2h_3'],
+      ['maul_of_the_scourged_wilds', 'meshy/dwarven_warhammer_2h_4'],
+      ['ridgebreaker', 'meshy/dwarven_warhammer_2h_5'],
+    ] as const;
+
+    for (const [itemId, model] of cases) {
+      expect(ITEM_WEAPON_VARIANTS[itemId], itemId).toBe(model);
+      expect(itemWeaponModelUrl(itemId), itemId).toBe(`models/weapons/${model}.glb`);
+    }
+  });
+
+  it('chooses sword and hammer model handedness from live equipment rules, not names', () => {
+    const weapons = Object.values(ITEMS).filter((item) => item.kind === 'weapon' && !item.heroicOf);
+    let covered = 0;
+    for (const item of weapons) {
+      if (item.kind !== 'weapon') continue;
+      const type = weaponTypeForItem(item.id);
+      if (type !== 'sword' && type !== 'mace') continue;
+      if (item.id === 'varkhul_forgebreaker') {
+        // Keep the bespoke animated legendary, not an ordinary tier fallback.
+        expect(ITEM_WEAPON_VARIANTS[item.id]).toBe('hammer_varkhul');
+        continue;
+      }
+      const twohand = weaponHand(item) === 'twohand';
+      const expected =
+        type === 'sword'
+          ? twohand
+            ? /^meshy\/claymore_sword_[1-5]$/
+            : /^meshy\/ascendance_sword_[1-5]$/
+          : twohand
+            ? /^meshy\/dwarven_warhammer_2h_[1-5]$/
+            : /^meshy\/lion_warhammer_1h_[1-5]$/;
+      expect(ITEM_WEAPON_VARIANTS[item.id], item.id).toMatch(expected);
+      covered += 1;
+    }
+    expect(covered).toBeGreaterThan(40);
+    for (const id of ['verlans_oathblade', 'moonscale_saber', 'final_argument_greatblade']) {
+      const item = ITEMS[id];
+      if (item.kind !== 'weapon') throw new Error(`${id} must remain a weapon`);
+      expect(weaponHand(item), id).toBe('onehand');
+      expect(ITEM_WEAPON_VARIANTS[id], id).toMatch(/^meshy\/ascendance_sword_/);
+    }
   });
 
   // COVERAGE: every equippable weapon must map to a held model. An unmapped item
@@ -285,13 +369,81 @@ describe('held weapon models', () => {
   });
 
   it('resolves actual offhands independently from the mainhand model', () => {
-    expect(itemOffhandModelUrl('eastbrook_buckler')).toBe('models/weapons/shield_round.glb');
-    expect(itemOffhandModelUrl('highwatch_wallshield')).toBe('models/weapons/shield_square.glb');
-    expect(itemOffhandModelUrl('rusty_dagger')).toBe('models/weapons/dagger_a.glb');
-    expect(itemOffhandModelUrl('heroic_fang_of_korzul')).toBe('models/weapons/dagger_c.glb');
+    expect(itemOffhandModelUrl('eastbrook_buckler')).toBe(
+      'models/weapons/meshy/battleworn_oak_shield.glb',
+    );
+    expect(itemOffhandModelUrl('highwatch_wallshield')).toBe(
+      'models/weapons/meshy/fallen_king_shield_2.glb',
+    );
+    expect(itemOffhandModelUrl('rusty_dagger')).toBe('models/weapons/meshy/arcane_dagger_1.glb');
+    expect(itemOffhandModelUrl('heroic_fang_of_korzul')).toBe(
+      'models/weapons/meshy/arcane_dagger_4.glb',
+    );
     expect(itemOffhandModelUrl('chest_armor_not_an_offhand')).toBeNull();
     expect(itemOffhandModelUrl(null)).toBeNull();
     expect(itemOffhandModelUrl(undefined)).toBeNull();
+  });
+
+  it('uses every tier of the live Meshy weapon families except the superseded T1 shield', () => {
+    const liveModels = new Set([
+      ...Object.values(ITEM_WEAPON_VARIANTS),
+      ...Object.values(ITEM_OFFHAND_MODELS),
+    ]);
+    for (const family of [
+      'arcane_dagger',
+      'arcane_staff',
+      'ascendance_sword',
+      'evolution_axe',
+      'claymore_sword',
+      'lion_warhammer_1h',
+      'dwarven_warhammer_2h',
+    ]) {
+      for (let tier = 1; tier <= 5; tier += 1) {
+        expect(liveModels.has(`meshy/${family}_${tier}`), `${family}_${tier}`).toBe(true);
+      }
+    }
+    expect(liveModels.has('meshy/battleworn_oak_shield')).toBe(true);
+    for (let tier = 2; tier <= 5; tier += 1) {
+      expect(liveModels.has(`meshy/fallen_king_shield_${tier}`), `fallen_king_shield_${tier}`).toBe(
+        true,
+      );
+    }
+  });
+
+  it('ships the imported longbow family with a bow grip and preview for future item mapping', () => {
+    for (let tier = 1; tier <= 5; tier += 1) {
+      const key = `arcane_longbow_${tier}`;
+      expect(KAYKIT_WEAPON_ACCESSORY[key], key).toBe('VAR_BOW');
+      expect(existsSync(`public/models/weapons/meshy/${key}.glb`), `${key}.glb missing`).toBe(true);
+      expect(existsSync(`public/ui/weapons/meshy/${key}.jpg`), `${key}.jpg missing`).toBe(true);
+    }
+  });
+
+  it('registers distinct imported sword, hammer and crossbow hand/back grips', () => {
+    for (const [prefix, family] of [
+      ['claymore_sword', 'VAR_SWORD'],
+      ['lion_warhammer_1h', 'VAR_MACE'],
+      ['dwarven_warhammer_2h', 'VAR_HAMMER'],
+    ]) {
+      for (let tier = 1; tier <= 5; tier += 1) {
+        expect(KAYKIT_WEAPON_ACCESSORY[`${prefix}_${tier}`]).toBe(family);
+      }
+      expect(VARIANT_GRIPS[family]).toBeDefined();
+      expect(BACK_GRIP_FAMILIES.has(family)).toBe(true);
+    }
+    expect(KAYKIT_WEAPON_ACCESSORY.test_crossbow_1).toBe('VAR_CROSSBOW');
+    expect(VARIANT_GRIPS.VAR_CROSSBOW).toBeDefined();
+    expect(BACK_GRIP_FAMILIES.has('VAR_CROSSBOW')).toBe(true);
+    expect(existsSync('public/models/weapons/meshy/test_crossbow_1.glb')).toBe(true);
+    expect(existsSync('public/ui/weapons/meshy/test_crossbow_1.jpg')).toBe(true);
+    // Temporary hunter test weapons preserve starter stats; the actual type
+    // distinguishes Longbow from Rifle-style crossbow presentation.
+    expect(
+      Object.values(ITEMS).filter(
+        (item) =>
+          item.kind === 'weapon' && ['bow', 'crossbow'].includes(weaponTypeForItem(item.id) ?? ''),
+      ).map((item) => item.id).sort(),
+    ).toEqual(['dev_hunter_practice_bow', 'dev_hunter_practice_crossbow']);
   });
 
   it('preloads every live shield model used by an actual offhand', () => {
@@ -331,6 +483,14 @@ describe('held weapon models', () => {
         {
           position: [0, -0.0123, 0.1341],
           scale: 0.5108,
+        },
+      ],
+      [
+        'fallen_king_shield_1',
+        'Meshy_Shield',
+        {
+          position: [0, 0.017, 0.15],
+          scale: 0.65,
         },
       ],
     ] as const;

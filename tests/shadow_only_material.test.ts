@@ -8,6 +8,15 @@ import { makeShadowOnlyMaterial } from '../src/render/shadow_only_material';
 const programKey = (mat: THREE.Material): string => mat.customProgramCacheKey();
 
 describe('makeShadowOnlyMaterial', () => {
+  it('allows independent lifetime caches without changing shader identity', () => {
+    const source = new THREE.MeshStandardMaterial();
+    const first = new WeakMap<THREE.Material, THREE.Material>();
+    const second = new WeakMap<THREE.Material, THREE.Material>();
+    const clone = makeShadowOnlyMaterial(source, first);
+    expect(makeShadowOnlyMaterial(source, first)).toBe(clone);
+    expect(makeShadowOnlyMaterial(source, second)).not.toBe(clone);
+    expect(clone.customProgramCacheKey()).toBe(source.customProgramCacheKey());
+  });
   it('keeps the program cache key of a wind-hooked source (the mid-travel compile hitch)', () => {
     const src = new THREE.MeshStandardMaterial();
     // addWind's shape: an own onBeforeCompile arrow, default cache key.

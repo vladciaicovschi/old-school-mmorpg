@@ -1,0 +1,16 @@
+{
+  "result": {
+    "templateId": "dev_ice_elemental",
+    "key": "npc_dev_ice_elemental",
+    "clip": "Ice_Idle",
+    "pos": {
+      "x": 812,
+      "y": 1.7000000000000002,
+      "z": -24
+    },
+    "material": "MeshLambertMaterial",
+    "particles": 112,
+    "opacity": 1
+  },
+  "errors": []
+}

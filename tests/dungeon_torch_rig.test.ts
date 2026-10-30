@@ -34,7 +34,7 @@ describe('addTorchFire', () => {
       tuning: HIGH,
     });
     expect(sink.flames).toHaveLength(1);
-    expect(sink.flames[0].position.y).toBeCloseTo(6.6);
+    expect(sink.flames[0].position.y).toBeCloseTo(6.3);
     expect(sink.fireLights).toHaveLength(1);
     const light = sink.fireLights[0];
     expect(light.userData.baseIntensity).toBe(46);
@@ -88,8 +88,37 @@ describe('addIgnivarPlacedTorchFires', () => {
     const basketY = 2 + 0.99 * 3.2;
     expect(sink.flames[0].position.x).toBeCloseTo(10);
     expect(sink.flames[0].position.z).toBeCloseTo(5);
-    expect(sink.flames[0].position.y).toBeCloseTo(basketY + 0.18 * rel);
+    expect(sink.flames[0].position.y).toBeCloseTo(basketY + (0.18 - 0.3) * rel);
     expect(sink.flames[0].scale.x).toBeCloseTo(rel);
     expect(sink.fireLights[0].position.y).toBeCloseTo(basketY + 0.4 * rel);
+  });
+});
+
+describe('torch flame presentation', () => {
+  it('retains cold dungeon colours and independent flame size through scenery updates', async () => {
+    const { updateSceneryFlame } = await import('../src/render/scenery_flame');
+    const sink = makeSink();
+    const cold = { flame: 0x7fd4ff, emissive: 0x2288cc, light: 0x66bbff };
+    addTorchFire(sink, {
+      flame: [0, 1, 5],
+      flameScale: 0.65,
+      light: [0, 1, 5],
+      colors: cold,
+      tuning: LOW,
+    });
+    const flame = sink.flames[0];
+    const material = flame.material as THREE.MeshBasicMaterial;
+    expect(material.color.getHex()).toBe(cold.flame);
+    expect(flame.geometry.getAttribute('aFlameRoot')).toBeDefined();
+    const state = updateSceneryFlame(
+      flame,
+      0,
+      2,
+      new THREE.Vector3(),
+      new THREE.Vector3(0, 0, 1),
+      600,
+    );
+    expect(flame.scale.toArray()).toEqual([0.65, 0.65, 0.65]);
+    expect(state?.emitsEmber).toBe(false);
   });
 });

@@ -1,0 +1,65 @@
+{
+  "idle": {
+    "clip": "WarlockT1_TravelIdle",
+    "time": 1.5166666666666662,
+    "paused": false,
+    "oneShot": false,
+    "base": "idle"
+  },
+  "run": {
+    "clip": "WarlockT1_TravelRun",
+    "time": 0.30000001192092945,
+    "paused": false,
+    "oneShot": false,
+    "base": "run"
+  },
+  "hostile": {
+    "clip": "WarlockT1_CastShadow_Loop",
+    "time": 0.6166668097178104,
+    "paused": false,
+    "oneShot": false,
+    "base": "cast"
+  },
+  "release": {
+    "clip": "WarlockT1_CastShadow_Release",
+    "time": 0.15,
+    "paused": false,
+    "oneShot": true,
+    "base": "idle"
+  },
+  "after": {
+    "clip": "WarlockT1_TravelRun",
+    "time": 0.4666666666666666,
+    "paused": false,
+    "oneShot": false,
+    "base": "run"
+  },
+  "self": {
+    "clip": "WarlockT1_CastSelf_Loop",
+    "time": 0.4166667620340955,
+    "paused": false,
+    "oneShot": false,
+    "base": "cast"
+  },
+  "selfRelease": {
+    "clip": "WarlockT1_CastSelf_Release",
+    "time": 0.15,
+    "paused": false,
+    "oneShot": true,
+    "base": "idle"
+  },
+  "ally": {
+    "clip": "WarlockT1_CastAlly_Loop",
+    "time": 0.4166667620340955,
+    "paused": false,
+    "oneShot": false,
+    "base": "cast"
+  },
+  "allyRelease": {
+    "clip": "WarlockT1_CastAlly_Release",
+    "time": 0.15,
+    "paused": false,
+    "oneShot": true,
+    "base": "idle"
+  }
+}

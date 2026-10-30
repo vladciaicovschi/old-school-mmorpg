@@ -11,6 +11,8 @@
 import * as THREE from 'three';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { loadGltf } from '../../render/assets/loader';
+import { attachArmorDye } from '../../render/characters/armor_dye';
+import { applySpiritSurface } from '../../render/characters/spirit_surface';
 import type { GuideModelSpec } from '../content.generated';
 
 export interface BuiltModel {
@@ -138,16 +140,18 @@ export async function buildModel(spec: GuideModelSpec, tint: number | null): Pro
 
   // Subtle tint toward the entity color (matching the renderer's gentle lerp, not a hard
   // multiply that muddies the hand-painted textures). Clone each source material once.
-  if (tint !== null) {
+  if (tint !== null || spec.spirit || spec.atlasDye) {
     const strength = spec.tintStrength ?? 0.4;
-    const tintColor = new THREE.Color(tint);
+    const tintColor = tint === null ? null : new THREE.Color(tint);
     const cloned = new Map<THREE.Material, THREE.Material>();
     const tintOne = (mat: THREE.Material): THREE.Material => {
       let next = cloned.get(mat);
       if (!next) {
         next = mat.clone();
         const std = next as THREE.MeshStandardMaterial;
-        if (std.color) std.color.lerp(tintColor, strength);
+        if (std.color && tintColor) std.color.lerp(tintColor, strength);
+        if (spec.atlasDye) attachArmorDye(next, spec.atlasDye);
+        if (spec.spirit) applySpiritSurface(next, spec.spirit);
         cloned.set(mat, next);
         ownedMaterials.push(next);
       }

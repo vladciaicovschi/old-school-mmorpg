@@ -6692,6 +6692,30 @@
       "commonPrompt": "Not a text-to-image prompt: deterministic in-engine still of the committed weapon model (shared framing rig, three-point lighting, alpha subject trimmed and centered with safe margins) composited on the item-icon radial vignette at 128px."
     },
     {
+      "batchId": "warrior-whole-body-suit-icons-2026-09-29",
+      "source": "Project render of the shipped whole-body warrior GLB models",
+      "owner": "World of ClaudeCraft",
+      "license": "World of ClaudeCraft project-generated art, project asset, rights reserved",
+      "styleReference": "Exact Recruit, Militia and Knight models rendered in their shared Warrior idle pose on the asset review stage.",
+      "provenanceRecord": "docs/design/warrior-whole-body-trial.md",
+      "commonPrompt": "Not a text-to-image prompt: the committed model review render was resized to the 128px WebP inventory format.",
+      "itemIds": [
+        "warrior_recruit_suit",
+        "warrior_militia_suit",
+        "warrior_knight_suit"
+      ]
+    },
+    {
+      "batchId": "hunter-ranged-test-icons-2026-10-14",
+      "source": "OpenAI built-in image generation",
+      "owner": "World of ClaudeCraft",
+      "license": "World of ClaudeCraft project-generated art, project asset, rights reserved",
+      "styleReference": "woc-item-icon-v1; imported Meshy model previews for identity, approved inventory art for style",
+      "provenanceRecord": "docs/design/hunter-ranged-art.json",
+      "commonPrompt": "Paint one complete plain practice bow or crossbow, exact imported model identity, warm top-left light, tactile wood/leather/iron, opaque dark painted vignette, no writing or frame. Full prompts and references in the provenance record.",
+      "itemIds": ["dev_hunter_practice_bow", "dev_hunter_practice_crossbow"]
+    },
+    {
       "batchId": "roots-bramblehide-icons-2026-09-07",
       "source": "OpenAI built-in image generation (gpt-image-2)",
       "owner": "World of ClaudeCraft",

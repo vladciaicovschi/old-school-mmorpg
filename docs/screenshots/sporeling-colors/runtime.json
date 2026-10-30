@@ -1,0 +1,141 @@
+{
+  "facts": [
+    {
+      "key": "mob_glub",
+      "low": false,
+      "raw": true,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "rules": 0,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ]
+    },
+    {
+      "key": "mob_glub",
+      "low": false,
+      "raw": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "rules": 4,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ]
+    },
+    {
+      "key": "mob_glub",
+      "low": true,
+      "raw": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 0,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ]
+    },
+    {
+      "key": "mob_glub",
+      "low": true,
+      "raw": false,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 4,
+      "clips": [
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle",
+        "Sporeling_Death",
+        "Sporeling_Hit",
+        "Sporeling_Idle",
+        "Sporeling_Run",
+        "Sporeling_Walk"
+      ]
+    },
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": false,
+      "raw": true,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "rules": 0,
+      "clips": [
+        "Infected_Attack",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Run",
+        "Infected_Walk"
+      ]
+    },
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": false,
+      "raw": false,
+      "visible": true,
+      "material": "MeshStandardMaterial",
+      "rules": 4,
+      "clips": [
+        "Infected_Attack",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Run",
+        "Infected_Walk"
+      ]
+    },
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": true,
+      "raw": true,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 0,
+      "clips": [
+        "Infected_Attack",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Run",
+        "Infected_Walk"
+      ]
+    },
+    {
+      "key": "mob_corrupted_sporeling",
+      "low": true,
+      "raw": false,
+      "visible": true,
+      "material": "MeshLambertMaterial",
+      "rules": 4,
+      "clips": [
+        "Infected_Attack",
+        "Infected_CombatIdle",
+        "Infected_Death",
+        "Infected_Hit",
+        "Infected_Idle",
+        "Infected_Run",
+        "Infected_Walk"
+      ]
+    }
+  ],
+  "errors": []
+}

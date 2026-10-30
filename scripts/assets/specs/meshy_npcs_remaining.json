@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/brother_aldric/brother_aldric.glb",
+      "out": "models/chars/npcs/brother_aldric.glb",
+      "type": "character",
+      "maxTex": 2048
+    },
+    {
+      "src": "tmp/asset_src/npcs/foreman_odell/foreman_odell.glb",
+      "out": "models/chars/npcs/foreman_odell.glb",
+      "type": "character",
+      "maxTex": 2048
+    }
+  ]
+}

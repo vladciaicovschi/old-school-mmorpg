@@ -41,10 +41,11 @@ describe('mob_crab bespoke attack (issue #2889 round 2)', () => {
     expect(meshCountOf(glbPath)).toBe(0);
   });
 
-  it('gives mob_crab its own ClipMap instead of mutating the shared ENEMY_BITE constant', () => {
+  it('uses embedded Smart Rig clips without importing the legacy crab donors', () => {
     const crabBlock = manifestBlock('mob_crab: {', 'mob_bull: {');
-    expect(crabBlock).toContain('crab_ability_anims.glb');
-    expect(crabBlock).toContain('clips: CRAB_ENEMY_BITE');
+    expect(crabBlock).not.toContain('crab_ability_anims.glb');
+    expect(crabBlock).not.toContain('crabenemy_hit_variety_anims.glb');
+    expect(crabBlock).toContain('clips: EMBERCLAW_CRAB');
     expect(crabBlock).not.toContain('clips: ENEMY_BITE,');
 
     // ENEMY_BITE itself (the constant definition, not a VisualDef using it)
@@ -56,7 +57,7 @@ describe('mob_crab bespoke attack (issue #2889 round 2)', () => {
     // Exactly 0 remaining direct `clips: ENEMY_BITE,` usages (2 as of this
     // branch's base off upstream/release/v0.35.0: mob_treant was migrated to
     // TREANT_ENEMY_BITE in parallel, and mob_crab is migrated to
-    // CRAB_ENEMY_BITE above).
+    // the embedded Emberclaw vocabulary above).
     const remaining = [...MANIFEST_SRC.matchAll(/clips: ENEMY_BITE,/g)].length;
     expect(remaining).toBe(0);
   });

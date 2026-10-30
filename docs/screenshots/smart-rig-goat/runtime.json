@@ -1,0 +1,54 @@
+{
+  "runtime": {
+    "walk": {
+      "clip": "Goat_Walk",
+      "speed": 0.8499999987099464,
+      "globalRunning": false
+    },
+    "run": {
+      "clip": "Goat_Run",
+      "speed": 3.3999999961298393,
+      "globalRunning": false
+    },
+    "attacks": [
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_Ram",
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_Ram"
+    ],
+    "recovery": {
+      "clip": "Goat_Idle",
+      "time": 0.8000000000000008,
+      "base": "idle",
+      "oneShot": false
+    },
+    "death": {
+      "clip": "Goat_Death",
+      "time": 1.399999976158142,
+      "base": "idle",
+      "oneShot": false
+    },
+    "clips": [
+      "Goat_AlertLook",
+      "Goat_Bleat",
+      "Goat_CombatIdle",
+      "Goat_Death",
+      "Goat_Graze",
+      "Goat_HeadbuttLeft",
+      "Goat_HeadbuttRight",
+      "Goat_Hit",
+      "Goat_Idle",
+      "Goat_Ram",
+      "Goat_Run",
+      "Goat_Trot",
+      "Goat_Walk"
+    ]
+  },
+  "errors": []
+}

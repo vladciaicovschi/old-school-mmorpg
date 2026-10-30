@@ -1,0 +1,18 @@
+{
+  "kind": "fire",
+  "low": true,
+  "runtime": {
+    "particles": 128,
+    "surface": false,
+    "streams": [],
+    "arcTriangles": 0
+  },
+  "contact": {
+    "pieces": 28,
+    "min": -0.00020762663583745455,
+    "maxContact": 0.00011781598798055182,
+    "meshOffset": -0.3394981158798652,
+    "clip": "Death"
+  },
+  "errors": []
+}

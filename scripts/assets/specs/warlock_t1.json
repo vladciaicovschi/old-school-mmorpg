@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/players/warlock_t1/warlock_t1.glb",
+      "out": "models/chars/players/warlock_t1.glb",
+      "type": "character",
+      "maxTex": 1024,
+      "keepClips": [
+        "WarlockT1_Idle", "WarlockT1_CombatIdle", "WarlockT1_Walk", "WarlockT1_Run", "WarlockT1_Jump", "WarlockT1_Death", "WarlockT1_CastShadow", "WarlockT1_CastFire", "WarlockT1_CastDrain", "WarlockT1_CastArea", "WarlockT1_StaffStrikeHorizontal", "WarlockT1_StaffStrikeDownward", "WarlockT1_StaffStrikeBackhand"
+      ]
+    }
+  ]
+}

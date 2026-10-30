@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/animals/smart_wolf/smart_wolf.glb",
+      "out": "models/creatures/smart_wolf.glb",
+      "type": "character",
+      "maxTex": 2048,
+      "keepExtras": true,
+      "keepClips": [
+        "Wolf_Idle",
+        "Wolf_CombatIdle",
+        "Wolf_Walk",
+        "Wolf_Trot",
+        "Wolf_Run",
+        "Wolf_BiteLeft",
+        "Wolf_BiteRight",
+        "Wolf_Lunge",
+        "Wolf_Hit",
+        "Wolf_Death",
+        "Wolf_Howl",
+        "Wolf_AlertLook"
+      ]
+    }
+  ]
+}

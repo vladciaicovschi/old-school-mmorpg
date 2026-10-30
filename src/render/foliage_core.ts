@@ -1,6 +1,7 @@
 import { isEastbrookGrandArmoury } from '../sim/building_layout';
 import { EASTBROOK_LAYOUT } from '../sim/eastbrook_layout';
 import { FENBRIDGE_LAYOUT } from '../sim/fenbridge_layout';
+import { buildingFootprints } from '../sim/settlement_clearance';
 import type { BuildingDef, NoticeboardDef } from '../sim/types';
 
 export type EastbrookGrassExclusion =
@@ -222,6 +223,28 @@ export function eastbrookGrassExclusions(
       });
     }
   }
+
+  if (builtInWorld)
+    for (const building of buildings) {
+      if (!building.id?.startsWith('settlement:') && !building.id?.startsWith('wickharbor:'))
+        continue;
+      for (const footprint of buildingFootprints(building)) {
+        const r = footprint.rect,
+          localX = (r.minX + r.maxX) / 2,
+          localZ = (r.minZ + r.maxZ) / 2;
+        const c = Math.cos(footprint.rot),
+          s = Math.sin(footprint.rot);
+        exclusions.push({
+          kind: 'obb',
+          id: footprint.id,
+          x: footprint.x + localX * c + localZ * s,
+          z: footprint.z - localX * s + localZ * c,
+          halfWidth: (r.maxX - r.minX) / 2,
+          halfDepth: (r.maxZ - r.minZ) / 2,
+          rotation: footprint.rot,
+        });
+      }
+    }
 
   for (const board of noticeboards) {
     exclusions.push({

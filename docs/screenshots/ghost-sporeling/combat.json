@@ -1,0 +1,47 @@
+{
+  "facts": [
+    {
+      "id": "reliquary_ledger_wraith",
+      "key": "delve_skel_wraith",
+      "clips": [
+        "Ghost_Move",
+        "Ghost_Attack",
+        "Ghost_CombatIdle"
+      ],
+      "auras": [
+        "Ledger Rot"
+      ],
+      "hits": 5,
+      "dead": true,
+      "deathClip": "Ghost_Death",
+      "mistVisible": false
+    },
+    {
+      "id": "sporeling_gatherer",
+      "key": "mob_glub",
+      "clips": [
+        "Sporeling_Run",
+        "Sporeling_Attack",
+        "Sporeling_CombatIdle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Sporeling_Death"
+    },
+    {
+      "id": "corrupted_sporeling",
+      "key": "mob_corrupted_sporeling",
+      "clips": [
+        "Fast_Flying",
+        "Glub_Attack",
+        "Flying_Idle"
+      ],
+      "auras": [],
+      "hits": 4,
+      "dead": true,
+      "deathClip": "Death"
+    }
+  ],
+  "errors": []
+}

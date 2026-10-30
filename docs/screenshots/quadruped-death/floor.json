@@ -1,0 +1,14 @@
+[
+  {
+    "animal": "wolf",
+    "samples": 61,
+    "lowestVertexY": 0.0018252808731547192,
+    "phase": 0.4
+  },
+  {
+    "animal": "bear",
+    "samples": 61,
+    "lowestVertexY": 0.00004822551531047294,
+    "phase": 0
+  }
+]

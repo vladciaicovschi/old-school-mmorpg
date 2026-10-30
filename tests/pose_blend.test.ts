@@ -18,6 +18,33 @@ import {
 } from '../scripts/anim/pose_blend.mjs';
 
 describe('pose_blend math', () => {
+  it('decodes quantized rotation accessors before blending a shipped clip', () => {
+    const doc = new Document();
+    const buffer = doc.createBuffer();
+    const node = doc.createNode('arm');
+    const input = doc
+      .createAccessor()
+      .setType('SCALAR')
+      .setArray(new Float32Array([0, 1]))
+      .setBuffer(buffer);
+    const output = doc
+      .createAccessor()
+      .setType('VEC4')
+      .setArray(new Int16Array([0, 0, 0, 32767, 0, 23170, 0, 23170]))
+      .setNormalized(true)
+      .setBuffer(buffer);
+    const sampler = doc.createAnimationSampler().setInput(input).setOutput(output);
+    const channel = doc
+      .createAnimationChannel()
+      .setTargetNode(node)
+      .setTargetPath('rotation')
+      .setSampler(sampler);
+    doc.createAnimation('compressed').addSampler(sampler).addChannel(channel);
+    const index = indexClip(doc.getRoot(), 'compressed');
+    expect(samplePose(index, 0).get('arm|rotation')).toEqual([0, 0, 0, 1]);
+    expect(Math.hypot(...samplePose(index, 0.5).get('arm|rotation')!)).toBeCloseTo(1, 4);
+    expect(samplePose(index, 1).get('arm|rotation')![1]).toBeCloseTo(Math.SQRT1_2, 4);
+  });
   it('lerpV interpolates component-wise', () => {
     expect(lerpV([0, 0, 0], [2, 4, 6], 0.5)).toEqual([1, 2, 3]);
     expect(lerpV([1, 1], [1, 1], 0.7)).toEqual([1, 1]);

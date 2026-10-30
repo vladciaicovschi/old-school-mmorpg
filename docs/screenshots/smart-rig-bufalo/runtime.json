@@ -1,0 +1,54 @@
+{
+  "runtime": {
+    "walk": {
+      "clip": "Buffalo_Walk",
+      "speed": 0.9999999984822899,
+      "globalRunning": false
+    },
+    "run": {
+      "clip": "Buffalo_Run",
+      "speed": 4.199999995143329,
+      "globalRunning": false
+    },
+    "attacks": [
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_Charge",
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_Charge"
+    ],
+    "recovery": {
+      "clip": "Buffalo_Idle",
+      "time": 0.850000000000001,
+      "base": "idle",
+      "oneShot": false
+    },
+    "death": {
+      "clip": "Buffalo_Death",
+      "time": 1.600000023841858,
+      "base": "idle",
+      "oneShot": false
+    },
+    "clips": [
+      "Buffalo_AlertLook",
+      "Buffalo_Bellow",
+      "Buffalo_Charge",
+      "Buffalo_CombatIdle",
+      "Buffalo_Death",
+      "Buffalo_Graze",
+      "Buffalo_Hit",
+      "Buffalo_HornLeft",
+      "Buffalo_HornRight",
+      "Buffalo_Idle",
+      "Buffalo_Run",
+      "Buffalo_Trot",
+      "Buffalo_Walk"
+    ]
+  },
+  "errors": []
+}

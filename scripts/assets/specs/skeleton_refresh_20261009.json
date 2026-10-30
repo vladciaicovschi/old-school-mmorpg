@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_necromancer_v2/dev_skeleton_necromancer_v2.glb",
+      "out": "models/chars/npcs/dev_skeleton_necromancer_v2.glb",
+      "type": "character",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_caster_v3/dev_skeleton_caster_v3.glb",
+      "out": "models/chars/npcs/dev_skeleton_caster_v3.glb",
+      "type": "character",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_skeleton_rogue_v3/dev_skeleton_rogue_v3.glb",
+      "out": "models/chars/npcs/dev_skeleton_rogue_v3.glb",
+      "type": "character",
+      "maxTex": 1024
+    },
+    {
+      "src": "tmp/asset_src/npcs/dev_treant_v2/dev_treant_v2.glb",
+      "out": "models/chars/npcs/dev_treant_v2.glb",
+      "type": "character",
+      "maxTex": 1024
+    }
+  ]
+}

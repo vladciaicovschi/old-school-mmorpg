@@ -33,6 +33,11 @@
 // tests/island_isolation_core.test.ts.
 
 import { isOnProvingShore } from '../sim/content/proving_shore';
+import {
+  DEV_MODEL_LAB_RECT,
+  DEV_MODEL_LAB_ZONE_ID,
+  isOnDevModelLab,
+} from '../sim/content/dev_model_lab';
 
 /** The island's zone id, the one zone an isolated scope streams. */
 export const ISLAND_ZONE_ID = 'proving_shore';
@@ -50,6 +55,28 @@ export const ISLAND_VISTA_MARGIN_YD = 600;
  *  tests/island_isolation_core.test.ts pins these against the predicate. */
 export const ISLAND_RECT = { minX: -540, maxX: -180, minZ: -180, maxZ: 180 } as const;
 
+export interface IslandScope {
+  zoneId: string;
+  rect: { minX: number; maxX: number; minZ: number; maxZ: number };
+}
+
+const PROVING_SHORE_SCOPE: IslandScope = { zoneId: ISLAND_ZONE_ID, rect: ISLAND_RECT };
+const DEV_MODEL_LAB_SCOPE: IslandScope = {
+  zoneId: DEV_MODEL_LAB_ZONE_ID,
+  rect: {
+    minX: DEV_MODEL_LAB_RECT.xMin,
+    maxX: DEV_MODEL_LAB_RECT.xMax,
+    minZ: DEV_MODEL_LAB_RECT.zMin,
+    maxZ: DEV_MODEL_LAB_RECT.zMax,
+  },
+};
+
+export function islandScopeAt(x: number, z: number): IslandScope | null {
+  if (isOnProvingShore(x, z)) return PROVING_SHORE_SCOPE;
+  if (isOnDevModelLab(x, z)) return DEV_MODEL_LAB_SCOPE;
+  return null;
+}
+
 /**
  * Does the client scope its streaming to the island right now?
  *
@@ -60,7 +87,7 @@ export const ISLAND_RECT = { minX: -540, maxX: -180, minZ: -180, maxZ: 180 } as 
  * answer for someone actually heading there.
  */
 export function islandIsolationActive(x: number, z: number): boolean {
-  return isOnProvingShore(x, z);
+  return islandScopeAt(x, z) !== null;
 }
 
 /**
@@ -68,8 +95,12 @@ export function islandIsolationActive(x: number, z: number): boolean {
  * own zone: every other rectangle is across the water, hidden behind the
  * panorama, and unreachable without the ferry.
  */
-export function islandScopeStreamsZone(zoneId: string): boolean {
-  return zoneId === ISLAND_ZONE_ID;
+export function islandScopeStreamsZone(zoneId: string, playerX?: number, playerZ?: number): boolean {
+  const scope =
+    playerX === undefined || playerZ === undefined
+      ? PROVING_SHORE_SCOPE
+      : islandScopeAt(playerX, playerZ);
+  return scope === null || zoneId === scope.zoneId;
 }
 
 /**
@@ -83,8 +114,9 @@ export function streamableZones<T extends { id: string }>(
   playerX: number,
   playerZ: number,
 ): T[] {
-  if (!islandIsolationActive(playerX, playerZ)) return [...zones];
-  return zones.filter((zone) => islandScopeStreamsZone(zone.id));
+  const scope = islandScopeAt(playerX, playerZ);
+  if (!scope) return [...zones];
+  return zones.filter((zone) => zone.id === scope.zoneId);
 }
 
 /**
@@ -93,18 +125,17 @@ export function streamableZones<T extends { id: string }>(
  * backdrop mesh covers the island and the water around it instead of the whole
  * continent.
  */
-export function islandVistaBounds(): {
+export function islandVistaBounds(playerX?: number, playerZ?: number): {
   minX: number;
   maxX: number;
   minZ: number;
   maxZ: number;
 } {
-  return {
-    minX: ISLAND_RECT.minX,
-    maxX: ISLAND_RECT.maxX,
-    minZ: ISLAND_RECT.minZ,
-    maxZ: ISLAND_RECT.maxZ,
-  };
+  const rect =
+    playerX === undefined || playerZ === undefined
+      ? PROVING_SHORE_SCOPE.rect
+      : (islandScopeAt(playerX, playerZ)?.rect ?? PROVING_SHORE_SCOPE.rect);
+  return { ...rect };
 }
 
 /**

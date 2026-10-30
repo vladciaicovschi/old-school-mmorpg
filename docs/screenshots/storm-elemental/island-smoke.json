@@ -1,0 +1,17 @@
+{
+  "result": {
+    "templateId": "dev_storm_elemental",
+    "key": "npc_dev_storm_elemental",
+    "clip": "Storm_Idle",
+    "pos": {
+      "x": 836,
+      "y": 1.7000000000000002,
+      "z": 0
+    },
+    "material": "MeshLambertMaterial",
+    "opacity": 1,
+    "fxVisible": true,
+    "arcClock": 13.916499999999992
+  },
+  "errors": []
+}

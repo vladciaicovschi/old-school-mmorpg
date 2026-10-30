@@ -156,7 +156,12 @@ export function buildingContainsRestPoint(
   z: number,
   padding = 0,
 ): boolean {
-  if (building.id === 'eastbrook_inn' || building.id === 'fenbridge_crooked_reed_inn') {
+  if (
+    building.id === 'eastbrook_inn' ||
+    building.id === 'fenbridge_crooked_reed_inn' ||
+    building.id?.startsWith('settlement:') ||
+    building.id?.startsWith('wickharbor:')
+  ) {
     return buildingContainsPoint(building, x, z, padding);
   }
 

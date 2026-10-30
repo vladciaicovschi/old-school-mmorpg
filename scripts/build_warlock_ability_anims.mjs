@@ -1,343 +1,206 @@
-// Build the warlock's ability-specific spellcast clips (issue #2889: the
-// class has zero attackByAbility overrides today, so every one of its 12
-// non-pet abilities plays the same Spellcast_Shoot wand zap,
-// player_warlock in src/render/characters/manifest.ts). This authors 4
-// distinct casts by pose-sample-and-blend (see scripts/anim/pose_blend.mjs,
-// the technique behind the hunter's bow_anims.glb and the mage's own
-// mage_ability_anims.glb) off donor poses already baked into the shipped
-// mage.glb: player_warlock is rigged on the SAME physical file as
-// player_mage and player_priest, but these are a SEPARATE, warlock-themed
-// set of clips, not a reuse of the mage's Cast_Fire/Cast_Frost/etc: a
-// clawed diagonal point (1H_Melee_Attack_Slice_Diagonal) instead of a
-// staff raise, a fast dual-hand ignite flick (Dualwield_Melee_Attack_Chop)
-// instead of a clean release, a slow sustained pull (Block held) instead of
-// a barrage, and a snap-recoil burst (Hit_A) instead of a flourish.
-//
-// Donor clips used (mage.glb's own durations): Idle 1.067s, Spellcast_Raise
-// 2.100s, Spellcast_Shoot 0.933s, 1H_Melee_Attack_Slice_Diagonal 1.000s,
-// Dualwield_Melee_Attack_Chop 1.267s, Block 1.067s, Spellcasting 0.667s,
-// Hit_A 0.667s.
-//
-//   Warlock_Cast_Shadow  gather (Spellcast_Raise), coil into a clawed
-//                        diagonal draw, a decisive point/thrust
-//                        (1H_Melee_Attack_Slice_Diagonal), settle. The
-//                        curse-magic bread and butter: shadow bolt, the two
-//                        DoT curses.
-//   Warlock_Cast_Fire    fast dual-hand snap-in (Dualwield_Melee_Attack_Chop),
-//                        a striking flick that ignites, flung outward
-//                        (Spellcast_Shoot's release). Scrappier and quicker
-//                        than a mage's clean Cast_Fire: immolate, searing
-//                        pain (both "quick to cast" per their flavor text),
-//                        and the rain-of-fire ground conjure.
-//   Warlock_Cast_Drain   a slow, sustained pull: reach (Block, repurposed
-//                        for its forward-lean silhouette), settle into the
-//                        channel hold (Spellcasting), deepen the pull, ease
-//                        back. One long draw, not a barrage: drain life's
-//                        5-tick channel.
-//   Warlock_Cast_Burst   a fast, decisive single gesture: snap to a point
-//                        (Spellcast_Shoot's early frame, no windup), a
-//                        sharp recoil (Hit_A, repurposed as a jerking
-//                        strike), settle. Every instant-cast (castTime 0)
-//                        ability in the kit reads as one quick committed
-//                        motion regardless of mechanic, the same call the
-//                        mage batch made folding three different AoE
-//                        mechanics into one Cast_Nova: shadowburn (instant
-//                        nuke), fear (a sudden point), life tap and demon
-//                        skin (self-cast), spell lock (an interrupt snap).
-//
-// Excluded: summon_imp/voidwalker/succubus/felhunter/felguard/infernal/
-// doomguard, the pet-summon channels, have no combat swing to author
-// (the same call the hunter batch made excluding tame_beast/dismiss_pet/
-// revive_pet).
-//
-// Usage: node scripts/build_warlock_ability_anims.mjs [--preview]
-// Output: public/models/chars/players/warlock_ability_anims.glb (0
-// meshes/skins, 4 clips: Warlock_Cast_Shadow, Warlock_Cast_Fire,
-// Warlock_Cast_Drain, Warlock_Cast_Burst)
+// Bake Warlock's native locomotion, full Playing with Magic and joined release.
+// Uses Druid's Locomotion/Pro Magic FBX packs, retargeted onto Warlock's rig.
+// First run Blender with scripts/assets/export_warlock_motion_donors.py.
+// node scripts/build_warlock_ability_anims.mjs [--preview]
+import { mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dedup, prune } from '@gltf-transform/functions';
+import { Quaternion, Vector3 } from 'three';
 import {
   bakeClip,
+  blendValue,
   createGlbIO,
-  easeInOutQuad,
-  easeOutCubic,
   indexClip,
-  mergePoses,
-  poseValue,
-  pushPoseRamp,
   samplePose,
   stripToAnimationsOnly,
 } from './anim/pose_blend.mjs';
+import { createPoseRig, retargetPose } from './anim/rig_pose.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '..');
-const SOURCE = resolve(ROOT, 'public/models/chars/players/mage.glb');
-const OUT = resolve(ROOT, 'public/models/chars/players/warlock_ability_anims.glb');
-const PREVIEW_OUT = resolve(ROOT, 'tmp/warlock_ability_anims_preview.glb');
-const PREVIEW = process.argv.includes('--preview');
-
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const io = createGlbIO();
-const doc = await io.read(SOURCE);
+const doc = await io.read(resolve(ROOT, 'public/models/chars/players/warlock_t1.glb'));
+const militia = await io.read(resolve(ROOT, 'public/models/chars/players/warrior_militia.glb'));
+const pack = (await io.read(resolve(ROOT, 'tmp/warlock_motion/mixamo_donors.glb'))).getRoot();
 const root = doc.getRoot();
-
-const idleIdx = indexClip(root, 'Idle');
-const raiseIdx = indexClip(root, 'Spellcast_Raise');
-const sliceIdx = indexClip(root, '1H_Melee_Attack_Slice_Diagonal');
-const dualIdx = indexClip(root, 'Dualwield_Melee_Attack_Chop');
-const shootIdx = indexClip(root, 'Spellcast_Shoot');
-const blockIdx = indexClip(root, 'Block');
-const castIdx = indexClip(root, 'Spellcasting');
-const hitIdx = indexClip(root, 'Hit_A');
-
-const allKeys = new Set([
-  ...idleIdx.keys(),
-  ...raiseIdx.keys(),
-  ...sliceIdx.keys(),
-  ...dualIdx.keys(),
-  ...shootIdx.keys(),
-  ...blockIdx.keys(),
-  ...castIdx.keys(),
-  ...hitIdx.keys(),
-]);
-const donorFor = (key) =>
-  sliceIdx.get(key) ??
-  dualIdx.get(key) ??
-  shootIdx.get(key) ??
-  blockIdx.get(key) ??
-  hitIdx.get(key) ??
-  castIdx.get(key) ??
-  raiseIdx.get(key) ??
-  idleIdx.get(key);
-
-// Donor poses, sampled once at chosen timestamps within each clip's real
-// duration.
-const P_idle = samplePose(idleIdx, 0.3);
-const P_raiseEarly = samplePose(raiseIdx, 0.25); // starting to lift the free hand
-const P_sliceWind = samplePose(sliceIdx, 0.2); // clawed hand draws back into a cross-body coil
-const P_sliceRelease = samplePose(sliceIdx, 0.75); // the decisive diagonal point/thrust
-const P_dualWind = samplePose(dualIdx, 0.15); // both hands snap in fast
-const P_dualStrike = samplePose(dualIdx, 0.55); // the quick striking flick that ignites
-const P_shootEarly = samplePose(shootIdx, 0.15); // barely a windup, before commitment
-const P_shootRelease = samplePose(shootIdx, 0.7); // full release / follow-through
-const P_reachStart = samplePose(blockIdx, 0.15); // forward lean, the grasping reach
-const P_drainDeep = samplePose(blockIdx, 0.55); // the pull deepens, sustained
-const P_castLoop = samplePose(castIdx, 0.3); // mid-loop channel hold
-const P_hitRecoil = samplePose(hitIdx, 0.35); // a sharp jerking snap, repurposed as a strike
-
-// mage.glb's Idle carries all 69 bones, so a single-pose fallback happens to
-// be complete on this particular rig, but every consumer of pose_blend.mjs
-// merges anyway (pose_blend.mjs mergePoses doc): a donor swapped in later for
-// a partial-channel clip (Spellcasting is 53 of the 69) must not silently
-// null out a blend, and this keeps the pattern uniform across every batch.
-const P_all = mergePoses(
-  P_idle,
-  P_raiseEarly,
-  P_sliceWind,
-  P_sliceRelease,
-  P_dualWind,
-  P_dualStrike,
-  P_shootEarly,
-  P_shootRelease,
-  P_reachStart,
-  P_drainDeep,
-  P_castLoop,
-  P_hitRecoil,
-);
-
+const rig = createPoseRig(root);
+const donorRig = createPoseRig(militia.getRoot());
+const packRig = createPoseRig(pack);
+const donors = indexClip(root, 'WarlockT1_Idle');
+const keys = [...donors.keys()];
 const animations = [];
+const smooth = (v) => v * v * (3 - 2 * v);
+const duration = (clip) => Math.max(...[...clip.values()].map((ch) => ch.times.at(-1)));
+const WINDUP = 0.76;
+// Additional physical shoulder spread on top of the baked Mixamo slider.
+// This is degrees, not a claimed conversion to Mixamo's Arm Space units.
+const IDLE_ARM_SPACE_DEGREES = 8;
+// Reduce the previous forward offsets: 1 degree back through the upper
+// spine and 2 through each clavicle, relative to the approved arm-guide pose.
+const CALM_CHEST_BACK_DEGREES = 1;
+const CALM_SHOULDER_BACK_DEGREES = 1;
+const packPose = (clip, time) => retargetPose(samplePose(clip, time), packRig.rest, rig.rest);
+const mix = (a, b, weight) =>
+  new Map(keys.map((key) => [key, blendValue(key, a.get(key), b.get(key), weight)]));
 
-function bake(clipName, timeline) {
-  const { animation } = bakeClip(doc, { clipName, channelKeys: allKeys, timeline, donorFor });
-  animations.push(animation);
+function bake(name, seconds, poseAt, looping = false, source = 'authored') {
+  const frames = Math.ceil(seconds * 30);
+  const times = new Set(Array.from({ length: frames + 1 }, (_, i) => (i * seconds) / frames));
+  if (name.endsWith('_Loop')) times.add(seconds - WINDUP);
+  const timeline = [...times]
+    .sort((a, b) => a - b)
+    .map((time) => {
+      const pose = poseAt(time, time / seconds);
+      return [time, (key) => pose.get(key) ?? rig.rest.get(key)];
+    });
+  if (looping) {
+    const seam = poseAt(0, 0);
+    timeline.at(-1)[1] = (key) => seam.get(key) ?? rig.rest.get(key);
+  }
+  animations.push(
+    bakeClip(doc, {
+      clipName: `WarlockT1_${name}`,
+      channelKeys: keys,
+      timeline,
+      donorFor: (key) => donors.get(key),
+    }).animation.setExtras({
+      motionSource: source,
+      ...(name.endsWith('_Loop') ? { nativePreparationSeconds: seconds - WINDUP } : {}),
+    }),
+  );
 }
 
-// --- Warlock_Cast_Shadow: gather, coil, a decisive clawed point ----------
-{
-  const t = [[0, (k) => poseValue(P_idle, k, P_all)]];
-  pushPoseRamp(t, {
-    fromTime: 0,
-    toTime: 0.15,
-    steps: 3,
-    ease: easeOutCubic,
-    fromPose: P_idle,
-    toPose: P_raiseEarly,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.15,
-    toTime: 0.35,
-    steps: 3,
-    ease: easeOutCubic,
-    fromPose: P_raiseEarly,
-    toPose: P_sliceWind,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.35,
-    toTime: 0.6,
-    steps: 4,
-    ease: easeOutCubic,
-    fromPose: P_sliceWind,
-    toPose: P_sliceRelease,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.6,
-    toTime: 0.9,
-    steps: 5,
-    ease: easeInOutQuad,
-    fromPose: P_sliceRelease,
-    toPose: P_idle,
-    fallback: P_all,
-  });
-  bake('Warlock_Cast_Shadow', t);
+function turnWorld(bone, axis, degrees) {
+  const world = bone
+    .getWorldQuaternion(new Quaternion())
+    .premultiply(new Quaternion().setFromAxisAngle(axis, (degrees * Math.PI) / 180));
+  bone.quaternion.copy(bone.parent.getWorldQuaternion(new Quaternion()).invert().multiply(world));
+  bone.updateWorldMatrix(false, true);
 }
 
-// --- Warlock_Cast_Fire: fast dual-hand snap, a striking ignite flick -----
-{
-  const t = [[0, (k) => poseValue(P_idle, k, P_all)]];
-  pushPoseRamp(t, {
-    fromTime: 0,
-    toTime: 0.12,
-    steps: 2,
-    ease: easeOutCubic,
-    fromPose: P_idle,
-    toPose: P_dualWind,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.12,
-    toTime: 0.28,
-    steps: 3,
-    ease: easeOutCubic,
-    fromPose: P_dualWind,
-    toPose: P_dualStrike,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.28,
-    toTime: 0.5,
-    steps: 3,
-    ease: easeOutCubic,
-    fromPose: P_dualStrike,
-    toPose: P_shootRelease,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.5,
-    toTime: 0.75,
-    steps: 4,
-    ease: easeInOutQuad,
-    fromPose: P_shootRelease,
-    toPose: P_idle,
-    fallback: P_all,
-  });
-  bake('Warlock_Cast_Fire', t);
+function idlePose(time, calm = false) {
+  rig.apply(packPose(indexClip(pack, 'Pack_IdleArmSpace'), time));
+  if (calm)
+    turnWorld(rig.named.get('mixamorig:Spine1'), new Vector3(1, 0, 0), CALM_CHEST_BACK_DEGREES);
+  for (const [side, sign] of [
+    ['Left', 1],
+    ['Right', -1],
+  ]) {
+    if (calm)
+      turnWorld(
+        rig.named.get(`mixamorig:${side}Shoulder`),
+        new Vector3(0, 1, 0),
+        -sign * CALM_SHOULDER_BACK_DEGREES,
+      );
+    const arm = rig.named.get(`mixamorig:${side}Arm`);
+    const spread = new Quaternion().setFromAxisAngle(
+      new Vector3(0, 0, 1),
+      (sign * IDLE_ARM_SPACE_DEGREES * Math.PI) / 180,
+    );
+    const world = arm.getWorldQuaternion(new Quaternion()).premultiply(spread);
+    arm.quaternion.copy(arm.parent.getWorldQuaternion(new Quaternion()).invert().multiply(world));
+    arm.updateWorldMatrix(false, true);
+    if (calm) {
+      const fore = rig.named.get(`mixamorig:${side}ForeArm`);
+      const hand = rig.named.get(`mixamorig:${side}Hand`);
+      const lowerDirection = hand
+        .getWorldPosition(new Vector3())
+        .sub(fore.getWorldPosition(new Vector3()))
+        .normalize();
+      // Follow the reviewed front/side guides: keep the elbow clearance from
+      // Arm Space, but let the forearm hang almost vertically and slightly
+      // forward (+Z, verified from the donor's foot-to-toe direction).
+      // Retain the donor's small sway instead of solving a fixed wrist target.
+      const desired = lowerDirection.clone();
+      desired.x *= 0.1;
+      desired.z += 0.18;
+      desired.normalize();
+      const axis = lowerDirection.clone().cross(desired).normalize();
+      turnWorld(fore, axis, (lowerDirection.angleTo(desired) * 180) / Math.PI);
+    }
+  }
+  return rig.capture(keys);
 }
 
-// --- Warlock_Cast_Drain: one slow sustained pull, not a barrage ----------
-{
-  const t = [[0, (k) => poseValue(P_idle, k, P_all)]];
-  pushPoseRamp(t, {
-    fromTime: 0,
-    toTime: 0.3,
-    steps: 4,
-    ease: easeInOutQuad,
-    fromPose: P_idle,
-    toPose: P_reachStart,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.3,
-    toTime: 0.55,
-    steps: 3,
-    ease: easeInOutQuad,
-    fromPose: P_reachStart,
-    toPose: P_castLoop,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.55,
-    toTime: 0.9,
-    steps: 4,
-    ease: easeInOutQuad,
-    fromPose: P_castLoop,
-    toPose: P_drainDeep,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.9,
-    toTime: 1.15,
-    steps: 3,
-    ease: easeInOutQuad,
-    fromPose: P_drainDeep,
-    toPose: P_castLoop,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 1.15,
-    toTime: 1.5,
-    steps: 4,
-    ease: easeInOutQuad,
-    fromPose: P_castLoop,
-    toPose: P_idle,
-    fallback: P_all,
-  });
-  bake('Warlock_Cast_Drain', t);
+for (const [name, source] of [
+  ['TravelIdle', 'Pack_IdleArmSpace'],
+  ['ReadyIdle', 'Pack_IdleArmSpace'],
+  ['TravelWalk', 'Pack_Walk'],
+  ['TravelRun', 'Pack_Run'],
+]) {
+  const clip = indexClip(pack, source);
+  bake(
+    name,
+    duration(clip),
+    (time) =>
+      source === 'Pack_IdleArmSpace' ? idlePose(time, name === 'TravelIdle') : packPose(clip, time),
+    true,
+    source === 'Pack_IdleArmSpace'
+      ? 'Druid Idle.fbx/Character Arm Space'
+      : `Druid Locomotion/${source}`,
+  );
 }
+const staffIdle = indexClip(pack, 'Pack_StaffIdle');
+bake(
+  'StaffIdle',
+  duration(staffIdle),
+  (time) => packPose(staffIdle, time),
+  true,
+  'Druid Pro Melee Axe Pack/standing idle.fbx',
+);
+const idle = idlePose(0, true);
+const playing = indexClip(pack, 'Pack_PlayingWithMagic');
+const playingLength = duration(playing);
+const playingEnd = packPose(playing, playingLength);
+const throwClip = indexClip(pack, 'Pack_ThrowShadow');
+const upwardClip = indexClip(pack, 'Pack_ThrowUpward');
 
-// --- Warlock_Cast_Burst: one fast decisive gesture, no windup ------------
-{
-  const t = [[0, (k) => poseValue(P_idle, k, P_all)]];
-  pushPoseRamp(t, {
-    fromTime: 0,
-    toTime: 0.08,
-    steps: 2,
-    ease: easeOutCubic,
-    fromPose: P_idle,
-    toPose: P_shootEarly,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.08,
-    toTime: 0.22,
-    steps: 2,
-    ease: easeOutCubic,
-    fromPose: P_shootEarly,
-    toPose: P_hitRecoil,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.22,
-    toTime: 0.4,
-    steps: 2,
-    ease: easeOutCubic,
-    fromPose: P_hitRecoil,
-    toPose: P_shootRelease,
-    fallback: P_all,
-  });
-  pushPoseRamp(t, {
-    fromTime: 0.4,
-    toTime: 0.6,
-    steps: 3,
-    ease: easeInOutQuad,
-    fromPose: P_shootRelease,
-    toPose: P_idle,
-    fallback: P_all,
-  });
-  bake('Warlock_Cast_Burst', t);
+for (const kind of ['Shadow', 'Fire', 'Drain', 'Self', 'Ally']) {
+  const friendly = kind === 'Self' || kind === 'Ally';
+  const attack = friendly ? upwardClip : throwClip;
+  // 03's upstroke reaches its high-hand release at 1.05s, later than 01's
+  // forward point. Resample that anticipation into the existing shared tail.
+  const releaseTime = friendly ? 1.05 : WINDUP;
+  const attackLength = duration(attack);
+  // Retain the legacy _Loop name for clip-map compatibility, but this now
+  // plays ONCE. The full donor is followed by an attack anticipation tail.
+  bake(
+    `Cast${kind}_Loop`,
+    playingLength + WINDUP,
+    (time) => {
+      if (time <= playingLength) return packPose(playing, time);
+      const tail = time - playingLength;
+      const sourceTime = friendly ? (tail / WINDUP) * releaseTime : tail;
+      return mix(playingEnd, packPose(attack, sourceTime), smooth(Math.min(1, tail / 0.16)));
+    },
+    false,
+    'Pro Magic/Standing Idle 03 (full) + release anticipation',
+  );
+  const followThrough = attackLength - releaseTime;
+  bake(
+    `Cast${kind}_Release`,
+    followThrough + 0.3,
+    (time) => {
+      if (time <= followThrough) return packPose(attack, releaseTime + time);
+      const end = packPose(attack, attackLength);
+      return mix(end, idle, smooth((time - followThrough) / 0.3));
+    },
+    false,
+    friendly
+      ? 'Pro Magic/Standing 1H Magic Attack 03 (upward)'
+      : 'Pro Magic/Standing 1H Magic Attack 01',
+  );
 }
-
-if (PREVIEW) {
-  await io.write(PREVIEW_OUT, doc);
-  console.log(`wrote preview (mesh + skin + all 4 clips): ${PREVIEW_OUT}`);
+const jump = indexClip(militia.getRoot(), 'Warrior_jump');
+bake('JumpClassic', duration(jump), (time) => {
+  rig.apply(retargetPose(samplePose(jump, time), donorRig.rest, rig.rest));
+  return rig.capture(keys);
+});
+if (process.argv.includes('--preview')) {
+  await mkdir(resolve(ROOT, 'tmp/warlock_motion'), { recursive: true });
+  await io.write(resolve(ROOT, 'tmp/warlock_motion/preview.glb'), doc);
 }
-
 stripToAnimationsOnly(doc, animations);
 await doc.transform(prune(), dedup());
-await io.write(OUT, doc);
-
-const kept = root.listAnimations().map((a) => a.getName());
-console.log(`wrote ${OUT}`);
-console.log(`clips (${kept.length}): ${kept.join(', ')}`);
+await io.write(resolve(ROOT, 'public/models/chars/players/warlock_ability_anims.glb'), doc);
+console.log(`Warlock T1: ${animations.length} clips authored on the target rig.`);

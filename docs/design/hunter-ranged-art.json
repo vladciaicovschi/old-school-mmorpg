@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-14",
+  "generator": "OpenAI built-in image generation",
+  "owner": "World of ClaudeCraft",
+  "license": "World of ClaudeCraft project-generated art, rights reserved; user Meshy previews used only as identity references",
+  "contracts": {
+    "item": {
+      "width": 128,
+      "height": 128,
+      "maxBytes": 15360,
+      "alpha": "opaque",
+      "styleContractId": "woc-item-icon-v1"
+    }
+  },
+  "references": [
+    "public/ui/weapons/meshy/arcane_longbow_1.jpg (bow identity)",
+    "public/ui/weapons/meshy/test_crossbow_1.jpg (crossbow identity)",
+    "public/ui/items/kingsbane_last_oath.webp (weapon composition/style)",
+    "public/ui/items/eastbrook_buckler.webp (material/light style)",
+    "public/ui/items/linen_pouch.webp (painted ground/style)"
+  ],
+  "assets": [
+    {
+      "kind": "item",
+      "id": "dev_hunter_practice_bow",
+      "runtimeUrl": "/ui/items/dev_hunter_practice_bow.webp",
+      "batch": "hunter-ranged-test-icons-2026-10-14",
+      "acceptedSha256": "0195ec59c31932031ce4c87446c4ebf130f95707eefbfaccf9060a2e76c52c00",
+      "acceptedBytes": 1884,
+      "original": {
+        "path": "tmp/hunter_motion/art/bow-original.png",
+        "sha256": "5b41c7eab315b93c1606f0e6579cda635f523bcbaa641bedfbc25d5cd108da8a"
+      },
+      "master": {
+        "path": "tmp/hunter_motion/art/dev_hunter_practice_bow-master.png",
+        "sha256": "cc3222631878dc4e66a7c4a3cec2d2c968f042bbc97e64c8e06f2e1ef53e2874"
+      },
+      "processing": "512x512 sRGB opaque master, owning assets:items converter to 128px WebP q82",
+      "retryCount": 0,
+      "orderedReferences": [
+        { "image": 1, "path": "public/ui/weapons/meshy/arcane_longbow_1.jpg", "role": "subject identity only" },
+        { "image": 2, "path": "public/ui/items/kingsbane_last_oath.webp", "role": "weapon composition and house painting style only" },
+        { "image": 3, "path": "public/ui/items/eastbrook_buckler.webp", "role": "materials and lighting style only" },
+        { "image": 4, "path": "public/ui/items/linen_pouch.webp", "role": "painted ground style only" }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: opaque square fantasy MMORPG inventory item icon, woc-item-icon-v1. Image 1 is subject identity only; images 2-4 are house style only (do not copy their objects). Paint one complete weapon with its exact reference construction/materials, diagonal composition, 68-76 percent fill, safe tip margins, readable at 22px. Premium hand-painted dark fantasy MMO art, tactile wood/leather/iron, warm top-left light, cool deep shadows, crisp focal edges and soft brushwork, opaque charcoal/umber painted vignette. No frame, UI, writing, letters, symbols, watermark, hand, person, transparency, cropping or collage. Subject: Practice Bow. Plain pale ash-wood recurved longbow, worn leather grip and tip bindings, taut simple string, no magic or gold decoration. Preserve the pictured weapon's silhouette."
+    },
+    {
+      "kind": "item",
+      "id": "dev_hunter_practice_crossbow",
+      "runtimeUrl": "/ui/items/dev_hunter_practice_crossbow.webp",
+      "batch": "hunter-ranged-test-icons-2026-10-14",
+      "acceptedSha256": "b2eb527464db27ad4fdb3c18fd65fd0fcaf388e3acac0bc4084ab72007da4604",
+      "acceptedBytes": 2918,
+      "original": {
+        "path": "tmp/hunter_motion/art/crossbow-original.png",
+        "sha256": "420a29ec29b82c2962b82b5de2c1bada7f020f89351dd713651534ad4dadddac"
+      },
+      "master": {
+        "path": "tmp/hunter_motion/art/dev_hunter_practice_crossbow-master.png",
+        "sha256": "8c640c9d6ceebd8c05ed3e380ac603831aefe5f7e8c6544f182794fb2ab8f436"
+      },
+      "processing": "512x512 sRGB opaque master, owning assets:items converter to 128px WebP q82",
+      "retryCount": 0,
+      "orderedReferences": [
+        { "image": 1, "path": "public/ui/weapons/meshy/test_crossbow_1.jpg", "role": "subject identity only" },
+        { "image": 2, "path": "public/ui/items/kingsbane_last_oath.webp", "role": "weapon composition and house painting style only" },
+        { "image": 3, "path": "public/ui/items/eastbrook_buckler.webp", "role": "materials and lighting style only" },
+        { "image": 4, "path": "public/ui/items/linen_pouch.webp", "role": "painted ground style only" }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: opaque square fantasy MMORPG inventory item icon, woc-item-icon-v1. Image 1 is subject identity only; images 2-4 are house style only (do not copy their objects). Paint one complete weapon with its exact reference construction/materials, diagonal composition, 68-76 percent fill, safe tip margins, readable at 22px. Premium hand-painted dark fantasy MMO art, tactile wood/leather/iron, warm top-left light, cool deep shadows, crisp focal edges and soft brushwork, opaque charcoal/umber painted vignette. No frame, UI, writing, letters, symbols, watermark, hand, person, transparency, cropping or collage. Subject: Practice Crossbow. Plain wooden shoulder-stock crossbow, dark iron prod and trigger, leather stock wrap, taut string, no scope or modern parts. Preserve the pictured weapon's silhouette."
+    }
+  ],
+  "review": {
+    "artifact": "tmp/hunter_motion/art/review.png",
+    "sizes": [
+      128,
+      64,
+      40,
+      28,
+      22
+    ],
+    "grayscale": 28,
+    "circularCrop64": "tmp/hunter_motion/art/review-circles.png",
+    "browserAcceptance": "Reserved for owner; no browser captures run."
+  }
+}

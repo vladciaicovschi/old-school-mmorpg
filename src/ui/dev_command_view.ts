@@ -228,6 +228,13 @@ export const DEV_COMMAND_ACTIONS: readonly DevCommandAction[] = [
     },
   },
   {
+    id: 'modelLab',
+    category: 'travel',
+    labelKey: 'devCommand.actions.modelLab.label',
+    descriptionKey: 'devCommand.actions.modelLab.description',
+    command: fixed('/dev lab'),
+  },
+  {
     id: 'teleport',
     category: 'travel',
     labelKey: 'devCommand.actions.teleport.label',
@@ -306,6 +313,11 @@ export function devCategoryVisible(category: DevCommandCategory, accountAdmin: b
 
 export function isDevGuiCommand(value: string): boolean {
   return /^\/dev\s+gui\s*$/i.test(value.trim());
+}
+
+/** Client-side route into the weapon attachment editor. */
+export function isDevEditorCommand(value: string): boolean {
+  return /^\/dev\s+editor\s*$/i.test(value.trim());
 }
 
 export function filteredDevActions(

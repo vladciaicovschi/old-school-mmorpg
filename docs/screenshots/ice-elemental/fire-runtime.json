@@ -1,0 +1,124 @@
+{
+  "key": "npc_dev_fire_elemental",
+  "low": false,
+  "clips": [
+    "Cast",
+    "Channel",
+    "Death",
+    "Fire_Idle",
+    "Fire_Move"
+  ],
+  "meshes": [
+    {
+      "name": "Ashcaller",
+      "materials": [
+        {
+          "name": "FireElemental_Basalt",
+          "type": "MeshStandardMaterial",
+          "emissiveMap": "FireElemental_Fissures"
+        }
+      ],
+      "triangles": 9712,
+      "uv": true,
+      "skinned": true
+    },
+    {
+      "name": "elemental_flame_head",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_hand.l",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_vfx_hand.r",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_vfx_core",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "elemental_flame_hips",
+      "materials": [
+        {
+          "name": "",
+          "type": "ShaderMaterial"
+        }
+      ],
+      "triangles": 2,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "character_far_mesh",
+      "materials": [
+        {
+          "name": "FireElemental_Basalt",
+          "type": "MeshStandardMaterial",
+          "emissiveMap": "FireElemental_Fissures"
+        }
+      ],
+      "triangles": 9712,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "character_shadow_proxy",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshBasicMaterial"
+        }
+      ],
+      "triangles": 9712,
+      "uv": true,
+      "skinned": false
+    },
+    {
+      "name": "",
+      "materials": [
+        {
+          "name": "",
+          "type": "MeshBasicMaterial"
+        }
+      ],
+      "triangles": 32,
+      "uv": true,
+      "skinned": false
+    }
+  ],
+  "errors": []
+}

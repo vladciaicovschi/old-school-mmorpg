@@ -11,6 +11,13 @@ import { armoryCollectionStrings, armorySkinStrings } from './armory';
 import { cosmeticsStrings } from './cosmetics';
 
 export const hudChromeStrings = {
+  warriorSuit: {
+    label: 'Armor set',
+    hint: 'Equip the complete armor set from your bags.',
+    recruit: 'Recruit',
+    militia: 'Militia',
+    knight: 'Knight',
+  },
   materialStackSelectionUnavailable: 'That material selection is no longer available.',
   warlock: {
     doomLabel: 'Condemnation',

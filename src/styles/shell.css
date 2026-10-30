@@ -9334,6 +9334,8 @@
    the rail whatever a tab holds. */
 @media (min-width: 861px) {
   #offline-select .appearance-customizer,
+  #offline-select .equipment-calibration,
+  body:not(.mobile-touch) #charcreate-panel.cs-wow .equipment-calibration,
   body:not(.mobile-touch) #charcreate-panel.cs-wow .appearance-customizer {
     position: absolute;
     left: 22px;
@@ -9357,4 +9359,294 @@
    is dropped rather than the panel renamed. */
 #charcreate-panel .skin-picker-header {
   display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Equipment calibration panel (Meshy Titan technical fitting pass).
+   The controls edit final hand-bone-local and skinned-node-local transforms.
+   The dedicated ?weaponfit=1 route exposes held targets for the selected model.
+   --------------------------------------------------------------------------- */
+.equipment-calibration {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  max-width: 348px;
+  margin-top: 12px;
+  padding: 12px;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background: linear-gradient(172deg, rgba(17, 17, 26, 0.94) 0%, rgba(9, 9, 14, 0.96) 100%);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+}
+
+.equipment-calibration .ec-head {
+  display: grid;
+  gap: 3px;
+}
+
+.equipment-calibration .ec-title {
+  color: var(--color-text-highlight);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.equipment-calibration .ec-hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.equipment-calibration .ec-tab-rail,
+.equipment-calibration .ec-mode-rail,
+.equipment-calibration .ec-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.equipment-calibration .ec-tab-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.equipment-calibration .ec-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.equipment-calibration .ec-subject-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.equipment-calibration :is(.ec-subject-select, .ec-clip-select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  padding: 6px 8px;
+  color: var(--color-text-light);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 5px;
+  font-size: 12px;
+  color-scheme: dark;
+}
+
+.equipment-calibration .ec-clip-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 40px 40px;
+  align-items: center;
+  gap: 6px;
+}
+
+.equipment-calibration .ec-clip-select {
+  min-width: 0;
+  font-family: ui-monospace, Consolas, "Cascadia Mono", monospace;
+  font-size: 10px;
+}
+
+.equipment-calibration .ec-clip-button {
+  display: grid;
+  place-items: center;
+  min-width: 40px;
+  min-height: 34px;
+  padding: 5px;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 6px;
+  cursor: var(--cursor-point);
+}
+
+.equipment-calibration .ec-mode-rail {
+  flex: 1 1 auto;
+}
+
+.equipment-calibration .ec-tab,
+.equipment-calibration .ec-mode,
+.equipment-calibration .ec-animation-toggle,
+.equipment-calibration .ec-action {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 40px;
+  padding: 6px;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: var(--cursor-point);
+}
+
+.equipment-calibration .ec-tab.sel,
+.equipment-calibration .ec-mode.sel {
+  color: var(--color-text-highlight);
+  background: rgba(200, 168, 56, 0.14);
+  border-color: var(--color-primary);
+}
+
+.equipment-calibration .ec-icon {
+  width: 21px;
+  height: 21px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.equipment-calibration .ec-icon-badge {
+  position: absolute;
+  right: 3px;
+  bottom: 1px;
+  min-width: 12px;
+  color: var(--color-text-secondary);
+  font-size: 8px;
+  line-height: 11px;
+  text-align: center;
+}
+
+.equipment-calibration .ec-controls,
+.equipment-calibration .ec-vector,
+.equipment-calibration .ec-scale {
+  display: grid;
+  gap: 7px;
+}
+
+.equipment-calibration .ec-animation-toggle {
+  flex: 0 0 44px;
+}
+
+.equipment-calibration .ec-animation-toggle[aria-pressed="true"] {
+  color: var(--color-text-highlight);
+  border-color: var(--color-primary);
+}
+
+.equipment-calibration .ec-axis-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 74px;
+  gap: 8px;
+  align-items: center;
+}
+
+.equipment-calibration .ec-axis-label {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.equipment-calibration .ec-range {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--color-primary);
+}
+
+.equipment-calibration .ec-number {
+  width: 74px;
+  min-height: 30px;
+  padding: 4px 6px;
+  color: var(--color-text-primary);
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 5px;
+  font-family: ui-monospace, Consolas, "Cascadia Mono", monospace;
+  font-size: 12px;
+}
+
+.equipment-calibration .ec-output-details {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.equipment-calibration .ec-output-summary {
+  padding: 3px 0;
+  cursor: var(--cursor-point);
+}
+
+.equipment-calibration .ec-output {
+  display: block;
+  width: 100%;
+  min-height: 112px;
+  margin-top: 5px;
+  padding: 7px 8px;
+  resize: vertical;
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--color-border-showcase);
+  border-radius: 6px;
+  font-family: ui-monospace, Consolas, "Cascadia Mono", monospace;
+  font-size: 10px;
+  line-height: 1.35;
+  scrollbar-width: thin;
+}
+
+.equipment-calibration .ec-action {
+  min-height: 40px;
+}
+
+.equipment-calibration .ec-save {
+  color: var(--color-text-highlight);
+  border-color: color-mix(in srgb, var(--color-primary) 65%, transparent);
+}
+
+.equipment-calibration .ec-action:disabled {
+  opacity: 0.48;
+  cursor: var(--cursor-default);
+}
+
+.equipment-calibration .ec-status {
+  min-height: 16px;
+  color: var(--color-text-success);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.equipment-calibration
+  :is(
+    .ec-tab,
+    .ec-mode,
+    .ec-animation-toggle,
+    .ec-range,
+    .ec-number,
+    .ec-output,
+    .ec-subject-select,
+    .ec-clip-select,
+    .ec-action
+  ):focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .equipment-calibration .ec-tab,
+  .equipment-calibration .ec-mode,
+  .equipment-calibration .ec-animation-toggle,
+  .equipment-calibration .ec-action,
+  .equipment-calibration .ec-subject-select,
+  .equipment-calibration .ec-clip-select,
+  .equipment-calibration .ec-number {
+    min-height: 40px;
+  }
 }

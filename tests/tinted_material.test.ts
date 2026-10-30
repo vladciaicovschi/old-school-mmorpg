@@ -239,6 +239,46 @@ describe('tinted character materials', () => {
     }
   });
 
+  it('retains an authored fissure mask and its intensity on low graphics without mutating the source', () => {
+    const restoreGfx = gfxInternalsForTest.overrideSettings({ standardMaterials: false });
+    try {
+      const atlas = new THREE.Texture();
+      const fissures = new THREE.Texture();
+      const source = new THREE.MeshStandardMaterial({
+        map: atlas,
+        emissiveMap: fissures,
+        emissive: 0xffa040,
+        emissiveIntensity: 1.4,
+      });
+      const before = source.emissive.clone();
+      const mesh = new THREE.Mesh(new THREE.BufferGeometry(), source);
+      const root = new THREE.Group();
+      root.add(mesh);
+      applyMaterials(root, { authoredAtlas: true } as VisualDef, 0xffffff);
+      const material = mesh.material as unknown as THREE.MeshLambertMaterial;
+      expect(material.isMeshLambertMaterial).toBe(true);
+      expect(material.map).toBe(atlas);
+      expect(material.emissiveMap).toBe(fissures);
+      expect(material.emissiveMap).not.toBe(atlas);
+      expect(material.emissive.equals(before)).toBe(true);
+      expect(material.emissiveIntensity).toBe(1.4);
+      expect(source.emissive.equals(before)).toBe(true);
+      expect(source.emissiveMap).toBe(fissures);
+      // An inactive authored map must still receive the ordinary readability
+      // floor; preserving zero emission would make existing dark rigs vanish.
+      const inactive = new THREE.MeshStandardMaterial({ map: atlas, emissiveMap: fissures });
+      const unlitMesh = new THREE.Mesh(new THREE.BufferGeometry(), inactive);
+      const unlitRoot = new THREE.Group();
+      unlitRoot.add(unlitMesh);
+      applyMaterials(unlitRoot, { authoredAtlas: true } as VisualDef, 0xffffff);
+      const fallback = unlitMesh.material as unknown as THREE.MeshLambertMaterial;
+      expect(fallback.emissiveMap).toBe(atlas);
+      expect(fallback.emissive.getHex()).not.toBe(0);
+    } finally {
+      restoreGfx();
+    }
+  });
+
   it('partitions the cache so a flagged def never hands its clone to a player form on the same GLB', () => {
     // mob_wolf (authoredAtlas) and the druid form_cat share wolf_basic.glb, so
     // both reach tintedMaterial with the SAME source material. The flag must

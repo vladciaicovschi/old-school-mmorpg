@@ -1,0 +1,14 @@
+[
+  {
+    "animal": "wolf",
+    "updated": "Wolf_Death",
+    "otherClipsIdentical": true,
+    "texturesIdentical": true
+  },
+  {
+    "animal": "bear",
+    "updated": "Bear_Death",
+    "otherClipsIdentical": true,
+    "texturesIdentical": true
+  }
+]

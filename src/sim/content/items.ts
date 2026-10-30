@@ -1,4 +1,6 @@
 import type { ItemDef, PlayerClass } from '../types';
+export const HUNTER_TEST_BOW_ITEM = 'dev_hunter_practice_bow';
+export const HUNTER_TEST_CROSSBOW_ITEM = 'dev_hunter_practice_crossbow';
 
 // Archetype groups for class-locked rewards (REWARD_ARCHETYPE hands warrior
 // rewards to paladins/shamans etc., so the lock must admit the whole group).
@@ -40,6 +42,18 @@ const CASTER_WEAPON_CLASSES: PlayerClass[] = [
 // ---------------------------------------------------------------------------
 
 export const BASE_ITEMS: Record<string, ItemDef> = {
+  // Temporary DEV-only acquisition, no vendor/loot source. Match the hunter's
+  // existing starter melee stats; class.ranged still owns ranged damage/speed.
+  dev_hunter_practice_bow: {
+    id: 'dev_hunter_practice_bow', name: 'Practice Bow', kind: 'weapon', slot: 'mainhand',
+    quality: 'common', hand: 'twohand', requiredClass: ['hunter'],
+    weapon: { min: 2, max: 5, speed: 2.2 }, sellValue: 0,
+  },
+  dev_hunter_practice_crossbow: {
+    id: 'dev_hunter_practice_crossbow', name: 'Practice Crossbow', kind: 'weapon', slot: 'mainhand',
+    quality: 'common', hand: 'twohand', requiredClass: ['hunter'],
+    weapon: { min: 2, max: 5, speed: 2.2 }, sellValue: 0,
+  },
   // --- starting gear ---
   worn_sword: {
     id: 'worn_sword',
@@ -96,6 +110,45 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     quality: 'common',
     stats: { armor: 20 },
     sellValue: 5,
+  },
+  warrior_recruit_suit: {
+    id: 'warrior_recruit_suit',
+    name: 'Recruit Armor Set',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'chest',
+    quality: 'common',
+    stats: { armor: 20 },
+    sellValue: 20,
+    requiredClass: ['warrior'],
+    wholeBodySuit: 'recruit',
+    appearanceTier: 1,
+  },
+  warrior_militia_suit: {
+    id: 'warrior_militia_suit',
+    name: 'Militia Armor Set',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'chest',
+    quality: 'uncommon',
+    stats: { armor: 90, sta: 2 },
+    sellValue: 150,
+    requiredClass: ['warrior'],
+    wholeBodySuit: 'militia',
+    appearanceTier: 2,
+  },
+  warrior_knight_suit: {
+    id: 'warrior_knight_suit',
+    name: 'Knight Armor Set',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'chest',
+    quality: 'uncommon',
+    stats: { armor: 237, str: 13, sta: 16 },
+    sellValue: 450,
+    requiredClass: ['warrior'],
+    wholeBodySuit: 'knight',
+    appearanceTier: 3,
   },
   apprentice_robe: {
     id: 'apprentice_robe',

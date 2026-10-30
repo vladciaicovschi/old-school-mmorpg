@@ -4,6 +4,7 @@
 // together, and forwards events plus the per-frame entity sync. Everything
 // else in this directory is internal.
 export { AbilityVfxFx } from './fx';
+export { createWarlockHandGlow } from './hand_glow';
 export {
   AbilityVfx,
   type AbilityVfxAuraEvent,

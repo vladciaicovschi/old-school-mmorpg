@@ -1,0 +1,82 @@
+{
+  "sourceHashes": {
+    "D:\\THE_GAME\\bible\\models\\ambient\\boats\\sailing-modular-v1\\output\\sailing-modular.blend": "b4d57e57cb45d5a08da8b2a6d2950a274c1ce1c8a79b6b46066808e7e982db44",
+    "D:\\THE_GAME\\bible\\models\\ambient\\boats\\sailing-modular-v1\\output\\sailing-modular.glb": "7533ef9f68f80cb497ca954907d823ae375ca689799502660e3b459d8ba6f1d1",
+    "D:\\THE_GAME\\bible\\models\\ambient\\boats\\sailing-refined-v21\\output\\sailing-refined.blend": "abe5ff32acc89aeaad4cfa144c2fdc944037519816ea1a81d73134a3b8a05a9c",
+    "D:\\THE_GAME\\bible\\models\\ambient\\boats\\sailing-rig-studies-v2\\output\\sailing-gaff.blend": "e17909260745f5c68c4502670193675bf0816b3507531968abc3221566d322ac",
+    "D:\\THE_GAME\\bible\\models\\ambient\\boats\\sailing-rig-studies-v2\\output\\sailing-brig.blend": "3ae2b9357b4dbda9888c74fffb57c8c6b4aee18b8fd40630db8370014ae96348"
+  },
+  "sourcesUnchanged": true,
+  "rigs": [
+    {
+      "id": "ketch",
+      "revision": "fleet-rigs-v1",
+      "file": "fleet-rigs-v1/output/ketch.patch.glb",
+      "patchSha256": "831043e11fcf40f14075665f317e641ee8b6dff02543dd319f640f14a93634aa",
+      "studySha256": "e17909260745f5c68c4502670193675bf0816b3507531968abc3221566d322ac",
+      "refinedJibSourceSha256": "abe5ff32acc89aeaad4cfa144c2fdc944037519816ea1a81d73134a3b8a05a9c",
+      "roles": ["masts", "rigging", "sails", "fittings", "framing"],
+      "roleTriangles": {
+        "cabin": 4450,
+        "cargo": 7084,
+        "deck": 1756,
+        "fittings": 19643,
+        "framing": 6370,
+        "helm": 1258,
+        "hull": 36963,
+        "lanterns": 17004,
+        "masts": 268,
+        "railings": 3688,
+        "rigging": 29840,
+        "sails": 9920,
+        "stairs": 624
+      },
+      "triangles": 138868,
+      "checks": {
+        "canvasCount": 4,
+        "canvasIntersections": [],
+        "ropeIntersections": [],
+        "minimumCrewHeadGapM": 0.1928665161132812,
+        "foredeckClearPoses": 141,
+        "foredeckBodyRadiusM": 0.3,
+        "helmClear": true,
+        "unchangedBodyObjects": 766
+      }
+    },
+    {
+      "id": "brig",
+      "revision": "fleet-rigs-v1",
+      "file": "fleet-rigs-v1/output/brig.patch.glb",
+      "patchSha256": "b6662519153b243703bf826526ec7df3581e5d80735dfb134658cc29c1d252af",
+      "studySha256": "3ae2b9357b4dbda9888c74fffb57c8c6b4aee18b8fd40630db8370014ae96348",
+      "refinedJibSourceSha256": "abe5ff32acc89aeaad4cfa144c2fdc944037519816ea1a81d73134a3b8a05a9c",
+      "roles": ["masts", "rigging", "sails", "fittings", "framing"],
+      "roleTriangles": {
+        "cabin": 4450,
+        "cargo": 7084,
+        "deck": 1756,
+        "fittings": 16715,
+        "framing": 6698,
+        "helm": 1258,
+        "hull": 36963,
+        "lanterns": 17004,
+        "masts": 396,
+        "railings": 3688,
+        "rigging": 38904,
+        "sails": 18084,
+        "stairs": 624
+      },
+      "triangles": 153624,
+      "checks": {
+        "canvasCount": 7,
+        "canvasIntersections": [],
+        "ropeIntersections": [],
+        "minimumCrewHeadGapM": 0.1928665161132812,
+        "foredeckClearPoses": 141,
+        "foredeckBodyRadiusM": 0.3,
+        "helmClear": true,
+        "unchangedBodyObjects": 766
+      }
+    }
+  ]
+}

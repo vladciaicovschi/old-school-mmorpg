@@ -41,7 +41,7 @@ describe('the render-side stow cache stays single-writer with mount folded into 
 
   it('feeds that call the swim/mount overlay, not a second diff against the bare sim bit', () => {
     expect(rendererSource).toMatch(
-      /const stowed = weaponStowedOverlay\(e\.weaponStowed, swimming, e\.mountKey !== ''\)/,
+      /const stowed = weaponStowedOverlay\(\s*e\.weaponStowed,\s*swimming,\s*e\.mountKey !== '',\s*this\.weaponCarry\.stowed\(e, dt\),?\s*\)/,
     );
     expect(rendererSource).not.toMatch(/if \(e\.weaponStowed !== v\.weaponStowed\)/);
   });

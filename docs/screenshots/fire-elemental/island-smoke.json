@@ -1,0 +1,31 @@
+{
+  "result": {
+    "templateId": "dev_fire_elemental",
+    "name": "Fire Elemental Prototype",
+    "key": "npc_dev_fire_elemental",
+    "pos": {
+      "x": 812,
+      "y": 1.7000000000000002,
+      "z": 0
+    },
+    "targetId": null,
+    "clip": "Fire_Idle",
+    "flames": 5,
+    "materials": [
+      {
+        "type": "MeshLambertMaterial",
+        "emissiveMap": "FireElemental_Fissures",
+        "emissive": 16777215,
+        "intensity": 2.4000000953674316
+      }
+    ],
+    "clips": [
+      "Cast",
+      "Channel",
+      "Death",
+      "Fire_Idle",
+      "Fire_Move"
+    ]
+  },
+  "errors": []
+}

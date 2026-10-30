@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "src": "tmp/asset_src/emberclaw_crab/emberclaw_crab.glb",
+      "out": "models/creatures/proving_shore_scuttler.glb",
+      "type": "character",
+      "maxTex": 1024
+    }
+  ]
+}

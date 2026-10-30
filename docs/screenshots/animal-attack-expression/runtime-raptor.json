@@ -1,0 +1,24 @@
+{
+  "errors": [],
+  "runtime": [
+    {
+      "animal": "raptor",
+      "attacks": [
+        "Raptor_SlashLeft",
+        "Raptor_SlashRight",
+        "Raptor_Pounce",
+        "Raptor_TailWhip",
+        "Raptor_SlashLeft",
+        "Raptor_TailWhip"
+      ],
+      "recovery": {
+        "clip": "Raptor_Idle",
+        "time": 1.183333333333334
+      },
+      "death": {
+        "clip": "Raptor_Death",
+        "time": 1.4500000476837158
+      }
+    }
+  ]
+}

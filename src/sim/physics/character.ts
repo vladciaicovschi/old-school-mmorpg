@@ -35,6 +35,7 @@ import {
   type Collider,
   colliderTopAt,
   MANTLE_REACH,
+  PASS_UNDER_HEADROOM,
   queryOpenWorldColliders,
   SUPPORT_OVERLAP,
   supportHeightAt,
@@ -216,6 +217,7 @@ function blocksAt(
   params: CharacterMoveParams,
 ): boolean {
   if (params.ignoreFences && c.type === 'obb' && c.isFence) return false;
+  if (c.passUnderY !== undefined && feetY + PASS_UNDER_HEADROOM <= c.passUnderY) return false;
   if (c.moveTopY === undefined) return true; // full height: buildings, trees, walls
   const lift = !params.grounded && c.standable === true ? MANTLE_REACH : 0;
   return colliderTopAt(c, x, z) > feetY + lift + TOP_EPS;
@@ -232,6 +234,10 @@ function steppableAt(c: Collider, feetY: number, params: CharacterMoveParams): b
   );
 }
 
+function contactRadius(c: Collider, params: CharacterMoveParams): number {
+  return c.type === 'obb' && c.stairTread ? params.radius * SUPPORT_OVERLAP : params.radius;
+}
+
 /** Is the body clear at (x, z) with its feet at `feetY`? Gates every step-up:
  *  climbing must never push the body into a wall or under an overhang. */
 function isClear(x: number, z: number, feetY: number, params: CharacterMoveParams): boolean {
@@ -239,7 +245,7 @@ function isClear(x: number, z: number, feetY: number, params: CharacterMoveParam
     const c = candidates[i];
     if (!blocksAt(c, x, z, feetY, params)) continue;
     physicsStats.overlaps++;
-    if (overlapCollider(c, x, z, params.radius, push)) return false;
+    if (overlapCollider(c, x, z, contactRadius(c, params), push)) return false;
   }
   return true;
 }
@@ -261,7 +267,7 @@ function depenetrate(
       const c = candidates[i];
       if (!blocksAt(c, px, pz, feetY, params)) continue;
       physicsStats.overlaps++;
-      if (!overlapCollider(c, px, pz, params.radius, push)) continue;
+      if (!overlapCollider(c, px, pz, contactRadius(c, params), push)) continue;
       px += push.nx * (push.depth + SKIN_WIDTH);
       pz += push.nz * (push.depth + SKIN_WIDTH);
       moved = true;
@@ -337,7 +343,7 @@ export function moveCharacter(
       // eave-clamped face as the wall it is.
       if (!blocksAt(c, px, pz, feetY, params)) continue;
       physicsStats.sweeps++;
-      if (!sweepCollider(c, px, pz, remX, remZ, params.radius, hit)) continue;
+      if (!sweepCollider(c, px, pz, remX, remZ, contactRadius(c, params), hit)) continue;
       // A zero-advance contact whose face the motion SEPARATES from is a
       // graze, not an obstruction: a body resting against a deck plate's
       // side while walking directly away used to take this as the nearest
@@ -384,7 +390,7 @@ export function moveCharacter(
     // the body slides around the obstacle exactly as it would off a wall.
     const blocker = candidates[bestIndex];
     if (steppableAt(blocker, feetY, params)) {
-      const lifted = (blocker.moveTopY as number) + TOP_EPS;
+      const blockerTop = (blocker.moveTopY as number) + TOP_EPS;
       const dirLen = Math.hypot(remX, remZ);
       const ux = dirLen > MIN_MOTION ? remX / dirLen : 0;
       const uz = dirLen > MIN_MOTION ? remZ / dirLen : 0;
@@ -393,6 +399,15 @@ export function moveCharacter(
         const adv = (s * STEP_COMMIT_DISTANCE) / (STEP_COMMIT_TRIES - 1);
         const cx = px + ux * adv;
         const cz = pz + uz * adv;
+        // Adjacent short treads can share the foot contact. Select their
+        // reachable support together so the next riser cannot veto this step.
+        const lifted =
+          blocker.type === 'obb' && blocker.stairTread
+            ? Math.max(
+                blockerTop,
+                supportFromCandidates(cx, cz, params.radius, feetY + params.stepHeight) + TOP_EPS,
+              )
+            : blockerTop;
         if (!isClear(cx, cz, lifted, params)) continue;
         const floor = supportFromCandidates(cx, cz, params.radius, lifted + TOP_EPS);
         if (floor < lifted - TOP_EPS) continue; // nothing underfoot there

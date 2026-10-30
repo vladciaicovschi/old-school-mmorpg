@@ -35,6 +35,8 @@ export interface CharacterState {
   // Talents V2 migration; revision 2 is the v0.29 Hunter redesign repick.
   // Absent means a pre-v0.26 character JSONB save.
   contentRevision?: number;
+  /** Inert legacy whole-body trial stamp, retained for save compatibility. */
+  wholeBodyArmorRevision?: number;
   level: number;
   xp: number;
   // Post-cap progression. All optional so characters saved before the Max-Level

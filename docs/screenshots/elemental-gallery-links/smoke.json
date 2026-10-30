@@ -1,0 +1,98 @@
+{
+  "smokeOnly": true,
+  "renderer": "headless SwiftShader",
+  "audit": {
+    "total": 237,
+    "rebuiltTotal": 237,
+    "gallery": 205,
+    "missing": 156,
+    "elementals": [
+      {
+        "id": "elemental",
+        "subject": {
+          "templateId": "dev_compare_mob_new_elemental",
+          "visualKey": "npc_dev_stone_elemental",
+          "side": "new",
+          "status": "ready",
+          "category": "mob",
+          "pairId": "mob_elemental",
+          "x": 844,
+          "z": -56,
+          "facing": 3.141592653589793
+        },
+        "count": 1,
+        "resolved": "npc_dev_stone_elemental",
+        "oldCount": 0
+      },
+      {
+        "id": "fire_elemental",
+        "subject": {
+          "templateId": "dev_compare_mob_new_fire_elemental",
+          "visualKey": "npc_dev_fire_elemental",
+          "side": "new",
+          "status": "ready",
+          "category": "mob",
+          "pairId": "mob_fire_elemental",
+          "x": 820,
+          "z": -8,
+          "facing": 3.141592653589793
+        },
+        "count": 1,
+        "resolved": "npc_dev_fire_elemental",
+        "oldCount": 0
+      },
+      {
+        "id": "ice_elemental",
+        "subject": {
+          "templateId": "dev_compare_mob_new_ice_elemental",
+          "visualKey": "npc_dev_ice_elemental",
+          "side": "new",
+          "status": "ready",
+          "category": "mob",
+          "pairId": "mob_ice_elemental",
+          "x": 820,
+          "z": -32,
+          "facing": 3.141592653589793
+        },
+        "count": 1,
+        "resolved": "npc_dev_ice_elemental",
+        "oldCount": 0
+      },
+      {
+        "id": "water_elemental",
+        "subject": {
+          "templateId": "dev_compare_mob_new_water_elemental",
+          "visualKey": "npc_dev_water_elemental",
+          "side": "new",
+          "status": "ready",
+          "category": "mob",
+          "pairId": "mob_water_elemental",
+          "x": 820,
+          "z": -56,
+          "facing": 3.141592653589793
+        },
+        "count": 1,
+        "resolved": "npc_dev_water_elemental",
+        "oldCount": 0
+      },
+      {
+        "id": "storm_elemental",
+        "subject": {
+          "templateId": "dev_compare_mob_new_storm_elemental",
+          "visualKey": "npc_dev_storm_elemental",
+          "side": "new",
+          "status": "ready",
+          "category": "mob",
+          "pairId": "mob_storm_elemental",
+          "x": 844,
+          "z": -8,
+          "facing": 3.141592653589793
+        },
+        "count": 1,
+        "resolved": "npc_dev_storm_elemental",
+        "oldCount": 0
+      }
+    ]
+  },
+  "errors": []
+}
