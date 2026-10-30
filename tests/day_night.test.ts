@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   currentDayNightPhase,
   dayNightPhaseOverride,
@@ -46,12 +46,30 @@ import type { BiomeId } from '../src/sim/types';
 // sun/hemi/IBL/fog/sky; here we drive any moment of the cycle deterministically.
 
 describe('the live cycle contract', () => {
-  it('runs a forty-five-minute cycle, epoch-anchored so it is identical for every player', () => {
-    // Literal pin: forty-five minutes, not a derived expression, so a period
+  it('runs a 24-hour cycle, epoch-anchored so it is identical for every player', () => {
+    // Literal pin: 24 real hours, not a derived expression, so a period
     // change is a deliberate act here too. Epoch anchoring (cyclePhase of an
     // absolute ms) is what makes the phase global; there is no per-client or
     // per-zone term.
-    expect(DAY_NIGHT_CYCLE_MS).toBe(2_700_000);
+    expect(DAY_NIGHT_CYCLE_MS).toBe(86_400_000);
+  });
+
+  it.each([
+    ['2026-10-25T00:00:00Z', 0],
+    ['2026-10-25T06:00:00Z', 0.25],
+    ['2026-10-25T12:00:00Z', 0.5],
+    ['2026-10-25T18:00:00Z', 0.75],
+    ['2026-10-26T00:00:00Z', 0],
+    ['2026-10-26T12:00:00+02:00', 10 / 24],
+  ])('keeps the live world clock aligned with UTC at %s', (timestamp, phase) => {
+    const nowMs = Date.parse(timestamp);
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(nowMs);
+    try {
+      expect(cyclePhase(nowMs)).toBeCloseTo(phase, 12);
+      expect(currentDayNightPhase()).toBeCloseTo(phase, 12);
+    } finally {
+      clock.mockRestore();
+    }
   });
 
   it('ships with the cycle LIVE (DAY_ONLY off): the sun and moon move', () => {

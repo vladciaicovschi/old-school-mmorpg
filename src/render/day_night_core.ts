@@ -18,13 +18,12 @@
 import type { BiomeId } from '../sim/types';
 import { clamp01 } from './num_clamp';
 
-/** Full day-to-night-to-day period. Forty-five real minutes: long enough that a
- *  zone crossing is not outpaced by the sky (the old twenty felt frantic), still
- *  short enough that a play session sees several dawns and dusks. Epoch-anchored
- *  below, so the phase is identical for every player on Earth at the same
- *  instant, decoupled from local clocks. The lunar month (LUNAR_CYCLE_MS) is
- *  defined in cycles, so it stretches with this automatically. */
-export const DAY_NIGHT_CYCLE_MS = 45 * 60 * 1000;
+/** Full day-to-night-to-day period: 24 real hours, aligned with UTC. Midnight
+ *  falls at 00:00 UTC and noon at 12:00 UTC, so the world follows real time
+ *  rather than racing through several days in one play session. Epoch-anchored
+ *  below, so the phase is identical for every player regardless of timezone.
+ *  The lunar month (LUNAR_CYCLE_MS) is defined in world days and scales with it. */
+export const DAY_NIGHT_CYCLE_MS = 24 * 60 * 60 * 1000;
 
 /** The grade a frame reads: intensity scale for the lights + IBL, per-channel
  *  color multipliers for the sky dome and fog, a fog-distance pull-in, and the
@@ -615,7 +614,7 @@ export function warmDuskGrade(g: DayNightGrade, duskAmt: number): DayNightGrade 
  *  at y -0.24, which gave a golden band about a sixth of the cycle: over
  *  before a player crossing a zone noticed it. Starting the ramp higher and
  *  letting the afterglow linger a little deeper stretches that past a fifth of
- *  the cycle (about four and a half of the twenty minutes), a real golden hour,
+ *  the cycle, giving players time to see the warm horizon,
  *  without leaking into deep night: the peak sun elevation is ~0.66, so noon
  *  still lands exactly on zero. */
 export function duskWarmAmount(sunElev: number): number {
